@@ -1,0 +1,9 @@
+GitHub:
+	- How to Upload Project on GitHub using Eclipse
+		https://www.youtube.com/watch?v=Huwf0TgWrOw
+	- How To Add Eclipse Project To GitHub | How to Commit, Push, Pull from Eclipse to GitHub
+		https://www.youtube.com/watch?v=LPT7v69guVY
+	- Git tutorial 2: Committing, pushing, pulling and resolving conflicts with git and Eclipse 4.5.1
+		https://www.youtube.com/watch?v=M88sKbRDR8Y
+	- Vogella: Git version control with Eclipse (EGit) - Tutorial
+		http://www.vogella.com/tutorials/EclipseGit/article.html
