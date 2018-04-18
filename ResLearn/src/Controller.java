@@ -15,7 +15,7 @@ public class Controller {
 	Button tutorial = new Button();
 	@FXML
 	Button einstellungen = new Button();
-	
+
 	@FXML
     public void weiter() {
 		//weiter zur nächsten Funktion
