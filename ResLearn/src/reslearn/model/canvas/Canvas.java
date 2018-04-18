@@ -8,7 +8,7 @@ import reslearn.model.paket.ArbeitspaketZustand;
  * @created 18-Apr-2018 10:53:17
  */
 public class Canvas {
-
+	int i; 	//ich will nur was verändern, um zu sehen, was passiert
 	private ArbeitspaketZustand arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
 	public ArbeitspaketZustand m_ArbeitspaketZustand;
