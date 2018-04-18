@@ -16,7 +16,7 @@ public class Tester {
 	
 	
 	
-		System.out.println("Lallalala");
+		System.out.println("Lallalala vom Lulu");
 	}
 
 }
