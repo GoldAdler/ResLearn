@@ -16,12 +16,13 @@ public class Controller {
 	@FXML
 	Button einstellungen = new Button();
 
+	//Hallo
 	@FXML
     public void weiter() {
-		//weiter zur nächsten Funktion
+		//weiter zur nÃ¤chsten Funktion
 	}
 	public void zurueck() {
-		//zum vorherigen Fenster zurück
+		//zum vorherigen Fenster zurÃ¼ck
 	}
 	
 }
