@@ -16,7 +16,8 @@ public class Controller {
 	@FXML
 	Button einstellungen = new Button();
 
-	//Hallo
+	//Hallo T‰t‰r‰
+
 	@FXML
     public void weiter() {
 		//weiter zur n√§chsten Funktion
