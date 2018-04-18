@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="902.0" text="ResLearn" textAlignment="RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: LIGHTGRAY;">
+         <children>
+            <Button fx:id="UebungAuswaehlen" alignment="CENTER" layoutX="127.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="142.0" prefWidth="662.0" style="-fx-background-color: BLUE;" text="Übung auswählen" textFill="WHITE" wrapText="true">
+               <padding>
+                  <Insets top="120.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="127.0" layoutY="200.0" mnemonicParsing="false" prefHeight="126.0" prefWidth="310.0" style="-fx-background-color: Blue;" text="Aufgabe erstellen" textFill="WHITE" wrapText="true">
+               <padding>
+                  <Insets top="100.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="127.0" layoutY="341.0" mnemonicParsing="false" prefHeight="126.0" prefWidth="310.0" style="-fx-background-color: blue;" text="Tutorial" textFill="WHITE" wrapText="true">
+               <padding>
+                  <Insets top="100.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="479.0" layoutY="341.0" mnemonicParsing="false" prefHeight="126.0" prefWidth="310.0" style="-fx-background-color: blue;" text="Einstellungen" textFill="WHITE" wrapText="true">
+               <padding>
+                  <Insets top="100.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="479.0" layoutY="200.0" mnemonicParsing="false" prefHeight="126.0" prefWidth="310.0" style="-fx-background-color: BLUE;" text="Aufgabe laden" textFill="WHITE" wrapText="true">
+               <padding>
+                  <Insets top="100.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></AnchorPane>
+  </content>
+   <font>
+      <Font size="30.0" />
+   </font>
+</TitledPane>
