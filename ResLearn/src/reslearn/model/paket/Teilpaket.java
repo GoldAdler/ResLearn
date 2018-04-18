@@ -14,14 +14,19 @@ public class Teilpaket extends Paket {
 	 */
 	private Arbeitspaket arbeitspaket;
 	private ArrayList<ResEinheit> resEinheitListe;
-	public ResEinheit m_ResEinheit;
 
 	public Teilpaket() {
 
 	}
 
-	@Override
-	public void finalize() throws Throwable {
-		super.finalize();
+	public Teilpaket(Arbeitspaket arbeitspaket) {
+		super(arbeitspaket.getVorgangsdauer(), arbeitspaket.getMitarbeiteranzahl(), arbeitspaket.getAufwand());
+		this.arbeitspaket = arbeitspaket;
+
+		resEinheitListe = new ArrayList<ResEinheit>();
+		for (int i = 0; i < this.aufwand; i++) {
+			resEinheitListe.add(new ResEinheit(this));
+		}
 	}
-}// end Teilpaket
+
+}

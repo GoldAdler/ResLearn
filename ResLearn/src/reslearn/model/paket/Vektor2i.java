@@ -10,11 +10,17 @@ public class Vektor2i {
 	private int xKoordinate;
 	private int yKoordinate;
 
-	public Vektor2i(){
+	public Vektor2i() {
 
 	}
 
-	public void finalize() throws Throwable {
-
+	public Vektor2i(int xKoordinate, int yKoordinate) {
+		this.xKoordinate = xKoordinate;
+		this.yKoordinate = yKoordinate;
 	}
-}//end Vektor2i
+
+	public void add(Vektor2i vektor2i) {
+		this.xKoordinate += vektor2i.xKoordinate;
+		this.yKoordinate += vektor2i.yKoordinate;
+	}
+}

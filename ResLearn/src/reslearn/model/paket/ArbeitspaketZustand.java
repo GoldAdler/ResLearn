@@ -11,30 +11,27 @@ public class ArbeitspaketZustand {
 
 	private ArrayList<Arbeitspaket> arbeitspaketListe;
 
-	public ArbeitspaketZustand(){
-
-	}
-
-	public void finalize() throws Throwable {
-
-	}
-	/**
-	 * 
-	 * @param arbeitspaket
-	 */
-	public void hinzufuegen(Arbeitspaket arbeitspaket){
-
+	public ArbeitspaketZustand() {
+		arbeitspaketListe = new ArrayList<Arbeitspaket>();
 	}
 
 	/**
-	 * 
+	 *
 	 * @param arbeitspaket
 	 */
-	public void entfernen(Arbeitspaket arbeitspaket){
-
+	public void hinzufuegen(Arbeitspaket arbeitspaket) {
+		arbeitspaketListe.add(arbeitspaket);
 	}
 
-	public void bearbeiten(){
+	/**
+	 *
+	 * @param arbeitspaket
+	 */
+	public void entfernen(Arbeitspaket arbeitspaket) {
+		arbeitspaketListe.remove(arbeitspaket);
+	}
+
+	public void bearbeiten() {
 
 	}
-}//end ArbeitspaketZustand
+}// end ArbeitspaketZustand

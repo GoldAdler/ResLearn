@@ -31,15 +31,21 @@ public class Arbeitspaket extends Paket {
 	 */
 	private int sez;
 	private ArrayList<Teilpaket> teilpaketListe;
-	public Teilpaket m_Teilpaket;
-	public ArbeitspaketZustand m_ArbeitspaketZustand;
 
 	public Arbeitspaket() {
 
 	}
 
-	@Override
-	public void finalize() throws Throwable {
-		super.finalize();
+	// TODO: Validierung der Vorgangsdauer
+	public Arbeitspaket(String id, int faz, int fez, int saz, int sez, int vorgangsdauer, int mitarbeiteranzahl,
+			int aufwand) {
+		super(vorgangsdauer, mitarbeiteranzahl, aufwand);
+		this.id = id;
+		this.faz = faz;
+		this.saz = saz;
+		this.fez = fez;
+		this.sez = sez;
+		teilpaketListe = new ArrayList<Teilpaket>();
+		teilpaketListe.add(new Teilpaket(this));
 	}
-}// end Arbeitspaket
+}
