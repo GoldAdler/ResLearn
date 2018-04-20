@@ -34,4 +34,13 @@ public class ArbeitspaketZustand {
 	public void bearbeiten() {
 
 	}
-}// end ArbeitspaketZustand
+
+	public ArrayList<Arbeitspaket> getArbeitspaketListe() {
+		return arbeitspaketListe;
+	}
+
+	public void setArbeitspaketListe(ArrayList<Arbeitspaket> arbeitspaketListe) {
+		this.arbeitspaketListe = arbeitspaketListe;
+	}
+
+}

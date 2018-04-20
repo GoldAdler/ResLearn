@@ -48,4 +48,37 @@ public class Arbeitspaket extends Paket {
 		teilpaketListe = new ArrayList<Teilpaket>();
 		teilpaketListe.add(new Teilpaket(this));
 	}
+
+	public int getFaz() {
+		return faz;
+	}
+
+	public void setFaz(int faz) {
+		this.faz = faz;
+	}
+
+	public int getSaz() {
+		return saz;
+	}
+
+	public void setSaz(int saz) {
+		this.saz = saz;
+	}
+
+	public int getFez() {
+		return fez;
+	}
+
+	public void setFez(int fez) {
+		this.fez = fez;
+	}
+
+	public int getSez() {
+		return sez;
+	}
+
+	public void setSez(int sez) {
+		this.sez = sez;
+	}
+
 }
