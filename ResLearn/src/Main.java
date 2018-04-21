@@ -9,7 +9,7 @@ public class Main extends Application {
 		launch(args);
 	}
 	public void start (Stage stage) throws Exception {
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("Scenebuilder.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("/reslearn.view/mainmenu.fxml"));
 		stage.setScene(new Scene(root));
 		stage.setTitle("ResLearn");
 		stage.show();
