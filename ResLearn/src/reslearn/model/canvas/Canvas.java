@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ArbeitspaketZustand;
+import reslearn.model.paket.ResEinheit;
 
 /**
  * @author Lukas Willburger
@@ -14,11 +15,13 @@ public class Canvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
+	private ResEinheit[][] koordinantenSystem;
 
 	public Canvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
+		koordinantenSystem = new ResEinheit[20][50];
 	}
 
 	/**
@@ -98,6 +101,14 @@ public class Canvas {
 
 	public void setAktuellerZustand(ArbeitspaketZustand aktuellerZustand) {
 		this.aktuellerZustand = aktuellerZustand;
+	}
+
+	public ResEinheit[][] getKoordinantenSystem() {
+		return koordinantenSystem;
+	}
+
+	public void setKoordinantenSystem(ResEinheit[][] koordinantenSystem) {
+		this.koordinantenSystem = koordinantenSystem;
 	}
 
 }

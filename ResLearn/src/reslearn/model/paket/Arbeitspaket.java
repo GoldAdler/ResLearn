@@ -81,4 +81,28 @@ public class Arbeitspaket extends Paket {
 		this.sez = sez;
 	}
 
+	public ArrayList<Teilpaket> getTeilpaketListe() {
+		return teilpaketListe;
+	}
+
+	public void setTeilpaketListe(ArrayList<Teilpaket> teilpaketListe) {
+		this.teilpaketListe = teilpaketListe;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public ArbeitspaketZustand getArbeitspaketZustand() {
+		return arbeitspaketZustand;
+	}
+
+	public void setArbeitspaketZustand(ArbeitspaketZustand arbeitspaketZustand) {
+		this.arbeitspaketZustand = arbeitspaketZustand;
+	}
+
 }

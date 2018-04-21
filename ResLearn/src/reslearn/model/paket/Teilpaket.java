@@ -29,4 +29,20 @@ public class Teilpaket extends Paket {
 		}
 	}
 
+	public Arbeitspaket getArbeitspaket() {
+		return arbeitspaket;
+	}
+
+	public void setArbeitspaket(Arbeitspaket arbeitspaket) {
+		this.arbeitspaket = arbeitspaket;
+	}
+
+	public ArrayList<ResEinheit> getResEinheitListe() {
+		return resEinheitListe;
+	}
+
+	public void setResEinheitListe(ArrayList<ResEinheit> resEinheitListe) {
+		this.resEinheitListe = resEinheitListe;
+	}
+
 }

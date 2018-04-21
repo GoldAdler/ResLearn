@@ -23,4 +23,24 @@ public class ResEinheit extends Paket {
 		super(BREITE, LAENGE, FLAECHE);
 		this.teilpaket = teilpaket;
 	}
+
+	public Teilpaket getTeilpaket() {
+		return teilpaket;
+	}
+
+	public void setTeilpaket(Teilpaket teilpaket) {
+		this.teilpaket = teilpaket;
+	}
+
+	public static int getBreite() {
+		return BREITE;
+	}
+
+	public static int getLaenge() {
+		return LAENGE;
+	}
+
+	public static int getFlaeche() {
+		return FLAECHE;
+	}
 }
