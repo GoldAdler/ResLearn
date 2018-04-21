@@ -1,3 +1,7 @@
+/*//////////////////////////////////////////////////////////////////
+//  Buttons im Mainmenu //
+//////////////////////////////////////////////////////////////////*/
+
 .buttonUebungAuswaehlen {
 	-fx-background-image: url("../images/balken.png");
 	-fx-background-repeat: no-repeat;
@@ -77,3 +81,25 @@
 .buttonEinstellungen:pressed{
 	-fx-background-color: #1e39a8;
 }
+
+
+/*//////////////////////////////////////////////////////////////////
+//  Speichern Button in Einstellungen  //
+//////////////////////////////////////////////////////////////////*/
+
+.buttonSpeichern {
+	-fx-background-color: #1c44b3;
+}
+
+.buttonSpeichern:hover {
+	-fx-background-color: #1b58b2;
+}
+
+.buttonSpeichern:pressed {
+	-fx-background-color: #1e39a8;
+}
+
+
+
+
+

@@ -16,7 +16,7 @@
       </Label>
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
-            <Image url="@../../../../../../Downloads/icons8-rückgängig-machen-26.png" />
+            <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
    </children>

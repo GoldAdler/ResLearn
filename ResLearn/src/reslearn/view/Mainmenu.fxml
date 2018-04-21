@@ -20,7 +20,7 @@
       </Label>
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
-            <Image url="@../../../../../../Desktop/Icons/icons8-rückgängig-machen-100.png" />
+            <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
       <GridPane alignment="CENTER" layoutX="101.0" layoutY="110.0" prefHeight="484.0" prefWidth="781.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="110.0">
