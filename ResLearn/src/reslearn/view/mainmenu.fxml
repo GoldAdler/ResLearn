@@ -20,7 +20,7 @@
       </Label>
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
-            <Image url="@../../../../../../Downloads/icons8-rückgängig-machen-26.png" />
+            <Image url="@../../../../../../Desktop/Icons/icons8-rückgängig-machen-100.png" />
          </image>
       </ImageView>
       <GridPane alignment="CENTER" layoutX="101.0" layoutY="110.0" prefHeight="484.0" prefWidth="781.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="110.0">
@@ -34,7 +34,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" style="-fx-background-color: blue;" text="Tutorial" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonTutorial" stylesheets="@Stylesheet.css" text="Tutorial" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -45,7 +45,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" style="-fx-background-color: blue;" text="Einstellungen" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonEinstellungen" stylesheets="@Stylesheet.css" text="Einstellungen" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -56,7 +56,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" style="-fx-background-color: Blue;" text="Aufgabe erstellen" textFill="WHITE" wrapText="true" GridPane.rowIndex="1">
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeErstellen" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" textFill="WHITE" wrapText="true" GridPane.rowIndex="1">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -67,7 +67,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" style="-fx-background-color: BLUE;" text="Aufgabe laden" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeLaden" stylesheets="@Stylesheet.css" text="Aufgabe laden" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -78,7 +78,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="UebungAuswaehlen" alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" style="-fx-background-color: BLUE;" text="Übung auswählen" textFill="WHITE" wrapText="true" GridPane.columnSpan="2">
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1500.0" styleClass="buttonUebungAuswaehlen" stylesheets="@Stylesheet.css" text="Übung auswählen" textFill="WHITE" wrapText="true" GridPane.columnSpan="2">
                <font>
                   <Font size="18.0" />
                </font>

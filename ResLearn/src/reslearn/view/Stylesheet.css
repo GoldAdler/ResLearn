@@ -1,0 +1,79 @@
+.buttonUebungAuswaehlen {
+	-fx-background-image: url("../images/balken.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50% 0%;
+	-fx-background-radius: 10 10 10 10;
+	-fx-background-color: #1c44b3;
+}
+
+.buttonUebungAuswaehlen:hover {
+	-fx-background-color: #1b58b2;
+}
+
+.buttonUebungAuswaehlen:pressed {
+	-fx-background-color: #1e39a8;
+}
+
+.buttonAufgabeErstellen {
+	-fx-background-image: url("../images/bleistift.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50% 0%;
+	-fx-background-radius: 10 10 10 10;
+	-fx-background-color: #1c44b3;
+}
+
+.buttonAufgabeErstellen:hover {
+	-fx-background-color: #1b58b2;
+}
+
+.buttonAufgabeErstellen:pressed {
+	-fx-background-color: #1e39a8;
+}
+
+.buttonAufgabeLaden {
+	-fx-background-image: url("../images/laden.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50% 0%;
+	-fx-background-radius: 10 10 10 10;
+	-fx-background-color: #1c44b3;
+}
+
+.buttonAufgabeLaden:hover {
+	-fx-background-color: #1b58b2;
+}
+
+.buttonAufgabeLaden:pressed {
+	-fx-background-color: #1e39a8;
+}
+
+.buttonTutorial {
+	-fx-background-image: url("../images/bildschirm.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50% 0%;
+	-fx-background-radius: 10 10 10 10;
+	-fx-background-color: #1c44b3;
+}
+
+.buttonTutorial:hover {
+	-fx-background-color: #1b58b2;
+}
+
+.buttonTutorial:pressed {
+	-fx-background-color: #1e39a8;
+}
+
+.buttonEinstellungen {
+	-fx-background-image: url("../images/getriebe.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 50% 0%;
+	-fx-background-radius: 10 10 10 10;
+	-fx-background-color: #1c44b3;
+}
+
+.buttonEinstellungen:hover{
+	-fx-background-color: #1b58b2;
+}
+
+.buttonEinstellungen:pressed{
+	-fx-background-color: #1e39a8;
+}
