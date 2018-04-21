@@ -7,6 +7,8 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,7 +17,7 @@
 
 <TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="902.0" text="Einstellungen" textAlignment="RIGHT" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="583.0" prefWidth="1000.0" style="-fx-background-color: LIGHTGRAY;">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="583.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -36,7 +38,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Farbschema">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Farbschema" GridPane.halignment="LEFT">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
@@ -44,59 +46,59 @@
                         <Insets />
                      </GridPane.margin>
                   </Label>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Schriftgröße" GridPane.rowIndex="1">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Schriftgröße" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Lautstärke" textAlignment="CENTER" GridPane.rowIndex="2">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Lautstärke" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Auflösung" textAlignment="CENTER" GridPane.rowIndex="3">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Auflösung" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Import Dateipfad" textAlignment="CENTER" GridPane.rowIndex="4">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Import Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="60.0" prefWidth="250.0" text="Export Dateipfad" textAlignment="CENTER" GridPane.rowIndex="5">
+                  <Label prefHeight="60.0" prefWidth="250.0" text="Export Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="5">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Slider prefHeight="35.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Slider prefHeight="35.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets bottom="-10.0" top="-10.0" />
                      </GridPane.margin>
                   </Slider>
-                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
-                        <Insets bottom="20.0" top="20.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                      <padding>
                         <Insets bottom="-7.0" top="-7.0" />
                      </padding></ChoiceBox>
-                  <TextField prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <TextField prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                      <padding>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                      </padding></TextField>
-                  <Button alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" text="Speichern" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <Button alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" style="-fx-background-color: BLUE;" text="Speichern" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                      <padding>
                         <Insets bottom="7.0" left="20.0" right="20.0" top="7.0" />
                      </padding>
                   </Button>
-                  <TextField prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <TextField prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <padding>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                      </padding>
@@ -104,24 +106,39 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <padding>
                         <Insets bottom="-7.0" top="-7.0" />
                      </padding>
                      <GridPane.margin>
-                        <Insets bottom="20.0" top="20.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </ChoiceBox>
-                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <ChoiceBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <padding>
                         <Insets bottom="-7.0" top="-7.0" />
                      </padding>
                      <GridPane.margin>
-                        <Insets bottom="20.0" top="20.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </ChoiceBox>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                     <image>
+                        <Image url="@../../../../../../Downloads/icons8-mappe-50.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                     <image>
+                        <Image url="@../../../../../../Downloads/icons8-mappe-50.png" />
+                     </image>
+                  </ImageView>
                </children>
             </GridPane>
+            <ImageView fitHeight="36.0" fitWidth="48.0" layoutX="27.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Downloads/icons8-rückgängig-machen-26.png" />
+               </image>
+            </ImageView>
          </children></AnchorPane>
   </content>
    <font>

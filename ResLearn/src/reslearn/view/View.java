@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class View extends Application{
 	
@@ -12,7 +13,13 @@ public class View extends Application{
 		launch(args);
 	}
 	public void start (Stage stage) throws Exception {
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("Einstellungen.fxml"));
+		
+		
+		
+		
+		
+		
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("mainmenu.fxml"));
 		stage.setScene(new Scene(root));
 		stage.setTitle("ResLearn");
 		stage.show();
