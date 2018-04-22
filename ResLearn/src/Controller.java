@@ -1,5 +1,8 @@
 
 
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +36,9 @@ public class Controller {
 //////////////////////////////////////////////////////////////////*/
 
 	@FXML
+	private ChoiceBox<String> choiceboxDesigntheme;
+	
+	@FXML
 	private ChoiceBox<String> choiceboxFarbschema;
 
 	@FXML
@@ -43,6 +49,20 @@ public class Controller {
 	
 	@FXML
 	public void initialize() {
+		choiceboxDesigntheme.getItems().add("Modena");
+		choiceboxDesigntheme.getItems().add("Caspian");
+		choiceboxDesigntheme.getSelectionModel().selectFirst();
+		
+		choiceboxDesigntheme.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+	        @Override
+	        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+	          if(choiceboxDesigntheme.getItems().get((Integer) number2)== "Modena") {
+	        	  Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+	          } else 
+	        	  Application.setUserAgentStylesheet(Application.STYLESHEET_CASPIAN);
+	        }
+		 });
+	        
 		choiceboxFarbschema.getItems().add("Dark Theme");
 		choiceboxFarbschema.getItems().add("Light Theme");
 		choiceboxFarbschema.getSelectionModel().selectFirst();
@@ -54,6 +74,11 @@ public class Controller {
 		choiceboxAufloesung.getItems().add("1600x900");
 		choiceboxAufloesung.getItems().add("900x600");
 		choiceboxAufloesung.setValue("1600x900");
+		
+		
+	}
+	
+	protected void buttonPressed(){
 		
 	}
 }

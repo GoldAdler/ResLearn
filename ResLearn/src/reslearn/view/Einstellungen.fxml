@@ -26,13 +26,14 @@
             <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
-      <GridPane alignment="CENTER" layoutX="267.0" layoutY="125.0" maxHeight="356.0" maxWidth="847.0" minHeight="175.0" minWidth="200.0" prefHeight="350.0" prefWidth="425.0" AnchorPane.leftAnchor="267.0" AnchorPane.rightAnchor="208.0">
+      <GridPane alignment="CENTER" layoutX="267.0" layoutY="125.0" maxHeight="369.0" maxWidth="847.0" minHeight="175.0" minWidth="200.0" prefHeight="369.0" prefWidth="425.0" AnchorPane.leftAnchor="267.0" AnchorPane.rightAnchor="208.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" maxWidth="254.0" minWidth="10.0" prefWidth="203.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="220.0" minWidth="10.0" prefWidth="168.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="37.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -42,7 +43,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Farbschema" GridPane.halignment="LEFT">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Farbschema" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -50,42 +51,47 @@
                   <Insets />
                </GridPane.margin>
             </Label>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Schriftgröße" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Schriftgröße" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Lautstärke" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Lautstärke" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Auflösung" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Auflösung" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Import Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Import Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="5">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label prefHeight="60.0" prefWidth="250.0" text="Export Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+            <Label prefHeight="60.0" prefWidth="250.0" text="Export Dateipfad" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="choiceboxFarbschema" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" styleClass="dropdownFarbschema" stylesheets="@Stylesheet.css" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <ChoiceBox fx:id="choiceboxDesigntheme" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" stylesheets="@Stylesheet.css" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </GridPane.margin>
+            </ChoiceBox>            
+            <ChoiceBox fx:id="choiceboxFarbschema" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" styleClass="dropdownFarbschema" stylesheets="@Stylesheet.css" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </ChoiceBox>  
-             <ChoiceBox fx:id="choiceboxSchriftgroesse" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+             <ChoiceBox fx:id="choiceboxSchriftgroesse" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </ChoiceBox>                     
-            <Slider maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <Slider maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -93,12 +99,12 @@
                   <Insets bottom="5.0" top="5.0" />
                </padding>
             </Slider>
-            <ChoiceBox fx:id="choiceboxAufloesung" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <ChoiceBox fx:id="choiceboxAufloesung" maxHeight="25.0" maxWidth="180.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </ChoiceBox> 
-            <TextField maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <TextField maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
@@ -106,7 +112,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </TextField>                       
-            <TextField maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <TextField maxHeight="25.0" maxWidth="180.0" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -114,7 +120,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
             </TextField>          
-            <Button alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Speichern" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <Button alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Speichern" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -122,16 +128,21 @@
                   <Insets bottom="7.0" left="20.0" right="20.0" top="7.0" />
                </padding>
             </Button>
-            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@../images/ordner.png" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <image>
                   <Image url="@../images/ordner.png" />
                </image>
             </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../images/ordner.png" />
+               </image>
+            </ImageView>
+            <Label prefHeight="60.0" prefWidth="250.0" text="Designtheme" GridPane.halignment="LEFT">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>
