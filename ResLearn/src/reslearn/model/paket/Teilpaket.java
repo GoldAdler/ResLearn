@@ -2,11 +2,6 @@ package reslearn.model.paket;
 
 import java.util.ArrayList;
 
-/**
- * @author Lukas Willburger
- * @version 1.0
- * @created 18-Apr-2018 10:53:20
- */
 public class Teilpaket extends Paket {
 
 	/**
