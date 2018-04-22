@@ -26,7 +26,7 @@
             <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
-      <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="267.0" layoutY="125.0" maxHeight="356.0" maxWidth="847.0" minHeight="310.0" minWidth="425.0" prefHeight="350.0" prefWidth="425.0" AnchorPane.leftAnchor="267.0" AnchorPane.rightAnchor="208.0">
+      <GridPane alignment="CENTER" layoutX="267.0" layoutY="125.0" maxHeight="356.0" maxWidth="847.0" minHeight="175.0" minWidth="200.0" prefHeight="350.0" prefWidth="425.0" AnchorPane.leftAnchor="267.0" AnchorPane.rightAnchor="208.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" maxWidth="254.0" minWidth="10.0" prefWidth="203.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="220.0" minWidth="10.0" prefWidth="168.0" />

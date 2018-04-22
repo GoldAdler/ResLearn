@@ -134,4 +134,18 @@
 	/* todo */
 }
 
+/*////////////////////////////////////////////////////////////////////
+//               Karten in Übung auswählen 		                   //
+//////////////////////////////////////////////////////////////////*/
+
+.karteUebung {
+	-fx-background-color: #ffffff;
+	-fx-effect: dropshadow(three-pass-box, grey, 10, 0, 0, 0);
+}
+
+.karteUebung:hover {
+	-fx-effect: dropshadow(three-pass-box, #1b58b2, 10, 0, 0, 0);
+}
+
+
 
