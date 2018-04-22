@@ -15,7 +15,10 @@ import reslearn.model.paket.Vektor2i;
 // TODO Erklärung ausarbeiten
 /* Erklärung des Algorithmus AlgoErsteSchritt
  *
- * Zuerst werden die Arbeitspake sortiert
+ * Zuerst werden die Arbeitspake sortiert. Diese Sortierung erfolgt nach dem FAZ. Sind die FAZ meherer Arbeitspakete
+ * gleich, wird nach der Vorgangsdauer sortiert.
+ *
+ *
  *
  *
  */
@@ -62,9 +65,7 @@ public abstract class AlgoErsteSchritt {
 
 				y_Start = findeStartpunkt(koordinantenSystem, x_Start, y_Start);
 
-				// ---------------------------------------------------------------------------------------------------------
 				ueberpruefeObereFelder(koordinantenSystem, canvas, arbeitspaket, x_Start, y_Start);
-				// ---------------------------------------------------------------------------------------------------------
 
 				befuelleKoordinatenSystem(koordinantenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
 
@@ -116,7 +117,8 @@ public abstract class AlgoErsteSchritt {
 
 	/**
 	 * Methode überprüft ob über dem einzufügenden Teilpaket A bereits ein Teilpaket
-	 * B liegt ist dies der Fall muss Teilpaket B nach oben verschoben werden
+	 * B liegt. Ist dies der Fall muss Teilpaket B nach oben verschoben werden.
+	 * Pakete die über B liegen werden ebenfalls nach oben verschoben.
 	 *
 	 * @param koordinantenSystem
 	 * @param canvas
