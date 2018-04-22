@@ -1,27 +1,27 @@
 package reslearn.model.canvas;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ArbeitspaketZustand;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.paket.Teilpaket;
+import reslearn.model.paket.Vektor2i;
 
-/**
- * @author Lukas Willburger
- * @version 1.0
- * @created 18-Apr-2018 10:53:17
- */
 public class Canvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
+	public static final int koorHoehe = 50;
+	public static final int koorBreite = 50;
 	private ResEinheit[][] koordinantenSystem;
 
 	public Canvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
-		koordinantenSystem = new ResEinheit[20][50];
+		koordinantenSystem = new ResEinheit[koorHoehe][koorBreite];
 	}
 
 	/**
@@ -109,6 +109,26 @@ public class Canvas {
 
 	public void setKoordinantenSystem(ResEinheit[][] koordinantenSystem) {
 		this.koordinantenSystem = koordinantenSystem;
+	}
+
+	public void bewegeNachOben(Teilpaket teilpaket, int y_Move) {
+		var resEinheitListe = teilpaket.getResEinheitListe();
+
+		// itereriert rückwärts
+		// somit mussen die Reseinheiten nur einmal angefasst werden
+		// i.a. Reseinheit von aktueller Position im Koordinatensystem löschen und um
+		// eines nach oben verschieben
+		ListIterator<ResEinheit> li = resEinheitListe.listIterator(resEinheitListe.size());
+
+		ResEinheit resEinheit;
+		while (li.hasPrevious()) {
+			resEinheit = li.previous();
+			Vektor2i vektor = resEinheit.getVektor();
+			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = null;
+			vektor.add(new Vektor2i(y_Move, 0));
+			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = resEinheit;
+		}
+
 	}
 
 }
