@@ -1,5 +1,16 @@
-/*//////////////////////////////////////////////////////////////////
-//  Buttons im Mainmenu //
+/*////////////////////////////////////////////////////////////////////
+//  					Title ResLearn			                   //
+//////////////////////////////////////////////////////////////////*/
+
+.titleResLearn {
+	-fx-background-color: #eeeeee; 
+	-fx-border-color: #afafaf;
+	
+}
+
+
+/*////////////////////////////////////////////////////////////////////
+//  					Buttons im Hauptmenü                       //
 //////////////////////////////////////////////////////////////////*/
 
 .buttonUebungAuswaehlen {
@@ -83,23 +94,44 @@
 }
 
 
-/*//////////////////////////////////////////////////////////////////
-//  Speichern Button in Einstellungen  //
+/*////////////////////////////////////////////////////////////////////
+//  Speichern Button in Einstellungen  							   //
 //////////////////////////////////////////////////////////////////*/
 
-.buttonSpeichern {
+.buttonBlau {
 	-fx-background-color: #1c44b3;
 }
 
-.buttonSpeichern:hover {
+.buttonBlau:hover {
 	-fx-background-color: #1b58b2;
 }
 
-.buttonSpeichern:pressed {
+.buttonBlau:pressed {
 	-fx-background-color: #1e39a8;
 }
 
+.buttonWeiss {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 5 5 5 5;
+	-fx-border-color: #afafaf;
+	-fx-border-radius: 5 5 5 5;
+}
+
+.buttonWeiss:hover {
+	-fx-background-color: #ffffff;
+}
+
+.buttonWeiss:pressed {
+	-fx-background-color: #ffffff;
+}
 
 
+/*////////////////////////////////////////////////////////////////////
+//               Dropdown Buttons in Einstellungen                 //
+//////////////////////////////////////////////////////////////////*/
+
+.dropdownFarbschema {
+	/* todo */
+}
 
 

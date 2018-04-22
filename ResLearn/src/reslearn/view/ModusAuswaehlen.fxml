@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" style="-fx-background-color: #eeeeee; -fx-border-color: #afafaf;" text="Modus auswählen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Modus auswählen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
-            <Image url="@../../../../../../Downloads/icons8-rückgängig-machen-26.png" />
+            <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
       <GridPane layoutX="32.0" layoutY="95.0" prefHeight="411.0" prefWidth="844.0">
@@ -40,7 +39,7 @@
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/Baby2.PNG" />
+                        <Image url="@../images/Baby2.PNG" />
                      </image>
                   </ImageView>
                   <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="ErsterSchritt Modus">
@@ -65,7 +64,7 @@
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/gewichtheber.PNG" />
+                        <Image url="@../images/gewichtheber.PNG" />
                      </image>
                   </ImageView>
                   <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="Übungsmodus">
@@ -90,7 +89,7 @@
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/Treppensteiger.PNG" />
+                        <Image url="@../images/Treppensteiger.PNG" />
                      </image>
                   </ImageView>
                   <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="Übungsmodus">
@@ -118,4 +117,3 @@
       <Insets />
    </opaqueInsets>
 </AnchorPane>
-

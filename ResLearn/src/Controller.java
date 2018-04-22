@@ -1,6 +1,4 @@
-import java.io.IOException;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
@@ -20,11 +18,11 @@ public class Controller {
 
 	@FXML
     public void weiter() {
-		//weiter zur nÃ¤chsten Funktion
+		//weiter zur nächsten Funktion
 	}
 	public void zurueck() {
-		//zum vorherigen Fenster zurÃ¼ck
+		//zum vorherigen Fenster zurück
 	}
-	
+
 }
 
