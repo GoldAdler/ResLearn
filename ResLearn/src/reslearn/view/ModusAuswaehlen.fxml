@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -25,24 +26,91 @@
             <Image url="@../../../../../../Downloads/icons8-rückgängig-machen-26.png" />
          </image>
       </ImageView>
-      <GridPane layoutX="46.0" layoutY="106.0" prefHeight="400.0" prefWidth="808.0">
+      <GridPane layoutX="32.0" layoutY="95.0" prefHeight="411.0" prefWidth="844.0">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="288.0" minWidth="10.0" prefWidth="288.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="284.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="238.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/Baby.PNG" />
-               </image>
+            <Group>
+               <children>
+                  <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/Baby2.PNG" />
+                     </image>
+                  </ImageView>
+                  <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="ErsterSchritt Modus">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets top="200.0" />
+                     </opaqueInsets>
+                  </TextField>
+                  <TextArea editable="false" layoutX="1.0" layoutY="287.0" prefHeight="116.0" prefWidth="268.0" style="-fx-background-color: white;" text="Lorem ipsum dolor sit amet, &#10;consectetur adipiscing elit. Aenean &#10;euismod bibendum laoreet. Proin &#10;gravida dolor sit amet lacus &#10;accumsan et viverra justo commodo. ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextArea>
+               </children>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-160.0" />
+                  <Insets left="10.0" right="10.0" />
                </GridPane.margin>
-            </ImageView>
+            </Group>
+            <Group GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/gewichtheber.PNG" />
+                     </image>
+                  </ImageView>
+                  <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="Übungsmodus">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets top="200.0" />
+                     </opaqueInsets>
+                  </TextField>
+                  <TextArea editable="false" layoutX="1.0" layoutY="287.0" prefHeight="116.0" prefWidth="268.0" style="-fx-background-color: white;" text="Lorem ipsum dolor sit amet, &#10;consectetur adipiscing elit. Aenean &#10;euismod bibendum laoreet. Proin &#10;gravida dolor sit amet lacus &#10;accumsan et viverra justo commodo. ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextArea>
+               </children>
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </Group>
+            <Group GridPane.columnIndex="2">
+               <children>
+                  <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../LRZ%20Sync+Share/Projekt/IconsGUI/Treppensteiger.PNG" />
+                     </image>
+                  </ImageView>
+                  <TextField editable="false" layoutY="243.0" prefHeight="44.0" prefWidth="269.0" style="-fx-background-color: white;" text="Übungsmodus">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets top="200.0" />
+                     </opaqueInsets>
+                  </TextField>
+                  <TextArea editable="false" layoutX="1.0" layoutY="287.0" prefHeight="116.0" prefWidth="268.0" style="-fx-background-color: white;" text="Lorem ipsum dolor sit amet, &#10;consectetur adipiscing elit. Aenean &#10;euismod bibendum laoreet. Proin &#10;gravida dolor sit amet lacus &#10;accumsan et viverra justo commodo. ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextArea>
+               </children>
+               <GridPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </GridPane.margin>
+            </Group>
          </children>
       </GridPane>
    </children>
@@ -50,3 +118,4 @@
       <Insets />
    </opaqueInsets>
 </AnchorPane>
+
