@@ -1,4 +1,4 @@
-package reslearn.model.canvas;
+package reslearn.model.resCanvas;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -9,7 +9,7 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
 
-public class Canvas {
+public class ResCanvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
@@ -17,7 +17,7 @@ public class Canvas {
 	public static final int koorBreite = 50;
 	private ResEinheit[][] koordinantenSystem;
 
-	public Canvas() {
+	public ResCanvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
@@ -111,6 +111,9 @@ public class Canvas {
 		this.koordinantenSystem = koordinantenSystem;
 	}
 
+	// TODO Richtge Stelle?
+	// Überlegen ob die Bewegen Methode hier angebracht ist
+	// Arbeitspaket und Teilpakete sollten eine Bewegen Methode haben???
 	public void bewegeNachOben(Teilpaket teilpaket, int y_Move) {
 		var resEinheitListe = teilpaket.getResEinheitListe();
 
@@ -123,7 +126,7 @@ public class Canvas {
 		ResEinheit resEinheit;
 		while (li.hasPrevious()) {
 			resEinheit = li.previous();
-			Vektor2i vektor = resEinheit.getVektor();
+			Vektor2i vektor = resEinheit.getPosition();
 			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = null;
 			vektor.add(new Vektor2i(y_Move, 0));
 			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = resEinheit;

@@ -5,40 +5,54 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Stack;
 
-import reslearn.model.canvas.Canvas;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ComperatorErsteSchrittModus;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
+import reslearn.model.resCanvas.ResCanvas;
 
-// TODO Erklärung ausarbeiten
 /* Erklärung des Algorithmus AlgoErsteSchritt
  *
  * Zuerst werden die Arbeitspake sortiert. Diese Sortierung erfolgt nach dem FAZ. Sind die FAZ meherer Arbeitspakete
- * gleich, wird nach der Vorgangsdauer sortiert.
+ * gleich, wird nach der Vorgangsdauer sortiert. #soritereAP
  *
+ * Vom ResCanvas wird das Koordinatensystem (2-D-Array) geholt um in diesem die ResEinheiten
+ * zu setzen, verschieben etc
  *
+ * Der Algorithmus wird durchgeführt #algoDurchfuehren
  *
+ * Aus jedem Arbeitspaket in der arbeitspaketliste wird das Teilpaket entommen
+ * um den Startpunkt im KoordinatenSystem zu ermitteln.
+ * Ist der optimalle Startpunkt (ResCanvas.koorHoehe - 1, arbeitspaket.getFaz() - 1)
+ * bereits vergeben wird solange in Y-Richtung gesucht bis ein freier Platz gefunden ist.
+ *  ANMERKUNG: (0,0) in einem 2-D-Array ist Links-Oben! (ArrayHoehe - 1, 0) ist Links-unten
+ *
+ * Ist der Startpunkt gefunden muss überprüft werden, ob über den einzufügenden ResEinheiten
+ * bereits andere ResEinheiten anderer Arbeitspakete sind. #ueberpruefeObereFelder
+ * Ist dies der Fall müssen diese um nach oben verschoben werden.
+ *
+ * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt.
  *
  */
 
 public abstract class AlgoErsteSchritt {
 
-	public static ResEinheit[][] berechne(Canvas canvas) {
+	public static ResEinheit[][] berechne(ResCanvas resCanvas) {
 
-		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(canvas);
-		ResEinheit[][] koordinantenSystem = canvas.getKoordinantenSystem();
-		algoDurchfuehren(arbeitspaketListe, koordinantenSystem, canvas);
+		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(resCanvas);
+		ResEinheit[][] koordinantenSystem = resCanvas.getKoordinantenSystem();
+		algoDurchfuehren(arbeitspaketListe, koordinantenSystem, resCanvas);
 
 		return koordinantenSystem;
 	}
 
 	/**
-	 * Sortieren der Arbeitspakete von Canvas->AktuellerZustand->ArbeitspaketListe
+	 * Sortieren der Arbeitspakete von
+	 * ResCanvas->AktuellerZustand->ArbeitspaketListe
 	 */
-	private static ArrayList<Arbeitspaket> sortiereAP(Canvas canvas) {
-		ArrayList<Arbeitspaket> arbeitspaketListe = canvas.getAktuellerZustand().getArbeitspaketListe();
+	private static ArrayList<Arbeitspaket> sortiereAP(ResCanvas resCanvas) {
+		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getAktuellerZustand().getArbeitspaketListe();
 		Collections.sort(arbeitspaketListe, new ComperatorErsteSchrittModus());
 		return arbeitspaketListe;
 	}
@@ -47,7 +61,7 @@ public abstract class AlgoErsteSchritt {
 	 * Jedes Arbeitspaket in das KoordinatenSystem setzten
 	 */
 	private static void algoDurchfuehren(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinantenSystem,
-			Canvas canvas) {
+			ResCanvas resCanvas) {
 
 		for (int i = 0; i < arbeitspaketListe.size(); i++) {
 			// if (i != 0) {
@@ -61,11 +75,11 @@ public abstract class AlgoErsteSchritt {
 				size = teilpaketListe.size();
 				Teilpaket teilpaket = teilpaketListe.get(size - 1);
 				int x_Start = arbeitspaket.getFaz() - 1;
-				int y_Start = Canvas.koorHoehe - 1;
+				int y_Start = ResCanvas.koorHoehe - 1;
 
 				y_Start = findeStartpunkt(koordinantenSystem, x_Start, y_Start);
 
-				ueberpruefeObereFelder(koordinantenSystem, canvas, arbeitspaket, x_Start, y_Start);
+				ueberpruefeObereFelder(koordinantenSystem, resCanvas, arbeitspaket, x_Start, y_Start);
 
 				befuelleKoordinatenSystem(koordinantenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
 
@@ -75,7 +89,7 @@ public abstract class AlgoErsteSchritt {
 	}
 
 	/**
-	 * Ermittelt den Startpunkt des Teilpaketes im 2-D-Array der Klasse Canvas
+	 * Ermittelt den Startpunkt des Teilpaketes im 2-D-Array der Klasse ResCanvas
 	 * (koordinatenSystem)
 	 */
 	private static int findeStartpunkt(ResEinheit[][] koordinantenSystem, int x_Start, int y_Start) {
@@ -108,7 +122,7 @@ public abstract class AlgoErsteSchritt {
 				if (koordinantenSystem[y][x] == null) {
 					if (it.hasNext()) {
 						koordinantenSystem[y][x] = it.next();
-						koordinantenSystem[y][x].setVektor(new Vektor2i(y, x));
+						koordinantenSystem[y][x].setPosition(new Vektor2i(y, x));
 					}
 				}
 			}
@@ -121,12 +135,12 @@ public abstract class AlgoErsteSchritt {
 	 * Pakete die über B liegen werden ebenfalls nach oben verschoben.
 	 *
 	 * @param koordinantenSystem
-	 * @param canvas
+	 * @param resCanvas
 	 * @param arbeitspaket
 	 * @param x_Start
 	 * @param y_Start
 	 */
-	private static void ueberpruefeObereFelder(ResEinheit[][] koordinantenSystem, Canvas canvas,
+	private static void ueberpruefeObereFelder(ResEinheit[][] koordinantenSystem, ResCanvas resCanvas,
 			Arbeitspaket arbeitspaket, int x_Start, int y_Start) {
 		for (int y = y_Start; y > y_Start - arbeitspaket.getMitarbeiteranzahl(); y--) {
 			if (koordinantenSystem[y][x_Start] != null) {
@@ -146,10 +160,13 @@ public abstract class AlgoErsteSchritt {
 				}
 
 				while (!stackTeilpaket.isEmpty()) {
-					canvas.bewegeNachOben(stackTeilpaket.pop(), y_Move);
+					resCanvas.bewegeNachOben(stackTeilpaket.pop(), y_Move);
 				}
 				break;
 			}
+			// TODO Algo verbessern
+			// Die Überprüfung ob über einem Teilpaket B noch andere Reseinheiten liegen ist
+			// noch nicht ausgereift
 		}
 	}
 }
