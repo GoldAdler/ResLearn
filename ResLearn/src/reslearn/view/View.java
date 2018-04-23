@@ -14,11 +14,6 @@ public class View extends Application{
 	}
 	public void start (Stage stage) throws Exception {
 		
-		
-		
-		
-		
-		
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("mainmenu.fxml"));
 		stage.setScene(new Scene(root));
 		stage.setTitle("ResLearn");
