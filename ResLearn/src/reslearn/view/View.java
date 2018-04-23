@@ -17,8 +17,6 @@ public class View extends Application{
 			
 		
 		
-		setUserAgentStylesheet(STYLESHEET_MODENA);
-		//setUserAgentStylesheet(STYLESHEET_CASPIAN);
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("Einstellungen.fxml"));
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
