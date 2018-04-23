@@ -6,7 +6,6 @@ public class ResEinheit extends Paket {
 	 * Referenz auf das Teilpaket
 	 */
 	private Teilpaket teilpaket;
-	private Vektor2i vektor;
 	private static final int BREITE = 1;
 	private static final int LAENGE = 1;
 	private static final int FLAECHE = 1;
@@ -40,11 +39,4 @@ public class ResEinheit extends Paket {
 		return FLAECHE;
 	}
 
-	public Vektor2i getVektor() {
-		return vektor;
-	}
-
-	public void setVektor(Vektor2i vektor) {
-		this.vektor = vektor;
-	}
 }

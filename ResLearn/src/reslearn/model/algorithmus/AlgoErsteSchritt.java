@@ -12,14 +12,27 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
 
-// TODO Erklärung ausarbeiten
 /* Erklärung des Algorithmus AlgoErsteSchritt
  *
  * Zuerst werden die Arbeitspake sortiert. Diese Sortierung erfolgt nach dem FAZ. Sind die FAZ meherer Arbeitspakete
- * gleich, wird nach der Vorgangsdauer sortiert.
+ * gleich, wird nach der Vorgangsdauer sortiert. #soritereAP
  *
+ * Vom Canvas wird das Koordinatensystem (2-D-Array) geholt um in diesem die ResEinheiten
+ * zu setzen, verschieben etc
  *
+ * Der Algorithmus wird durchgeführt #algoDurchfuehren
  *
+ * Aus jedem Arbeitspaket in der arbeitspaketliste wird das Teilpaket entommen
+ * um den Startpunkt im KoordinatenSystem zu ermitteln.
+ * Ist der optimalle Startpunkt (Canvas.koorHoehe - 1, arbeitspaket.getFaz() - 1)
+ * bereits vergeben wird solange in Y-Richtung gesucht bis ein freier Platz gefunden ist.
+ *  ANMERKUNG: (0,0) in einem 2-D-Array ist Links-Oben! (ArrayHoehe - 1, 0) ist Links-unten
+ *
+ * Ist der Startpunkt gefunden muss überprüft werden, ob über den einzufügenden ResEinheiten
+ * bereits andere ResEinheiten anderer Arbeitspakete sind. #ueberpruefeObereFelder
+ * Ist dies der Fall müssen diese um nach oben verschoben werden.
+ *
+ * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt.
  *
  */
 
@@ -108,7 +121,7 @@ public abstract class AlgoErsteSchritt {
 				if (koordinantenSystem[y][x] == null) {
 					if (it.hasNext()) {
 						koordinantenSystem[y][x] = it.next();
-						koordinantenSystem[y][x].setVektor(new Vektor2i(y, x));
+						koordinantenSystem[y][x].setPosition(new Vektor2i(y, x));
 					}
 				}
 			}
@@ -150,6 +163,9 @@ public abstract class AlgoErsteSchritt {
 				}
 				break;
 			}
+			// TODO Algo verbessern
+			// Die Überprüfung ob über einem Teilpaket B noch andere Reseinheiten liegen ist
+			// noch nicht ausgereift
 		}
 	}
 }

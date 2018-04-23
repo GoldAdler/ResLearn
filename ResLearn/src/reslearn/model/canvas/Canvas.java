@@ -111,6 +111,9 @@ public class Canvas {
 		this.koordinantenSystem = koordinantenSystem;
 	}
 
+	// TODO Richtge Stelle?
+	// Überlegen ob die Bewegen Methode hier angebracht ist
+	// Arbeitspaket und Teilpakete sollten eine Bewegen Methode haben???
 	public void bewegeNachOben(Teilpaket teilpaket, int y_Move) {
 		var resEinheitListe = teilpaket.getResEinheitListe();
 
@@ -123,7 +126,7 @@ public class Canvas {
 		ResEinheit resEinheit;
 		while (li.hasPrevious()) {
 			resEinheit = li.previous();
-			Vektor2i vektor = resEinheit.getVektor();
+			Vektor2i vektor = resEinheit.getPosition();
 			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = null;
 			vektor.add(new Vektor2i(y_Move, 0));
 			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = resEinheit;
