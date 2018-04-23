@@ -2,6 +2,18 @@ package reslearn.model.paket;
 
 import java.util.Comparator;
 
+/**
+ * Sortiert die Arbeitspaketet nach dem FAZ Sind die FAZ der Pakete gleich, wird
+ * nach der Vorgangsdauer sortiert. Dadurch befinden sich die längeren Pakete
+ * vorne in der Liste
+ *
+ * @param index
+ *            index at which the specified element is to be inserted
+ * @param element
+ *            element to be inserted
+ * @throws IndexOutOfBoundsException
+ *             {@inheritDoc}
+ */
 public class ComperatorErsteSchrittModus implements Comparator<Arbeitspaket> {
 
 	@Override

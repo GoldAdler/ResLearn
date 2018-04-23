@@ -1,10 +1,5 @@
 package reslearn.model.paket;
 
-/**
- * @author Lukas Willburger
- * @version 1.0
- * @created 18-Apr-2018 10:53:18
- */
 public abstract class Paket {
 
 	protected Vektor2i position;

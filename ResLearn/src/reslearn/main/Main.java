@@ -1,45 +1,77 @@
 package reslearn.main;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.canvas.Canvas;
 import reslearn.model.paket.Arbeitspaket;
-import reslearn.model.paket.ComperatorErsteSchrittModus;
+import reslearn.model.paket.ResEinheit;
 
 public class Main {
 
 	public static void main(String[] args) {
 		Canvas canvas = new Canvas();
 
-		Arbeitspaket ap1 = new Arbeitspaket("Testpaket1", 1, 2, 3, 4, 2, 3, 6);
-		Arbeitspaket ap1_5 = new Arbeitspaket("Testpaket1_5", 1, 2, 4, 4, 2, 4, 8);
-		Arbeitspaket ap2 = new Arbeitspaket("Testpaket2", 3, 5, 5, 7, 2, 3, 6);
-		Arbeitspaket ap3 = new Arbeitspaket("Testpaket3", 6, 6, 6, 6, 6, 6, 6);
+		erstelleTestDaten(canvas);
 
-		canvas.hinzufuegen(ap3);
-		canvas.hinzufuegen(ap1_5);
-		canvas.hinzufuegen(ap2);
-		canvas.hinzufuegen(ap1);
+		// durchführen des Algorithmus
+		var koordinantenSystem = AlgoErsteSchritt.berechne(canvas);
 
-		ArrayList<Arbeitspaket> arbeitspaketListe = canvas.getAktuellerZustand().getArbeitspaketListe();
+		ausgeben(koordinantenSystem);
 
-		Collections.sort(arbeitspaketListe, new ComperatorErsteSchrittModus());
+	}
 
-		for (int i = 0; i < arbeitspaketListe.size(); i++) {
-			if (i != 0) {
+	private static void erstelleTestDaten(Canvas canvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
 
-			} else {
-				arbeitspaketListe.get(i);
-				// for()
+		/*
+		 * Erster Test
+		 */
+		// Arbeitspaket apA = new Arbeitspaket("A", 1, 2, 3, 4, 2, 3, 6);
+		// Arbeitspaket apB = new Arbeitspaket("B", 1, 2, 4, 4, 2, 4, 8);
+		// Arbeitspaket apC = new Arbeitspaket("C", 3, 5, 5, 7, 2, 3, 6);
+		//
+		// canvas.hinzufuegen(apB);
+		// canvas.hinzufuegen(apC);
+		// canvas.hinzufuegen(apA);
+
+		/*
+		 * PTMA_U09_L Test
+		 */
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 3, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 10, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 14, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 17, 5, 5, 25);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 21, 6, 3, 18);
+
+		canvas.hinzufuegen(apB);
+		canvas.hinzufuegen(apD);
+		canvas.hinzufuegen(apA);
+		canvas.hinzufuegen(apE);
+		canvas.hinzufuegen(apC);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void ausgeben(ResEinheit[][] koordinantenSystem) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestAusgabe-----------------------------
+		// -------------------------------Anfang--------------------------------
+		for (ResEinheit[] a : koordinantenSystem) {
+			for (ResEinheit b : a) {
+				if (b == null) {
+					System.out.print(" ");
+				} else {
+					System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+				}
 			}
-			// falls nicht 0
-			// schau dir an an was der Vektor des letzten Reseinheit rechts unten
-			// nimm den und vergieb Vektoren entsprechend
-
-			// Vergeben wir anhhand faz die doppel for schleife
+			System.out.println();
 		}
-
+		// -----------------------------TestAusgabe-----------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
 	}
 
 }

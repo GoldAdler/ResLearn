@@ -2,11 +2,6 @@ package reslearn.model.paket;
 
 import java.util.ArrayList;
 
-/**
- * @author Lukas Willburger
- * @version 1.0
- * @created 18-Apr-2018 10:53:12
- */
 public class Arbeitspaket extends Paket {
 
 	/**
@@ -79,6 +74,30 @@ public class Arbeitspaket extends Paket {
 
 	public void setSez(int sez) {
 		this.sez = sez;
+	}
+
+	public ArrayList<Teilpaket> getTeilpaketListe() {
+		return teilpaketListe;
+	}
+
+	public void setTeilpaketListe(ArrayList<Teilpaket> teilpaketListe) {
+		this.teilpaketListe = teilpaketListe;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public ArbeitspaketZustand getArbeitspaketZustand() {
+		return arbeitspaketZustand;
+	}
+
+	public void setArbeitspaketZustand(ArbeitspaketZustand arbeitspaketZustand) {
+		this.arbeitspaketZustand = arbeitspaketZustand;
 	}
 
 }
