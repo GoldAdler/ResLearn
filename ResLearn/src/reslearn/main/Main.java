@@ -1,25 +1,25 @@
 package reslearn.main;
 
 import reslearn.model.algorithmus.AlgoErsteSchritt;
-import reslearn.model.canvas.Canvas;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.resCanvas.ResCanvas;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Canvas canvas = new Canvas();
+		ResCanvas resCanvas = new ResCanvas();
 
-		erstelleTestDaten(canvas);
+		erstelleTestDaten(resCanvas);
 
 		// durchführen des Algorithmus
-		var koordinantenSystem = AlgoErsteSchritt.berechne(canvas);
+		var koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
 
 		ausgeben(koordinantenSystem);
 
 	}
 
-	private static void erstelleTestDaten(Canvas canvas) {
+	private static void erstelleTestDaten(ResCanvas resCanvas) {
 		// ---------------------------------------------------------------------
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------Anfang--------------------------------
@@ -31,9 +31,9 @@ public class Main {
 		// Arbeitspaket apB = new Arbeitspaket("B", 1, 2, 4, 4, 2, 4, 8);
 		// Arbeitspaket apC = new Arbeitspaket("C", 3, 5, 5, 7, 2, 3, 6);
 		//
-		// canvas.hinzufuegen(apB);
-		// canvas.hinzufuegen(apC);
-		// canvas.hinzufuegen(apA);
+		// resCanvas.hinzufuegen(apB);
+		// resCanvas.hinzufuegen(apC);
+		// resCanvas.hinzufuegen(apA);
 
 		/*
 		 * PTMA_U09_L Test
@@ -44,11 +44,11 @@ public class Main {
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 17, 5, 5, 25);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 21, 6, 3, 18);
 
-		canvas.hinzufuegen(apB);
-		canvas.hinzufuegen(apD);
-		canvas.hinzufuegen(apA);
-		canvas.hinzufuegen(apE);
-		canvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
 
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------ENDE--------------------------------
