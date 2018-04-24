@@ -15,7 +15,7 @@ public class Vektor2i {
 	}
 
 	public void add(Vektor2i vektor2i) {
-		this.xKoordinate -= vektor2i.xKoordinate;
+		this.xKoordinate += vektor2i.xKoordinate;
 		this.yKoordinate -= vektor2i.yKoordinate;
 	}
 
