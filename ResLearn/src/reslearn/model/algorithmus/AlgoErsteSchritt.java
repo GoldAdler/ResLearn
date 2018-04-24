@@ -33,7 +33,7 @@ import reslearn.model.resCanvas.ResCanvas;
  * bereits andere ResEinheiten anderer Arbeitspakete sind. #ueberpruefeObereFelder
  * Ist dies der Fall müssen diese um nach oben verschoben werden.
  *
- * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt.
+ * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt. #befuelleKoordinatenSystem
  *
  */
 
