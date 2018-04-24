@@ -14,5 +14,4 @@ public class Main extends Application {
 		stage.setTitle("ResLearn");
 		stage.show();
 	}
-
 }
