@@ -55,7 +55,7 @@ public class Main {
 		// ---------------------------------------------------------------------
 	}
 
-	private static void ausgeben(ResEinheit[][] koordinantenSystem) {
+	public static void ausgeben(ResEinheit[][] koordinantenSystem) {
 		// ---------------------------------------------------------------------
 		// -----------------------------TestAusgabe-----------------------------
 		// -------------------------------Anfang--------------------------------
