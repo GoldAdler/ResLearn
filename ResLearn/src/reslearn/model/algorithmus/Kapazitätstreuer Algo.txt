@@ -1,0 +1,17 @@
+1. schauen ob ein Paket über dem Maximum liegt
+-> Koordinatensystem bei der jeweiligen Obergrenze durchgehen
+-> wenn eine ResEinheit != null, dann jeweiliges Arbeitspaket speichern
+
+2. diese Arbeitspakete in eine Queue (VerletzPakete) speichern
+-> mit erstem Paket anfangen
+-> welches Paket liegt direkt darunter? DrunterPaket
+-> ist rechts davon noch mehr Pakete, und daneben? Diese werden in eine Liste(quruadsuf, stack) WiederSetzPakete aufgenommen und aus dem Koordinatensysetm gelöscht
+-> DrunterPaket um Länge verschieben, die benötigt wird (nicht leerer Bereich unter dem ursprüngl. Paket),
+-> währenddessen prüfen, ob damit SAZ etc. verletzt wird
+-> VerletzPakete abarbeit, sprich nach unten fallen lassen
+-> WiderSetzPakete wieder in ins Koordinansystem einpflanzen
+-> wieder prüfen ob Obergrenze überschritten
+-> repeat 2.
+
+3. nur Parameter überprüfen, wenn Lösung validiert wird.
+Lösung anzeigen -> eine Lösung wird berechnet.

@@ -33,19 +33,32 @@ import reslearn.model.resCanvas.ResCanvas;
  * bereits andere ResEinheiten anderer Arbeitspakete sind. #ueberpruefeObereFelder
  * Ist dies der Fall müssen diese um nach oben verschoben werden.
  *
- * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt.
+ * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt. #befuelleKoordinatenSystem
  *
  */
 
-public abstract class AlgoErsteSchritt {
+public class AlgoErsteSchritt extends Algorithmus {
 
-	public static ResEinheit[][] berechne(ResCanvas resCanvas) {
+	private static AlgoErsteSchritt algoErsteSchritt;
+
+	private AlgoErsteSchritt() {
+	}
+
+	public static AlgoErsteSchritt getInstance() {
+		if (algoErsteSchritt == null) {
+			algoErsteSchritt = new AlgoErsteSchritt();
+		}
+		return algoErsteSchritt;
+	}
+
+	@Override
+	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(resCanvas);
-		ResEinheit[][] koordinantenSystem = resCanvas.getKoordinantenSystem();
-		algoDurchfuehren(arbeitspaketListe, koordinantenSystem, resCanvas);
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+		berechne(arbeitspaketListe, koordinatenSystem, resCanvas);
 
-		return koordinantenSystem;
+		return koordinatenSystem;
 	}
 
 	/**
@@ -61,7 +74,7 @@ public abstract class AlgoErsteSchritt {
 	/**
 	 * Jedes Arbeitspaket in das KoordinatenSystem setzten
 	 */
-	private static void algoDurchfuehren(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinantenSystem,
+	private static void berechne(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
 			ResCanvas resCanvas) {
 
 		for (int i = 0; i < arbeitspaketListe.size(); i++) {
@@ -78,14 +91,14 @@ public abstract class AlgoErsteSchritt {
 				int x_Start = arbeitspaket.getFaz() - 1;
 				int y_Start = ResCanvas.koorHoehe - 1;
 
-				y_Start = findeStartpunkt(koordinantenSystem, x_Start, y_Start);
+				y_Start = findeStartpunkt(koordinatenSystem, x_Start, y_Start);
 
-				ueberpruefeObereFelder(koordinantenSystem, resCanvas, arbeitspaket, x_Start, y_Start);
+				ueberpruefeObereFelder(koordinatenSystem, resCanvas, arbeitspaket, x_Start, y_Start);
 
-				befuelleKoordinatenSystem(koordinantenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
+				befuelleKoordinatenSystem(koordinatenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
 
 				// TODO löschen
-				Main.ausgeben(koordinantenSystem);
+				Main.ausgeben(koordinatenSystem);
 
 			} while (size != teilpaketListe.size());
 
@@ -96,10 +109,10 @@ public abstract class AlgoErsteSchritt {
 	 * Ermittelt den Startpunkt des Teilpaketes im 2-D-Array der Klasse ResCanvas
 	 * (koordinatenSystem)
 	 */
-	private static int findeStartpunkt(ResEinheit[][] koordinantenSystem, int x_Start, int y_Start) {
+	private static int findeStartpunkt(ResEinheit[][] koordinatenSystem, int x_Start, int y_Start) {
 		boolean gefunden = false;
 		for (int posY = y_Start; posY >= 0; posY--) {
-			if (koordinantenSystem[posY][x_Start] == null) {
+			if (koordinatenSystem[posY][x_Start] == null) {
 				gefunden = true;
 				y_Start = posY;
 				break;
@@ -115,7 +128,7 @@ public abstract class AlgoErsteSchritt {
 	 * Befüllt anhand des gefunden Startpunktes (#findeStartpunkt) das 2-D-Array
 	 * koordinatenSystem mit den Reseinheiten eines Teilpaketes
 	 */
-	private static void befuelleKoordinatenSystem(ResEinheit[][] koordinantenSystem, Arbeitspaket arbeitspaket,
+	private static void befuelleKoordinatenSystem(ResEinheit[][] koordinatenSystem, Arbeitspaket arbeitspaket,
 			Teilpaket teilpaket, int x_Start, int y_Start) {
 
 		var resEinheitenListe = teilpaket.getResEinheitListe();
@@ -123,10 +136,10 @@ public abstract class AlgoErsteSchritt {
 
 		for (int y = y_Start; y > y_Start - arbeitspaket.getMitarbeiteranzahl(); y--) {
 			for (int x = x_Start; x < arbeitspaket.getFez(); x++) {
-				if (koordinantenSystem[y][x] == null) {
+				if (koordinatenSystem[y][x] == null) {
 					if (it.hasNext()) {
-						koordinantenSystem[y][x] = it.next();
-						koordinantenSystem[y][x].setPosition(new Vektor2i(y, x));
+						koordinatenSystem[y][x] = it.next();
+						koordinatenSystem[y][x].setPosition(new Vektor2i(y, x));
 					}
 				}
 			}
@@ -138,36 +151,41 @@ public abstract class AlgoErsteSchritt {
 	 * B liegt. Ist dies der Fall muss Teilpaket B nach oben verschoben werden.
 	 * Pakete die über B liegen werden ebenfalls nach oben verschoben.
 	 *
-	 * @param koordinantenSystem
+	 * @param koordinatenSystem
 	 * @param resCanvas
 	 * @param arbeitspaket
-	 * @param x_Start
-	 * @param y_Start
+	 * @param xStart
+	 * @param yStart
 	 */
-	private static void ueberpruefeObereFelder(ResEinheit[][] koordinantenSystem, ResCanvas resCanvas,
-			Arbeitspaket arbeitspaket, int x_Start, int y_Start) {
-		for (int y = y_Start; y > y_Start - arbeitspaket.getMitarbeiteranzahl(); y--) {
-			if (koordinantenSystem[y][x_Start] != null) {
-				int y_Move = arbeitspaket.getMitarbeiteranzahl() - (y_Start - y);
+	private static void ueberpruefeObereFelder(ResEinheit[][] koordinatenSystem, ResCanvas resCanvas,
+			Arbeitspaket arbeitspaket, int xStart, int yStart) {
+		for (int y = yStart; y > yStart - arbeitspaket.getMitarbeiteranzahl(); y--) {
+			if (koordinatenSystem[y][xStart] != null) {
+				int yMove = arbeitspaket.getMitarbeiteranzahl() - (yStart - y);
 				Stack<Teilpaket> stackTeilpaket = new Stack<>();
-				stackTeilpaket.add(koordinantenSystem[y][x_Start].getTeilpaket());
+				stackTeilpaket.add(koordinatenSystem[y][xStart].getTeilpaket());
 
 				// über dem einzufügenden Teilpaket A liegt bereits Teilpaket B
 				// hier muss jetzt aber auch überprüft werden, ob ein Teilpaket C
 				// über B liegt, etc.
-				for (int y_Kollision = y; y_Kollision >= 0; y_Kollision--) {
-					if (koordinantenSystem[y_Kollision][x_Start] != null) {
-						if (!stackTeilpaket.contains(koordinantenSystem[y_Kollision][x_Start].getTeilpaket())) {
-							stackTeilpaket.add(koordinantenSystem[y_Kollision][x_Start].getTeilpaket());
+				for (int yKollision = y; yKollision >= 0; yKollision--) {
+					for (int xKollision = stackTeilpaket.peek().getArbeitspaket().getFaz(); xKollision < stackTeilpaket
+							.peek().getArbeitspaket().getFez(); xKollision++) {
+						if (koordinatenSystem[yKollision][xKollision] != null) {
+							if (!stackTeilpaket.contains(koordinatenSystem[yKollision][xKollision].getTeilpaket())) {
+								stackTeilpaket.add(koordinatenSystem[yKollision][xKollision].getTeilpaket());
+							}
 						}
 					}
 				}
 
+				// TODO: Eventuell rekursiv lösen
+
 				while (!stackTeilpaket.isEmpty()) {
-					resCanvas.bewegeNachOben(stackTeilpaket.pop(), y_Move);
+					stackTeilpaket.pop().bewegen(resCanvas, yMove, 0);
 				}
 				// TODO löschen
-				Main.ausgeben(koordinantenSystem);
+				Main.ausgeben(koordinatenSystem);
 
 				break;
 			}

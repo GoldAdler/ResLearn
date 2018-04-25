@@ -1,27 +1,31 @@
 package reslearn.model.resCanvas;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ArbeitspaketZustand;
 import reslearn.model.paket.ResEinheit;
-import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
 
 public class ResCanvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
-	public static final int koorHoehe = 50;
-	public static final int koorBreite = 50;
-	private ResEinheit[][] koordinantenSystem;
+	private ResEinheit[][] koordinatenSystem;
+	public static final int koorHoehe = 28;
+	public static final int koorBreite = 43;
 
 	public ResCanvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
-		koordinantenSystem = new ResEinheit[koorHoehe][koorBreite];
+		koordinatenSystem = new ResEinheit[koorHoehe][koorBreite];
+	}
+
+	public void updatePosition(ResEinheit resEinheit, Vektor2i altePosition) {
+		this.koordinatenSystem[altePosition.getyKoordinate()][altePosition.getxKoordinate()] = null;
+		Vektor2i position = resEinheit.getPosition();
+		this.koordinatenSystem[position.getyKoordinate()][position.getxKoordinate()] = resEinheit;
 	}
 
 	/**
@@ -103,35 +107,12 @@ public class ResCanvas {
 		this.aktuellerZustand = aktuellerZustand;
 	}
 
-	public ResEinheit[][] getKoordinantenSystem() {
-		return koordinantenSystem;
+	public ResEinheit[][] getKoordinatenSystem() {
+		return koordinatenSystem;
 	}
 
-	public void setKoordinantenSystem(ResEinheit[][] koordinantenSystem) {
-		this.koordinantenSystem = koordinantenSystem;
-	}
-
-	// TODO Richtge Stelle?
-	// Überlegen ob die Bewegen Methode hier angebracht ist
-	// Arbeitspaket und Teilpakete sollten eine Bewegen Methode haben???
-	public void bewegeNachOben(Teilpaket teilpaket, int y_Move) {
-		var resEinheitListe = teilpaket.getResEinheitListe();
-
-		// itereriert rückwärts
-		// somit mussen die Reseinheiten nur einmal angefasst werden
-		// i.a. Reseinheit von aktueller Position im Koordinatensystem löschen und um
-		// eines nach oben verschieben
-		ListIterator<ResEinheit> li = resEinheitListe.listIterator(resEinheitListe.size());
-
-		ResEinheit resEinheit;
-		while (li.hasPrevious()) {
-			resEinheit = li.previous();
-			Vektor2i vektor = resEinheit.getPosition();
-			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = null;
-			vektor.add(new Vektor2i(y_Move, 0));
-			this.koordinantenSystem[vektor.getyKoordinate()][vektor.getxKoordinate()] = resEinheit;
-		}
-
+	public void setKoordinatenSystem(ResEinheit[][] koordinatenSystem) {
+		this.koordinatenSystem = koordinatenSystem;
 	}
 
 }
