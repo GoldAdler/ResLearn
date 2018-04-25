@@ -41,7 +41,6 @@ public class View extends Application{
 		stage.setTitle("ResLearn");
 		stage.show();
 		
-
 		Diagramm meincanvas = new Diagramm();
         meincanvas.zeichneCanvas(gc,canvas);
 	}
