@@ -18,7 +18,11 @@ public class Main {
 		ausgeben(koordinantenSystem);
 		
 		//TODO Lösche mich weg
+<<<<<<< HEAD
 		System.out.println("Commit Klemens");
+=======
+		System.out.println("sdfgadfgsdfgsdfgsdgadfg");
+>>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 
 	}
 
