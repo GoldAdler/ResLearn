@@ -16,6 +16,9 @@ public class Main {
 		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
 
 		ausgeben(koordinantenSystem);
+		
+		//TODO Lösche mich weg
+		System.out.println("Hallo blabalbalb");
 
 	}
 
