@@ -25,15 +25,15 @@ public class ResFeld {
     public void zeichneFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
         gc.setFill(Color.rgb(255, 255, 255));
         gc.setLineWidth(1);
-        gc.strokeRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
-        gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
+        gc.strokeRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
+        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
         
     }
     
     
     public void setzeFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j, ResEinheit resEinheit) {
     	gc.setFill(setzeFarbe(resEinheit));
-        gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
+        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
     }
     
     public static Color setzeFarbe(ResEinheit resEinheit) {
