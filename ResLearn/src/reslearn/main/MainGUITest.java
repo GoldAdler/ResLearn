@@ -5,7 +5,7 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
-public class Main {
+public class MainGUITest {
 
 	public static void main(String[] args) {
 		ResCanvas resCanvas = new ResCanvas();
