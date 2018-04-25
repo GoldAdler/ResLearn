@@ -47,8 +47,7 @@ public class Diagramm {
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
-					feld[i*10][j*10].setzeFeld(gc, myCanvas, abstandX, abstandY, spaltX, spaltY, j*10, i*10,
-							koordinatenSystem[i][j]);
+					feld[i*10][j*10].setzeFeld(gc, myCanvas, abstandX, abstandY, spaltX, spaltY, j*10, i*10, koordinatenSystem[i][j]);
 				}
 			}
 		}
