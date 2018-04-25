@@ -13,20 +13,9 @@ public class Main {
 		erstelleTestDaten(resCanvas);
 
 		// durchführen des Algorithmus
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.berechne(resCanvas);
+		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
 
-<<<<<<< HEAD
-		ausgeben(koordinatenSystem);
-=======
 		ausgeben(koordinantenSystem);
-		
-		//TODO Lösche mich weg
-<<<<<<< HEAD
-		System.out.println("Commit Klemens");
-=======
-		System.out.println("sdfgadfgsdfgsdfgsdgadfg");
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 
 	}
 
