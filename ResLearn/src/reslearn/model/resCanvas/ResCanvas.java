@@ -11,21 +11,14 @@ public class ResCanvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
-<<<<<<< HEAD
-	public static final int koorHoehe = 50;
-	public static final int koorBreite = 50;
 	private ResEinheit[][] koordinatenSystem;
-=======
 	public static final int koorHoehe = 28;
 	public static final int koorBreite = 43;
-	private ResEinheit[][] koordinantenSystem;
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 
 	public ResCanvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
-<<<<<<< HEAD
 		koordinatenSystem = new ResEinheit[koorHoehe][koorBreite];
 	}
 
@@ -33,9 +26,6 @@ public class ResCanvas {
 		this.koordinatenSystem[altePosition.getyKoordinate()][altePosition.getxKoordinate()] = null;
 		Vektor2i position = resEinheit.getPosition();
 		this.koordinatenSystem[position.getyKoordinate()][position.getxKoordinate()] = resEinheit;
-=======
-		koordinantenSystem = new ResEinheit[koorBreite][koorHoehe];
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 	}
 
 	/**
