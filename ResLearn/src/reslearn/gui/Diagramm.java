@@ -39,9 +39,6 @@ public class Diagramm {
 		for (i = 0; i < zeile; i += 10) {
 			for (j = 0; j < spalte; j += 10) {
 				feld[i][j] = new ResFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
-				if(i==10 && j==20) {
-					//feld[i][j].zeichneFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
-				}
 			}
 		}
 	}
