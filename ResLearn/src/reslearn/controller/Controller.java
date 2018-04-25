@@ -60,6 +60,7 @@ public class Controller {
 			newScene = new Scene(root);
 		}
 		
+		
 		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 		window.setScene(newScene);
 		window.show();

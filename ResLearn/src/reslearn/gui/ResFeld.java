@@ -3,6 +3,7 @@ package reslearn.gui;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import reslearn.model.paket.ResEinheit;
 
 public class ResFeld {
 	
@@ -24,18 +25,33 @@ public class ResFeld {
     public void zeichneFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
         gc.setFill(Color.rgb(255, 255, 255));
         gc.setLineWidth(1);
-        gc.strokeRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
-        gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
+        gc.strokeRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
+        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
         
     }
     
     
-    public void setzeFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
-    	gc.setFill(Color.RED);
-//        gc.setLineWidth(1);
-//        gc.strokeRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
-        gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
+    public void setzeFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j, ResEinheit resEinheit) {
+    	gc.setFill(setzeFarbe(resEinheit));
+        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
     }
+    
+    public static Color setzeFarbe(ResEinheit resEinheit) {
+		switch (resEinheit.getTeilpaket().getArbeitspaket().getId()) {
+		case "A": 
+			return Color.RED;
+		case "B":
+			return Color.GREEN;
+		case "C":
+			return Color.BLUE;
+		case "D":
+			return Color.YELLOW;
+		case "E":
+			return Color.ORANGE;
+		default:
+			return Color.WHITE;
+		}
+	}
     
     public int getBreite() {
     	return breite;
