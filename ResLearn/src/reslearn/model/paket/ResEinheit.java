@@ -1,5 +1,7 @@
 package reslearn.model.paket;
 
+import reslearn.model.resCanvas.ResCanvas;
+
 public class ResEinheit extends Paket {
 
 	/**
@@ -11,6 +13,30 @@ public class ResEinheit extends Paket {
 	private static final int FLAECHE = 1;
 
 	public ResEinheit() {
+
+	}
+
+	@Override
+	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
+
+		// TODO: Kommentar eventuell weg
+		// itereriert rückwärts
+		// somit mussen die Reseinheiten nur einmal angefasst werden
+		// i.a. Reseinheit von aktueller Position im Koordinatensystem löschen und um
+		// eines nach oben verschieben
+		// ListIterator<ResEinheit> li =
+		// resEinheitListe.listIterator(resEinheitListe.size());
+
+		// while (li.hasPrevious()) {
+		// resEinheit = li.previous();
+		// Vektor2i vektor = this.getPosition();
+		// resCanvas.bewege(resEinheit, resEinheit.get)
+		// resCanvas.delete(vektor.getyKoordinate()][vektor.getxKoordinate() );
+
+		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
+		this.position.add(new Vektor2i(yMove, xMove));
+
+		resCanvas.updatePosition(this, altePosition);
 
 	}
 

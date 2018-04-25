@@ -2,6 +2,8 @@ package reslearn.model.paket;
 
 import java.util.ArrayList;
 
+import reslearn.model.resCanvas.ResCanvas;
+
 public class Arbeitspaket extends Paket {
 
 	/**
@@ -42,6 +44,13 @@ public class Arbeitspaket extends Paket {
 		this.sez = sez;
 		teilpaketListe = new ArrayList<Teilpaket>();
 		teilpaketListe.add(new Teilpaket(this));
+	}
+
+	@Override
+	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
+		for (Teilpaket teilpaket : teilpaketListe) {
+			teilpaket.bewegen(resCanvas, yMove, xMove);
+		}
 	}
 
 	public int getFaz() {

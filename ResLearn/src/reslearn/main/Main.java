@@ -13,9 +13,9 @@ public class Main {
 		erstelleTestDaten(resCanvas);
 
 		// durchführen des Algorithmus
-		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.berechne(resCanvas);
 
-		ausgeben(koordinantenSystem);
+		ausgeben(koordinatenSystem);
 
 	}
 
@@ -43,23 +43,25 @@ public class Main {
 		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 14, 8, 2, 16);
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 17, 5, 5, 25);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 21, 6, 3, 18);
+		Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
 
 		resCanvas.hinzufuegen(apB);
 		resCanvas.hinzufuegen(apD);
 		resCanvas.hinzufuegen(apA);
 		resCanvas.hinzufuegen(apE);
 		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apZ);
 
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------ENDE--------------------------------
 		// ---------------------------------------------------------------------
 	}
 
-	public static void ausgeben(ResEinheit[][] koordinantenSystem) {
+	public static void ausgeben(ResEinheit[][] koordinatenSystem) {
 		// ---------------------------------------------------------------------
 		// -----------------------------TestAusgabe-----------------------------
 		// -------------------------------Anfang--------------------------------
-		for (ResEinheit[] a : koordinantenSystem) {
+		for (ResEinheit[] a : koordinatenSystem) {
 			for (ResEinheit b : a) {
 				if (b == null) {
 					System.out.print(".");
