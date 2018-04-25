@@ -13,13 +13,12 @@ public class Diagramm {
 	private int spaltX = 5;
 	private int spaltY = 5;
 	private ResEinheit[][] koordinatenSystem;
-	ResFeld[][] resfeld;
-	ResFeld feld;
+	ResFeld[][] feld;
 	int i;
 	int j;
 	
     public void zeichneCanvas(GraphicsContext gc, Canvas canvas) {
-
+    	
         gc.setStroke(Color.GRAY);
         gc.strokeLine(0, canvas.getHeight(), 0, 0);
         gc.strokeLine(0, canvas.getHeight(), canvas.getWidth(), canvas.getHeight());
@@ -30,12 +29,13 @@ public class Diagramm {
         gc.strokeLine(abstandX, canvas.getHeight()-abstandY, abstandX, abstandY - spaltY);
         gc.strokeLine(abstandX, canvas.getHeight()-abstandY, canvas.getWidth()-abstandX + spaltX, canvas.getHeight()-abstandY);
         
-        koordinatenSystem = new ResEinheit[43][28];
-		resfeld = new ResFeld[i][j];
+        
+        
+		feld = new ResFeld[i][j];
 		for(i=0; i<430;i+=10) {
 			for(j=0; j<280;j+=10) {
 //				feld[i][j] = new ResFeld();
-				feld.zeichneDiagramm(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
+				ResFeld.zeichneDiagramm(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
 				
 			}
 		}

@@ -6,6 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import reslearn.model.algorithmus.AlgoErsteSchritt;
+import reslearn.model.paket.ResEinheit;
 import javafx.scene.canvas.*;
 import javafx.scene.layout.Pane;
 
@@ -39,6 +41,7 @@ public class View extends Application{
 		stage.setTitle("ResLearn");
 		stage.show();
 		
+
 		Diagramm meincanvas = new Diagramm();
         meincanvas.zeichneCanvas(gc,canvas);
 	}
