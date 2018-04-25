@@ -18,7 +18,7 @@ public class Main {
 		ausgeben(koordinantenSystem);
 		
 		//TODO Lösche mich weg
-		System.out.println("Hallo blabalbalb");
+		System.out.println("Commit Klemens");
 
 	}
 
