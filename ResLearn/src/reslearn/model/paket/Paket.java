@@ -1,5 +1,7 @@
 package reslearn.model.paket;
 
+import reslearn.model.resCanvas.ResCanvas;
+
 public abstract class Paket {
 
 	protected Vektor2i position;
@@ -19,6 +21,8 @@ public abstract class Paket {
 		this.mitarbeiteranzahl = mitarbeiteranzahl;
 		this.aufwand = aufwand;
 	}
+
+	public abstract void bewegen(ResCanvas resCanvas, int yMove, int xMove);
 
 	public Vektor2i getPosition() {
 		return position;

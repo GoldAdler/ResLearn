@@ -2,6 +2,8 @@ package reslearn.model.paket;
 
 import java.util.ArrayList;
 
+import reslearn.model.resCanvas.ResCanvas;
+
 public class Teilpaket extends Paket {
 
 	/**
@@ -21,6 +23,13 @@ public class Teilpaket extends Paket {
 		resEinheitListe = new ArrayList<ResEinheit>();
 		for (int i = 0; i < this.aufwand; i++) {
 			resEinheitListe.add(new ResEinheit(this));
+		}
+	}
+
+	@Override
+	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
+		for (ResEinheit resEinheit : resEinheitListe) {
+			resEinheit.bewegen(resCanvas, yMove, xMove);
 		}
 	}
 
