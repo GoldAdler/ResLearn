@@ -14,7 +14,6 @@ public class View extends Application{
 		launch(args);
 	}
 	public void start (Stage stage) throws Exception {
-		
 	
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("Hauptmenue.fxml"));
 		Scene scene = new Scene(new Group());

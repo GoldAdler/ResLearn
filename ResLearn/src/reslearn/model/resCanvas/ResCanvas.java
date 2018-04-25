@@ -13,15 +13,15 @@ public class ResCanvas {
 
 	private LinkedList<ArbeitspaketZustand> arbeitspaketZustandListe;
 	private ArbeitspaketZustand aktuellerZustand;
-	public static final int koorHoehe = 50;
-	public static final int koorBreite = 50;
+	public static final int koorHoehe = 28;
+	public static final int koorBreite = 43;
 	private ResEinheit[][] koordinantenSystem;
 
 	public ResCanvas() {
 		arbeitspaketZustandListe = new LinkedList<ArbeitspaketZustand>();
 		aktuellerZustand = new ArbeitspaketZustand();
 		// arbeitspaketZustandListe.add(aktuellerZustand);
-		koordinantenSystem = new ResEinheit[koorHoehe][koorBreite];
+		koordinantenSystem = new ResEinheit[koorBreite][koorHoehe];
 	}
 
 	/**
