@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+         <image>
+            <Image url="@../images/pfeil.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="100.0" layoutY="75.0" text="Anzahl Pakete">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <TextField alignment="CENTER" layoutX="433.0" layoutY="80.0" prefHeight="25.0" prefWidth="35.0" text="4" />
+      <Button layoutX="468.0" layoutY="80.0" mnemonicParsing="false" text="+">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button layoutX="410.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" text="-">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <ScrollPane hbarPolicy="NEVER" layoutX="100.0" layoutY="125.0" prefHeight="200.0" prefWidth="700.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="0.0">
+               <children>
+                  <TableView editable="true" prefHeight="200.0" prefWidth="700.0">
+                    <columns>
+                      <TableColumn prefWidth="103.0" sortable="false" text="Arbeitspaket ID" />
+                      <TableColumn prefWidth="75.0" sortable="false" text="FAZ" />
+                        <TableColumn prefWidth="75.0" sortable="false" text="SAZ" />
+                        <TableColumn prefWidth="75.0" sortable="false" text="FEZ" />
+                        <TableColumn prefWidth="75.0" sortable="false" text="SEZ" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Pane layoutX="100.0" layoutY="375.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: white;">
+         <children>
+            <Label alignment="CENTER" layoutX="213.0" layoutY="10.0" text="Auswahl Optimierungsverfahren">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Label>
+            <RadioButton layoutX="75.0" layoutY="60.0" mnemonicParsing="false" text="Kapazitätstreue Optimierung" />
+            <RadioButton layoutX="400.0" layoutY="60.0" mnemonicParsing="false" text="Termintreue Optimierung" />
+            <Pane layoutX="75.0" layoutY="89.0" prefHeight="47.0" prefWidth="262.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="15.0" text="Max. Personen Parallel">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Button layoutX="165.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" text="-">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="223.0" layoutY="10.0" mnemonicParsing="false" text="+">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField alignment="CENTER" layoutX="188.0" layoutY="10.0" prefHeight="25.0" prefWidth="35.0" text="4" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Button alignment="CENTER" graphicTextGap="5.0" layoutX="731.0" layoutY="543.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

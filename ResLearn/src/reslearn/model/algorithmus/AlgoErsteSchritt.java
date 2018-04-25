@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Stack;
 
+import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ComperatorErsteSchrittModus;
 import reslearn.model.paket.ResEinheit;
@@ -32,7 +33,7 @@ import reslearn.model.resCanvas.ResCanvas;
  * bereits andere ResEinheiten anderer Arbeitspakete sind. #ueberpruefeObereFelder
  * Ist dies der Fall müssen diese um nach oben verschoben werden.
  *
- * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt.
+ * Abschließend werden die einzufügenden Arbeitspakete in das Koordinatensystem gesetzt. #befuelleKoordinatenSystem
  *
  */
 
@@ -82,6 +83,9 @@ public abstract class AlgoErsteSchritt {
 				ueberpruefeObereFelder(koordinantenSystem, resCanvas, arbeitspaket, x_Start, y_Start);
 
 				befuelleKoordinatenSystem(koordinantenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
+
+				// TODO löschen
+				Main.ausgeben(koordinantenSystem);
 
 			} while (size != teilpaketListe.size());
 
@@ -162,11 +166,15 @@ public abstract class AlgoErsteSchritt {
 				while (!stackTeilpaket.isEmpty()) {
 					resCanvas.bewegeNachOben(stackTeilpaket.pop(), y_Move);
 				}
+				// TODO löschen
+				Main.ausgeben(koordinantenSystem);
+
 				break;
 			}
 			// TODO Algo verbessern
 			// Die Überprüfung ob über einem Teilpaket B noch andere Reseinheiten liegen ist
 			// noch nicht ausgereift
 		}
+
 	}
 }
