@@ -13,7 +13,7 @@ public class Main {
 		erstelleTestDaten(resCanvas);
 
 		// durchführen des Algorithmus
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.berechne(resCanvas);
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
 
 		ausgeben(koordinatenSystem);
 

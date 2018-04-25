@@ -37,13 +37,26 @@ import reslearn.model.resCanvas.ResCanvas;
  *
  */
 
-public abstract class AlgoErsteSchritt {
+public class AlgoErsteSchritt extends Algorithmus {
 
-	public static ResEinheit[][] berechne(ResCanvas resCanvas) {
+	private static AlgoErsteSchritt algoErsteSchritt;
+
+	private AlgoErsteSchritt() {
+	}
+
+	public static AlgoErsteSchritt getInstance() {
+		if (algoErsteSchritt == null) {
+			algoErsteSchritt = new AlgoErsteSchritt();
+		}
+		return algoErsteSchritt;
+	}
+
+	@Override
+	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(resCanvas);
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
-		algoDurchfuehren(arbeitspaketListe, koordinatenSystem, resCanvas);
+		berechne(arbeitspaketListe, koordinatenSystem, resCanvas);
 
 		return koordinatenSystem;
 	}
@@ -61,7 +74,7 @@ public abstract class AlgoErsteSchritt {
 	/**
 	 * Jedes Arbeitspaket in das KoordinatenSystem setzten
 	 */
-	private static void algoDurchfuehren(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
+	private static void berechne(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
 			ResCanvas resCanvas) {
 
 		for (int i = 0; i < arbeitspaketListe.size(); i++) {
