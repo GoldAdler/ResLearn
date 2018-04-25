@@ -14,8 +14,9 @@ public class Diagramm {
 	private int spaltY = 5;
 	private ResEinheit[][] koordinatenSystem;
 	ResFeld[][] feld;
-	int i;
-	int j;
+	int i,j;
+	int zeile = 430;
+	int spalte = 280;
 	
     public void zeichneCanvas(GraphicsContext gc, Canvas canvas) {
     	
@@ -31,15 +32,16 @@ public class Diagramm {
         
         
         
-		feld = new ResFeld[i][j];
-		for(i=0; i<430;i+=10) {
-			for(j=0; j<280;j+=10) {
-//				feld[i][j] = new ResFeld();
-				ResFeld.zeichneDiagramm(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
-				
+		feld = new ResFeld[zeile][spalte];
+		for(i=0; i<zeile;i+=10) {
+			for(j=0; j<spalte;j+=10) {
+				feld[i][j] = new ResFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
+				if(i==10 && j==20) {
+					feld[i][j].setzeFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
+				}
 			}
 		}
-//		feld[120][40].setzeFarbe(gc);
+
     }
 	
     public void zeichneTeilpaket() {

@@ -4,15 +4,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class ResFeld extends Canvas{
+public class ResFeld {
 	
 	GraphicsContext gc;
 	private static int breite = 20;
 	private static int laenge = 20;
 	ResFeld[][] resfeld;
 	
-	public ResFeld() {
-		
+	public ResFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
+		zeichneFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
 	}
 	
 	public ResFeld(GraphicsContext gc, int breite, int laenge) {
@@ -21,17 +21,20 @@ public class ResFeld extends Canvas{
 		ResFeld.laenge = laenge;
 	}
 	
-    public static void zeichneDiagramm(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
-        gc.setFill(Color.rgb(255, 0, 0));
+    public void zeichneFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
+        gc.setFill(Color.rgb(255, 255, 255));
         gc.setLineWidth(1);
         gc.strokeRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
         gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
- 
+        
     }
     
     
-    public void setzeFeld(GraphicsContext gc) {
-    	
+    public void setzeFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
+    	gc.setFill(Color.RED);
+//        gc.setLineWidth(1);
+//        gc.strokeRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
+        gc.fillRect(spaltX + abstandX + i*2, canvas.getHeight() - spaltY - abstandY -20 - j*2, breite, laenge);
     }
     
     public int getBreite() {
