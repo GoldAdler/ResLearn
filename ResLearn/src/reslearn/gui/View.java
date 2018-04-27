@@ -50,8 +50,13 @@ public class View extends Application {
 
 		erstelleTestDaten(resCanvas);
 
-		// durchführen des Algorithmus
-		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
+//		// alt: durchführen des Algorithmus
+//		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
+		
+		// neu: durchführen des Algorithmus
+		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		
+		
 		
 		Diagramm meincanvas = new Diagramm(koordinantenSystem);
 		meincanvas.zeichneCanvas(gc, canvas);
