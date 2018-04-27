@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerHauptmenue">    
    <children>
       <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="ResLearn" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
@@ -34,7 +34,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonTutorial" stylesheets="@Stylesheet.css" text="Tutorial" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
+            <Button fx:id="tutorial" alignment="CENTER" mnemonicParsing="false" onAction="#weiter" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonTutorial" stylesheets="@Stylesheet.css" text="Tutorial" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -45,7 +45,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonEinstellungen" stylesheets="@Stylesheet.css" text="Einstellungen" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="einstellungen" alignment="CENTER" mnemonicParsing="false" onAction="#weiter" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonEinstellungen" stylesheets="@Stylesheet.css" text="Einstellungen" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -56,7 +56,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeErstellen" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" textFill="WHITE" wrapText="true" GridPane.rowIndex="1">
+            <Button fx:id="aufgabeErstellen" alignment="CENTER" mnemonicParsing="false" onAction="#weiter" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeErstellen" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" textFill="WHITE" wrapText="true" GridPane.rowIndex="1">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -67,7 +67,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeLaden" stylesheets="@Stylesheet.css" text="Aufgabe laden" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="aufgabeLaden" alignment="CENTER" mnemonicParsing="false" onAction="#weiter" prefHeight="126.0" prefWidth="1000.0" styleClass="buttonAufgabeLaden" stylesheets="@Stylesheet.css" text="Aufgabe laden" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <padding>
                   <Insets top="100.0" />
                </padding>
@@ -78,7 +78,7 @@
                   <Insets left="20.0" right="20.0" />
                </GridPane.margin>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="126.0" prefWidth="1500.0" styleClass="buttonUebungAuswaehlen" stylesheets="@Stylesheet.css" text="Übung auswählen" textFill="WHITE" wrapText="true" GridPane.columnSpan="2">
+            <Button fx:id="uebungAuswaehlen" alignment="CENTER" mnemonicParsing="false" onAction="#weiter" prefHeight="126.0" prefWidth="1500.0" styleClass="buttonUebungAuswaehlen" stylesheets="@Stylesheet.css" text="Übung auswählen" textFill="WHITE" wrapText="true" GridPane.columnSpan="2">
                <font>
                   <Font size="18.0" />
                </font>

@@ -12,6 +12,8 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 import javafx.scene.canvas.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class View extends Application {
 
@@ -20,11 +22,8 @@ public class View extends Application {
 	}
 
 	public void start(Stage stage) throws Exception {
-		// FXMLLoader fxmlLoader = new
-		// FXMLLoader(getClass().getResource("./fxml/Uebungsmodus.fxml"));
-		// Parent root = fxmlLoader.load();
-		//
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
+
+		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
 
@@ -33,11 +32,12 @@ public class View extends Application {
 		canvas.setLayoutY(80);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Group diagramm = new Group();
+
 		diagramm.getChildren().add(canvas);
 
 		Scene sceneFenster = new Scene(root);
 		Scene sceneDiagramm = new Scene(diagramm);
-		((Pane) sceneFenster.getRoot()).getChildren().add(sceneDiagramm.getRoot());
+//		((Pane) sceneFenster.getRoot()).getChildren().add(sceneDiagramm.getRoot());
 
 		stage.setMaximized(true);
 		stage.setScene(sceneFenster);
@@ -56,6 +56,7 @@ public class View extends Application {
 		Diagramm meincanvas = new Diagramm(koordinantenSystem);
 		meincanvas.zeichneCanvas(gc, canvas);
 		meincanvas.zeichneResEinheit(gc, canvas);
+		
 		
 	}
 
