@@ -1,6 +1,9 @@
 1. schauen ob ein Paket über dem Maximum liegt
 -> Koordinatensystem bei der jeweiligen Obergrenze durchgehen
--> wenn eine ResEinheit != null, dann jeweiliges Arbeitspaket speichern
+-> wenn eine ResEinheit != null, dann jeweiliges Teilpaket speichern (LinkedList)
+
+// TODO: WICHTIG über diesen ARbeitspaketen die die Regel verletzen, könnten noch andere
+// Arbeitspakte liegen!!!
 
 2. diese Arbeitspakete in eine Queue (VerletzPakete) speichern
 -> mit erstem Paket anfangen
@@ -11,7 +14,11 @@
 -> VerletzPakete abarbeit, sprich nach unten fallen lassen
 -> WiderSetzPakete wieder in ins Koordinansystem einpflanzen
 -> wieder prüfen ob Obergrenze überschritten
+-> Pakete nach unten fallen lassen
 -> repeat 2.
+
+
+
 
 3. nur Parameter überprüfen, wenn Lösung validiert wird.
 Lösung anzeigen -> eine Lösung wird berechnet.
