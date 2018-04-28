@@ -1,0 +1,18 @@
+Teilpaket von 12 steht noch auf 10b, genau so wie in Ausgangssituation(Heruntergefallen)
+
+10a und 10b haben bereits die Position von Lösung c
+
+1. Teilpaket von 12, das noch auf 10b sthet, verschieben,
+	damit Vorgangsunterbrechung aufgehoben wird.
+	
+2. Jetzt kommt Algo und überprüfft ob Grenze von 5 Mitarbeitern überschritten ist
+	und stellt fest, das 12 die Regel verstößt
+	
+3. Wir schauen uns was unter 12 ist. Unt UntenUndRechts
+
+4. Da in der Liste UntenUndRechts bereits ein Teilpaket vom Arbeitspaket 12 ist,
+	darf das untere Paket (10b) nicht verschoben werden.
+	
+5. verschieben aller Teilpakete die UntenUndRechts sind (ohne 10b)
+
+6. das Obere 12 TeilPaket vor dem 12 Teilpaket legen, das unten liegt.

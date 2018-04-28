@@ -46,6 +46,10 @@ public class Arbeitspaket extends Paket {
 		teilpaketListe.add(new Teilpaket(this));
 	}
 
+	public void teilpaketHinzufuegen(Teilpaket teilpaket) {
+		teilpaketListe.add(teilpaket);
+	}
+
 	@Override
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {

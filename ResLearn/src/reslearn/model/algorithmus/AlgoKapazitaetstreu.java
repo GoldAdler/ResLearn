@@ -1,7 +1,9 @@
 package reslearn.model.algorithmus;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
+import reslearn.main.Main;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
@@ -24,11 +26,19 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		return algoKapazitaetstreu;
 	}
 
+	// TODO: Hier weiter machen ihr lappen
+	// Kompletter Algorithmus nochmal durchgehen um herauszufinden
+	// - warum E nicht in die Liste unterhalbUndRechts aufgenommen wird
+	// - Zeile 71 warum wird hier gelöscht
+	// - Irgendwas stimmt nicht mit D, was ist hier HILFE
+
 	@Override
 	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
-		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		resCanvas.herunterfallen();
 		LinkedList<Teilpaket> teilpaketListe = ueberpruefeObergrenze(resCanvas, koordinatenSystem);
-		LinkedList<Teilpaket> unterhalbUndRechts = new LinkedList<Teilpaket>();
+		Stack<Teilpaket> unterhalbUndRechts = new Stack<Teilpaket>();
 		Vektor2i position = null;
 		ResEinheit unterhalb;
 
@@ -37,7 +47,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 				position = res.getPosition();
 				int x = position.getxKoordinate();
-				for (int y = position.getyKoordinate(); y > ResCanvas.koorHoehe; y++) {
+				for (int y = position.getyKoordinate() + 1; y < ResCanvas.koorHoehe; y++) {
 					unterhalb = koordinatenSystem[y][x];
 
 					// wenn unterhalb der aktuellen resEinheit nichts liegt,
@@ -65,13 +75,24 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					unterhalb = koordinatenSystem[y][x];
 					if (unterhalb != null) {
 						unterhalbUndRechts.add(unterhalb.getTeilpaket());
-						resCanvas.entfernenTeilpaket(unterhalb.getTeilpaket());
 					}
 				}
 			}
 
+			int xMove = teilpaket.getVorgangsdauer();
+			for (Teilpaket tp : unterhalbUndRechts) {
+				tp.bewegen(resCanvas, 0, xMove);
+
+				// TODO: löschen
+				Main.ausgeben(koordinatenSystem);
+
+			}
+
+			resCanvas.herunterfallen(teilpaket);
+
 		}
-		return null;
+
+		return koordinatenSystem;
 	}
 
 	/**
@@ -88,10 +109,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		for (int x = 0; x < ResCanvas.koorBreite; x++) {
 
 			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
-			tempResEinheit = koordinatenSystem[maxBegrenzung][x];
-			if (tempResEinheit != null) {
-				teilpaketListe.add(koordinatenSystem[maxBegrenzung][x].getTeilpaket());
-				resCanvas.entfernenTeilpaket(tempResEinheit.getTeilpaket());
+			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
+			if (tempResEinheit != null && !teilpaketListe.contains(tempResEinheit.getTeilpaket())) {
+				teilpaketListe.add(tempResEinheit.getTeilpaket());
 			}
 		}
 
