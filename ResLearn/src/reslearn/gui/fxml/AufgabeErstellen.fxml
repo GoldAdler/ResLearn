@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerAufgabeErstellen">
    <children>
-      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" onMouseClicked="#handleImagePfeilAction" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Aufgabe erstellen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+      <ImageView fx:id="imagePfeil" fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" onMouseClicked="#handleImagePfeilAction" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
             <Image url="@../images/pfeil.png" />
          </image>
@@ -29,13 +29,13 @@
          <font>
             <Font size="24.0" />
          </font></Label>
-      <TextField alignment="CENTER" layoutX="433.0" layoutY="80.0" prefHeight="25.0" prefWidth="35.0" text="4" />
-      <Button layoutX="468.0" layoutY="80.0" mnemonicParsing="false" text="+">
+      <TextField fx:id="textFieldAnzPakete" alignment="CENTER" editable="false" layoutX="433.0" layoutY="80.0" prefHeight="25.0" prefWidth="35.0" text="4" />
+      <Button fx:id="buttonAnzPaketePlus" layoutX="468.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketePlusAction" text="+">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="410.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" text="-">
+      <Button fx:id="buttonAnzPaketeMinus" layoutX="410.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketeMinusAction" prefHeight="25.0" prefWidth="23.0" text="-">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -44,13 +44,15 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="0.0">
                <children>
-                  <TableView editable="true" prefHeight="200.0" prefWidth="700.0">
+                  <TableView fx:id="tabelle" editable="true" prefHeight="200.0" prefWidth="700.0">
                     <columns>
-                      <TableColumn prefWidth="103.0" sortable="false" text="Arbeitspaket ID" />
-                      <TableColumn prefWidth="75.0" sortable="false" text="FAZ" />
-                        <TableColumn prefWidth="75.0" sortable="false" text="SAZ" />
-                        <TableColumn prefWidth="75.0" sortable="false" text="FEZ" />
-                        <TableColumn prefWidth="75.0" sortable="false" text="SEZ" />
+                      <TableColumn fx:id="spalteID" prefWidth="97.0" sortable="false" text="Arbeitspaket ID" />
+                      <TableColumn fx:id="spalteFaz" prefWidth="96.0" sortable="false" text="FAZ" />
+                        <TableColumn fx:id="spalteSaz" prefWidth="96.0" sortable="false" text="SAZ" />
+                        <TableColumn fx:id="spalteFez" prefWidth="96.0" sortable="false" text="FEZ" />
+                        <TableColumn fx:id="spalteSez" prefWidth="96.0" sortable="false" text="SEZ" />
+                        <TableColumn fx:id="spalteAnzMitarbeiter" prefWidth="115.0" sortable="false" text="Anz. Mitarbeiter" />
+                        <TableColumn fx:id="spalteAufwand" prefWidth="89.0" sortable="false" text="Aufwand" />
                     </columns>
                   </TableView>
                </children>
@@ -63,30 +65,30 @@
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></Label>
-            <RadioButton layoutX="75.0" layoutY="60.0" mnemonicParsing="false" text="Kapazitätstreue Optimierung" />
-            <RadioButton layoutX="400.0" layoutY="60.0" mnemonicParsing="false" text="Termintreue Optimierung" />
-            <Pane layoutX="75.0" layoutY="89.0" prefHeight="47.0" prefWidth="262.0">
+            <RadioButton fx:id="radioButtonKapazitaet" layoutX="75.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleRadioButtonKapazitaetAction" text="Kapazitätstreue Optimierung" />
+            <RadioButton fx:id="radioButtonTermin" layoutX="400.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleRadioButtonTerminAction" text="Termintreue Optimierung" />
+            <Pane fx:id="panePersonen" layoutX="75.0" layoutY="89.0" prefHeight="47.0" prefWidth="262.0">
                <children>
                   <Label layoutX="14.0" layoutY="15.0" text="Max. Personen Parallel">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <Button layoutX="165.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" text="-">
+                  <Button fx:id="buttonMaxPersonenMinus" layoutX="165.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonMaxPersonenMinusAction" prefHeight="25.0" prefWidth="23.0" text="-">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button layoutX="223.0" layoutY="10.0" mnemonicParsing="false" text="+">
+                  <Button fx:id="buttonMaxPersonenPlus" layoutX="223.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonMaxPersonenPlusAction" text="+">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <TextField alignment="CENTER" layoutX="188.0" layoutY="10.0" prefHeight="25.0" prefWidth="35.0" text="4" />
+                  <TextField fx:id="textFieldMaxPersonen" alignment="CENTER" editable="false" layoutX="188.0" layoutY="10.0" prefHeight="25.0" prefWidth="35.0" text="4" />
                </children>
             </Pane>
          </children>
       </Pane>
-      <Button alignment="CENTER" graphicTextGap="5.0" layoutX="731.0" layoutY="543.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" />
+      <Button fx:id="buttonValidieren" alignment="CENTER" graphicTextGap="5.0" layoutX="731.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleButtonValidierenAction" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" />
    </children>
    <opaqueInsets>
       <Insets />
