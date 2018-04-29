@@ -15,7 +15,7 @@ public class View extends Application{
 	}
 	public void start (Stage stage) throws Exception {
 	
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("Hauptmenue.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("UebungAuswaehlen.fxml"));
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
 		stage.setScene(new Scene(root));
