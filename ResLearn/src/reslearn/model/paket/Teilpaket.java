@@ -12,10 +12,6 @@ public class Teilpaket extends Paket {
 	private Arbeitspaket arbeitspaket;
 	private ArrayList<ResEinheit> resEinheitListe;
 
-	public Teilpaket() {
-
-	}
-
 	public Teilpaket(Arbeitspaket arbeitspaket) {
 		super(arbeitspaket.getVorgangsdauer(), arbeitspaket.getMitarbeiteranzahl(), arbeitspaket.getAufwand());
 		this.arbeitspaket = arbeitspaket;
@@ -24,6 +20,30 @@ public class Teilpaket extends Paket {
 		for (int i = 0; i < this.aufwand; i++) {
 			resEinheitListe.add(new ResEinheit(this));
 		}
+	}
+
+	private Teilpaket(Arbeitspaket arbeitspaket, ArrayList<ResEinheit> resEinheitListe) {
+		this.arbeitspaket = arbeitspaket;
+		this.resEinheitListe = resEinheitListe;
+		this.mitarbeiteranzahl = arbeitspaket.getMitarbeiteranzahl();
+		this.aufwand = resEinheitListe.size();
+		this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+
+	}
+
+	public Teilpaket trenneTeilpaket(ArrayList<ResEinheit> neueResEinheitListe) {
+
+		for (ResEinheit zuEntfernen : neueResEinheitListe) {
+			this.resEinheitListe.remove(zuEntfernen);
+		}
+
+		this.aufwand = resEinheitListe.size();
+		this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+
+		Teilpaket neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
+		this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
+
+		return neuesTeilpaket;
 	}
 
 	@Override

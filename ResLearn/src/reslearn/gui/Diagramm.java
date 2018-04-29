@@ -2,6 +2,7 @@ package reslearn.gui;
 
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import reslearn.model.paket.ResEinheit;
 import reslearn.gui.ResFeld;
 
