@@ -6,65 +6,68 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import reslearn.gui.controller.ControllerCanvas;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 import javafx.scene.canvas.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class View extends Application {
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+	public static Pane pane;
+	public static ControllerCanvas cc = new ControllerCanvas();
+	public static ContextMenu menu = new ContextMenu();
+	public static MenuItem ap = new MenuItem("Teile Arbeitspaket");
+	public static MenuItem farbe = new MenuItem("Ändere Farbe");
 
 	public void start(Stage stage) throws Exception {
-
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
+		//Lade FXML & CSS Datei
+		Parent root = FXMLLoader.load(getClass().getResource("./fxml/ModusAuswaehlen.fxml"));
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
-
+		
+		//Erstelle Canvas-Zeichenfläche & Gruppe
 		Canvas canvas = new Canvas(900, 600);
 		canvas.setLayoutX(230);
 		canvas.setLayoutY(80);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		Group diagramm = new Group();
+		Group group = new Group();
 
-		diagramm.getChildren().add(canvas);
+		//Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Canvas
+		Scene hauptszene = new Scene(root);
+		Scene unterszene = new Scene(group);
+		
+		//Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
+		//der Unterszene hinzu
+		pane = new Pane();
+		pane.setPrefWidth(860);
+		pane.setPrefHeight(560);
+		pane.setLayoutX(255);
+		pane.setLayoutY(95);
+		
+		group.getChildren().addAll(canvas, pane);
 
-		Scene sceneFenster = new Scene(root);
-		Scene sceneDiagramm = new Scene(diagramm);
-//		((Pane) sceneFenster.getRoot()).getChildren().add(sceneDiagramm.getRoot());
-
+		//Durchführen des Algorithmus
+		ResCanvas resCanvas = new ResCanvas();
+		erstelleTestDaten(resCanvas);	
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		
+		//((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
+		
+		Diagramm meincanvas = new Diagramm();
+		//meincanvas.zeichneCanvas(gc, canvas);
+		//meincanvas.zeichnePaket(koordinatenSystem);
+	
 		stage.setMaximized(true);
-		stage.setScene(sceneFenster);
+		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
-
-		
-
-		ResCanvas resCanvas = new ResCanvas();
-
-		erstelleTestDaten(resCanvas);
-
-//		// alt: durchführen des Algorithmus
-//		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.berechne(resCanvas);
-		
-		// neu: durchführen des Algorithmus
-		ResEinheit[][] koordinantenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
-		
-		
-		
-		Diagramm meincanvas = new Diagramm(koordinantenSystem);
-		meincanvas.zeichneCanvas(gc, canvas);
-		meincanvas.zeichneResEinheit(gc, canvas);
-		
-		
 	}
-
+	
 	private static void erstelleTestDaten(ResCanvas resCanvas) {
 		// ---------------------------------------------------------------------
 		// -----------------------------TestDaten-------------------------------
@@ -99,6 +102,10 @@ public class View extends Application {
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------ENDE--------------------------------
 		// ---------------------------------------------------------------------
+	}
+
+	public static void main(String[] args) {
+		launch(args);
 	}
 
 }

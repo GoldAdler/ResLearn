@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class ControllerModusAuswaehlen {
+	
 	@FXML
 	private Group ersterSchritt;
 	@FXML
@@ -17,16 +18,14 @@ public class ControllerModusAuswaehlen {
 	@FXML
 	private Group loesungsmodus;
 
-
 	@FXML
-    public void weiter(ActionEvent event) throws Exception{
+    public void initialize(ActionEvent event) throws Exception{
 		Scene newScene = null;
-
 
 		if(event.getSource()==ersterSchritt) {
 			newScene = new Scene(FXMLLoader.load(getClass().getResource("ErsterSchritt")));
 		}else if(event.getSource()==uebungsmodus) {
-			newScene = new Scene(FXMLLoader.load(getClass().getResource("Uebungsmodus.fxml")));
+			newScene = new Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
 		}else if(event.getSource()==loesungsmodus) {
 			newScene = new Scene(FXMLLoader.load(getClass().getResource("Loesungsmodus.fxml")));
 		} 
@@ -36,7 +35,5 @@ public class ControllerModusAuswaehlen {
 		window.show();
 	}
 	
-
-
 }
 
