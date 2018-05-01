@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import reslearn.main.Main;
+import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
@@ -36,11 +37,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
 
 		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
-		resCanvas.herunterfallen();
+		resCanvas.herunterfallenAlleTeilpakete();
 		LinkedList<Teilpaket> teilpaketListe = ueberpruefeObergrenze(resCanvas, koordinatenSystem);
 		Stack<Teilpaket> unterhalbUndRechts = new Stack<Teilpaket>();
 		Vektor2i position = null;
 		ResEinheit unterhalb;
+		ResEinheit oberhalb;
 
 		for (Teilpaket teilpaket : teilpaketListe) {
 			LOOP: for (ResEinheit res : teilpaket.getResEinheitListe()) {
@@ -75,11 +77,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			// Teilpakete
 			// darunterligen
 			// Wenn ja, werden sie unterhalbUndRechts hinzugefügt
-			for (int y = position.getyKoordinate() + 1; y < ResCanvas.koorHoehe; y++) {
-				for (int x = position.getxKoordinate() + 1; x < ResCanvas.koorBreite; x++) {
-					unterhalb = koordinatenSystem[y][x];
-					if (unterhalb != null && !unterhalbUndRechts.contains(unterhalb.getTeilpaket())) {
-						unterhalbUndRechts.add(unterhalb.getTeilpaket());
+			for (int x = position.getxKoordinate() + 1; x < ResCanvas.koorBreite; x++) {
+				for (int y = 0; y < ResCanvas.koorHoehe; y++) {
+
+					oberhalb = koordinatenSystem[y][x];
+					if (oberhalb != null && !unterhalbUndRechts.contains(oberhalb.getTeilpaket())) {
+						unterhalbUndRechts.add(oberhalb.getTeilpaket());
 					}
 				}
 			}
@@ -131,7 +134,16 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 						teilpaket.bewegen(resCanvas, -vektor2i.getyKoordinate(), vektor2i.getxKoordinate());
 
+						// TODO: löschen
+						Main.ausgeben(koordinatenSystem);
+
+						resCanvas.herunterfallenAlleTeilpakete();
+
 						teilpaket.zusammenfuehren(tp);
+
+						// TODO: löschen
+						Main.ausgeben(koordinatenSystem);
+
 					}
 
 				}
@@ -154,6 +166,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			// TODO: löschen
 			Main.ausgeben(koordinatenSystem);
 
+		}
+
+		for (Arbeitspaket ap : resCanvas.getAktuellerZustand().getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				int verschieben = tp.ueberpruefeZeiten();
+
+			}
 		}
 
 		return koordinatenSystem;

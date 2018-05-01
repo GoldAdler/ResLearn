@@ -61,7 +61,7 @@ public class ResCanvas {
 	 * heruntergelassen.
 	 *
 	 */
-	public void herunterfallen() {
+	public void herunterfallenAlleTeilpakete() {
 		for (Arbeitspaket arbeitspaket : this.getAktuellerZustand().getArbeitspaketListe()) {
 
 			var teilpaketListe = arbeitspaket.getTeilpaketListe();
@@ -150,7 +150,8 @@ public class ResCanvas {
 
 		tmp.bewegen(this, -minAbstand, 0);
 		for (Teilpaket teilpaket : zuVerschiebenListe) {
-			teilpaket.bewegen(this, -minAbstand, 0);
+			// teilpaket.bewegen(this, -minAbstand, 0);
+			herunterfallen(teilpaket);
 
 		}
 
