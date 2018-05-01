@@ -88,7 +88,8 @@ public class ResCanvas {
 		// das
 		// neue Teilpaket identisch währen.
 		Teilpaket tmp = teilpaket;
-		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()) {
+		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
+				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
 			tmp = teilpaket.trenneTeilpaket(resEinheitFuerNeuesTeilpaket);
 
 		}
