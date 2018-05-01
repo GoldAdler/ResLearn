@@ -3,7 +3,7 @@ package reslearn.gui.controller;
 import javafx.event.EventHandler;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
-import reslearn.gui.ResGeometrie;
+import reslearn.gui.ResFeld;
 import reslearn.gui.Diagramm;
 import reslearn.gui.View;
 import reslearn.model.paket.ResEinheit;
@@ -13,11 +13,11 @@ public class ControllerCanvas {
 
 	double zeigerX, zeigerY;
 	double translateX, translateY;
-	ResGeometrie feld;
-	ResGeometrie rect;
+	ResFeld feld;
+	ResFeld rect;
 
 	
-	public void makeDraggable(ResGeometrie feld) {
+	public void makeDraggable(ResFeld feld) {
 		this.feld = feld;
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
@@ -31,7 +31,7 @@ public class ControllerCanvas {
 			zeigerX = e.getSceneX();
 			zeigerY = e.getSceneY();
 
-			rect = (ResGeometrie) e.getSource();
+			rect = (ResFeld) e.getSource();
 
 			translateX = rect.getTranslateX();
 			translateY = rect.getTranslateY();
@@ -42,8 +42,6 @@ public class ControllerCanvas {
 		@Override
 		public void handle(MouseEvent e) {
 			
-			
-
 			double offsetX = e.getSceneX() - zeigerX;
 			double offsetY = e.getSceneY() - zeigerY;
 
@@ -56,35 +54,40 @@ public class ControllerCanvas {
 			double differenzX = newTranslateX % 20;
 			double differenzY = newTranslateY % 20;
 			
-			Teilpaket teilpaket = rect.getTeilpaket();
-			for(ResGeometrie[] resAr : Diagramm.res) {
-				for(ResGeometrie resG : resAr) {
-					if(resG.getTeilpaket()==teilpaket) {
-						System.out.println(resG.getId());
-						resG.setTranslateX(resG.getTranslateX()+offsetX);
-						resG.setTranslateY(resG.getTranslateY()+offsetY);
-					}
-				}
+//			Teilpaket teilpaket = rect.getTeilpaket();
+//			for(ResGeometrie[] resAr : Diagramm.res) {
+//				for(ResGeometrie resG : resAr) {
+//					if(resG.getTeilpaket()==teilpaket) {
+//						System.out.println(resG.getId());
+//						resG.setTranslateX(resG.getTranslateX()+offsetX);
+//						resG.setTranslateY(resG.getTranslateY()+offsetY);
+//					}
+//				}
+//			}
+			
+//			 if(differenzX<-10.0 && differenzY<-10.0) {
+//			 newTranslateX += differenzX;
+//			 newTranslateY += differenzY;
+//			 }else {
+//			 newTranslateX -= differenzX;
+//			 newTranslateY -= differenzY;
+//			 }
+			if (differenzX > 10.0) {
+				newTranslateX += differenzX;
+			} else {
+				newTranslateX -= differenzX;
 			}
 			
-			// if(differenzX<-10.0 && differenzY<-10.0) {
-			// newTranslateX += differenzX;
-			// newTranslateY += differenzY;
-			// }else {
-			// newTranslateX -= differenzX;
-			// newTranslateY -= differenzY;
-			// }
-//			if (differenzX > 10.0) {
-//				newTranslateX += differenzX;
-//			} else {
-//				newTranslateX -= differenzX;
-//			}
-//			
-//			if (differenzY > 10.0) {
-//				newTranslateY += differenzY;
-//			} else {
-//				newTranslateY -= differenzY;
-//			}
+			if (differenzY > 10.0) {
+				newTranslateY += differenzY;
+			} else {
+				newTranslateY -= differenzY;
+			}
+
+			rect = (ResFeld) e.getSource();
+
+			rect.setTranslateX(newTranslateX);
+			rect.setTranslateY(newTranslateY);
 
 		}
 	};
