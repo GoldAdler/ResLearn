@@ -25,10 +25,8 @@ public class View extends Application {
 	public static MenuItem farbe = new MenuItem("Ändere Farbe");
 
 	public void start(Stage stage) throws Exception {
-		//Lade FXML & CSS Datei
+		//Lade FXML
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
-		Scene scene = new Scene(new Group());
-		scene.getStylesheets().add("Stylesheet.css");
 		
 		//Erstelle Canvas-Zeichenfläche & Gruppe
 		Canvas canvas = new Canvas(900, 600);
@@ -107,5 +105,5 @@ public class View extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
 }
