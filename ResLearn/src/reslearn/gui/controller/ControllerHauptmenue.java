@@ -30,34 +30,13 @@ public class ControllerHauptmenue {
 	@FXML
 	private Button einstellungen;
 
-	//Hallo Tätärä
-//	public ControllerHauptmenue() {
-//		uebungauswaehlen = new Button();
-//		aufgabeerstellen = new Button();
-//		aufgabeladen = new Button();
-//		tutorial = new Button();
-//		einstellungen = new Button();
-//	}
-
-	@FXML
-	public void initialize(){
-		uebungAuswaehlen.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	Scene newScene;
-		    	System.out.println("ERfolgg");
-				try {
-					
-					newScene = new Scene(FXMLLoader.load(getClass().getResource("./../fxml/Einstellungen")));
-					System.out.println("Hallo");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-		    	
-		    }
-		});
+	
+	public ControllerHauptmenue() {
+		uebungAuswaehlen = new Button();
+		aufgabeErstellen = new Button();
+		aufgabeLaden = new Button();
+		tutorial = new Button();
+		einstellungen = new Button();
 	}
 	
 	@FXML
@@ -66,23 +45,22 @@ public class ControllerHauptmenue {
 
 
 		if(event.getSource()==uebungAuswaehlen) {
-			Parent root = FXMLLoader.load(getClass().getResource("Einstellungen"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml"));
 			newScene = new Scene(root);
-			System.out.println(event.getSource() + "Hallo");
 		}else if(event.getSource()==aufgabeErstellen) {
-			Parent root = FXMLLoader.load(getClass().getResource("AufgabeBearbeiten.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeBearbeiten.fxml"));
 			newScene = new Scene(root);
 		}else if(event.getSource()==aufgabeLaden) {
-			Parent root = FXMLLoader.load(getClass().getResource("AufgabeLaden.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeLaden.fxml"));
 			newScene = new Scene(root);
 		}else if(event.getSource()==tutorial) {
-			Parent root = FXMLLoader.load(getClass().getResource("AufgabeBearbeiten.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeBearbeiten.fxml"));
 			newScene = new Scene(root);
 		}else if(event.getSource()==einstellungen) {
-			Parent root = FXMLLoader.load(getClass().getResource("Einstellungen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Einstellungen.fxml"));
 			newScene = new Scene(root);
 		}else {
-			Parent root = FXMLLoader.load(getClass().getResource("Einstellungen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Einstellungen.fxml"));
 			newScene = new Scene(root);
 		}
 		

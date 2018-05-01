@@ -16,7 +16,7 @@ public class Diagramm {
 	int zeile = 430;
 	int spalte = 280;
 	ResGeometrie[][] feld;
-	ResGeometrie[][] res;
+	public static ResGeometrie[][] res;
 
 	public Diagramm() {
 		

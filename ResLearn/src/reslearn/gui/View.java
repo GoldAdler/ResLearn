@@ -26,7 +26,7 @@ public class View extends Application {
 
 	public void start(Stage stage) throws Exception {
 		//Lade FXML & CSS Datei
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/ModusAuswaehlen.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
 		
