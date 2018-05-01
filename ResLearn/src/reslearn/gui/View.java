@@ -26,11 +26,7 @@ public class View extends Application {
 
 	public void start(Stage stage) throws Exception {
 		//Lade FXML & CSS Datei
-<<<<<<< HEAD
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
-=======
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
 		
