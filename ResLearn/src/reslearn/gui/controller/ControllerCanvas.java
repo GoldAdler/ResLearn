@@ -49,7 +49,10 @@ public class ControllerCanvas {
 
 			double newTranslateX = translateX + offsetX;
 			double newTranslateY = translateY + offsetY;
-
+			
+			newTranslateX = newTranslateX - newTranslateX%20;
+			newTranslateY = newTranslateY - newTranslateY%20;
+			
 			double differenzX = newTranslateX % 20;
 			double differenzY = newTranslateY % 20;
 			

@@ -61,7 +61,7 @@ public class ResCanvas {
 	 * heruntergelassen.
 	 *
 	 */
-	public void herunterfallen() {
+	public void herunterfallenAlleTeilpakete() {
 		for (Arbeitspaket arbeitspaket : this.getAktuellerZustand().getArbeitspaketListe()) {
 
 			var teilpaketListe = arbeitspaket.getTeilpaketListe();
@@ -88,7 +88,8 @@ public class ResCanvas {
 		// das
 		// neue Teilpaket identisch währen.
 		Teilpaket tmp = teilpaket;
-		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()) {
+		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
+				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
 			tmp = teilpaket.trenneTeilpaket(resEinheitFuerNeuesTeilpaket);
 
 		}
@@ -149,7 +150,8 @@ public class ResCanvas {
 
 		tmp.bewegen(this, -minAbstand, 0);
 		for (Teilpaket teilpaket : zuVerschiebenListe) {
-			teilpaket.bewegen(this, -minAbstand, 0);
+			// teilpaket.bewegen(this, -minAbstand, 0);
+			herunterfallen(teilpaket);
 
 		}
 

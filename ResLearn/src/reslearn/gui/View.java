@@ -22,15 +22,19 @@ public class View extends Application {
 	public static ControllerCanvas cc = new ControllerCanvas();
 	public static ContextMenu menu = new ContextMenu();
 	public static MenuItem ap = new MenuItem("Teile Arbeitspaket");
-	public static MenuItem farbe = new MenuItem("Ändere Farbe");
+	public static MenuItem farbe = new MenuItem("Ã„ndere Farbe");
 
 	public void start(Stage stage) throws Exception {
 		//Lade FXML & CSS Datei
+<<<<<<< HEAD
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
+=======
+		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
+>>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
 		Scene scene = new Scene(new Group());
 		scene.getStylesheets().add("Stylesheet.css");
 		
-		//Erstelle Canvas-Zeichenfläche & Gruppe
+		//Erstelle Canvas-ZeichenflÃ¤che & Gruppe
 		Canvas canvas = new Canvas(900, 600);
 		canvas.setLayoutX(230);
 		canvas.setLayoutY(80);
@@ -41,7 +45,7 @@ public class View extends Application {
 		Scene hauptszene = new Scene(root);
 		Scene unterszene = new Scene(group);
 		
-		//Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
+		//Erstelle neue ZeichenflÃ¤che fÃ¼r KlÃ¶tzchen und fÃ¼ge Canvas & Pane
 		//der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(860);
@@ -51,16 +55,16 @@ public class View extends Application {
 		
 		group.getChildren().addAll(canvas, pane);
 
-		//Durchführen des Algorithmus
+		//DurchfÃ¼hren des Algorithmus
 		ResCanvas resCanvas = new ResCanvas();
 		erstelleTestDaten(resCanvas);	
 		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
 		
-		//((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
+		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
 		
 		Diagramm meincanvas = new Diagramm();
-		//meincanvas.zeichneCanvas(gc, canvas);
-		//meincanvas.zeichnePaket(koordinatenSystem);
+		meincanvas.zeichneCanvas(gc, canvas);
+		meincanvas.zeichnePaket(koordinatenSystem);
 	
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);

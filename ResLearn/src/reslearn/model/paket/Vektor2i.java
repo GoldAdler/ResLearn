@@ -19,6 +19,11 @@ public class Vektor2i {
 		this.yKoordinate -= vektor2i.yKoordinate;
 	}
 
+	public void subtract(Vektor2i vektor2i) {
+		this.xKoordinate -= vektor2i.xKoordinate;
+		this.yKoordinate += vektor2i.yKoordinate;
+	}
+
 	public int getxKoordinate() {
 		return xKoordinate;
 	}
