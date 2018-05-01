@@ -56,11 +56,11 @@ public class View extends Application {
 		erstelleTestDaten(resCanvas);	
 		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
 		
-		//((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
+		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
 		
 		Diagramm meincanvas = new Diagramm();
-		//meincanvas.zeichneCanvas(gc, canvas);
-		//meincanvas.zeichnePaket(koordinatenSystem);
+		meincanvas.zeichneCanvas(gc, canvas);
+		meincanvas.zeichnePaket(koordinatenSystem);
 	
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);

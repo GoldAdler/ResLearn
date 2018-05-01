@@ -42,7 +42,10 @@ public class ControllerCanvas {
 
 			double newTranslateX = translateX + offsetX;
 			double newTranslateY = translateY + offsetY;
-
+			
+			newTranslateX = newTranslateX - newTranslateX%20;
+			newTranslateY = newTranslateY - newTranslateY%20;
+			
 			ResGeometrie rect = (ResGeometrie) e.getSource();
 
 			rect.setTranslateX(newTranslateX);
