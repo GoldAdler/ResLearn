@@ -4,11 +4,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import reslearn.gui.ResFeld;
-import reslearn.gui.ResGeometrie;
 import reslearn.gui.Diagramm;
 import reslearn.gui.View;
-import reslearn.model.paket.ResEinheit;
-import reslearn.model.paket.Teilpaket;
 
 public class ControllerCanvas {
 
@@ -50,17 +47,15 @@ public class ControllerCanvas {
 			double newTranslateX = translateX + offsetX;
 			double newTranslateY = translateY + offsetY;
 
-			newTranslateX = newTranslateX - newTranslateX % 20;
-			newTranslateY = newTranslateY - newTranslateY % 20;
+			newTranslateX -= newTranslateX % 20;
+			newTranslateY -= newTranslateY % 20;
 
 			for (ResFeld[] resAr : Diagramm.res) {
 				for (ResFeld resG : resAr) {
 					if (resG != null) {
-						if (nameClicked == resG.getResEinheit().getTeilpaket().getArbeitspaket().getId()) {
-							double differenzX = translateX - resG.getTranslateX();
-							double differenzY = translateY - resG.getTranslateY();
-							resG.setTranslateX(newTranslateX + differenzX);
-							resG.setTranslateY(newTranslateY + differenzY);
+						if (nameClicked == resG.getResEinheit().getTeilpaket().getArbeitspaket().getId()) {							
+							resG.setTranslateX(newTranslateX );
+							resG.setTranslateY(newTranslateY );
 						}
 					}
 				}
