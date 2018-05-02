@@ -15,13 +15,10 @@ public class Diagramm {
 	static int y = + abstandY - spaltY;
 	int zeile = 430;
 	int spalte = 280;
-	ResGeometrie[][] feld;
-	public static ResGeometrie[][] res;
+	ResFeld[][] feld;
+	public static ResFeld[][] res;
 
-	public Diagramm() {
-		
-	}
-
+	
 	public void zeichneCanvas(GraphicsContext gc, Canvas canvas) {
 		//Zeichne 4 x Rahmen & 2 x Koordinaten-Achsen
 		gc.setStroke(Color.GRAY);
@@ -39,10 +36,10 @@ public class Diagramm {
 	}
 	
 	public void zeichneArray() {
-		feld = new ResGeometrie[zeile][spalte];
+		feld = new ResFeld[zeile][spalte];
 		for (int i = 0; i < zeile; i += 10) {
 			for (int j = 0; j < spalte; j += 10) {
-				feld[i][j] = new ResGeometrie(i*2, j*2, 20, 20);
+				feld[i][j] = new ResFeld(i*2, j*2, 20, 20);
 				feld[i][j].setFill(Color.TRANSPARENT);
 				feld[i][j].setStroke(Color.GRAY);
 				View.pane.getChildren().add(feld[i][j]);
@@ -51,7 +48,7 @@ public class Diagramm {
 	}
 	
 	public void zeichnePaket(ResEinheit[][] koordinatenSystem) {
-		res = new ResGeometrie[zeile][spalte];
+		res = new ResFeld[zeile][spalte];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
@@ -62,41 +59,4 @@ public class Diagramm {
 			}
 		}
 	}
-	
-	public void vereinePaket(ResEinheit resEinheit) {
-		ResGeometrie res;
-		Shape a;
-		for (int i = 0; i < zeile; i += 10) {
-			for (int j = 0; j < spalte; j += 10) {
-				if(feld[i][j].getFill() == Color.FIREBRICK) {
-					
-				}
-					
-			}
-				//ResGeometrie res = ResGeometrie.union(....);
-		}
-	}
-
-//	public void zeichneArrayCanvas(GraphicsContext gc, Canvas canvas) {
-//	feld = new ResFeld[zeile][spalte];
-//	for (int i = 0; i < zeile; i += 10) {
-//		for (int j = 0; j < spalte; j += 10) {
-//			feld[i][j] = new ResFeld(gc, canvas, x, y, i, j);
-//			//geo[i][j] = new ResGeometrie(x, y, i, j);
-//		}
-//	}
-//}
-	
-//	public void zeichneResEinheit(GraphicsContext gc, Canvas myCanvas, ResEinheit[][] koordinatenSystem) {
-//		this.koordinatenSystem = koordinatenSystem;
-//		for (int i = 0; i < koordinatenSystem.length; i++) {
-//			for (int j = 0; j < koordinatenSystem[i].length; j++) {
-//				if (koordinatenSystem[i][j] != null) {
-//					feld[i*10][j*10].setzeFeld(gc, myCanvas, x, y, j*10, i*10, koordinatenSystem[i][j]);
-//					//geo[i*10][j*10].setzeBox(x, y, j*10, i*10, koordinatenSystem[i][j]);
-//					
-//				}
-//			}
-//		}
-//	}
 }

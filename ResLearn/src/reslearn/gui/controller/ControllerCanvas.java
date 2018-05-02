@@ -3,6 +3,7 @@ package reslearn.gui.controller;
 import javafx.event.EventHandler;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import reslearn.gui.ResFeld;
 import reslearn.gui.ResGeometrie;
 import reslearn.gui.Diagramm;
 import reslearn.gui.View;
@@ -13,11 +14,11 @@ public class ControllerCanvas {
 
 	double zeigerX, zeigerY;
 	double translateX, translateY;
-	ResGeometrie feld;
-	ResGeometrie rect;
+	ResFeld feld;
+	ResFeld rect;
 	String nameClicked;
 
-	public void makeDraggable(ResGeometrie feld) {
+	public void makeDraggable(ResFeld feld) {
 		this.feld = feld;
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
@@ -31,7 +32,7 @@ public class ControllerCanvas {
 			zeigerX = e.getSceneX();
 			zeigerY = e.getSceneY();
 
-			rect = (ResGeometrie) e.getSource();
+			rect = (ResFeld) e.getSource();
 			nameClicked = rect.getResEinheit().getTeilpaket().getArbeitspaket().getId();
 
 			translateX = rect.getTranslateX();
@@ -52,8 +53,8 @@ public class ControllerCanvas {
 			newTranslateX = newTranslateX - newTranslateX % 20;
 			newTranslateY = newTranslateY - newTranslateY % 20;
 
-			for (ResGeometrie[] resAr : Diagramm.res) {
-				for (ResGeometrie resG : resAr) {
+			for (ResFeld[] resAr : Diagramm.res) {
+				for (ResFeld resG : resAr) {
 					if (resG != null) {
 						if (nameClicked == resG.getResEinheit().getTeilpaket().getArbeitspaket().getId()) {
 							double differenzX = translateX - resG.getTranslateX();
@@ -64,28 +65,6 @@ public class ControllerCanvas {
 					}
 				}
 			}
-
-			// if(differenzX<-10.0 && differenzY<-10.0) {
-			// newTranslateX += differenzX;
-			// newTranslateY += differenzY;
-			// }else {
-			// newTranslateX -= differenzX;
-			// newTranslateY -= differenzY;
-			// }
-			// if (differenzX > 10.0) {
-			// newTranslateX += differenzX;
-			// } else {
-			// newTranslateX -= differenzX;
-			// }
-			//
-			// if (differenzY > 10.0) {
-			// newTranslateY += differenzY;
-			// } else {
-			// newTranslateY -= differenzY;
-			// }
-
-			// rect.setTranslateX(newTranslateX);
-			// rect.setTranslateY(newTranslateY);
 		}
 	};
 
