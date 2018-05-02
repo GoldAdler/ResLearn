@@ -161,4 +161,32 @@
 	-fx-pref-width: 35;
 }
 
+/*////////////////////////////////////////////////////////////////////
+//              	Karten in ModusAuswählen         		       //
+//////////////////////////////////////////////////////////////////*/
+
+.labelTitle {
+	-fx-background-color: white;
+	-fx-font-weight: bold;
+}
+
+.labelText {
+	-fx-background-color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,6 +1,5 @@
 package reslearn.gui.controller;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,28 +11,41 @@ import javafx.stage.Stage;
 public class ControllerModusAuswaehlen {
 	
 	@FXML
-	private Group ersterSchritt;
+	private Node ersterSchritt;
 	@FXML
-	private Group uebungsmodus;
+	private Node uebungsmodus;
 	@FXML
 	private Group loesungsmodus;
 
 	@FXML
-    public void initialize(ActionEvent event) throws Exception{
-		Scene newScene = null;
+    public void weiter(ActionEvent event) throws Exception{
+		Scene newScene;
 
 		if(event.getSource()==ersterSchritt) {
-			newScene = new Scene(FXMLLoader.load(getClass().getResource("ErsterSchritt")));
+			newScene = new Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		}else if(event.getSource()==uebungsmodus) {
 			newScene = new Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		}else if(event.getSource()==loesungsmodus) {
-			newScene = new Scene(FXMLLoader.load(getClass().getResource("Loesungsmodus.fxml")));
+			newScene = new Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} 
-		
-		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-		window.setScene(newScene);
-		window.show();
 	}
-	
 }
 
