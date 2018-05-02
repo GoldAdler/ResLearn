@@ -15,6 +15,7 @@ public class Main {
 		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		erstelleTestDaten2_7(resCanvas);
+		// erstelleTestDaten2_8(resCanvas);
 
 		// durchführen des Algorithmus ErsteSchritt
 		// ResEinheit[][] koordinatenSystem =
@@ -114,6 +115,33 @@ public class Main {
 		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 14, 8, 2, 16);
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 17, 5, 2, 10);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 21, 6, 3, 18);
+		// Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
+		// resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstelleTestDaten2_8(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		/*
+		 * PTMA_U09_L Test
+		 */
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 3, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 10, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 14, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 11, 15, 14, 18, 5, 2, 10);
+		Arbeitspaket apE = new Arbeitspaket("E", 14, 19, 21, 21, 6, 3, 18);
 		// Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
 
 		resCanvas.hinzufuegen(apB);

@@ -57,6 +57,20 @@ public class Arbeitspaket extends Paket {
 		}
 	}
 
+	@Override
+	public void bewegeX(ResCanvas resCanvas, int xMove) {
+		for (Teilpaket teilpaket : teilpaketListe) {
+			teilpaket.bewegeX(resCanvas, xMove);
+		}
+	}
+
+	@Override
+	public void bewegeY(ResCanvas resCanvas, int yMove) {
+		for (Teilpaket teilpaket : teilpaketListe) {
+			teilpaket.bewegeY(resCanvas, yMove);
+		}
+	}
+
 	public int getFaz() {
 		return faz;
 	}

@@ -24,6 +24,10 @@ public abstract class Paket {
 
 	public abstract void bewegen(ResCanvas resCanvas, int yMove, int xMove);
 
+	public abstract void bewegeX(ResCanvas resCanvas, int xMove);
+
+	public abstract void bewegeY(ResCanvas resCanvas, int yMove);
+
 	public Vektor2i getPosition() {
 		return position;
 	}

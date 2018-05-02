@@ -99,6 +99,64 @@ public class Teilpaket extends Paket {
 
 	}
 
+	@Override
+	public void bewegeX(ResCanvas resCanvas, int xMove) {
+		ListIterator<ResEinheit> li;
+
+		if (xMove < 0) {
+
+			li = resEinheitListe.listIterator();
+			while (li.hasNext()) {
+				li.next().bewegeX(resCanvas, xMove);
+			}
+		} else {
+
+			li = resEinheitListe.listIterator(resEinheitListe.size());
+			// Iterate in reverse.
+			while (li.hasPrevious()) {
+				li.previous().bewegeX(resCanvas, xMove);
+			}
+		}
+	}
+
+	@Override
+	public void bewegeY(ResCanvas resCanvas, int yMove) {
+		ListIterator<ResEinheit> li;
+
+		if (yMove > 0) {
+
+			li = resEinheitListe.listIterator();
+			while (li.hasNext()) {
+				li.next().bewegeY(resCanvas, yMove);
+			}
+		} else {
+
+			li = resEinheitListe.listIterator(resEinheitListe.size());
+			// Iterate in reverse.
+			while (li.hasPrevious()) {
+				li.previous().bewegeY(resCanvas, yMove);
+			}
+		}
+
+	}
+
+	// private void bewegeRechts(ResCanvas resCanvas, int yMove, int xMove) {
+	// ListIterator<ResEinheit> li;
+	// li = resEinheitListe.listIterator();
+	// while (li.hasNext()) {
+	// li.next().bewegen(resCanvas, yMove, xMove);
+	// }
+	// }
+	//
+	// private void bewegeLinks(ResCanvas resCanvas, int yMove, int xMove) {
+	// ListIterator<ResEinheit> li;
+	// li = resEinheitListe.listIterator(resEinheitListe.size());
+	// // Iterate in reverse.
+	// while (li.hasPrevious()) {
+	// li.previous().bewegen(resCanvas, yMove, xMove);
+	// }
+	// }
+
 	/**
 	 * Überprüfe die Position jeder Reseinheit eines Teilpakets, ob diese die
 	 * vorgebebenen Zeiten des zugehörigen Arbeitspakets einhält. Ist das Teilpaket
@@ -107,7 +165,6 @@ public class Teilpaket extends Paket {
 	 *
 	 * @return
 	 */
-
 	public int ueberpruefeZeiten() {
 		Vektor2i position;
 		for (ResEinheit res : resEinheitListe) {

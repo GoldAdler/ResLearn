@@ -182,7 +182,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 				// TODO: Eventuell rekursiv lösen
 
 				while (!stackTeilpaket.isEmpty()) {
-					stackTeilpaket.pop().bewegen(resCanvas, yMove, 0);
+					stackTeilpaket.pop().bewegeY(resCanvas, yMove);
 				}
 				// TODO löschen
 				Main.ausgeben(koordinatenSystem);

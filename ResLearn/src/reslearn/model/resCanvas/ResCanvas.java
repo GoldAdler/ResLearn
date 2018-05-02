@@ -59,7 +59,6 @@ public class ResCanvas {
 	/**
 	 * Jedes Teilpaket, dass im Canvas heruntergesenkt werden kann, wird
 	 * heruntergelassen.
-	 *
 	 */
 	public void herunterfallenAlleTeilpakete() {
 		for (Arbeitspaket arbeitspaket : this.getAktuellerZustand().getArbeitspaketListe()) {
@@ -74,6 +73,13 @@ public class ResCanvas {
 		}
 	}
 
+	/**
+	 * Das übergebene Teilpaket wird soweit nach unten gesenkt, wie möglich. Bei
+	 * Kollision wird das Paket in mehrere Teilpaket aufgetrennt. Die neu
+	 * entstandenen Teilpakete werden wieder herabgesenkt.
+	 *
+	 * @param teilpaket
+	 */
 	public void herunterfallen(Teilpaket teilpaket) {
 
 		ArrayList<ResEinheit> altesTeilpaketResEinheiten = teilpaket.getResEinheitListe();
@@ -148,11 +154,12 @@ public class ResCanvas {
 
 		}
 
-		tmp.bewegen(this, -minAbstand, 0);
-		for (Teilpaket teilpaket : zuVerschiebenListe) {
-			// teilpaket.bewegen(this, -minAbstand, 0);
-			herunterfallen(teilpaket);
-
+		if (minAbstand != 0) {
+			tmp.bewegeY(this, -minAbstand);
+			for (Teilpaket teilpaket : zuVerschiebenListe) {
+				// teilpaket.bewegen(this, -minAbstand, 0);
+				herunterfallen(teilpaket);
+			}
 		}
 
 		return kollision;
@@ -205,6 +212,38 @@ public class ResCanvas {
 		}
 
 		Collections.sort(resEinheitFuerNeuesTeilpaket, new ComperatorVektor2i());
+	}
+
+	/**
+	 * Wenn im Koordinatensystem Lücken in der untersten Ebene zwischen Teilpaketen
+	 * sind, werden diese durch das verschieben der Teilpakete geschlossen.
+	 */
+	public void aufschliessen() {
+		boolean untersteReiheLeer = false;
+		int laengeLuecke = 0;
+		for (int x = 0; x < ResCanvas.koorBreite; x++) {
+			ResEinheit untersteReihe = koordinatenSystem[ResCanvas.koorHoehe - 1][x];
+
+			if (untersteReihe == null) {
+				untersteReiheLeer = true;
+				laengeLuecke++;
+			}
+
+			if (untersteReiheLeer && untersteReihe != null) {
+				Teilpaket verschiebe = untersteReihe.getTeilpaket();
+				verschiebe.bewegeX(this, -laengeLuecke);
+
+				// TODO: Zu löschen
+				Main.ausgeben(koordinatenSystem);
+
+				untersteReiheLeer = false;
+				laengeLuecke = 0;
+				x = untersteReihe.getTeilpaket().getResEinheitListe().get(0).getPosition().getxKoordinate()
+						+ untersteReihe.getVorgangsdauer();
+			}
+
+		}
+
 	}
 
 	/**
