@@ -19,22 +19,28 @@ public class ResEinheit extends Paket {
 	@Override
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
 
-		// TODO: Kommentar eventuell weg
-		// itereriert rückwärts
-		// somit mussen die Reseinheiten nur einmal angefasst werden
-		// i.a. Reseinheit von aktueller Position im Koordinatensystem löschen und um
-		// eines nach oben verschieben
-		// ListIterator<ResEinheit> li =
-		// resEinheitListe.listIterator(resEinheitListe.size());
-
-		// while (li.hasPrevious()) {
-		// resEinheit = li.previous();
-		// Vektor2i vektor = this.getPosition();
-		// resCanvas.bewege(resEinheit, resEinheit.get)
-		// resCanvas.delete(vektor.getyKoordinate()][vektor.getxKoordinate() );
-
 		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
 		this.position.add(new Vektor2i(yMove, xMove));
+
+		resCanvas.updatePosition(this, altePosition);
+
+	}
+
+	@Override
+	public void bewegeX(ResCanvas resCanvas, int xMove) {
+
+		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
+		this.position.add(new Vektor2i(0, xMove));
+
+		resCanvas.updatePosition(this, altePosition);
+
+	}
+
+	@Override
+	public void bewegeY(ResCanvas resCanvas, int yMove) {
+
+		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
+		this.position.add(new Vektor2i(yMove, 0));
 
 		resCanvas.updatePosition(this, altePosition);
 
