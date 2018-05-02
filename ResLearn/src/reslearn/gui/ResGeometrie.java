@@ -20,6 +20,7 @@ public class ResGeometrie extends Rectangle{
 		
 		ResGeometrie res = new ResGeometrie(i*2, j*2, breite, laenge);
 		res.setFill(setFarbe(resEinheit));
+		res.setResEinheit(resEinheit);
 		return res;
 	}
 	
@@ -42,6 +43,14 @@ public class ResGeometrie extends Rectangle{
     
     public Teilpaket getTeilpaket() {
     	return resEinheit.getTeilpaket();
+    }
+    
+    public ResEinheit getResEinheit() {
+    	return resEinheit;
+    }
+    
+    public void setResEinheit(ResEinheit resEinheit) {
+    	this.resEinheit = resEinheit;
     }
     
 }

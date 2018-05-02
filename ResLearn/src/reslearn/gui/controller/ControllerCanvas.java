@@ -15,8 +15,8 @@ public class ControllerCanvas {
 	double translateX, translateY;
 	ResGeometrie feld;
 	ResGeometrie rect;
+	String nameClicked;
 
-	
 	public void makeDraggable(ResGeometrie feld) {
 		this.feld = feld;
 		feld.setOnMousePressed(OnMousePressedEventHandler);
@@ -32,6 +32,7 @@ public class ControllerCanvas {
 			zeigerY = e.getSceneY();
 
 			rect = (ResGeometrie) e.getSource();
+			nameClicked = rect.getResEinheit().getTeilpaket().getArbeitspaket().getId();
 
 			translateX = rect.getTranslateX();
 			translateY = rect.getTranslateY();
@@ -41,32 +42,29 @@ public class ControllerCanvas {
 	EventHandler<MouseEvent> OnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
-			
-			
 
 			double offsetX = e.getSceneX() - zeigerX;
 			double offsetY = e.getSceneY() - zeigerY;
 
 			double newTranslateX = translateX + offsetX;
 			double newTranslateY = translateY + offsetY;
-			
-			newTranslateX = newTranslateX - newTranslateX%20;
-			newTranslateY = newTranslateY - newTranslateY%20;
-			
-			double differenzX = newTranslateX % 20;
-			double differenzY = newTranslateY % 20;
-			
-			Teilpaket teilpaket = rect.getTeilpaket();
-			for(ResGeometrie[] resAr : Diagramm.res) {
-				for(ResGeometrie resG : resAr) {
-					if(resG.getTeilpaket()==teilpaket) {
-						System.out.println(resG.getId());
-						resG.setTranslateX(resG.getTranslateX()+offsetX);
-						resG.setTranslateY(resG.getTranslateY()+offsetY);
+
+			newTranslateX = newTranslateX - newTranslateX % 20;
+			newTranslateY = newTranslateY - newTranslateY % 20;
+
+			for (ResGeometrie[] resAr : Diagramm.res) {
+				for (ResGeometrie resG : resAr) {
+					if (resG != null) {
+						if (nameClicked == resG.getResEinheit().getTeilpaket().getArbeitspaket().getId()) {
+							double differenzX = translateX - resG.getTranslateX();
+							double differenzY = translateY - resG.getTranslateY();
+							resG.setTranslateX(newTranslateX + differenzX);
+							resG.setTranslateY(newTranslateY + differenzY);
+						}
 					}
 				}
 			}
-			
+
 			// if(differenzX<-10.0 && differenzY<-10.0) {
 			// newTranslateX += differenzX;
 			// newTranslateY += differenzY;
@@ -74,18 +72,20 @@ public class ControllerCanvas {
 			// newTranslateX -= differenzX;
 			// newTranslateY -= differenzY;
 			// }
-//			if (differenzX > 10.0) {
-//				newTranslateX += differenzX;
-//			} else {
-//				newTranslateX -= differenzX;
-//			}
-//			
-//			if (differenzY > 10.0) {
-//				newTranslateY += differenzY;
-//			} else {
-//				newTranslateY -= differenzY;
-//			}
+			// if (differenzX > 10.0) {
+			// newTranslateX += differenzX;
+			// } else {
+			// newTranslateX -= differenzX;
+			// }
+			//
+			// if (differenzY > 10.0) {
+			// newTranslateY += differenzY;
+			// } else {
+			// newTranslateY -= differenzY;
+			// }
 
+			// rect.setTranslateX(newTranslateX);
+			// rect.setTranslateY(newTranslateY);
 		}
 	};
 

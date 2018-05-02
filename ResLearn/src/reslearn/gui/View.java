@@ -25,14 +25,8 @@ public class View extends Application {
 	public static MenuItem farbe = new MenuItem("Ändere Farbe");
 
 	public void start(Stage stage) throws Exception {
-		//Lade FXML & CSS Datei
-<<<<<<< HEAD
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
-=======
+		//Lade FXML
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
-		Scene scene = new Scene(new Group());
-		scene.getStylesheets().add("Stylesheet.css");
 		
 		//Erstelle Canvas-Zeichenfläche & Gruppe
 		Canvas canvas = new Canvas(900, 600);
