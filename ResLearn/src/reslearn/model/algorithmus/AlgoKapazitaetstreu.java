@@ -15,7 +15,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int maxBegrenzung = 5;
+	private static int maxBegrenzung = 3;
 
 	private AlgoKapazitaetstreu() {
 	}
@@ -64,22 +64,25 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 * Teilpakete von links nach rechts durchgegehen und Zeiten überprüfen. Wenn
 		 * Zeiten nicht passen wird zu diesem Arbeitspaket alle Teilpakete gelöscht und
 		 * danach wieder um die differenz eingesetzt. Herunterfallen ausführen und
-		 * prüfen ob maximum verletzt. wenn maximum verlezt wird, dann ist der algo
-		 * wahrscheinlich nicht lösbar
-		 *
-		 *
-		 *
-		 *
-		 *
-		 *
+		 * prüfen ob maximum verletzt. wenn maximum verlezt wird, prüfen wir die
+		 * teilpakete unterhalb und rechts, ob diese noch verschoben werden können, wenn
+		 * nicht müssen wir vertikal schneiden.
 		 */
 
 		for (Arbeitspaket ap : resCanvas.getAktuellerZustand().getArbeitspaketListe()) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				int verschieben = tp.ueberpruefeZeiten();
+				if (verschieben != 0) {
+					resCanvas.entferneArbeitspaket(ap);
+					resCanvas.herunterfallenAlleTeilpakete();
 
+					ap.neuSetzen(verschieben, resCanvas);
+					break;
+				}
 			}
+
 		}
+
 	}
 
 	/**
@@ -93,16 +96,16 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		LinkedList<Teilpaket> teilpaketListe = ueberpruefeObergrenze(resCanvas, koordinatenSystem);
 		Stack<Teilpaket> unterhalbStack = new Stack<Teilpaket>();
-		Stack<Teilpaket> rechtsVonunterhalbStack = new Stack<Teilpaket>();
+		Stack<Teilpaket> rechtsVonUnterhalbStack = new Stack<Teilpaket>();
 		Vektor2i position = null;
 
 		for (Teilpaket teilpaket : teilpaketListe) {
 
 			position = sucheDarunterLiegendePakete(koordinatenSystem, unterhalbStack, position, teilpaket);
 
-			sucheUntenRechts(koordinatenSystem, rechtsVonunterhalbStack, position);
+			sucheUntenRechts(koordinatenSystem, rechtsVonUnterhalbStack, unterhalbStack, position);
 
-			verschieben(resCanvas, koordinatenSystem, unterhalbStack, rechtsVonunterhalbStack, teilpaket);
+			verschieben(resCanvas, koordinatenSystem, unterhalbStack, rechtsVonUnterhalbStack, teilpaket);
 
 			resCanvas.herunterfallen(teilpaket);
 
@@ -179,6 +182,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				// TODO: löschen
 				Main.ausgeben(koordinatenSystem);
 			}
+
+			resCanvas.herunterfallen(teilpaket);
 		}
 	}
 
@@ -265,7 +270,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param position
 	 */
 	private void sucheUntenRechts(ResEinheit[][] koordinatenSystem, Stack<Teilpaket> rechtsVonUnterhalbStack,
-			Vektor2i position) {
+			Stack<Teilpaket> unterhalbStack, Vektor2i position) {
 
 		ResEinheit oberhalb;
 
@@ -273,7 +278,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			for (int y = 0; y < ResCanvas.koorHoehe; y++) {
 
 				oberhalb = koordinatenSystem[y][x];
-				if (oberhalb != null && !rechtsVonUnterhalbStack.contains(oberhalb.getTeilpaket())) {
+				if (oberhalb != null && !rechtsVonUnterhalbStack.contains(oberhalb.getTeilpaket())
+						&& !unterhalbStack.contains(oberhalb.getTeilpaket())) {
 					rechtsVonUnterhalbStack.add(oberhalb.getTeilpaket());
 				}
 			}

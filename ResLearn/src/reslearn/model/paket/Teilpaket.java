@@ -123,7 +123,7 @@ public class Teilpaket extends Paket {
 	public void bewegeY(ResCanvas resCanvas, int yMove) {
 		ListIterator<ResEinheit> li;
 
-		if (yMove > 0) {
+		if (yMove < 0) {
 
 			li = resEinheitListe.listIterator();
 			while (li.hasNext()) {
@@ -169,10 +169,10 @@ public class Teilpaket extends Paket {
 		Vektor2i position;
 		for (ResEinheit res : resEinheitListe) {
 			position = res.position;
-			if (this.arbeitspaket.getFaz() > position.getxKoordinate()) {
-				return this.arbeitspaket.getFaz() - position.getxKoordinate();
-			} else if (this.arbeitspaket.getSez() < position.getxKoordinate()) {
-				return this.arbeitspaket.getSez() - position.getxKoordinate();
+			if (this.arbeitspaket.getFaz() > position.getxKoordinate() + 1) {
+				return this.arbeitspaket.getFaz() - position.getxKoordinate() + 1;
+			} else if (this.arbeitspaket.getSez() < position.getxKoordinate() + 1) {
+				return this.arbeitspaket.getSez() - position.getxKoordinate() + 1;
 			}
 
 		}

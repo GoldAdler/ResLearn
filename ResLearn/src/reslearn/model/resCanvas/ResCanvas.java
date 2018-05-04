@@ -43,6 +43,18 @@ public class ResCanvas {
 	}
 
 	/**
+	 * entfernen des Arbeitspaket aus dem Koordinatensystem! Arbeitspaket ist nicht
+	 * gelöscht, sondern weiß immer noch die Position
+	 * 
+	 * @param arbeitspaket
+	 */
+	public void entferneArbeitspaket(Arbeitspaket arbeitspaket) {
+		for (Teilpaket tp : arbeitspaket.getTeilpaketListe()) {
+			entfernenTeilpaket(tp);
+		}
+	}
+
+	/**
 	 * entfernen des Teilpakets aus dem Koordinatensystem! Teilpaket ist nicht
 	 * gelöscht, sondern weiß immer noch die Position
 	 *
@@ -134,7 +146,7 @@ public class ResCanvas {
 		int aktuellerAbstand;
 		boolean kollision = false;
 
-		for (int xPos = x; xPos < x + tmp.getVorgangsdauer() - 1; xPos++) {
+		for (int xPos = x; xPos <= x + tmp.getVorgangsdauer() - 1; xPos++) {
 			aktuellerAbstand = 0;
 			for (int yPos = y + 1; yPos < ResCanvas.koorHoehe; yPos++) {
 
