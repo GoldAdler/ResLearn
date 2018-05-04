@@ -1,5 +1,6 @@
 package reslearn.model.algorithmus;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -15,7 +16,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int maxBegrenzung = 3;
+	private static int maxBegrenzung = 5;
 
 	private AlgoKapazitaetstreu() {
 	}
@@ -54,13 +55,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void zeitValidierung(ResCanvas resCanvas) {
 
-		// TODO HIER weiter machen ihr Lappos
 		/*
-		 * Bevor hier weiter!!!!! Zuerst die Testfälle alle durchgehen
-		 *
-		 * WICHTIG: Testdaten auf Korrektheit überprüfen Aktuell sind die meisten Falsch
-		 * Wenn die nicht korrekt sind fliegen Exceptions ohne Ende
-		 *
 		 * Teilpakete von links nach rechts durchgegehen und Zeiten überprüfen. Wenn
 		 * Zeiten nicht passen wird zu diesem Arbeitspaket alle Teilpakete gelöscht und
 		 * danach wieder um die differenz eingesetzt. Herunterfallen ausführen und
@@ -77,6 +72,19 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					resCanvas.herunterfallenAlleTeilpakete();
 
 					ap.neuSetzen(verschieben, resCanvas);
+
+					// TODO: löschen
+					Main.ausgeben(resCanvas.getKoordinatenSystem());
+
+					Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas,
+							resCanvas.getKoordinatenSystem());
+
+					// TODO: HIER WEITERMACHEN
+					/*
+					 * Verschieben von neuesTeilpaket - überprüfen ob nach rechts oder links -
+					 * herunterfallen, etc,
+					 */
+
 					break;
 				}
 			}
@@ -94,7 +102,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void kapazitaetsOptimierung(ResCanvas resCanvas, ResEinheit[][] koordinatenSystem) {
 
-		LinkedList<Teilpaket> teilpaketListe = ueberpruefeObergrenze(resCanvas, koordinatenSystem);
+		LinkedList<Teilpaket> teilpaketListe = ueberpruefeObergrenzeTeilpaket(resCanvas, koordinatenSystem);
 		Stack<Teilpaket> unterhalbStack = new Stack<Teilpaket>();
 		Stack<Teilpaket> rechtsVonUnterhalbStack = new Stack<Teilpaket>();
 		Vektor2i position = null;
@@ -338,7 +346,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param koordinatenSystem
 	 * @return teilpaketListe
 	 */
-	private LinkedList<Teilpaket> ueberpruefeObergrenze(ResCanvas resCanvas, ResEinheit[][] koordinatenSystem) {
+	private LinkedList<Teilpaket> ueberpruefeObergrenzeTeilpaket(ResCanvas resCanvas,
+			ResEinheit[][] koordinatenSystem) {
 		LinkedList<Teilpaket> teilpaketListe = new LinkedList<Teilpaket>();
 		ResEinheit tempResEinheit;
 		for (int x = 0; x < ResCanvas.koorBreite; x++) {
@@ -351,6 +360,46 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		}
 
 		return teilpaketListe;
+	}
+
+	/**
+	 * Ueberprüft ob es ResEinheiten gibt, die über der Mitarbeitergrenze liegen.
+	 * Wenn ja werden diese der grenzeUeberschrittenListe hinzugefügt. Die
+	 * hinzugefügten ResEinheiten können dabei nur von einem einzigen Teilpaket
+	 * stammen. Aus den ResEinheiten wird das neue Teilpaket erstellt und
+	 * zurückgegeben.
+	 *
+	 * @param resCanvas
+	 * @param koordinatenSystem
+	 * @return
+	 */
+	private Teilpaket ueberpruefeObergrenzeResEinheit(ResCanvas resCanvas, ResEinheit[][] koordinatenSystem) {
+		ArrayList<ResEinheit> grenzeUeberschrittenListe = new ArrayList<ResEinheit>();
+		ResEinheit tempResEinheit;
+		Teilpaket neuesTeilpaket = null;
+		int vorgangsdauer = 0;
+		for (int x = 0; x < ResCanvas.koorBreite; x++) {
+
+			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
+			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
+			if (tempResEinheit != null) {
+				grenzeUeberschrittenListe.add(tempResEinheit);
+				for (int y = ResCanvas.koorHoehe - maxBegrenzung - 2; y >= 0; y--) {
+					if (koordinatenSystem[y][x] != null) {
+						grenzeUeberschrittenListe.add(koordinatenSystem[y][x]);
+					} else {
+						break;
+					}
+				}
+			}
+			vorgangsdauer = x;
+		}
+		if (!grenzeUeberschrittenListe.isEmpty()) {
+			neuesTeilpaket = grenzeUeberschrittenListe.get(0).getTeilpaket()
+					.trenneTeilpaketVertikal(grenzeUeberschrittenListe, vorgangsdauer);
+		}
+
+		return neuesTeilpaket;
 	}
 
 }

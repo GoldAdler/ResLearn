@@ -108,7 +108,7 @@ public class ResCanvas {
 		Teilpaket tmp = teilpaket;
 		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
 				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
-			tmp = teilpaket.trenneTeilpaket(resEinheitFuerNeuesTeilpaket);
+			tmp = teilpaket.trenneTeilpaketHorizontal(resEinheitFuerNeuesTeilpaket);
 
 		}
 

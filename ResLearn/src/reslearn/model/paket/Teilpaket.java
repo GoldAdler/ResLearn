@@ -36,7 +36,7 @@ public class Teilpaket extends Paket {
 
 	}
 
-	public Teilpaket trenneTeilpaket(ArrayList<ResEinheit> neueResEinheitListe) {
+	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		for (ResEinheit zuEntfernen : neueResEinheitListe) {
 			this.resEinheitListe.remove(zuEntfernen);
@@ -49,6 +49,18 @@ public class Teilpaket extends Paket {
 		this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
 
 		return neuesTeilpaket;
+	}
+
+	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe, int vorgangsdauer) {
+
+		Teilpaket neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
+
+		neuesTeilpaket.vorgangsdauer = vorgangsdauer;
+		neuesTeilpaket.aufwand = neueResEinheitListe.size();
+		neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
+
+		return neuesTeilpaket;
+
 	}
 
 	/**
@@ -174,9 +186,7 @@ public class Teilpaket extends Paket {
 			} else if (this.arbeitspaket.getSez() < position.getxKoordinate() + 1) {
 				return this.arbeitspaket.getSez() - position.getxKoordinate() + 1;
 			}
-
 		}
-
 		return 0;
 	}
 

@@ -27,10 +27,10 @@ public class Main {
 		// erstelleTestDaten2_8(resCanvas);
 
 		// Kinder-Uni
-		erstelleAufgabeKinderuni(resCanvas);
+		// erstelleAufgabeKinderuni(resCanvas);
 
 		// Prüfungsaufgabe
-		// erstellePruefungsAufgabe(resCanvas);
+		erstellePruefungsAufgabe(resCanvas);
 
 		// ----------------------------------------------------------
 		// Algos
