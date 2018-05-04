@@ -55,7 +55,7 @@ public class ControllerCanvas {
 					if (resG != null) {
 						if (nameClicked == resG.getResEinheit().getTeilpaket().getArbeitspaket().getId()) {							
 							resG.setTranslateX(newTranslateX );
-							resG.setTranslateY(newTranslateY );
+							resG.setTranslateY(newTranslateY );					
 						}
 					}
 				}
@@ -70,8 +70,4 @@ public class ControllerCanvas {
 			View.menu.getItems().addAll(View.ap, View.farbe);
 		}
 	};
-
-	// rect.setX(e.getX()-10);
-	// rect.setY(e.getY()-10);
-
 }

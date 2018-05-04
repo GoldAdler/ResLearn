@@ -18,17 +18,18 @@ import javafx.scene.layout.Pane;
 
 public class View extends Application {
 
+	public static Stage classStage = new Stage();
 	public static Pane pane;
 	public static ControllerCanvas cc = new ControllerCanvas();
 	public static ContextMenu menu = new ContextMenu();
 	public static MenuItem ap = new MenuItem("Teile Arbeitspaket");
-	public static MenuItem farbe = new MenuItem("Ã„ndere Farbe");
+	public static MenuItem farbe = new MenuItem("Ändere Farbe");
 
 	public void start(Stage stage) throws Exception {
 		//Lade FXML
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
 		
-		//Erstelle Canvas-ZeichenflÃ¤che & Gruppe
+		//Erstelle Canvas-Zeichenfläche & Gruppe
 		Canvas canvas = new Canvas(900, 600);
 		canvas.setLayoutX(230);
 		canvas.setLayoutY(80);
@@ -39,7 +40,7 @@ public class View extends Application {
 		Scene hauptszene = new Scene(root);
 		Scene unterszene = new Scene(group);
 		
-		//Erstelle neue ZeichenflÃ¤che fÃ¼r KlÃ¶tzchen und fÃ¼ge Canvas & Pane
+		//Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
 		//der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(860);
@@ -49,7 +50,7 @@ public class View extends Application {
 		
 		group.getChildren().addAll(canvas, pane);
 
-		//DurchfÃ¼hren des Algorithmus
+		//Durchführen des Algorithmus
 		ResCanvas resCanvas = new ResCanvas();
 		erstelleTestDaten(resCanvas);	
 		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
@@ -60,6 +61,7 @@ public class View extends Application {
 		meincanvas.zeichneCanvas(gc, canvas);
 		meincanvas.zeichnePaket(koordinatenSystem);
 	
+		classStage = stage;
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");

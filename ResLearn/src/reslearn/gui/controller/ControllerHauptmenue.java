@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import reslearn.gui.View;
+import reslearn.gui.fxml.TutorialVideo;
 
 public class ControllerHauptmenue {
 	
@@ -27,16 +29,11 @@ public class ControllerHauptmenue {
 		Scene newScene;
 
 		if (event.getSource() == uebungAuswaehlen) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml"));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+			View view = new View();
+			view.start(View.classStage);
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == aufgabeErstellen) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeBearbeiten.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeErstellen.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -54,13 +51,8 @@ public class ControllerHauptmenue {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}else if(event.getSource()==tutorial) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeBearbeiten.fxml"));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+			TutorialVideo tut = new TutorialVideo();
+			tut.start(TutorialVideo.classStage);
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}else if(event.getSource()==einstellungen) {
 			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Einstellungen.fxml"));
@@ -72,7 +64,7 @@ public class ControllerHauptmenue {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}else {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Einstellungen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Hauptmenue.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
