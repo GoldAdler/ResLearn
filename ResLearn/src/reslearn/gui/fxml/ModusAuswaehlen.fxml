@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
@@ -11,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerModusAuswaehlen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerModusAuswaehlen">
    <children>
       <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Modus auswählen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
@@ -33,7 +40,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Group fx:id="ersterSchritt" onMouseClicked="#weiter">
+            <Group>
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -56,12 +63,13 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
+                  <Button fx:id="ersterSchritt" mnemonicParsing="false" onAction="#weiter" opacity="0.0" prefHeight="392.0" prefWidth="270.0" style="-fx-background-color: LIGHTGRAY;" />
                </children>
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Group>
-            <Group fx:id="uebungsmodus" onMouseClicked="#weiter" GridPane.columnIndex="1">
+            <Group GridPane.columnIndex="1">
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -84,12 +92,13 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
+                  <Button fx:id="uebungsmodus" mnemonicParsing="false" onAction="#weiter" opacity="0.0" prefHeight="391.0" prefWidth="270.0" style="-fx-background-color: LIGHTGRAY;" />
                </children>
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Group>
-            <Group fx:id="loesungsmodus" onMouseClicked="#weiter" GridPane.columnIndex="2">
+            <Group GridPane.columnIndex="2">
                <children>
                   <ImageView fitHeight="266.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -112,6 +121,7 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
+                  <Button fx:id="loesungsmodus" mnemonicParsing="false" onAction="#weiter" opacity="0.0" prefHeight="393.0" prefWidth="270.0" style="-fx-background-color: LIGHTGRAY;" />
                </children>
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
