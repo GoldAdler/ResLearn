@@ -5,6 +5,7 @@
 .titleResLearn {
 	-fx-background-color: #eeeeee; 
 	-fx-border-color: #afafaf;
+	-fx-font-weight: bold;
 	
 }
 
@@ -160,5 +161,33 @@
 .dropdownButtonKlein .context-menu{
 	-fx-pref-width: 35;
 }
+
+/*////////////////////////////////////////////////////////////////////
+//              	Karten in ModusAuswählen         		       //
+//////////////////////////////////////////////////////////////////*/
+
+.labelTitle {
+	-fx-background-color: white;
+	-fx-font-weight: bold;
+}
+
+.labelText {
+	-fx-background-color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

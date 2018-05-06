@@ -1,7 +1,9 @@
 package reslearn.model.paket;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import reslearn.main.Main;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class Arbeitspaket extends Paket {
@@ -46,6 +48,41 @@ public class Arbeitspaket extends Paket {
 		teilpaketListe.add(new Teilpaket(this));
 	}
 
+	public void neuSetzen(int abstand, ResCanvas resCanvas) {
+		Teilpaket ersteTP = teilpaketListe.get(0);
+		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
+
+		int alteXposition = erstesRes.position.getxKoordinate();
+		int neueXPosition = alteXposition - abstand;
+
+		teilpaketListe.clear();
+
+		Teilpaket vereint = new Teilpaket(this);
+		teilpaketListe.add(vereint);
+
+		var resEinheitenListe = vereint.getResEinheitListe();
+		Iterator<ResEinheit> it = resEinheitenListe.iterator();
+
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		for (int y = this.mitarbeiteranzahl - 1; y >= 0; y--) {
+			for (int x = neueXPosition; x < neueXPosition + this.vorgangsdauer; x++) {
+				if (koordinatenSystem[y][x] == null) {
+					if (it.hasNext()) {
+						koordinatenSystem[y][x] = it.next();
+						koordinatenSystem[y][x].setPosition(new Vektor2i(y, x));
+					}
+				}
+			}
+		}
+
+		// TODO: Ausgeben löschen
+		Main.ausgeben(koordinatenSystem);
+
+		resCanvas.herunterfallen(vereint);
+
+	}
+
 	public void teilpaketHinzufuegen(Teilpaket teilpaket) {
 		teilpaketListe.add(teilpaket);
 	}
@@ -54,6 +91,20 @@ public class Arbeitspaket extends Paket {
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegen(resCanvas, yMove, xMove);
+		}
+	}
+
+	@Override
+	public void bewegeX(ResCanvas resCanvas, int xMove) {
+		for (Teilpaket teilpaket : teilpaketListe) {
+			teilpaket.bewegeX(resCanvas, xMove);
+		}
+	}
+
+	@Override
+	public void bewegeY(ResCanvas resCanvas, int yMove) {
+		for (Teilpaket teilpaket : teilpaketListe) {
+			teilpaket.bewegeY(resCanvas, yMove);
 		}
 	}
 

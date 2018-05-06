@@ -7,7 +7,7 @@ import java.util.Stack;
 
 import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
-import reslearn.model.paket.ComperatorErsteSchrittModus;
+import reslearn.model.paket.ComperatorFaz;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.paket.Vektor2i;
@@ -67,7 +67,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 */
 	private static ArrayList<Arbeitspaket> sortiereAP(ResCanvas resCanvas) {
 		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getAktuellerZustand().getArbeitspaketListe();
-		Collections.sort(arbeitspaketListe, new ComperatorErsteSchrittModus());
+		Collections.sort(arbeitspaketListe, new ComperatorFaz());
 		return arbeitspaketListe;
 	}
 
@@ -182,7 +182,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 				// TODO: Eventuell rekursiv lösen
 
 				while (!stackTeilpaket.isEmpty()) {
-					stackTeilpaket.pop().bewegen(resCanvas, yMove, 0);
+					stackTeilpaket.pop().bewegeY(resCanvas, yMove);
 				}
 				// TODO löschen
 				Main.ausgeben(koordinatenSystem);

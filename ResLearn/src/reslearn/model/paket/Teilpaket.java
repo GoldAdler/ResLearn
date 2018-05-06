@@ -1,6 +1,8 @@
 package reslearn.model.paket;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ListIterator;
 
 import reslearn.model.resCanvas.ResCanvas;
 
@@ -24,6 +26,9 @@ public class Teilpaket extends Paket {
 
 	private Teilpaket(Arbeitspaket arbeitspaket, ArrayList<ResEinheit> resEinheitListe) {
 		this.arbeitspaket = arbeitspaket;
+		for (ResEinheit resEinheit : resEinheitListe) {
+			resEinheit.setTeilpaket(this);
+		}
 		this.resEinheitListe = resEinheitListe;
 		this.mitarbeiteranzahl = arbeitspaket.getMitarbeiteranzahl();
 		this.aufwand = resEinheitListe.size();
@@ -31,7 +36,7 @@ public class Teilpaket extends Paket {
 
 	}
 
-	public Teilpaket trenneTeilpaket(ArrayList<ResEinheit> neueResEinheitListe) {
+	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		for (ResEinheit zuEntfernen : neueResEinheitListe) {
 			this.resEinheitListe.remove(zuEntfernen);
@@ -46,11 +51,143 @@ public class Teilpaket extends Paket {
 		return neuesTeilpaket;
 	}
 
+	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe, int vorgangsdauer) {
+
+		Teilpaket neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
+
+		neuesTeilpaket.vorgangsdauer = vorgangsdauer;
+		neuesTeilpaket.aufwand = neueResEinheitListe.size();
+		neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
+
+		return neuesTeilpaket;
+
+	}
+
+	/**
+	 * Zwei Teilpakete eines gemeinsamen Arbeitspaketes werden zu einem gemeinsamen
+	 * Teilpaket zusammengeführt, wenn die untersten ResEinheiten sich auf einer
+	 * gemeinsamen Y_Achse befinden
+	 *
+	 * @param tp
+	 * @return
+	 */
+	public boolean zusammenfuehren(Teilpaket tp) {
+
+		int xPunkt1Tp1 = tp.resEinheitListe.get(0).getPosition().getxKoordinate();
+		int xPunkt2Tp1 = xPunkt1Tp1 + tp.aufwand;
+
+		int xPunkt1Tp2 = this.resEinheitListe.get(0).getPosition().getxKoordinate();
+		int xPunkt2Tp2 = xPunkt1Tp2 + this.aufwand;
+
+		int yAchse1 = tp.resEinheitListe.get(0).getPosition().getyKoordinate();
+		int yAchse2 = this.resEinheitListe.get(0).getPosition().getyKoordinate();
+
+		if ((yAchse1 == yAchse2) && (xPunkt1Tp1 == xPunkt2Tp2 + 1 || xPunkt2Tp1 == xPunkt1Tp2 + 1)) {
+			for (ResEinheit res : tp.getResEinheitListe()) {
+				res.setTeilpaket(this);
+				resEinheitListe.add(res);
+			}
+			aufwand += tp.getAufwand();
+			vorgangsdauer += tp.getVorgangsdauer();
+			Collections.sort(resEinheitListe, new ComperatorVektor2i());
+
+			arbeitspaket.getTeilpaketListe().remove(tp);
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
-		for (ResEinheit resEinheit : resEinheitListe) {
-			resEinheit.bewegen(resCanvas, yMove, xMove);
+
+		ListIterator<ResEinheit> li = resEinheitListe.listIterator(resEinheitListe.size());
+
+		// Iterate in reverse.
+		while (li.hasPrevious()) {
+			li.previous().bewegen(resCanvas, yMove, xMove);
 		}
+
+	}
+
+	@Override
+	public void bewegeX(ResCanvas resCanvas, int xMove) {
+		ListIterator<ResEinheit> li;
+
+		if (xMove < 0) {
+
+			li = resEinheitListe.listIterator();
+			while (li.hasNext()) {
+				li.next().bewegeX(resCanvas, xMove);
+			}
+		} else {
+
+			li = resEinheitListe.listIterator(resEinheitListe.size());
+			// Iterate in reverse.
+			while (li.hasPrevious()) {
+				li.previous().bewegeX(resCanvas, xMove);
+			}
+		}
+	}
+
+	@Override
+	public void bewegeY(ResCanvas resCanvas, int yMove) {
+		ListIterator<ResEinheit> li;
+
+		if (yMove < 0) {
+
+			li = resEinheitListe.listIterator();
+			while (li.hasNext()) {
+				li.next().bewegeY(resCanvas, yMove);
+			}
+		} else {
+
+			li = resEinheitListe.listIterator(resEinheitListe.size());
+			// Iterate in reverse.
+			while (li.hasPrevious()) {
+				li.previous().bewegeY(resCanvas, yMove);
+			}
+		}
+
+	}
+
+	// private void bewegeRechts(ResCanvas resCanvas, int yMove, int xMove) {
+	// ListIterator<ResEinheit> li;
+	// li = resEinheitListe.listIterator();
+	// while (li.hasNext()) {
+	// li.next().bewegen(resCanvas, yMove, xMove);
+	// }
+	// }
+	//
+	// private void bewegeLinks(ResCanvas resCanvas, int yMove, int xMove) {
+	// ListIterator<ResEinheit> li;
+	// li = resEinheitListe.listIterator(resEinheitListe.size());
+	// // Iterate in reverse.
+	// while (li.hasPrevious()) {
+	// li.previous().bewegen(resCanvas, yMove, xMove);
+	// }
+	// }
+
+	/**
+	 * Überprüfe die Position jeder Reseinheit eines Teilpakets, ob diese die
+	 * vorgebebenen Zeiten des zugehörigen Arbeitspakets einhält. Ist das Teilpaket
+	 * zu früh, so gibt die Methode einen positiven Wert zurück. Ist es zu spät,
+	 * entsprechend einen negativen!
+	 *
+	 * @return
+	 */
+	public int ueberpruefeZeiten() {
+		Vektor2i position;
+		for (ResEinheit res : resEinheitListe) {
+			position = res.position;
+			if (this.arbeitspaket.getFaz() > position.getxKoordinate() + 1) {
+				return this.arbeitspaket.getFaz() - position.getxKoordinate() + 1;
+			} else if (this.arbeitspaket.getSez() < position.getxKoordinate() + 1) {
+				return this.arbeitspaket.getSez() - position.getxKoordinate() + 1;
+			}
+		}
+		return 0;
 	}
 
 	public Arbeitspaket getArbeitspaket() {

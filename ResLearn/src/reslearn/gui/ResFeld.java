@@ -1,77 +1,56 @@
 package reslearn.gui;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.paket.Teilpaket;
 
-public class ResFeld {
+public class ResFeld extends Rectangle{
 	
-	GraphicsContext gc;
-	private static int breite = 20;
-	private static int laenge = 20;
-	ResFeld[][] resfeld;
+	private int breite = 20;
+	private int laenge = 20;
+	private ResEinheit resEinheit;
 	
-	public ResFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
-		zeichneFeld(gc, canvas, abstandX, abstandY, spaltX, spaltY, i, j);
+	public ResFeld(double x, double y, double width, double height) {
+		super(x,y, width,height);
+	}
+    
+	public ResFeld setzeFeld(int x, int y, int i, int j, ResEinheit resEinheit) {
+		this.resEinheit = resEinheit;
+		
+		ResFeld res = new ResFeld(i*2, j*2, breite, laenge);
+		res.setFill(setFarbe(resEinheit));
+		res.setResEinheit(resEinheit);
+		return res;
 	}
 	
-	public ResFeld(GraphicsContext gc, int breite, int laenge) {
-		this.gc = gc;
-		ResFeld.breite = breite;
-		ResFeld.laenge = laenge;
-	}
-	
-    public void zeichneFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j) {
-        
-    	gc.setFill(Color.rgb(255, 255, 255));
-        gc.setLineWidth(1);
-        gc.strokeRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
-        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
-        
-    }
-    
-    
-    public void setzeFeld(GraphicsContext gc, Canvas canvas, int abstandX, int abstandY, int spaltX, int spaltY, int i, int j, ResEinheit resEinheit) {
-    	gc.setFill(setzeFarbe(resEinheit));
-        gc.fillRect(spaltX + abstandX + i*2, - spaltY + abstandY+ j*2, breite, laenge);
-        
-    }
-    
-    public static Color setzeFarbe(ResEinheit resEinheit) {
+    public static Color setFarbe(ResEinheit resEinheit) {
 		switch (resEinheit.getTeilpaket().getArbeitspaket().getId()) {
 		case "A": 
-			return Color.RED;
+			return Color.FIREBRICK.deriveColor(1, 1, 1, 0.7);
 		case "B":
-			return Color.GREEN;
+			return Color.GREEN.deriveColor(1, 1, 1, 0.7);
 		case "C":
-			return Color.BLUE;
+			return Color.ROYALBLUE.deriveColor(1, 1, 1, 0.7);
 		case "D":
-			return Color.YELLOW;
+			return Color.GOLD.deriveColor(1, 1, 1, 0.7);
 		case "E":
-			return Color.ORANGE;
+			return Color.GOLDENROD.deriveColor(1, 1, 1, 0.7);
 		default:
 			return Color.WHITE;
 		}
 	}
-	
-    public int getBreite() {
-    	return breite;
+    
+    public Teilpaket getTeilpaket() {
+    	return resEinheit.getTeilpaket();
     }
     
-    public void setBreite(int breite) {
-    	this.breite = breite;
+    public ResEinheit getResEinheit() {
+    	return resEinheit;
     }
     
-    public int getLaenge() {
-    	return laenge;
+    public void setResEinheit(ResEinheit resEinheit) {
+    	this.resEinheit = resEinheit;
     }
     
-    public void setLaenge(int laenge) {
-    	this.laenge = laenge;
-    }
-	
-    public int getFlaeche() {
-    	return laenge*breite;
-    }
 }
