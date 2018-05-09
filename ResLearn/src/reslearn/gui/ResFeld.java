@@ -10,6 +10,7 @@ public class ResFeld extends Rectangle{
 	private int breite = 20;
 	private int laenge = 20;
 	private ResEinheit resEinheit;
+	Color color;
 	
 	public ResFeld(double x, double y, double width, double height) {
 		super(x,y, width,height);
@@ -19,12 +20,12 @@ public class ResFeld extends Rectangle{
 		this.resEinheit = resEinheit;
 		
 		ResFeld res = new ResFeld(i*2, j*2, breite, laenge);
-		res.setFill(setFarbe(resEinheit));
+		res.setFill(setzeFarbe(resEinheit));
 		res.setResEinheit(resEinheit);
 		return res;
 	}
 	
-    public static Color setFarbe(ResEinheit resEinheit) {
+    public static Color setzeFarbe(ResEinheit resEinheit) {
 		switch (resEinheit.getTeilpaket().getArbeitspaket().getId()) {
 		case "A": 
 			return Color.FIREBRICK.deriveColor(1, 1, 1, 0.7);
@@ -40,6 +41,10 @@ public class ResFeld extends Rectangle{
 			return Color.WHITE;
 		}
 	}
+    
+    public void setFarbe(Color color) {
+    	this.color = color;
+    }
     
     public Teilpaket getTeilpaket() {
     	return resEinheit.getTeilpaket();

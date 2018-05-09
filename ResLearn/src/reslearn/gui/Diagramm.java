@@ -40,7 +40,7 @@ public class Diagramm {
 		for (int i = 0; i < zeile; i += 10) {
 			for (int j = 0; j < spalte; j += 10) {
 				feld[i][j] = new ResFeld(i*2, j*2, 20, 20);
-				feld[i][j].setFill(Color.TRANSPARENT);
+				feld[i][j].setFill(Color.WHITE);
 				feld[i][j].setStroke(Color.GRAY);
 				View.pane.getChildren().add(feld[i][j]);
 			}

@@ -12,6 +12,7 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 import javafx.scene.canvas.*;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
@@ -24,6 +25,7 @@ public class View extends Application {
 	public static ContextMenu menu = new ContextMenu();
 	public static MenuItem ap = new MenuItem("Teile Arbeitspaket");
 	public static MenuItem farbe = new MenuItem("Ändere Farbe");
+	
 
 	public void start(Stage stage) throws Exception {
 		//Lade FXML
@@ -48,7 +50,7 @@ public class View extends Application {
 		pane.setLayoutX(255);
 		pane.setLayoutY(95);
 		
-		group.getChildren().addAll(canvas, pane);
+		group.getChildren().addAll(canvas, pane, ControllerCanvas.table);
 
 		//Durchführen des Algorithmus
 		ResCanvas resCanvas = new ResCanvas();
@@ -60,13 +62,19 @@ public class View extends Application {
 		Diagramm meincanvas = new Diagramm();
 		meincanvas.zeichneCanvas(gc, canvas);
 		meincanvas.zeichnePaket(koordinatenSystem);
-	
+		
+		menu.getItems().addAll(ap, farbe);
+		
+		cc.erstelleTabelle();
+        
 		classStage = stage;
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
 	}
+	
+
 	
 	private static void erstelleTestDaten(ResCanvas resCanvas) {
 		// ---------------------------------------------------------------------
