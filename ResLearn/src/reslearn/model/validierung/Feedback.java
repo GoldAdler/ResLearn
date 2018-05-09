@@ -18,6 +18,11 @@ public class Feedback {
 		this.type = type;
 	}
 
+	public Feedback(String message, MsgType type) {
+		this.message = message;
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		String msg = "";
@@ -33,15 +38,15 @@ public class Feedback {
 		return msg;
 	}
 
-	// TODO: Error-Return-Message zusammenbauen
 	private String errorToString() {
-		String msg = "";
+		String overview = "Fehler bei Arbeitspaket " + resEinheit.getTeilpaket().getArbeitspaket().getId() + "!";
+		String msg = overview + "\n" + message;
 		return msg;
 	}
 
-	// TODO: Info-Return-Message zusammenbauen
 	private String infoToString() {
-		String msg = "";
+		String overview = "Information: ";
+		String msg = overview + "\n" + message;
 		return msg;
 	}
 
