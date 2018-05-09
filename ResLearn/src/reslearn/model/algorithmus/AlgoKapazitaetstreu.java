@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
+
+
 import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -79,12 +81,44 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas,
 							resCanvas.getKoordinatenSystem());
 
-					// TODO: HIER WEITERMACHEN
-					/*
-					 * Verschieben von neuesTeilpaket - überprüfen ob nach rechts oder links -
-					 * herunterfallen, etc,
-					 */
-
+					
+					int xPos = neuesTeilpaket.getResEinheitListe().get(0).getPosition().getxKoordinate();
+					int grenze =  ResCanvas.koorHoehe - maxBegrenzung - 2;
+					ArrayList<ResEinheit> gesezteResEinheiten = new ArrayList<ResEinheit>();
+					ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+					for (int x = xPos-1; x >= ap.getFaz(); x-- ) {
+						boolean gesetzt = false;
+						
+						for (int y = ResCanvas.koorHoehe-1; y >= grenze ; y--) {
+							if (koordinatenSystem [y][x] == null) {
+								int abstand = grenze - y;
+								if (abstand > ap.getMitarbeiteranzahl()) {
+									abstand = ap.getMitarbeiteranzahl();
+								}
+								
+								for (int i = y; i >= abstand; i--) {
+									ResEinheit zuSetzen = zuSetzendeResEinheiten.get(gesezteResEinheiten.size());
+									koordinatenSystem[i][x] = zuSetzen;
+									gesezteResEinheiten.add(zuSetzen);
+								}
+								
+								// TODO: HIER WEITERMACHEN
+								/*
+								 * trenne horitonzal oder vertiakl???
+								 */ 
+								
+								
+								gesetzt = true;
+							}
+						}
+						if(!gesetzt) {
+							break;
+						}
+					}
+					
+					
+					
 					break;
 				}
 			}
@@ -381,9 +415,11 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		for (int x = 0; x < ResCanvas.koorBreite; x++) {
 
 			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
+			// deswegen maxBegrenzung -2
 			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
 			if (tempResEinheit != null) {
 				grenzeUeberschrittenListe.add(tempResEinheit);
+				
 				for (int y = ResCanvas.koorHoehe - maxBegrenzung - 2; y >= 0; y--) {
 					if (koordinatenSystem[y][x] != null) {
 						grenzeUeberschrittenListe.add(koordinatenSystem[y][x]);
