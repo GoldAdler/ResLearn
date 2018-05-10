@@ -66,7 +66,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 * nicht müssen wir vertikal schneiden.
 		 */
 
-		for (Arbeitspaket ap : resCanvas.getAktuellerZustand().getArbeitspaketListe()) {
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			resCanvas.aufschliessen();
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				int verschieben = tp.ueberpruefeZeiten();

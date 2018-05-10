@@ -66,7 +66,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 * ResCanvas->AktuellerZustand->ArbeitspaketListe
 	 */
 	private static ArrayList<Arbeitspaket> sortiereAP(ResCanvas resCanvas) {
-		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getAktuellerZustand().getArbeitspaketListe();
+		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
 		Collections.sort(arbeitspaketListe, new ComperatorFaz());
 		return arbeitspaketListe;
 	}

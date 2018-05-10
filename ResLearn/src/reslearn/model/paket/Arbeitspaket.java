@@ -25,7 +25,6 @@ public class Arbeitspaket extends Paket {
 	 * Fruehester Endzeitpunkt
 	 */
 	private int fez;
-	private ArbeitspaketZustand arbeitspaketZustand;
 	/**
 	 * Spaetester Endzeitpunkt
 	 */
@@ -159,14 +158,6 @@ public class Arbeitspaket extends Paket {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public ArbeitspaketZustand getArbeitspaketZustand() {
-		return arbeitspaketZustand;
-	}
-
-	public void setArbeitspaketZustand(ArbeitspaketZustand arbeitspaketZustand) {
-		this.arbeitspaketZustand = arbeitspaketZustand;
 	}
 
 }
