@@ -39,23 +39,23 @@ public class Teilpaket extends Paket {
 	}
 
 	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
-		
+
 		Teilpaket neuesTeilpaket = null;
-		
-		if(!neueResEinheitListe.isEmpty()) {
-		
-		for (ResEinheit zuEntfernen : neueResEinheitListe) {
-			this.resEinheitListe.remove(zuEntfernen);
+
+		if (!neueResEinheitListe.isEmpty()) {
+
+			for (ResEinheit zuEntfernen : neueResEinheitListe) {
+				this.resEinheitListe.remove(zuEntfernen);
+			}
+
+			this.aufwand = resEinheitListe.size();
+			this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+
+			neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
+			this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
+
 		}
 
-		this.aufwand = resEinheitListe.size();
-		this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
-
-		neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
-		this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
- 
-		}
-		
 		return neuesTeilpaket;
 	}
 
@@ -63,16 +63,16 @@ public class Teilpaket extends Paket {
 
 		Teilpaket neuesTeilpaket = null;
 
-		if(!neueResEinheitListe.isEmpty()) {
-		
-		neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
-		
-		neuesTeilpaket.vorgangsdauer = vorgangsdauer;
-		neuesTeilpaket.aufwand = neueResEinheitListe.size();
-		neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
+		if (!neueResEinheitListe.isEmpty()) {
+
+			neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
+
+			neuesTeilpaket.vorgangsdauer = vorgangsdauer;
+			neuesTeilpaket.aufwand = neueResEinheitListe.size();
+			neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
 
 		}
-		
+
 		return neuesTeilpaket;
 
 	}
@@ -105,7 +105,7 @@ public class Teilpaket extends Paket {
 			vorgangsdauer += tp.getVorgangsdauer();
 			Collections.sort(resEinheitListe, new ComperatorVektor2i());
 
-			arbeitspaket.getTeilpaketListe().remove(tp);
+			arbeitspaket.entferneTeilpaket(tp);
 
 			return true;
 		} else {
@@ -193,15 +193,22 @@ public class Teilpaket extends Paket {
 	 */
 	public int ueberpruefeZeiten() {
 		Vektor2i position;
+		int verschieben = 0;
 		for (ResEinheit res : resEinheitListe) {
 			position = res.position;
 			if (this.arbeitspaket.getFaz() > position.getxKoordinate() + 1) {
-				return this.arbeitspaket.getFaz() - position.getxKoordinate() + 1;
+				int neuVerschieben = this.arbeitspaket.getFaz() - (position.getxKoordinate() + 1);
+				if (neuVerschieben > verschieben) {
+					verschieben = neuVerschieben;
+				}
 			} else if (this.arbeitspaket.getSez() < position.getxKoordinate() + 1) {
-				return this.arbeitspaket.getSez() - position.getxKoordinate() + 1;
+				int neuVerschieben = this.arbeitspaket.getSez() - (position.getxKoordinate() + 1);
+				if (neuVerschieben < verschieben) {
+					verschieben = neuVerschieben;
+				}
 			}
 		}
-		return 0;
+		return verschieben;
 	}
 
 	public Arbeitspaket getArbeitspaket() {

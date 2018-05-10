@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
-
-
 import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -51,12 +49,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * innerhalb der zeitlichen Rahmenbedingen (FAZ - SEZ) liegen. Wenn die
 	 * Rahmenbedingung verletzt worden ist, versucht die Methode die Pakete zu
 	 * verschieben, damit die Position gültig ist. Ist dies nicht möglich, kann die
-	 * Aufgabe nicht gelöst werden und der Algorithmsu wird abgebrochen.
+	 * Aufgabe nicht gelöst werden und der Algorithmus wird abgebrochen.
 	 *
 	 * @param resCanvas
 	 */
 	private void zeitValidierung(ResCanvas resCanvas) {
 
+		// TODO Überarbeiten wenn mit Klutke geklärt
+		// verschieben unterhalb und rechts blabla
 		/*
 		 * Teilpakete von links nach rechts durchgegehen und Zeiten überprüfen. Wenn
 		 * Zeiten nicht passen wird zu diesem Arbeitspaket alle Teilpakete gelöscht und
@@ -67,12 +67,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 */
 
 		for (Arbeitspaket ap : resCanvas.getAktuellerZustand().getArbeitspaketListe()) {
+			resCanvas.aufschliessen();
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				int verschieben = tp.ueberpruefeZeiten();
 				if (verschieben != 0) {
+
 					resCanvas.entferneArbeitspaket(ap);
 					resCanvas.herunterfallenAlleTeilpakete();
-
 					ap.neuSetzen(verschieben, resCanvas);
 
 					// TODO: löschen
@@ -81,50 +82,168 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas,
 							resCanvas.getKoordinatenSystem());
 
-					
-					int xPos = neuesTeilpaket.getResEinheitListe().get(0).getPosition().getxKoordinate();
-					int grenze =  ResCanvas.koorHoehe - maxBegrenzung - 2;
-					ArrayList<ResEinheit> gesezteResEinheiten = new ArrayList<ResEinheit>();
+					int grenze = ResCanvas.koorHoehe - maxBegrenzung - 2;
+
 					ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
 					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
-					for (int x = xPos-1; x >= ap.getFaz(); x-- ) {
-						boolean gesetzt = false;
-						
-						for (int y = ResCanvas.koorHoehe-1; y >= grenze ; y--) {
-							if (koordinatenSystem [y][x] == null) {
-								int abstand = grenze - y;
-								if (abstand > ap.getMitarbeiteranzahl()) {
-									abstand = ap.getMitarbeiteranzahl();
-								}
-								
-								for (int i = y; i >= abstand; i--) {
-									ResEinheit zuSetzen = zuSetzendeResEinheiten.get(gesezteResEinheiten.size());
-									koordinatenSystem[i][x] = zuSetzen;
-									gesezteResEinheiten.add(zuSetzen);
-								}
-								
-								// TODO: HIER WEITERMACHEN
-								/*
-								 * trenne horitonzal oder vertiakl???
-								 */ 
-								
-								
-								gesetzt = true;
-							}
-						}
-						if(!gesetzt) {
-							break;
-						}
-					}
-					
-					
-					
+
+					verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+
+					verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+
+					// TODO Hier weitermachen
+					// - abbruch berechnen
+					// - wie an user geben
+					// - überlegen wie integer maxbegrenzung in Algo kommmt
+
 					break;
 				}
 			}
 
 		}
 
+	}
+
+	/**
+	 * Verschiebt nach Links wenn möglich.
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param neuesTeilpaket
+	 * @param grenze
+	 * @param zuSetzendeResEinheiten
+	 * @param koordinatenSystem
+	 */
+	private void verschiebeLinks(ResCanvas resCanvas, Arbeitspaket ap, Teilpaket neuesTeilpaket, int grenze,
+			ArrayList<ResEinheit> zuSetzendeResEinheiten, ResEinheit[][] koordinatenSystem) {
+		ArrayList<ResEinheit> gesezteResEinheiten;
+
+		if (!zuSetzendeResEinheiten.isEmpty()) {
+
+			int xPosLinks = zuSetzendeResEinheiten.get(0).getPosition().getxKoordinate();
+			for (int x = xPosLinks - 1; x >= ap.getFaz(); x--) {
+
+				boolean gesetzt = false;
+				gesezteResEinheiten = new ArrayList<ResEinheit>();
+
+				if (zuSetzendeResEinheiten.isEmpty()) {
+					ap.entferneTeilpaket(neuesTeilpaket);
+					break;
+				}
+
+				gesetzt = setzeResEinheitenNeu(resCanvas, ap, neuesTeilpaket, grenze, gesezteResEinheiten,
+						zuSetzendeResEinheiten, koordinatenSystem, x, gesetzt);
+
+				if (!gesetzt) {
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Verschiebt nach Rechts wenn möglich.
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param neuesTeilpaket
+	 * @param grenze
+	 * @param zuSetzendeResEinheiten
+	 * @param koordinatenSystem
+	 */
+	private void verschiebeRechts(ResCanvas resCanvas, Arbeitspaket ap, Teilpaket neuesTeilpaket, int grenze,
+			ArrayList<ResEinheit> zuSetzendeResEinheiten, ResEinheit[][] koordinatenSystem) {
+		ArrayList<ResEinheit> gesezteResEinheiten;
+
+		if (!zuSetzendeResEinheiten.isEmpty()) {
+
+			int xPosRechts = zuSetzendeResEinheiten.get(neuesTeilpaket.getVorgangsdauer() - 1).getPosition()
+					.getxKoordinate();
+
+			for (int x = xPosRechts + 1; x <= ap.getFaz(); x++) {
+
+				boolean gesetzt = false;
+				gesezteResEinheiten = new ArrayList<ResEinheit>();
+
+				if (zuSetzendeResEinheiten.isEmpty()) {
+					ap.entferneTeilpaket(neuesTeilpaket);
+					break;
+				}
+
+				gesetzt = setzeResEinheitenNeu(resCanvas, ap, neuesTeilpaket, grenze, gesezteResEinheiten,
+						zuSetzendeResEinheiten, koordinatenSystem, x, gesetzt);
+
+				if (!gesetzt) {
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Setzt die ResEinheiten in der ArrayList zuSetzendeResEinheiten neu ins
+	 * Koordinatensystem um der Zeitanforderung des Arbeitspaktes zu entsprechen.
+	 * Wenn ResEinheiten neu gesetzt werden konnten wird der booleanwert true
+	 * zurückgegeben.
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param neuesTeilpaket
+	 * @param grenze
+	 * @param gesezteResEinheiten
+	 * @param zuSetzendeResEinheiten
+	 * @param koordinatenSystem
+	 * @param x
+	 * @param gesetzt
+	 * @return
+	 */
+	private boolean setzeResEinheitenNeu(ResCanvas resCanvas, Arbeitspaket ap, Teilpaket neuesTeilpaket, int grenze,
+			ArrayList<ResEinheit> gesezteResEinheiten, ArrayList<ResEinheit> zuSetzendeResEinheiten,
+			ResEinheit[][] koordinatenSystem, int x, boolean gesetzt) {
+
+		int gleicheResEinheiten = 0;
+
+		for (int y = ResCanvas.koorHoehe - 1; y >= grenze; y--) {
+
+			if (koordinatenSystem[y][x] != null) {
+
+				Arbeitspaket aptmp = koordinatenSystem[y][x].getTeilpaket().getArbeitspaket();
+
+				if (ap == aptmp) {
+					gleicheResEinheiten++;
+				}
+
+			} else if (koordinatenSystem[y][x] == null) {
+
+				int abstand = grenze - y - gleicheResEinheiten;
+				if (abstand > ap.getMitarbeiteranzahl()) {
+					abstand = ap.getMitarbeiteranzahl();
+				}
+
+				for (int i = y; i >= abstand; i--) {
+					if (gesezteResEinheiten.size() < zuSetzendeResEinheiten.size()) {
+						ResEinheit zuSetzen = zuSetzendeResEinheiten.get(gesezteResEinheiten.size());
+						koordinatenSystem[zuSetzen.getPosition().getyKoordinate()][zuSetzen.getPosition()
+								.getxKoordinate()] = null;
+						koordinatenSystem[i][x] = zuSetzen;
+						zuSetzen.setPosition(new Vektor2i(i, x));
+						gesezteResEinheiten.add(zuSetzen);
+					} else {
+						break;
+					}
+
+					// TODO: löschen
+					Main.ausgeben(resCanvas.getKoordinatenSystem());
+
+				}
+
+				neuesTeilpaket.trenneTeilpaketVertikal(gesezteResEinheiten, 1);
+
+				gesetzt = true;
+				break;
+			}
+		}
+		return gesetzt;
 	}
 
 	/**
@@ -418,8 +537,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			// deswegen maxBegrenzung -2
 			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
 			if (tempResEinheit != null) {
+				vorgangsdauer++;
 				grenzeUeberschrittenListe.add(tempResEinheit);
-				
+
 				for (int y = ResCanvas.koorHoehe - maxBegrenzung - 2; y >= 0; y--) {
 					if (koordinatenSystem[y][x] != null) {
 						grenzeUeberschrittenListe.add(koordinatenSystem[y][x]);
@@ -428,7 +548,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					}
 				}
 			}
-			vorgangsdauer = x;
 		}
 		if (!grenzeUeberschrittenListe.isEmpty()) {
 			neuesTeilpaket = grenzeUeberschrittenListe.get(0).getTeilpaket()

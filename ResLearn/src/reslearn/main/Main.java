@@ -30,7 +30,12 @@ public class Main {
 		// erstelleAufgabeKinderuni(resCanvas);
 
 		// Prüfungsaufgabe
-		erstellePruefungsAufgabe(resCanvas);
+		// erstellePruefungsAufgabe(resCanvas);
+		erstellePruefungsAufgabeMitE(resCanvas);
+		// erstellePruefungsAufgabeMitEBlosKleiner(resCanvas);
+		// TODO: Klutke fragen
+		// Müssen überprüft werden ob die Pakete unterhalb der Obergrenze verschoben
+		// werden können
 
 		// ----------------------------------------------------------
 		// Algos
@@ -220,6 +225,50 @@ public class Main {
 
 		resCanvas.hinzufuegen(apC);
 		// resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstellePruefungsAufgabeMitE(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 1, 6, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 10, 7, 10, 4, 2, 8);
+		Arbeitspaket apC = new Arbeitspaket("C", 8, 15, 8, 15, 8, 3, 24);
+		Arbeitspaket apD = new Arbeitspaket("D", 13, 15, 15, 17, 3, 4, 12);
+		Arbeitspaket apE = new Arbeitspaket("E", 16, 19, 17, 20, 4, 4, 16);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apE);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstellePruefungsAufgabeMitEBlosKleiner(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 1, 6, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 10, 7, 10, 4, 2, 8);
+		Arbeitspaket apC = new Arbeitspaket("C", 8, 15, 8, 15, 8, 3, 24);
+		Arbeitspaket apD = new Arbeitspaket("D", 13, 15, 15, 17, 3, 4, 12);
+		Arbeitspaket apE = new Arbeitspaket("E", 16, 16, 17, 17, 1, 4, 4);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apE);
 
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------ENDE--------------------------------

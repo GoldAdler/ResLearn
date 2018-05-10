@@ -54,7 +54,7 @@ public class Arbeitspaket extends Paket {
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
 
 		int alteXposition = erstesRes.position.getxKoordinate();
-		int neueXPosition = alteXposition - abstand;
+		int neueXPosition = alteXposition + abstand;
 
 		teilpaketListe.clear();
 
@@ -107,6 +107,10 @@ public class Arbeitspaket extends Paket {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegeY(resCanvas, yMove);
 		}
+	}
+
+	public void entferneTeilpaket(Teilpaket teilpaket) {
+		getTeilpaketListe().remove(teilpaket);
 	}
 
 	public int getFaz() {
