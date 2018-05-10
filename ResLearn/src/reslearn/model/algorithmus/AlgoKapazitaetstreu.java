@@ -10,8 +10,8 @@ import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
-import reslearn.model.paket.Vektor2i;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.Vektor2i;
 
 public class AlgoKapazitaetstreu extends Algorithmus {
 

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.ListIterator;
 
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.ComperatorVektor2i;
+import reslearn.model.utils.Vektor2i;
 
 public class Teilpaket extends Paket {
 

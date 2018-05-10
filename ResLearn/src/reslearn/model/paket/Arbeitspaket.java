@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import reslearn.main.Main;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.Vektor2i;
 
 public class Arbeitspaket extends Paket {
 

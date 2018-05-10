@@ -1,6 +1,7 @@
 package reslearn.model.paket;
 
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.Vektor2i;
 
 public class ResEinheit extends Paket {
 

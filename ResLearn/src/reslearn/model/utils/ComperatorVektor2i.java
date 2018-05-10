@@ -1,6 +1,8 @@
-package reslearn.model.paket;
+package reslearn.model.utils;
 
 import java.util.Comparator;
+
+import reslearn.model.paket.ResEinheit;
 
 public class ComperatorVektor2i implements Comparator<ResEinheit> {
 

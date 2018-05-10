@@ -1,6 +1,8 @@
-package reslearn.model.paket;
+package reslearn.model.utils;
 
 import java.util.Comparator;
+
+import reslearn.model.paket.Arbeitspaket;
 
 /**
  * Sortiert die Arbeitspaketet nach dem FAZ Sind die FAZ der Pakete gleich, wird

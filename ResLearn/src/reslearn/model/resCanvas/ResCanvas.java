@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ArbeitspaketZustand;
-import reslearn.model.paket.ComperatorVektor2i;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
-import reslearn.model.paket.Vektor2i;
+import reslearn.model.utils.ComperatorVektor2i;
+import reslearn.model.utils.Vektor2i;
 
 public class ResCanvas {
 

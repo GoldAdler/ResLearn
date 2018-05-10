@@ -7,11 +7,11 @@ import java.util.Stack;
 
 import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
-import reslearn.model.paket.ComperatorFaz;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
-import reslearn.model.paket.Vektor2i;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.ComperatorFaz;
+import reslearn.model.utils.Vektor2i;
 
 /* Erklärung des Algorithmus AlgoErsteSchritt
  *

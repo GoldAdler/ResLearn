@@ -1,4 +1,4 @@
-package reslearn.model.paket;
+package reslearn.model.utils;
 
 public class Vektor2i {
 
