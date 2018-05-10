@@ -9,6 +9,7 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ArbeitspaketZustand;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
+import reslearn.model.utils.ComperatorFaz;
 import reslearn.model.utils.ComperatorVektor2i;
 import reslearn.model.utils.Vektor2i;
 
@@ -45,7 +46,7 @@ public class ResCanvas {
 	/**
 	 * entfernen des Arbeitspaket aus dem Koordinatensystem! Arbeitspaket ist nicht
 	 * gelöscht, sondern weiß immer noch die Position
-	 * 
+	 *
 	 * @param arbeitspaket
 	 */
 	public void entferneArbeitspaket(Arbeitspaket arbeitspaket) {
@@ -233,6 +234,7 @@ public class ResCanvas {
 	public void aufschliessen() {
 		boolean untersteReiheLeer = false;
 		int laengeLuecke = 0;
+
 		for (int x = 0; x < ResCanvas.koorBreite; x++) {
 			ResEinheit untersteReihe = koordinatenSystem[ResCanvas.koorHoehe - 1][x];
 
@@ -242,8 +244,10 @@ public class ResCanvas {
 			}
 
 			if (untersteReiheLeer && untersteReihe != null) {
+
 				Teilpaket verschiebe = untersteReihe.getTeilpaket();
 				verschiebe.bewegeX(this, -laengeLuecke);
+				this.herunterfallenAlleTeilpakete();
 
 				// TODO: Zu löschen
 				Main.ausgeben(koordinatenSystem);
@@ -255,6 +259,9 @@ public class ResCanvas {
 			}
 
 		}
+
+		// TODO: !!!!!!!!HIER WAREN WIR STHEN GEBLIEBEN
+		Collections.sort(this.aktuellerZustand.getArbeitspaketListe(), new ComperatorFaz());
 
 	}
 

@@ -20,7 +20,7 @@ public class Main {
 		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		// erstelleTestDaten2_5(resCanvas);
+		erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// 2_7 wichtig
 		// erstelleTestDaten2_7(resCanvas);
@@ -31,7 +31,7 @@ public class Main {
 
 		// Prüfungsaufgabe
 		// erstellePruefungsAufgabe(resCanvas);
-		erstellePruefungsAufgabeMitE(resCanvas);
+		// erstellePruefungsAufgabeMitE(resCanvas);
 		// erstellePruefungsAufgabeMitEBlosKleiner(resCanvas);
 		// TODO: Klutke fragen
 		// Müssen überprüft werden ob die Pakete unterhalb der Obergrenze verschoben

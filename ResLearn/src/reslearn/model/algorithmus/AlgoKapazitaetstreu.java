@@ -82,19 +82,19 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas,
 							resCanvas.getKoordinatenSystem());
 
-					int grenze = ResCanvas.koorHoehe - maxBegrenzung - 2;
+					if (neuesTeilpaket != null) {
 
-					ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
-					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+						int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
 
-					verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+						ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+						ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 
-					verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+						verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten,
+								koordinatenSystem);
 
-					// TODO Hier weitermachen
-					// - abbruch berechnen
-					// - wie an user geben
-					// - überlegen wie integer maxbegrenzung in Algo kommmt
+						verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten,
+								koordinatenSystem);
+					}
 
 					break;
 				}
@@ -160,7 +160,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			int xPosRechts = zuSetzendeResEinheiten.get(neuesTeilpaket.getVorgangsdauer() - 1).getPosition()
 					.getxKoordinate();
 
-			for (int x = xPosRechts + 1; x <= ap.getFaz(); x++) {
+			for (int x = xPosRechts + 1; x <= ResCanvas.koorBreite; x++) {
 
 				boolean gesetzt = false;
 				gesezteResEinheiten = new ArrayList<ResEinheit>();
@@ -215,19 +215,16 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			} else if (koordinatenSystem[y][x] == null) {
 
-				int abstand = grenze - y - gleicheResEinheiten;
-				if (abstand > ap.getMitarbeiteranzahl()) {
-					abstand = ap.getMitarbeiteranzahl();
-				}
-
-				for (int i = y; i >= abstand; i--) {
-					if (gesezteResEinheiten.size() < zuSetzendeResEinheiten.size()) {
+				for (int i = y; i > grenze; i--) {
+					if (gesezteResEinheiten.size() < zuSetzendeResEinheiten.size()
+							&& gleicheResEinheiten < ap.getMitarbeiteranzahl()) {
 						ResEinheit zuSetzen = zuSetzendeResEinheiten.get(gesezteResEinheiten.size());
 						koordinatenSystem[zuSetzen.getPosition().getyKoordinate()][zuSetzen.getPosition()
 								.getxKoordinate()] = null;
 						koordinatenSystem[i][x] = zuSetzen;
 						zuSetzen.setPosition(new Vektor2i(i, x));
 						gesezteResEinheiten.add(zuSetzen);
+						gleicheResEinheiten++;
 					} else {
 						break;
 					}
@@ -296,18 +293,27 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		// prüfen ob, in unterhalbUndRechts ein Teilpaket liegt, das zum selben
 		// Arbeitspaket des aktuellen Teilpaketes gehöhrt
-		boolean zusammenfuehren = false;
 		Teilpaket zusammenzufuerhen = null;
 		for (Teilpaket tp : rechtsVonunterhalbStack) {
 			if (tp.getArbeitspaket() == teilpaket.getArbeitspaket()) {
 				zusammenzufuerhen = tp;
-				zusammenfuehren = true;
 			}
 		}
 
-		int xMove = teilpaket.getVorgangsdauer();
+		int xFrueheste = Integer.MAX_VALUE;
+		for (Teilpaket tp : unterhalbStack) {
 
-		if (zusammenfuehren) {
+			int xTmp = tp.getResEinheitListe().get(0).getPosition().getxKoordinate();
+
+			if (xTmp < xFrueheste) {
+				xFrueheste = xTmp;
+			}
+		}
+
+		int abstand = teilpaket.getResEinheitListe().get(0).getPosition().getxKoordinate() - xFrueheste;
+		int xMove = teilpaket.getVorgangsdauer() + abstand;
+
+		if (zusammenzufuerhen != null) {
 
 			// Wenn in unterhalbUndRechts ein Teilpaket(TpB) liegt, das zum selben
 			// Arbeitspaket
