@@ -1,6 +1,7 @@
 package reslearn.model.algorithmus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -9,6 +10,7 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.ComperatorArbeitspaket;
 import reslearn.model.utils.Vektor2i;
 
 public class AlgoKapazitaetstreu extends Algorithmus {
@@ -65,6 +67,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 * teilpakete unterhalb und rechts, ob diese noch verschoben werden können, wenn
 		 * nicht müssen wir vertikal schneiden.
 		 */
+
+		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaket());
 
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			resCanvas.aufschliessen();

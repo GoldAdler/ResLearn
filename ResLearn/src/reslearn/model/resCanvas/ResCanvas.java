@@ -246,10 +246,6 @@ public class ResCanvas {
 			}
 
 		}
-
-		// TODO: !!!!!!!!HIER WAREN WIR STHEN GEBLIEBEN
-		// Collections.sort(getArbeitspaketListe(), new ComperatorFaz());
-
 	}
 
 	/**

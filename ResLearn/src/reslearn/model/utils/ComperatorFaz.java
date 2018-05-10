@@ -9,12 +9,6 @@ import reslearn.model.paket.Arbeitspaket;
  * nach der Vorgangsdauer sortiert. Dadurch befinden sich die längeren Pakete
  * vorne in der Liste
  *
- * @param index
- *            index at which the specified element is to be inserted
- * @param element
- *            element to be inserted
- * @throws IndexOutOfBoundsException
- *             {@inheritDoc}
  */
 public class ComperatorFaz implements Comparator<Arbeitspaket> {
 
