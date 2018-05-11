@@ -1,10 +1,12 @@
 package reslearn.model.paket;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import reslearn.main.Main;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.ComperatorTeilpaket;
 import reslearn.model.utils.Vektor2i;
 
 public class Arbeitspaket extends Paket {
@@ -48,6 +50,27 @@ public class Arbeitspaket extends Paket {
 		teilpaketListe.add(new Teilpaket(this));
 	}
 
+	public void zusammenfuegen() {
+
+		if (teilpaketListe.size() > 1) {
+
+			Collections.sort(this.teilpaketListe, new ComperatorTeilpaket());
+
+			int iterator = 0;
+			boolean zusammengefuehrt = false;
+
+			while (iterator < teilpaketListe.size()) {
+				if (iterator + 1 >= teilpaketListe.size()) {
+					break;
+				}
+				zusammengefuehrt = teilpaketListe.get(iterator).zusammenfuehren(teilpaketListe.get(iterator + 1));
+				if (!zusammengefuehrt) {
+					iterator++;
+				}
+			}
+		}
+	}
+
 	public void neuSetzen(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
@@ -60,7 +83,7 @@ public class Arbeitspaket extends Paket {
 		Teilpaket vereint = new Teilpaket(this);
 		teilpaketListe.add(vereint);
 
-		var resEinheitenListe = vereint.getResEinheitListe();
+		ArrayList<ResEinheit> resEinheitenListe = vereint.getResEinheitListe();
 		Iterator<ResEinheit> it = resEinheitenListe.iterator();
 
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();

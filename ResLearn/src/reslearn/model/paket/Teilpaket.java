@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.ListIterator;
 
 import reslearn.model.resCanvas.ResCanvas;
-import reslearn.model.utils.ComperatorVektor2i;
+import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
 public class Teilpaket extends Paket {
@@ -43,17 +43,22 @@ public class Teilpaket extends Paket {
 		Teilpaket neuesTeilpaket = null;
 
 		if (!neueResEinheitListe.isEmpty()) {
+			// && resEinheitListe.size() != neueResEinheitListe.size()
+			// && !(resEinheitListe.containsAll(neueResEinheitListe)
 
 			for (ResEinheit zuEntfernen : neueResEinheitListe) {
 				this.resEinheitListe.remove(zuEntfernen);
 			}
 
-			this.aufwand = resEinheitListe.size();
-			this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+			if (!resEinheitListe.isEmpty()) {
+				this.aufwand = resEinheitListe.size();
+				this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+			} else {
+				this.arbeitspaket.entferneTeilpaket(this);
+			}
 
 			neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
 			this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
-
 		}
 
 		return neuesTeilpaket;
@@ -87,23 +92,23 @@ public class Teilpaket extends Paket {
 	 */
 	public boolean zusammenfuehren(Teilpaket tp) {
 
-		int xPunkt1Tp1 = tp.resEinheitListe.get(0).getPosition().getxKoordinate();
-		int xPunkt2Tp1 = xPunkt1Tp1 + tp.aufwand;
+		int xPunkt1Tp1 = this.resEinheitListe.get(0).getPosition().getxKoordinate();
+		int xPunkt2Tp1 = xPunkt1Tp1 + this.vorgangsdauer - 1;
 
-		int xPunkt1Tp2 = this.resEinheitListe.get(0).getPosition().getxKoordinate();
-		int xPunkt2Tp2 = xPunkt1Tp2 + this.aufwand;
+		int xPunkt1Tp2 = tp.resEinheitListe.get(0).getPosition().getxKoordinate();
+		int xPunkt2Tp2 = xPunkt1Tp2 + tp.vorgangsdauer - 1;
 
 		int yAchse1 = tp.resEinheitListe.get(0).getPosition().getyKoordinate();
 		int yAchse2 = this.resEinheitListe.get(0).getPosition().getyKoordinate();
 
-		if ((yAchse1 == yAchse2) && (xPunkt1Tp1 == xPunkt2Tp2 + 1 || xPunkt2Tp1 == xPunkt1Tp2 + 1)) {
+		if ((yAchse1 == yAchse2) && (xPunkt1Tp1 == xPunkt2Tp2 - 1 || xPunkt2Tp1 == xPunkt1Tp2 - 1)) {
 			for (ResEinheit res : tp.getResEinheitListe()) {
 				res.setTeilpaket(this);
 				resEinheitListe.add(res);
 			}
 			aufwand += tp.getAufwand();
 			vorgangsdauer += tp.getVorgangsdauer();
-			Collections.sort(resEinheitListe, new ComperatorVektor2i());
+			Collections.sort(resEinheitListe, new ComperatorVektor2iY());
 
 			arbeitspaket.entferneTeilpaket(tp);
 
@@ -196,6 +201,7 @@ public class Teilpaket extends Paket {
 		int verschieben = 0;
 		for (ResEinheit res : resEinheitListe) {
 			position = res.position;
+
 			if (this.arbeitspaket.getFaz() > position.getxKoordinate() + 1) {
 				int neuVerschieben = this.arbeitspaket.getFaz() - (position.getxKoordinate() + 1);
 				if (neuVerschieben > verschieben) {

@@ -8,7 +8,7 @@ import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
-import reslearn.model.utils.ComperatorVektor2i;
+import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
 public class ResCanvas {
@@ -211,7 +211,7 @@ public class ResCanvas {
 			}
 		}
 
-		Collections.sort(resEinheitFuerNeuesTeilpaket, new ComperatorVektor2i());
+		Collections.sort(resEinheitFuerNeuesTeilpaket, new ComperatorVektor2iY());
 	}
 
 	/**

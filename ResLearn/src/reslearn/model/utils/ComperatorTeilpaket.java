@@ -14,10 +14,10 @@ public class ComperatorTeilpaket implements Comparator<Teilpaket> {
 		Vektor2i vek1 = tp1.getResEinheitListe().get(0).getPosition();
 		Vektor2i vek2 = tp2.getResEinheitListe().get(0).getPosition();
 
-		result = vek2.getyKoordinate() - vek1.getyKoordinate();
+		result = vek1.getxKoordinate() - vek2.getxKoordinate();
 
 		if (result == 0) {
-			result = vek1.getxKoordinate() - vek2.getxKoordinate();
+			result = vek1.getyKoordinate() - vek2.getyKoordinate();
 		}
 		return result;
 	}

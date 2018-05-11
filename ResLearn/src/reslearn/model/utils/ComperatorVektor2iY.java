@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import reslearn.model.paket.ResEinheit;
 
-public class ComperatorVektor2i implements Comparator<ResEinheit> {
+public class ComperatorVektor2iY implements Comparator<ResEinheit> {
 
 	@Override
 	public int compare(ResEinheit re1, ResEinheit re2) {

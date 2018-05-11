@@ -11,6 +11,9 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.ComperatorArbeitspaket;
+import reslearn.model.utils.ComperatorTeilpaket;
+import reslearn.model.utils.ComperatorVektor2iX;
+import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
 public class AlgoKapazitaetstreu extends Algorithmus {
@@ -69,43 +72,178 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 */
 
 		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaket());
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			ap.zusammenfuegen();
+		}
 
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			ap.zusammenfuegen();
 			resCanvas.aufschliessen();
-			for (Teilpaket tp : ap.getTeilpaketListe()) {
-				int verschieben = tp.ueberpruefeZeiten();
-				if (verschieben != 0) {
 
-					resCanvas.entferneArbeitspaket(ap);
-					resCanvas.herunterfallenAlleTeilpakete();
-					ap.neuSetzen(verschieben, resCanvas);
+			ArrayList<Teilpaket> tpListe = ap.getTeilpaketListe();
+			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
+			int verschiebenRechts = letztesTeilpaket.ueberpruefeZeiten();
+			if (verschiebenRechts != 0) {
 
-					// TODO: löschen
-					Main.ausgeben(resCanvas.getKoordinatenSystem());
+				verschiebeZeitueberschreitendePakete(resCanvas, ap, verschiebenRechts);
 
-					Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas,
-							resCanvas.getKoordinatenSystem());
+			}
 
-					if (neuesTeilpaket != null) {
+			// TODO: löschen
+			Main.ausgeben(resCanvas.getKoordinatenSystem());
 
-						int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+			zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
 
-						ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
-						ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+		}
 
-						verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten,
-								koordinatenSystem);
+	}
 
-						verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten,
-								koordinatenSystem);
+	/**
+	 * Überprüfe ob Arbeitspaket nach links (Richtung FAZ) verschoben werden kann.
+	 * Wenn ja werden ResEinheiten vom Ende des Arbeitspaketes genommen und nach
+	 * vorne gesetzt.
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param tpListe
+	 * @param letztesTeilpaket
+	 */
+	private void zeitOptimieren(ResCanvas resCanvas, Arbeitspaket ap, ArrayList<Teilpaket> tpListe,
+			Teilpaket letztesTeilpaket) {
+
+		Teilpaket erstesTeilpaket = tpListe.get(0);
+		ResEinheit ersteResEinheit = erstesTeilpaket.getResEinheitListe().get(0);
+		boolean gesetzt = false;
+		int xPos = ersteResEinheit.getPosition().getxKoordinate();
+
+		ArrayList<ResEinheit> zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
+		ArrayList<ResEinheit> gesetzteResEinheiten;
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+		for (int x = xPos - 1; x >= ap.getFaz(); xPos--) {
+
+			gesetzt = false;
+
+			Collections.sort(letztesTeilpaket.getResEinheitListe(), new ComperatorVektor2iX());
+
+			gesetzteResEinheiten = new ArrayList<ResEinheit>();
+
+			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+
+			for (int y = ResCanvas.koorHoehe - 1; y >= grenze; y--) {
+
+				if (koordinatenSystem[y][x] == null) {
+					int indexLetzteRes = zuSetzendeResEinheiten.size() - 1;
+					for (int i = y; i > grenze; i--) {
+						if (gesetzteResEinheiten.size() == zuSetzendeResEinheiten.size()) {
+
+							/*
+							 * ############## WICHTIG !!!!! ##################### Dieser Code Block ist
+							 * nahezu identisch mit dem Block, der weiter unten ebenfalls mit WICHTIG
+							 * markiert wurde. Der einzige unterschied besteht darin, dass im oberen Block,
+							 * also diesem, das Teilpaket letztesTeilpaket aus dem Arbeitspaket entfernt
+							 * wird.
+							 *
+							 * Wenn an diesem Block etwas verändert wird, muss ebenso der untere Block mit
+							 * der gleichen Veränderungen versehen werden!!!!!
+							 *
+							 * Erklärung: hieraus lässt sich leider keien Methode extrahieren. Dem Finder
+							 * einer besseren Lösung bieten wir einen Download-Gutschein für ein Glässle
+							 * Bärlauch Pesto. Der Finder meldet sich bitte bei willburger@hotmail.de.####
+							 * Der Lukas schwimmt in dem Zeug.
+							 *
+							 */
+							// #################### ANFANG BLOCK #######################
+							Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
+							Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
+							letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+
+							ap.entferneTeilpaket(letztesTeilpaket);
+
+							Collections.sort(tpListe, new ComperatorTeilpaket());
+							letztesTeilpaket = tpListe.get(tpListe.size() - 1);
+							zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
+							Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iX());
+							gesetzteResEinheiten = new ArrayList<ResEinheit>();
+
+							// ################### ENDE BLOCK #######################
+
+							indexLetzteRes = zuSetzendeResEinheiten.size() - 1;
+						}
+						ResEinheit zuSetzen = zuSetzendeResEinheiten.get(indexLetzteRes--);
+						koordinatenSystem[zuSetzen.getPosition().getyKoordinate()][zuSetzen.getPosition()
+								.getxKoordinate()] = null;
+						koordinatenSystem[i][x] = zuSetzen;
+						zuSetzen.setPosition(new Vektor2i(i, x));
+						gesetzteResEinheiten.add(zuSetzen);
+						// TODO: löschen
+						Main.ausgeben(resCanvas.getKoordinatenSystem());
+
+						gesetzt = true;
+
 					}
+
+					/*
+					 * ############## WICHTIG !!!!! ############################ Dieser Code Block
+					 * ist nahezu identisch mit dem Block, der weiter oben ebenfalls mit WICHTIG
+					 * markiert wurde. Der einzige unterschied besteht darin, dass im oberen Block
+					 * das Teilpaket letztesTeilpaket aus dem Arbeitspaket entfernt wird.
+					 *
+					 * Wenn an diesem Block etwas verändert wird, muss ebenso der obere Block mit
+					 * der gleichen Veränderungen versehen werden!!!!!
+					 *
+					 */
+					// #################### ANFANG BLOCK #######################
+					Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
+					Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
+					letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+					Collections.sort(tpListe, new ComperatorTeilpaket());
+					letztesTeilpaket = tpListe.get(tpListe.size() - 1);
+					zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
+					Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iX());
+					gesetzteResEinheiten = new ArrayList<ResEinheit>();
+
+					// ################### ENDE BLOCK #######################
 
 					break;
 				}
 			}
-
+			if (!gesetzt) {
+				break;
+			}
 		}
+	}
 
+	/**
+	 * Die Pakete bei dennen die Zeitvaldierung verstöße feststellt werden gelöscht
+	 * und um die entsprechende Differenz wieder eingefügt. Falls ResEinheiten die
+	 * Obergrenze überscheiten werden diese entsprechend nach Links oder nach Rechts
+	 * verschoben.
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param verschiebenRechts
+	 */
+	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschiebenRechts) {
+		resCanvas.entferneArbeitspaket(ap);
+		resCanvas.herunterfallenAlleTeilpakete();
+		ap.neuSetzen(verschiebenRechts, resCanvas);
+
+		// TODO: löschen
+		Main.ausgeben(resCanvas.getKoordinatenSystem());
+
+		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
+
+		if (neuesTeilpaket != null) {
+
+			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+
+			ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+			ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+			verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+
+			verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+		}
 	}
 
 	/**
@@ -161,8 +299,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		if (!zuSetzendeResEinheiten.isEmpty()) {
 
-			int xPosRechts = zuSetzendeResEinheiten.get(neuesTeilpaket.getVorgangsdauer() - 1).getPosition()
-					.getxKoordinate();
+			Collections.sort(ap.getTeilpaketListe(), new ComperatorTeilpaket());
+			Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
+
+			// int xPosRechts = zuSetzendeResEinheiten.get(neuesTeilpaket.getVorgangsdauer()
+			// - 1).getPosition()
+			// .getxKoordinate();
+			Teilpaket tp = ap.getTeilpaketListe().get(ap.getTeilpaketListe().size() - 1);
+			int xPosRechts = tp.getResEinheitListe().get(tp.getVorgangsdauer() - 1).getPosition().getxKoordinate();
 
 			for (int x = xPosRechts + 1; x <= ResCanvas.koorBreite; x++) {
 

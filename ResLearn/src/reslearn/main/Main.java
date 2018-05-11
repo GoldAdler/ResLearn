@@ -20,11 +20,14 @@ public class Main {
 		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		erstelleTestDaten2_5(resCanvas);
+		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// 2_7 wichtig
 		// erstelleTestDaten2_7(resCanvas);
-		// erstelleTestDaten2_8(resCanvas);
+		erstelleTestDaten2_8(resCanvas);
+		// TODO: Team-Logik hier weitermachen
+		// für erstelleTestDaten2_8 prüfen ob Eingaben korrekt, und warum Lösung
+		// verwurschtelt
 
 		// Kinder-Uni
 		// erstelleAufgabeKinderuni(resCanvas);
