@@ -25,7 +25,7 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+      <ImageView fx:id="zurueck" fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" onMouseClicked="#zurueck" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
             <Image url="@../images/pfeil.png" />
          </image>

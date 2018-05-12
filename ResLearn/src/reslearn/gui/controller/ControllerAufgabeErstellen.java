@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import reslearn.model.paket.Arbeitspaket;
 
-public class ControllerAufgabeErstellen {
+public class ControllerAufgabeErstellen extends Controller{
 	private int anzPakete, anzMaxPersonen;
 	final ToggleGroup rbGruppe = new ToggleGroup();	
 	private String ergebnisValidierung = "";
