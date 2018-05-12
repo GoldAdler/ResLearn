@@ -129,6 +129,11 @@
             </Group>
          </children>
       </GridPane>
+      <ImageView fx:id="home" fitHeight="35.0" fitWidth="35.0" layoutX="56.0" layoutY="7.0" onMouseClicked="#home" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../bin/reslearn/gui/images/home.png" />
+         </image>
+      </ImageView>
    </children>
    <opaqueInsets>
       <Insets />

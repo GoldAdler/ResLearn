@@ -14,13 +14,18 @@ public class Controller {
 	public static ArrayList<String> alleFenster = new ArrayList<String>();
 	
 
-	public static String vorherigesFenster(ArrayList<String> list) {
+	public String vorherigesFenster(ArrayList<String> list) {
 		for(String ausgabe : alleFenster)
 		{
 			System.out.println(ausgabe);
 		}
-		return list.get(list.size() - 1);
-		//list.remove(list.size() - 1);
+		String string = list.get(list.size() - 1);
+		list.remove(list.get(list.size() - 1));
+		return string;
+	}
+	
+	public String hauptmenue () {
+		return "../fxml/Hauptmenue.fxml";
 	}
 
 	
