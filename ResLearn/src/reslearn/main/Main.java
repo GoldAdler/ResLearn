@@ -3,7 +3,6 @@ package reslearn.main;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
-import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class Main {
@@ -52,9 +51,9 @@ public class Main {
 		// durchführen des Algorithmus AlgoKapazitaetstreu
 		algorithmus = AlgoKapazitaetstreu.getInstance();
 
-		ResEinheit[][] koordinatenSystem = algorithmus.algoDurchfuehren(resCanvas);
+		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 
-		Algorithmus.ausgeben(koordinatenSystem);
+		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 
 	}
 

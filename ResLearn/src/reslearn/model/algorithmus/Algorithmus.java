@@ -7,7 +7,7 @@ public abstract class Algorithmus {
 
 	static final boolean testModus = true;
 
-	public abstract ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas);
+	public abstract ResCanvas algoDurchfuehren(ResCanvas resCanvas);
 
 	/*
 	 * Methode gibt den aktuellen Zustand des koordinatenSystems (ResEinheit[][]) in

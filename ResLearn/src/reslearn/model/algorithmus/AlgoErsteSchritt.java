@@ -51,13 +51,13 @@ public class AlgoErsteSchritt extends Algorithmus {
 	}
 
 	@Override
-	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
+	public ResCanvas algoDurchfuehren(ResCanvas resCanvas) {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(resCanvas);
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 		berechne(arbeitspaketListe, koordinatenSystem, resCanvas);
 
-		return koordinatenSystem;
+		return resCanvas;
 	}
 
 	/**

@@ -33,19 +33,20 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	}
 
 	@Override
-	public ResEinheit[][] algoDurchfuehren(ResCanvas resCanvas) {
+	public ResCanvas algoDurchfuehren(ResCanvas resCanvas) {
 
 		// Durchführen des AlgoErsteSchritt und anschließendes herabsenken aller in der
 		// Luft stehenden ResEinheiten.
 		// Damit wir die Ausgangssituation des AlgoKapazitaetstreu geschaffen.
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
+				.getKoordinatenSystem();
 		resCanvas.herunterfallenAlleTeilpakete();
 
 		kapazitaetsOptimierung(resCanvas, koordinatenSystem);
 
 		zeitValidierung(resCanvas);
 
-		return koordinatenSystem;
+		return resCanvas;
 	}
 
 	/**

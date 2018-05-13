@@ -14,7 +14,8 @@ public class MainGUITest {
 		erstelleTestDaten(resCanvas);
 
 		// durchführen des Algorithmus
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
+				.getKoordinatenSystem();
 
 		ausgeben(koordinatenSystem);
 

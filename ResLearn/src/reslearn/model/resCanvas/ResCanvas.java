@@ -15,6 +15,9 @@ public class ResCanvas {
 
 	private ArrayList<Arbeitspaket> arbeitspaketListe;
 	private ResEinheit[][] koordinatenSystem;
+	// TODO Historie der sich veränderten koordiantenSysteme anlegen
+	// dient dafür im Lösungsmodus die einzelnen Schritte anzuzeigen
+	private ArrayList<ResEinheit[][]> historieKoordinatenSystem;
 	public static final int koorHoehe = 28;
 	public static final int koorBreite = 43;
 	private int maxMitarbeiter = koorHoehe - 1;
