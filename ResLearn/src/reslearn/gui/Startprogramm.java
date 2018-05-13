@@ -13,7 +13,7 @@ public class Startprogramm extends Application{
 	}
 	public void start (Stage stage) throws Exception {
 	
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("./fxml/ModusAuswaehlen.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("./fxml/AufgabeLaden.fxml"));
 		Scene scene = new Scene(root);
 		
 		stage.setMaximized(true);
