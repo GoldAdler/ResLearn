@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import reslearn.main.Main;
+import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -67,8 +67,7 @@ public class ResCanvas {
 			for (int i = 0; i < teilpaketListe.size(); i++) {
 				this.herunterfallen(teilpaketListe.get(i));
 
-				// TODO: Ausgeben löschen
-				Main.ausgeben(koordinatenSystem);
+				Algorithmus.ausgeben(koordinatenSystem);
 			}
 		}
 	}
@@ -107,8 +106,7 @@ public class ResCanvas {
 
 			if (kollision) {
 
-				// TODO: Ausgeben löschen
-				Main.ausgeben(koordinatenSystem);
+				Algorithmus.ausgeben(koordinatenSystem);
 
 				this.herunterfallen(tmp);
 			}
@@ -236,8 +234,7 @@ public class ResCanvas {
 				verschiebe.bewegeX(this, -laengeLuecke);
 				this.herunterfallenAlleTeilpakete();
 
-				// TODO: Zu löschen
-				Main.ausgeben(koordinatenSystem);
+				Algorithmus.ausgeben(koordinatenSystem);
 
 				untersteReiheLeer = false;
 				laengeLuecke = 0;

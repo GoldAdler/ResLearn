@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -89,8 +88,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			}
 
-			// TODO: löschen
-			Main.ausgeben(resCanvas.getKoordinatenSystem());
+			ausgeben(resCanvas.getKoordinatenSystem());
 
 			zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
 
@@ -175,8 +173,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						koordinatenSystem[i][x] = zuSetzen;
 						zuSetzen.setPosition(new Vektor2i(i, x));
 						gesetzteResEinheiten.add(zuSetzen);
-						// TODO: löschen
-						Main.ausgeben(resCanvas.getKoordinatenSystem());
+
+						ausgeben(resCanvas.getKoordinatenSystem());
 
 						gesetzt = true;
 
@@ -228,8 +226,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		resCanvas.herunterfallenAlleTeilpakete();
 		ap.neuSetzen(verschiebenRechts, resCanvas);
 
-		// TODO: löschen
-		Main.ausgeben(resCanvas.getKoordinatenSystem());
+		ausgeben(resCanvas.getKoordinatenSystem());
 
 		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
 
@@ -377,8 +374,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						break;
 					}
 
-					// TODO: löschen
-					Main.ausgeben(resCanvas.getKoordinatenSystem());
+					ausgeben(resCanvas.getKoordinatenSystem());
 
 				}
 
@@ -415,13 +411,11 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			resCanvas.herunterfallen(teilpaket);
 
-			// TODO: löschen
-			Main.ausgeben(koordinatenSystem);
+			ausgeben(koordinatenSystem);
 
 			resCanvas.aufschliessen();
 
-			// TODO: löschen
-			Main.ausgeben(koordinatenSystem);
+			ausgeben(koordinatenSystem);
 		}
 	}
 
@@ -486,16 +480,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				Teilpaket tp = rechtsVonunterhalbStack.pop();
 				tp.bewegen(resCanvas, 0, xMove);
 
-				// TODO: löschen
-				Main.ausgeben(koordinatenSystem);
+				ausgeben(koordinatenSystem);
 			}
 
 			while (!unterhalbStack.isEmpty()) {
 				Teilpaket tp = unterhalbStack.pop();
 				tp.bewegen(resCanvas, 0, xMove);
 
-				// TODO: löschen
-				Main.ausgeben(koordinatenSystem);
+				ausgeben(koordinatenSystem);
 			}
 
 			resCanvas.herunterfallen(teilpaket);
@@ -531,8 +523,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			if (verschieben) {
 				tp.bewegeX(resCanvas, xMove);
 
-				// TODO: löschen
-				Main.ausgeben(koordinatenSystem);
+				ausgeben(koordinatenSystem);
 
 			}
 
@@ -552,8 +543,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 					teilpaket.bewegen(resCanvas, -differenz.getyKoordinate(), differenz.getxKoordinate());
 
-					// TODO: löschen
-					Main.ausgeben(koordinatenSystem);
+					ausgeben(koordinatenSystem);
 
 					// TODO: nice to have
 					// swappen der Teilpakete vor dem Herunterfallen,
@@ -566,8 +556,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 					teilpaket.zusammenfuehren(tp);
 
-					// TODO: löschen
-					Main.ausgeben(koordinatenSystem);
+					ausgeben(koordinatenSystem);
 				}
 
 			}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import reslearn.main.Main;
+import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.ComperatorTeilpaket;
 import reslearn.model.utils.Vektor2i;
@@ -99,8 +99,7 @@ public class Arbeitspaket extends Paket {
 			}
 		}
 
-		// TODO: Ausgeben löschen
-		Main.ausgeben(koordinatenSystem);
+		Algorithmus.ausgeben(koordinatenSystem);
 
 		resCanvas.herunterfallen(vereint);
 

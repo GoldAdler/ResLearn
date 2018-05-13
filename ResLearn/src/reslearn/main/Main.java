@@ -1,6 +1,7 @@
 package reslearn.main;
 
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
@@ -43,14 +44,17 @@ public class Main {
 		// ----------------------------------------------------------
 		// Algos
 
+		Algorithmus algorithmus;
+
 		// durchführen des Algorithmus ErsteSchritt
-		// ResEinheit[][] koordinatenSystem =
-		// AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas);
+		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus AlgoKapazitaetstreu
-		ResEinheit[][] koordinatenSystem = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas);
+		algorithmus = AlgoKapazitaetstreu.getInstance();
 
-		ausgeben(koordinatenSystem);
+		ResEinheit[][] koordinatenSystem = algorithmus.algoDurchfuehren(resCanvas);
+
+		Algorithmus.ausgeben(koordinatenSystem);
 
 	}
 
@@ -274,26 +278,6 @@ public class Main {
 		resCanvas.hinzufuegen(apE);
 
 		// -----------------------------TestDaten-------------------------------
-		// -------------------------------ENDE--------------------------------
-		// ---------------------------------------------------------------------
-	}
-
-	public static void ausgeben(ResEinheit[][] koordinatenSystem) {
-		// ---------------------------------------------------------------------
-		// -----------------------------TestAusgabe-----------------------------
-		// -------------------------------Anfang--------------------------------
-		for (ResEinheit[] a : koordinatenSystem) {
-			for (ResEinheit b : a) {
-				if (b == null) {
-					System.out.print(".");
-				} else {
-					System.out.print(b.getTeilpaket().getArbeitspaket().getId());
-				}
-			}
-			System.out.println();
-		}
-		System.out.println();
-		// -----------------------------TestAusgabe-----------------------------
 		// -------------------------------ENDE--------------------------------
 		// ---------------------------------------------------------------------
 	}

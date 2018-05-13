@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Stack;
 
-import reslearn.main.Main;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -97,8 +96,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 
 				befuelleKoordinatenSystem(koordinatenSystem, arbeitspaket, teilpaket, x_Start, y_Start);
 
-				// TODO löschen
-				Main.ausgeben(koordinatenSystem);
+				ausgeben(koordinatenSystem);
 
 			} while (size != teilpaketListe.size());
 
@@ -184,8 +182,8 @@ public class AlgoErsteSchritt extends Algorithmus {
 				while (!stackTeilpaket.isEmpty()) {
 					stackTeilpaket.pop().bewegeY(resCanvas, yMove);
 				}
-				// TODO löschen
-				Main.ausgeben(koordinatenSystem);
+
+				ausgeben(koordinatenSystem);
 
 				break;
 			}
