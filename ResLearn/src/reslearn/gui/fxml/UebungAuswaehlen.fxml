@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -15,14 +23,14 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerUebungAuswaehlen">
    <children>
       <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Übung auswählen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+      <ImageView fx:id="zurueck" fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" onMouseClicked="#zurueck" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
             <Image url="@../images/pfeil.png" />
          </image>
@@ -132,6 +140,11 @@
             </GridPane>
          </children>
       </Pane>
+      <ImageView fx:id="home" fitHeight="35.0" fitWidth="35.0" layoutX="53.0" layoutY="7.0" onMouseClicked="#home" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/home.png" />
+         </image>
+      </ImageView>
    </children>
    <opaqueInsets>
       <Insets />
