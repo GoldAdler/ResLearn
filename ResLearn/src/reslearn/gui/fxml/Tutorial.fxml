@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerTutorial">
    <children>
       <Button alignment="CENTER" graphicTextGap="5.0" layoutX="1045.0" layoutY="632.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Quiz starten" textFill="WHITE">
          <padding>
@@ -34,6 +34,11 @@
       <ImageView fx:id="zurueck" fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" onMouseClicked="#zurueck" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
             <Image url="@../images/pfeil.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="home" fitHeight="35.0" fitWidth="35.0" layoutX="48.0" layoutY="7.0" onMouseClicked="#home" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/home.png" />
          </image>
       </ImageView>
    </children>

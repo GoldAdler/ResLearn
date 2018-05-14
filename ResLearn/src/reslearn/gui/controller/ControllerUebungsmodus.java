@@ -16,6 +16,8 @@ public class ControllerUebungsmodus extends Controller{
 		
 	@FXML
 	private ImageView zurueck;
+	@FXML 
+	private ImageView home;
 		
 	@FXML
 	public void zurueck() throws Exception{
@@ -31,6 +33,30 @@ public class ControllerUebungsmodus extends Controller{
 				stage.setMaximized(true);
 				stage.setScene(newScene);
 				stage.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			}
+		});
+	}
+	
+	@FXML
+	public void home() throws Exception {
+		home.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			Scene newScene;
+
+			public void handle(MouseEvent event) {
+				Parent root;
+				try {
+					root = FXMLLoader.load(getClass().getResource(hauptmenue()));
+					newScene = new Scene(root);
+					Stage stage = new Stage();
+					stage.setTitle("ResLearn");
+					stage.setMaximized(true);
+					stage.setScene(newScene);
+					stage.show();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
