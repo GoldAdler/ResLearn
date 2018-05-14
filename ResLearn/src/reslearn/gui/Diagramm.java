@@ -2,7 +2,6 @@ package reslearn.gui;
 
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import reslearn.model.paket.ResEinheit;
 
 public class Diagramm {
@@ -13,8 +12,8 @@ public class Diagramm {
 	static int spaltY = 5;
 	static int x = abstandX + spaltX;
 	static int y = + abstandY - spaltY;
-	int zeile = 430;
-	int spalte = 280;
+	public static int zeile = 430;
+	public static int spalte = 280;
 	ResFeld[][] feld;
 	public static ResFeld[][] res;
 
@@ -31,15 +30,17 @@ public class Diagramm {
 		gc.strokeLine(abstandX, canvas.getHeight() - abstandY, abstandX, abstandY - spaltY);
 		gc.strokeLine(abstandX, canvas.getHeight() - abstandY, canvas.getWidth() - abstandX + spaltX, canvas.getHeight() - abstandY);
 		
+		
 		//TODO Koordinaten-Achsen um Pfeile & Beschriftung erweitern, evtl auch Holzhintergrund
 		zeichneArray();
 	}
 	
+	//Weiße Klötzchen
 	public void zeichneArray() {
 		feld = new ResFeld[zeile][spalte];
 		for (int i = 0; i < zeile; i += 10) {
 			for (int j = 0; j < spalte; j += 10) {
-				feld[i][j] = new ResFeld(i*2, j*2, 20, 20);
+				feld[i][j] = new ResFeld(i*2, j*2, ResFeld.breite, ResFeld.laenge);
 				feld[i][j].setFill(Color.WHITE);
 				feld[i][j].setStroke(Color.GRAY);
 				View.pane.getChildren().add(feld[i][j]);
@@ -47,14 +48,15 @@ public class Diagramm {
 		}
 	}
 	
+	//Farbige Pakete
 	public void zeichnePaket(ResEinheit[][] koordinatenSystem) {
 		res = new ResFeld[zeile][spalte];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
-					res[i][j] = feld[i*10][j*10].setzeFeld(Diagramm.x, Diagramm.y, j*10, i*10, koordinatenSystem[i][j]);
-					View.pane.getChildren().add(res[i][j]);
-					View.cc.makeDraggable(res[i][j]);
+					res[i*10][j*10] = feld[i*10][j*10].setzeFeld(j, i, koordinatenSystem[i][j]);
+					View.pane.getChildren().add(res[i*10][j*10]);
+					View.cc.makeDraggable(res[i*10][j*10]);
 				}
 			}
 		}
