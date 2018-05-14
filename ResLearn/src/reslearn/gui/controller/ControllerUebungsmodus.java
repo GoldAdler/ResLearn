@@ -30,7 +30,7 @@ public class ControllerUebungsmodus extends Controller{
 			public void handle(MouseEvent event) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
-				alert.setContentText("Wirklich zum " + vorherigesFenster(alleFenster) +" zurück");
+				alert.setContentText("Wirklich zum vorherigen Fenster zurückkehren");
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get()== ButtonType.OK) {
 					System.out.println("Ok Button gedrückt");

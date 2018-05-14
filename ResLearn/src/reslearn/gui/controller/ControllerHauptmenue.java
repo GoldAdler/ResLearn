@@ -29,8 +29,6 @@ public class ControllerHauptmenue extends Controller{
 	private Button tutorial;
 	@FXML
 	private Button einstellungen;
-	@FXML
-	private ImageView zurueck;
 	
 	@FXML
     public void weiter(ActionEvent event) throws Exception{
@@ -82,28 +80,4 @@ public class ControllerHauptmenue extends Controller{
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}
 	}
-	
-	@FXML
-	public void zurueck() throws Exception{
-		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			Scene newScene;
-			public void handle(MouseEvent event) {
-				Parent root;
-				try {
-					root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-				newScene = new Scene(root);
-				Stage stage = new Stage();
-				stage.setTitle("ResLearn");
-				stage.setMaximized(true);
-				stage.setScene(newScene);
-				stage.show();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				((Node) (event.getSource())).getScene().getWindow().hide();
-			}
-		});
-	}
-
 }
