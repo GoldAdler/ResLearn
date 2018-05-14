@@ -70,6 +70,36 @@ public class Arbeitspaket extends Paket {
 			}
 		}
 	}
+	
+	public void ueberpruefeVorgangsunterbrechung(ResCanvas resCanvas) {
+		Collections.sort(teilpaketListe, new ComperatorTeilpaket());
+		int xEnde = 0;
+		for(Teilpaket tp : teilpaketListe) {
+			int xStart = tp.getResEinheitListe().get(0).getPosition().getxKoordinate();
+			
+			if(xStart != xEnde+1 && xEnde != 0 ) {
+				resCanvas.entferneArbeitspaket(tp.getArbeitspaket());
+				resCanvas.herunterfallenAlleTeilpakete();
+				resCanvas.aufschliessen();
+				ResEinheit[][] koordinatensystem = resCanvas.getKoordinatenSystem();
+				int abstand = 0;
+				for(int x = 0; x < ResCanvas.koorBreite ; x++) {
+					if(koordinatensystem[ResCanvas.koorHoehe-1][x] == null) {
+						abstand = x - tp.getArbeitspaket().getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition().getxKoordinate();
+						break;
+					}
+					
+				}
+				
+				
+				tp.getArbeitspaket().neuSetzen(abstand, resCanvas);
+			break;
+			}
+			xEnde = xStart + tp.getVorgangsdauer()-1;
+			
+		}
+
+	}
 
 	public void neuSetzen(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
