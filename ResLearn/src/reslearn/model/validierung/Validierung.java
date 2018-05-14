@@ -313,9 +313,7 @@ public class Validierung {
 				mitarbeiterParallelCount++;
 			}
 
-			// TODO: Dead-Code: falls statt oben hier koordinatenSystem[y][xPos] steht,
-			// gehts
-			if (oben == null) {
+			if (koordinatenSystem[y][xPos] == null) {
 				break;
 			}
 		}
