@@ -32,7 +32,7 @@ public class ControllerHauptmenue extends Controller{
 	@FXML
 	private ImageView zurueck;
 	
-	//Hallo
+	//Hallo 123
 	@FXML
     public void weiter(ActionEvent event) throws Exception{
 		Scene newScene;
