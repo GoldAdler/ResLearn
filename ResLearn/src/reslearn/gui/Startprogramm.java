@@ -20,5 +20,5 @@ public class Startprogramm extends Application{
 		stage.setScene(scene);
 		stage.setTitle("ResLearn");
 		stage.show();
-	}//Test
+	}
 }

@@ -15,12 +15,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import reslearn.gui.fxml.TutorialVideo;
 
 public class ControllerTutorialFragen extends Controller {
 
-	static int counter = -1;
+	static int counter = 0;
+	static int counterFrageAntwort = 1;
 
 	@FXML
 	private ImageView zurueck;
@@ -44,10 +46,8 @@ public class ControllerTutorialFragen extends Controller {
 	@FXML
 	public void zurueck() throws Exception {
 		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			Scene newScene;
-
 			public void handle(MouseEvent event) {
-				if (counter < 0) {
+				if (counter <= 0) {
 					TutorialVideo tut = new TutorialVideo();
 					try {
 						tut.start(TutorialVideo.classStage);
@@ -56,10 +56,10 @@ public class ControllerTutorialFragen extends Controller {
 						e.printStackTrace();
 					}
 					((Node) (event.getSource())).getScene().getWindow().hide();
-					((Node) (event.getSource())).getScene().getWindow().hide();
 				} else {
 					frage(counter-1);
-					counter -= 1;
+					counter = counter - 1;
+					System.out.println("ZurueckButton Gedrücht" + counter);
 				}
 			}
 		});
@@ -68,10 +68,18 @@ public class ControllerTutorialFragen extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) {
 		System.out.println("Button gedrückt" + counter);
-		counter += 1;
 		if (counter < 4) {
-			frage(counter);
-		} else if (counter > 4) {
+			if (counterFrageAntwort == 1) {
+				frage(counter);
+				counterFrageAntwort = 2;
+			} else {
+				antwort(counter);
+				counterFrageAntwort = 1;
+				counter += 1;
+			}
+			
+		} else if (counter == 4) {
+			counter = -1;
 			Scene newScene;
 			Parent root;
 			alleFenster.add("../fxml/TutorialFragen.fxml");
@@ -91,29 +99,111 @@ public class ControllerTutorialFragen extends Controller {
 		}
 	}
 
-	@FXML
+	
+	public void antwort(int counter) {
+		if (counter == 0) {
+			if (rb1.isSelected()) {
+				label.setText("Antwort 1 ist richtig");
+				rb1.setTextFill(Color.GREEN);
+				rb2.setDisable(true);
+				rb2.setTextFill(Color.RED);
+				rb3.setDisable(true);
+				rb3.setTextFill(Color.RED);
+				rb4.setDisable(true);
+				rb4.setTextFill(Color.RED);
+			} else {
+				label.setText("Antwort " + tg.getSelectedToggle().getUserData() + " war falsch");
+				rb1.setTextFill(Color.GREEN);
+				rb2.setDisable(true);
+				rb2.setTextFill(Color.RED);
+				rb3.setDisable(true);
+				rb3.setTextFill(Color.RED);
+				rb4.setDisable(true);
+				rb4.setTextFill(Color.RED);
+			}
+			
+		} else if (counter == 1) {
+			label.setText("Antwort 1");
+			tg = new ToggleGroup();
+			rb1.setText("Richtig 1");
+			rb1.setToggleGroup(tg);
+			rb2.setText("Falsch 2");
+			rb2.setToggleGroup(tg);
+			rb3.setText("Falsch 3");
+			rb3.setToggleGroup(tg);
+			rb4.setText("Falsch 4");
+			rb4.setToggleGroup(tg);
+		} else if (counter == 2) {
+			label.setText("Antwort 2");
+			tg = new ToggleGroup();
+			rb1.setText("Richtig 11");
+			rb1.setToggleGroup(tg);
+			rb2.setText("Falsch 22");
+			rb2.setToggleGroup(tg);
+			rb3.setText("Falsch 33");
+			rb3.setToggleGroup(tg);
+			rb4.setText("Falsch 44");
+			rb4.setToggleGroup(tg);
+		} else if (counter == 3) {
+			label.setText("Antwort 3");
+			tg = new ToggleGroup();
+			rb1.setText("Falsch 111");
+			rb1.setToggleGroup(tg);
+			rb2.setText("Richtig 222");
+			rb2.setToggleGroup(tg);
+			rb3.setText("Falsch 333");
+			rb3.setToggleGroup(tg);
+			rb4.setText("Falsch 444");
+			rb4.setToggleGroup(tg);
+		}
+	}
+	
 	public void frage(int counter) {
 		if (counter == 0) {
 			label.setText("Frage 0");;
 			tg = new ToggleGroup();
+			rb1.setDisable(false);
+			rb1.setTextFill(Color.BLACK);
 			rb1.setText("Antwort 01");
+			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
+			rb2.setDisable(false);
+			rb2.setTextFill(Color.BLACK);
 			rb2.setText("Antwort 02");
+			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
+			rb3.setTextFill(Color.BLACK);
+			rb3.setDisable(false);
 			rb3.setText("Antwort 03");
+			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
+			rb4.setTextFill(Color.BLACK);
+			rb4.setDisable(false);
 			rb4.setText("Antwort 04");
+			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 		} else if (counter == 1) {
-			label.setText("Frage 1");
+			label.setText("Frage 1");;
 			tg = new ToggleGroup();
+			rb1.setDisable(false);
+			rb1.setTextFill(Color.BLACK);
 			rb1.setText("Antwort 1");
+			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
+			rb2.setDisable(false);
+			rb2.setTextFill(Color.BLACK);
 			rb2.setText("Antwort 2");
+			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
+			rb3.setDisable(false);
+			rb3.setTextFill(Color.BLACK);
 			rb3.setText("Antwort 3");
+			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
+			rb4.setDisable(false);
+			rb4.setTextFill(Color.BLACK);
 			rb4.setText("Antwort 4");
+			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 		} else if (counter == 2) {
 			label.setText("Frage 2");
