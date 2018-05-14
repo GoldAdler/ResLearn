@@ -58,12 +58,12 @@ public class ControllerCanvas {
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnMouseReleased(OnMouseReleasedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		feld.setOnMouseClicked(OnMouseClickedEventHandler);
 		View.ap.setOnAction(OnMenuItemApEventHandler);
 	}
 
 	// Event Handler Maus klicken
 	EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
+		@SuppressWarnings("unchecked")
 		@Override
 		public void handle(MouseEvent e) {
 
@@ -86,6 +86,20 @@ public class ControllerCanvas {
 			
 			verschiebungX = 0;
 			verschiebungY = 0;
+			
+			// Erstellen der Informationsleiste links
+			data = FXCollections.observableArrayList(
+					pair("Arbeitspaket", rect.getTeilpaket().getArbeitspaket().getId()),
+					pair("Farbe", rect.getFill()),
+					pair("FAZ", rect.getTeilpaket().getArbeitspaket().getFaz()),
+					pair("FEZ", rect.getTeilpaket().getArbeitspaket().getFez()),
+					pair("SAZ", rect.getTeilpaket().getArbeitspaket().getSaz()),
+					pair("SEZ", rect.getTeilpaket().getArbeitspaket().getSez()),
+					pair("Vorgangsdauer", rect.getTeilpaket().getArbeitspaket().getVorgangsdauer()),
+					pair("Mitarbeiter", rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
+					pair("Aufwand", rect.getTeilpaket().getArbeitspaket().getAufwand()));
+
+			table.setItems(data);
 			
 		}
 	};
@@ -129,6 +143,7 @@ public class ControllerCanvas {
 			///////////////////////////////////////////////////////////////////////////////////////
 			// 								Kollision mit Pane									//
 			/////////////////////////////////////////////////////////////////////////////////////
+			
 			Point2D zeiger = new Point2D(e.getSceneX(), e.getSceneY());
 			// Feld und Zeiger in Array, X & Y-Achse
 			if((rect.getBoundsInParent().getMinX() >= 0 && zeiger.getX() > 255) && (rect.getBoundsInParent().getMinX() <= 860 && zeiger.getX() < 1115) && 
@@ -260,7 +275,6 @@ public class ControllerCanvas {
 		@Override
 		public void handle(ActionEvent e) {
 
-            
             Pane pane = new Pane();
             Label arbeitspaket = new Label("neues Arbeitspaket: A2");
             Label farbe = new Label("Farbe: ");
@@ -314,30 +328,8 @@ public class ControllerCanvas {
 
 	 
 	//////////////////////////////////////////////////////////////////////////////////
-	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
+	// Erstellung der unterschiedlichen Datentypen für die Tabelle links 			//
 	//////////////////////////////////////////////////////////////////////////////////
-
-	EventHandler<MouseEvent> OnMouseClickedEventHandler = new EventHandler<MouseEvent>() {
-		@SuppressWarnings("unchecked")
-		@Override
-		public void handle(MouseEvent e) {
-
-			rect = (ResFeld) e.getSource();
-
-			data = FXCollections.observableArrayList(
-					pair("Arbeitspaket", rect.getTeilpaket().getArbeitspaket().getId()),
-					pair("Farbe", rect.getFill()),
-					pair("FAZ", rect.getTeilpaket().getArbeitspaket().getFaz()),
-					pair("FEZ", rect.getTeilpaket().getArbeitspaket().getFez()),
-					pair("SAZ", rect.getTeilpaket().getArbeitspaket().getSaz()),
-					pair("SEZ", rect.getTeilpaket().getArbeitspaket().getSez()),
-					pair("Vorgangsdauer", rect.getTeilpaket().getArbeitspaket().getVorgangsdauer()),
-					pair("Mitarbeiter", rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
-					pair("Aufwand", rect.getTeilpaket().getArbeitspaket().getAufwand()));
-
-			table.setItems(data);
-		}
-	};
 
 	@SuppressWarnings("unchecked")
 	public void erstelleTabelle() {
