@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -37,17 +38,56 @@ public class ControllerAufgabeErstellen extends Controller{
 	private String ergebnisValidierung = "";
 //	private boolean paketKorrekt;
 	
-	// Zurück-Button ins Hauptmenü
 	@FXML
-	ImageView imagePfeil = new ImageView();
+	private ImageView zurueck;
+	@FXML
+	private ImageView home;
 	
 	@FXML
-	private void handleImagePfeilAction(ActionEvent event) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("Hauptmenue.fxml"));
-		Scene newScene = new Scene(root);
-		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-		window.setScene(newScene);
-		window.show();
+	public void zurueck() throws Exception{
+		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			Scene newScene;
+			public void handle(MouseEvent event) {
+				Parent root;
+				try {
+					root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+				newScene = new Scene(root);
+				Stage stage = new Stage();
+				stage.setTitle("ResLearn");
+				stage.setMaximized(true);
+				stage.setScene(newScene);
+				stage.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			}
+		});
+	}
+	
+	@FXML
+	public void home() throws Exception {
+		home.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			Scene newScene;
+
+			public void handle(MouseEvent event) {
+				Parent root;
+				try {
+					root = FXMLLoader.load(getClass().getResource(hauptmenue()));
+					newScene = new Scene(root);
+					Stage stage = new Stage();
+					stage.setTitle("ResLearn");
+					stage.setMaximized(true);
+					stage.setScene(newScene);
+					stage.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			}
+		});
 	}
 	
 	// Anzahl Pakete
@@ -181,9 +221,30 @@ public class ControllerAufgabeErstellen extends Controller{
 		Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
 		if(paketeValidieren(pakete)) {
 			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
+			weiter(event);
 		} else {
 			labelErgebnis.setText(ergebnisValidierung);
 		}
+	}
+	
+	@FXML
+	public void weiter(ActionEvent event) {
+		Scene newScene;
+		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+		newScene = new Scene(root);
+		Stage stage = new Stage();
+		stage.setTitle("ResLearn");
+		stage.setMaximized(true);
+		stage.setScene(newScene);
+		stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 	
 	
@@ -244,7 +305,7 @@ public class ControllerAufgabeErstellen extends Controller{
 				paketKorrekt = true;
 			}
 		}			
-		
+		paketKorrekt = true;
 		return paketKorrekt;
 	}
 	

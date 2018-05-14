@@ -29,9 +29,6 @@ import reslearn.gui.Diagramm;
 import reslearn.gui.View;
 
 public class ControllerCanvas extends Controller{
-	
-	@FXML
-	private ImageView zurueck;
 
 	double zeigerX, zeigerY;
 	double translateX, translateY;
@@ -233,27 +230,5 @@ public class ControllerCanvas extends Controller{
 			}
 		});
 	}
-	
-	@FXML
-	public void zurueck() throws Exception{
-		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			Scene newScene;
-			public void handle(MouseEvent event) {
-				Parent root;
-				try {
-					root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-				newScene = new Scene(root);
-				Stage stage = new Stage();
-				stage.setTitle("ResLearn");
-				stage.setMaximized(true);
-				stage.setScene(newScene);
-				stage.show();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				((Node) (event.getSource())).getScene().getWindow().hide();
-			}
-		});
-	} 
+
 }
