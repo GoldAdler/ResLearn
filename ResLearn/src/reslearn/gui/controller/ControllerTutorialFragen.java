@@ -16,6 +16,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import reslearn.gui.fxml.TutorialVideo;
 
 public class ControllerTutorialFragen extends Controller {
 
@@ -47,19 +48,14 @@ public class ControllerTutorialFragen extends Controller {
 
 			public void handle(MouseEvent event) {
 				if (counter < 0) {
-					Parent root;
+					TutorialVideo tut = new TutorialVideo();
 					try {
-						root = FXMLLoader.load(getClass().getResource("../fxml/Tutorial.fxml"));
-						newScene = new Scene(root);
-						Stage stage = new Stage();
-						stage.setTitle("ResLearn");
-						stage.setMaximized(true);
-						stage.setScene(newScene);
-						stage.show();
-					} catch (IOException e) {
+						tut.start(TutorialVideo.classStage);
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					((Node) (event.getSource())).getScene().getWindow().hide();
 					((Node) (event.getSource())).getScene().getWindow().hide();
 				} else {
 					frage(counter-1);

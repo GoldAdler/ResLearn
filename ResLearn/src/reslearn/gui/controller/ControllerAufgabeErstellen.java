@@ -221,6 +221,7 @@ public class ControllerAufgabeErstellen extends Controller{
 		Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
 		if(paketeValidieren(pakete)) {
 			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
+			
 			weiter(event);
 		} else {
 			labelErgebnis.setText(ergebnisValidierung);
@@ -230,7 +231,7 @@ public class ControllerAufgabeErstellen extends Controller{
 	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
-		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+		alleFenster.add("../fxml/AufgabeErstellen.fxml");
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));

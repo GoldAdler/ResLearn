@@ -20,7 +20,7 @@ public class Controller {
 			System.out.println(ausgabe);
 		}
 		String string = list.get(list.size() - 1);
-		list.remove(list.get(list.size() - 1));
+		//list.remove(list.get(list.size() - 1));
 		return string;
 	}
 	

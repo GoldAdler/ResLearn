@@ -16,12 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerTutorial">
    <children>
-      <Button alignment="CENTER" graphicTextGap="5.0" layoutX="1045.0" layoutY="632.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Quiz starten" textFill="WHITE">
-         <padding>
-            <Insets bottom="7.0" left="20.0" right="20.0" top="7.0" />
-         </padding>
-      </Button>
-      <Button alignment="CENTER" graphicTextGap="5.0" layoutX="900.0" layoutY="631.0" mnemonicParsing="false" styleClass="buttonWeiss" stylesheets="@Stylesheet.css" text="Überspringen">
+      <Button fx:id="quizStarten" alignment="CENTER" graphicTextGap="5.0" layoutX="1045.0" layoutY="632.0" mnemonicParsing="false" onAction="#quizStarten" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Quiz starten" textFill="WHITE">
          <padding>
             <Insets bottom="7.0" left="20.0" right="20.0" top="7.0" />
          </padding>
