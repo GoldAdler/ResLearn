@@ -233,4 +233,16 @@ public class Teilpaket extends Paket {
 		this.resEinheitListe = resEinheitListe;
 	}
 
+	public Teilpaket copy() {
+
+		ArrayList<ResEinheit> neueResEinheitListe = new ArrayList<ResEinheit>();
+
+		for (ResEinheit re : this.resEinheitListe) {
+			neueResEinheitListe.add(re.copy());
+		}
+
+		return new Teilpaket(arbeitspaket, neueResEinheitListe);
+
+	}
+
 }

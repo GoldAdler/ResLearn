@@ -72,4 +72,10 @@ public class ResEinheit extends Paket {
 		return FLAECHE;
 	}
 
+	public ResEinheit copy() {
+		ResEinheit tmp = new ResEinheit();
+		tmp.setPosition(new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate()));
+		return tmp;
+	}
+
 }

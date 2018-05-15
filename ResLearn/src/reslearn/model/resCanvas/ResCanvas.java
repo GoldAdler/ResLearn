@@ -14,6 +14,7 @@ import reslearn.model.utils.Vektor2i;
 public class ResCanvas {
 
 	private ArrayList<Arbeitspaket> arbeitspaketListe;
+	private ArrayList<Arbeitspaket> historienArbeitspaketListe;
 	private ResEinheit[][] koordinatenSystem;
 	// TODO Historie der sich veränderten koordiantenSysteme anlegen
 	// dient dafür im Lösungsmodus die einzelnen Schritte anzuzeigen
@@ -25,6 +26,7 @@ public class ResCanvas {
 	public ResCanvas() {
 		arbeitspaketListe = new ArrayList<Arbeitspaket>();
 		koordinatenSystem = new ResEinheit[koorHoehe][koorBreite];
+		historieKoordinatenSystem = new ArrayList<ResEinheit[][]>();
 	}
 
 	public void updatePosition(ResEinheit resEinheit, Vektor2i altePosition) {
@@ -288,6 +290,44 @@ public class ResCanvas {
 
 	public void setArbeitspaketListe(ArrayList<Arbeitspaket> arbeitspaketListe) {
 		this.arbeitspaketListe = arbeitspaketListe;
+	}
+
+	public void aktuallisiereHistorie() {
+
+		if (historieKoordinatenSystem.isEmpty()) {
+
+		} else {
+
+		}
+
+	}
+
+	private void pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
+			ArrayList<Arbeitspaket> aktuelleArbeitspaketListe) {
+
+	}
+
+	private void neueHistorie() {
+
+		ResEinheit[][] neuesKoordinatenSystem = new ResEinheit[koorHoehe][koorBreite];
+
+		ArrayList<Arbeitspaket> neueArbeitspaketListe = new ArrayList<Arbeitspaket>();
+
+		for (Arbeitspaket ap : this.arbeitspaketListe) {
+			neueArbeitspaketListe.add(ap.copy());
+		}
+
+		for (Arbeitspaket ap : neueArbeitspaketListe) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				for (ResEinheit re : tp.getResEinheitListe()) {
+					koordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition().getyKoordinate()] = re;
+				}
+			}
+		}
+
+		this.historieKoordinatenSystem.add(neuesKoordinatenSystem);
+		this.historienArbeitspaketListe = neueArbeitspaketListe;
+
 	}
 
 }
