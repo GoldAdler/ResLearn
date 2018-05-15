@@ -70,33 +70,33 @@ public class Arbeitspaket extends Paket {
 			}
 		}
 	}
-	
+
 	public void ueberpruefeVorgangsunterbrechung(ResCanvas resCanvas) {
 		Collections.sort(teilpaketListe, new ComperatorTeilpaket());
 		int xEnde = 0;
-		for(Teilpaket tp : teilpaketListe) {
+		for (Teilpaket tp : teilpaketListe) {
 			int xStart = tp.getResEinheitListe().get(0).getPosition().getxKoordinate();
-			
-			if(xStart != xEnde+1 && xEnde != 0 ) {
+
+			if (xStart != xEnde + 1 && xEnde != 0) {
 				resCanvas.entferneArbeitspaket(tp.getArbeitspaket());
 				resCanvas.herunterfallenAlleTeilpakete();
 				resCanvas.aufschliessen();
 				ResEinheit[][] koordinatensystem = resCanvas.getKoordinatenSystem();
 				int abstand = 0;
-				for(int x = 0; x < ResCanvas.koorBreite ; x++) {
-					if(koordinatensystem[ResCanvas.koorHoehe-1][x] == null) {
-						abstand = x - tp.getArbeitspaket().getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition().getxKoordinate();
+				for (int x = 0; x < ResCanvas.koorBreite; x++) {
+					if (koordinatensystem[ResCanvas.koorHoehe - 1][x] == null) {
+						abstand = x - tp.getArbeitspaket().getTeilpaketListe().get(0).getResEinheitListe().get(0)
+								.getPosition().getxKoordinate();
 						break;
 					}
-					
+
 				}
-				
-				
+
 				tp.getArbeitspaket().neuSetzen(abstand, resCanvas);
-			break;
+				break;
 			}
-			xEnde = xStart + tp.getVorgangsdauer()-1;
-			
+			xEnde = xStart + tp.getVorgangsdauer() - 1;
+
 		}
 
 	}
@@ -147,17 +147,19 @@ public class Arbeitspaket extends Paket {
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegeX(resCanvas, xMove);
 		}
+		return true;
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegeY(resCanvas, yMove);
 		}
+		return true;
 	}
 
 	public void entferneTeilpaket(Teilpaket teilpaket) {

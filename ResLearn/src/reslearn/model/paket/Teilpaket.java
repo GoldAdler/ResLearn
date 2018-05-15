@@ -131,43 +131,53 @@ public class Teilpaket extends Paket {
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
 		ListIterator<ResEinheit> li;
 
-		if (xMove < 0) {
+		if (resCanvas.ueberpruefePosition(this, xMove, 0)) {
 
-			li = resEinheitListe.listIterator();
-			while (li.hasNext()) {
-				li.next().bewegeX(resCanvas, xMove);
-			}
-		} else {
+			if (xMove < 0) {
 
-			li = resEinheitListe.listIterator(resEinheitListe.size());
-			// Iterate in reverse.
-			while (li.hasPrevious()) {
-				li.previous().bewegeX(resCanvas, xMove);
+				li = resEinheitListe.listIterator();
+				while (li.hasNext()) {
+					li.next().bewegeX(resCanvas, xMove);
+				}
+			} else {
+
+				li = resEinheitListe.listIterator(resEinheitListe.size());
+				// Iterate in reverse.
+				while (li.hasPrevious()) {
+					li.previous().bewegeX(resCanvas, xMove);
+				}
 			}
+
+			return true;
 		}
+		return false;
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
 		ListIterator<ResEinheit> li;
 
-		if (yMove < 0) {
+		if (resCanvas.ueberpruefePosition(this, 0, yMove)) {
+			if (yMove < 0) {
 
-			li = resEinheitListe.listIterator();
-			while (li.hasNext()) {
-				li.next().bewegeY(resCanvas, yMove);
-			}
-		} else {
+				li = resEinheitListe.listIterator();
+				while (li.hasNext()) {
+					li.next().bewegeY(resCanvas, yMove);
+				}
+			} else {
 
-			li = resEinheitListe.listIterator(resEinheitListe.size());
-			// Iterate in reverse.
-			while (li.hasPrevious()) {
-				li.previous().bewegeY(resCanvas, yMove);
+				li = resEinheitListe.listIterator(resEinheitListe.size());
+				// Iterate in reverse.
+				while (li.hasPrevious()) {
+					li.previous().bewegeY(resCanvas, yMove);
+				}
 			}
+			return true;
 		}
+		return false;
 
 	}
 
