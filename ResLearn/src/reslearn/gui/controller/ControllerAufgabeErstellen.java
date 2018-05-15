@@ -21,7 +21,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.tableedit.ArbeitspaketTableData;
@@ -30,18 +29,77 @@ import reslearn.gui.tableedit.MyIntegerStringConverter;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerAufgabeErstellen extends Controller {
-	private int anzPakete, anzMaxPersonen;
+
+	private static int anzPakete, anzMaxPersonen;
 	final ToggleGroup rbGruppe = new ToggleGroup();
 	private String ergebnisValidierung = "";
 	private ObservableList<ArbeitspaketTableData> data = FXCollections.observableArrayList();
+
+	@FXML
+	private Button zurueck;
+	@FXML
+	private Button home;
+
+	// Anzahl Pakete
+	@FXML
+	Button buttonAnzPaketeMinus = new Button();
+	@FXML
+	Button buttonAnzPaketePlus = new Button();
+	@FXML
+	TextField textFieldAnzPakete = new TextField();
+
+	// Tabelle
+	@FXML
+	TableView<ArbeitspaketTableData> tabelle;
+	@FXML
+	TableColumn<ArbeitspaketTableData, String> spalteID;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteFaz;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteSaz;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteFez;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteSez;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteAnzMitarbeiter;
+	@FXML
+	TableColumn<ArbeitspaketTableData, Integer> spalteAufwand;
+
+	// Auswahl Optimierungsverfahren (Radiobuttons)
+	@FXML
+	RadioButton radioButtonKapazitaet = new RadioButton();
+	@FXML
+	RadioButton radioButtonTermin = new RadioButton();
+	@FXML
+	Pane panePersonen = new Pane();
+
+	// maximale Personen Parallel (kapazit‰tstreu)
+	@FXML
+	Button buttonMaxPersonenMinus = new Button();
+	@FXML
+	Button buttonMaxPersonenPlus = new Button();
+	@FXML
+	TextField textFieldMaxPersonen = new TextField();
 	
+	// Button zur Validierung
+	@FXML
+	Button buttonValidieren;
+	
+	// Ergebnis Validierung anzeigen
+	@FXML
+	Pane paneErgebnis;
+	@FXML
+	Label labelErgebnis;
+
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
 		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
-		// den Spalten die richtigen Attribute zuteilen
 		tabelle.setItems(data);
 		populate(retrieveData());
+
+		// den Spalten die richtigen Attribute zuteilen und bearbeitbar machen
 		setupSpalteID();
 		setupSpalteFaz();
 		setupSpalteSaz();
@@ -49,24 +107,17 @@ public class ControllerAufgabeErstellen extends Controller {
 		setupSpalteSez();
 		setupSpalteAnzMitarbeiter();
 		setupSpalteAufwand();
-
-		// tabelle.setItems(getArbeitspaket());
 		setTableEditable();
 
 		radioButtonKapazitaet.setToggleGroup(rbGruppe);
 		radioButtonKapazitaet.setSelected(true);
 		radioButtonTermin.setToggleGroup(rbGruppe);
 	}
-	
-	@FXML
-	private Button zurueck;
-	@FXML
-	private Button home;
-	
+
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
-		Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
+		Arbeitspaket[] pakete = getArbeitspaketArray(retrieveData());
 		if (paketeValidieren(pakete)) {
 			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
 
@@ -131,29 +182,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
-
-
-	// Zur√ºck-Button ins Hauptmen√º
-	@FXML
-	ImageView imagePfeil = new ImageView();
-
-	@FXML
-	private void handleImagePfeilAction(ActionEvent event) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("Hauptmenue.fxml"));
-		Scene newScene = new Scene(root);
-		Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		window.setScene(newScene);
-		window.show();
-	}
-
-	// Anzahl Pakete
-	@FXML
-	Button buttonAnzPaketeMinus = new Button();
-	@FXML
-	Button buttonAnzPaketePlus = new Button();
-	@FXML
-	TextField textFieldAnzPakete = new TextField();
-
 	@FXML
 	private void handleButtonAnzPaketeMinusAction(ActionEvent event) {
 		// Anzahl der Pakete soll nicht unter 1 sein
@@ -168,32 +196,16 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	@FXML
 	private void handleButtonAnzPaketePlusAction(ActionEvent event) {
-		anzPakete++;
-		textFieldAnzPakete.setText(Integer.toString(anzPakete));
+		if (anzPakete < 30) {
+			anzPakete++;
+			textFieldAnzPakete.setText(Integer.toString(anzPakete));
 
-		// neue Zeile hinzuf√ºgen
-		tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
+			// neue Zeile hinzuf¸gen
+			tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
+		}
 	}
 
-	// Tabelle
-	@FXML
-	TableView<ArbeitspaketTableData> tabelle;
-	@FXML
-	TableColumn<ArbeitspaketTableData, String> spalteID;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteFaz;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteSaz;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteFez;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteSez;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteAnzMitarbeiter;
-	@FXML
-	TableColumn<ArbeitspaketTableData, Integer> spalteAufwand;
-
-	// Tabelle mit Default-Werten bef√ºllen
+	// Tabelle mit Default-Werten bef¸llen
 	private List<Arbeitspaket> retrieveData() {
 
 		return Arrays.asList(
@@ -207,16 +219,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		pakete.forEach(p -> data.add(new ArbeitspaketTableData(p)));
 	}
 
-	public ObservableList<ArbeitspaketTableData> getArbeitspaket() {
-		ObservableList<ArbeitspaketTableData> pakete = FXCollections.observableArrayList();
-
-		// pakete.add(new ArbeitspaketTableData("1", 0, 0, 0, 0, 0, 0, 0));
-		// pakete.add(new ArbeitspaketTableData("2", 0, 0, 0, 0, 0, 0, 0));
-		// pakete.add(new ArbeitspaketTableData("3", 0, 0, 0, 0, 0, 0, 0));
-		// pakete.add(new ArbeitspaketTableData("4", 0, 0, 0, 0, 0, 0, 0));
-		return pakete;
-	}
-
 	private void setupSpalteID() {
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
 		// sets the cell factory to use EditCell which will handle key presses
@@ -226,8 +228,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteID.setOnEditCommit(event -> {
 			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setId(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
 			tabelle.refresh();
 		});
 	}
@@ -242,8 +243,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteFaz.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setFaz(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setFaz(value);
 			tabelle.refresh();
 		});
 	}
@@ -258,8 +258,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteSaz.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setSaz(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setSaz(value);
 			tabelle.refresh();
 		});
 	}
@@ -274,8 +273,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteFez.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setFez(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setFez(value);
 			tabelle.refresh();
 		});
 	}
@@ -290,8 +288,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteSez.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setSez(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setSez(value);
 			tabelle.refresh();
 		});
 	}
@@ -306,8 +303,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteAnzMitarbeiter.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setMitarbeiteranzahl(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setMitarbeiteranzahl(value);
 			tabelle.refresh();
 		});
 	}
@@ -322,8 +318,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteAufwand.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			((ArbeitspaketTableData) event.getTableView().getItems().get(event.getTablePosition().getRow()))
-					.setAufwand(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setAufwand(value);
 			tabelle.refresh();
 		});
 	}
@@ -336,17 +331,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		tabelle.setOnKeyPressed(event -> {
 			if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
 				editFocusedCell();
-//			} else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.PLUS
-//					|| event.getCode() == KeyCode.TAB) {
-//				tabelle.getSelectionModel().selectNext();
-//				event.consume();
-//			} else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.MINUS) {
-//				// work around due to
-//				// TableView.getSelectionModel().selectPrevious() due to a bug
-//				// stopping it from working on
-//				// the first column in the last row of the table
-//				selectPrevious();
-//				event.consume();
 			}
 		});
 	}
@@ -358,58 +342,13 @@ public class ControllerAufgabeErstellen extends Controller {
 		tabelle.edit(focusedCell.getRow(), focusedCell.getTableColumn());
 	}
 
-//	@SuppressWarnings("unchecked")
-//	private void selectPrevious() {
-//		if (tabelle.getSelectionModel().isCellSelectionEnabled()) {
-//			// in cell selection mode, we have to wrap around, going from
-//			// right-to-left, and then wrapping to the end of the previous line
-//			TablePosition<ArbeitspaketTableData, ?> pos = tabelle.getFocusModel().getFocusedCell();
-//			if (pos.getColumn() - 1 >= 0) {
-//				// go to previous row
-//				tabelle.getSelectionModel().select(pos.getRow(), getTableColumn(pos.getTableColumn(), -1));
-//			} else if (pos.getRow() < tabelle.getItems().size()) {
-//				// wrap to end of previous row
-//				tabelle.getSelectionModel().select(pos.getRow() - 1,
-//						tabelle.getVisibleLeafColumn(tabelle.getVisibleLeafColumns().size() - 1));
-//			}
-//		} else {
-//			int focusIndex = tabelle.getFocusModel().getFocusedIndex();
-//			if (focusIndex == -1) {
-//				tabelle.getSelectionModel().select(tabelle.getItems().size() - 1);
-//			} else if (focusIndex > 0) {
-//				tabelle.getSelectionModel().select(focusIndex - 1);
-//			}
-//		}
-//	}
-
-	private TableColumn<ArbeitspaketTableData, ?> getTableColumn(final TableColumn<ArbeitspaketTableData, ?> column,
-			int offset) {
-		int columnIndex = tabelle.getVisibleLeafIndex(column);
-		int newColumnIndex = columnIndex + offset;
-		return tabelle.getVisibleLeafColumn(newColumnIndex);
-	}
-
-	// ObservableList zu Array konvertieren
-	public static Arbeitspaket[] getArbeitspaketArray(ObservableList<ArbeitspaketTableData> pakete) {
-		Arbeitspaket arbeitspakete[] = pakete.get(0).getArbeitspakete();
+	public static Arbeitspaket[] getArbeitspaketArray(List<Arbeitspaket> pakete) {
+		Arbeitspaket[] arbeitspakete = new Arbeitspaket[anzPakete];
+		for (int i = 0; i < anzPakete; i++) {
+			arbeitspakete[i] = pakete.get(i);
+		}
 		return arbeitspakete;
 	}
-
-	// Auswahl Optimierungsverfahren (Radiobuttons)
-	@FXML
-	RadioButton radioButtonKapazitaet = new RadioButton();
-	@FXML
-	RadioButton radioButtonTermin = new RadioButton();
-	@FXML
-	Pane panePersonen = new Pane();
-
-	// maximale Personen Parallel (kapazit√§tstreu)
-	@FXML
-	Button buttonMaxPersonenMinus = new Button();
-	@FXML
-	Button buttonMaxPersonenPlus = new Button();
-	@FXML
-	TextField textFieldMaxPersonen = new TextField();
 
 	@FXML
 	private void handleButtonMaxPersonenMinusAction(ActionEvent event) {
@@ -436,9 +375,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		panePersonen.setVisible(false);
 	}
 
-	// Validieren
-	@FXML
-	Button buttonValidieren = new Button();
+	
 
 	// @FXML
 	// private void handleButtonValidierenAction(ActionEvent event) {
@@ -452,68 +389,76 @@ public class ControllerAufgabeErstellen extends Controller {
 	// }
 	// }
 
-	// Ergebnis Validierung anzeigen
-	@FXML
-	Pane paneErgebnis = new Pane();
-	@FXML
-	Label labelErgebnis = new Label();
+
 
 	public boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
-		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt = false;
-		String id;
+		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
+		String[] id = new String[arbeitspaket.length];
 		int faz, saz, fez, sez;
 
-		for (int i = 0; i < arbeitspaket.length; i++) {
-			id = arbeitspaket[i].getId();
+		idKorrekt = fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = paketKorrekt = false;
+
+		MAIN_LOOP: for (int i = 0; i < arbeitspaket.length; i++) {
+			id[i] = arbeitspaket[i].getId();
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 
-			// ID pr√ºfen (einzigartig?)
+			// ID pr¸fen (einzigartig?)
+			for (int j = i - 1; j >= 0; j--) {
+				if (id[i] != id[j]) {
+					idKorrekt = true;
+				} else {
+					paketKorrekt = false;
+					ergebnisValidierung = "Die Arbeitspaket-ID '" + arbeitspaket[i].getId()
+							+ "' darf nur ein mal verwendet werden";
+					break MAIN_LOOP;
+				}
+			}
 
-			// FAZ pr√ºfen
+			// FAZ pr¸fen
 			if (faz >= 1) {
 				fazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FAZ f√ºr das Arbeitspaket " + arbeitspaket[i].getId()
+				ergebnisValidierung = "Der Wert FAZ f¸r das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens 1 sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SAZ pr√ºfen
+			// SAZ pr¸fen
 			if (saz >= faz) {
 				sazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SAZ f√ºr das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich gro√ü wie der Wert FAZ sein";
+				ergebnisValidierung = "Der Wert SAZ f¸r das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss mindestens gleich gro wie der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// FEZ pr√ºfen
+			// FEZ pr¸fen
 			if (fez > faz) {
 				fezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FEZ f√ºr das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss gr√∂√üer als der Wert FAZ sein";
+				ergebnisValidierung = "Der Wert FEZ f¸r das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss grˆﬂer als der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SEZ pr√ºfen
+			// SEZ pr¸fen
 			if (sez >= fez) {
 				sezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SEZ f√ºr das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich gro√ü wie der Wert FEZ sein";
+				ergebnisValidierung = "Der Wert SEZ f¸r das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss mindestens gleich groﬂ wie der Wert FEZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// Alle Bedingungen pr√ºfen
-			if (fazKorrekt == true && sazKorrekt == true && fezKorrekt == true && sezKorrekt == true) {
+			// Alle Bedingungen pr¸fen
+			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt) {
 				paketKorrekt = true;
 			}
 		}
