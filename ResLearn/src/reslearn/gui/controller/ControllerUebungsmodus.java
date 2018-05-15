@@ -11,38 +11,40 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ControllerUebungsmodus extends Controller{
-		
+public class ControllerUebungsmodus extends Controller {
+
 	@FXML
-	private ImageView zurueck;
-	@FXML 
-	private ImageView home;
-		
+	private Button zurueck;
 	@FXML
-	public void zurueck() throws Exception{
+	private Button home;
+
+	@FXML
+	public void zurueck() throws Exception {
 		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			Scene newScene;
+
+			@Override
 			public void handle(MouseEvent event) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
 				alert.setContentText("Wirklich zum vorherigen Fenster zurückkehren");
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get()== ButtonType.OK) {
+				if (result.get() == ButtonType.OK) {
 					System.out.println("Ok Button gedrückt");
 					Parent root;
 					try {
 						root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-					newScene = new Scene(root);
-					Stage stage = new Stage();
-					stage.setTitle("ResLearn");
-					stage.setMaximized(true);
-					stage.setScene(newScene);
-					stage.show();
+						newScene = new Scene(root);
+						Stage stage = new Stage();
+						stage.setTitle("ResLearn");
+						stage.setMaximized(true);
+						stage.setScene(newScene);
+						stage.show();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -54,27 +56,29 @@ public class ControllerUebungsmodus extends Controller{
 			}
 		});
 	}
-	
+
 	@FXML
 	public void home() throws Exception {
 		home.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			Scene newScene;
+
+			@Override
 			public void handle(MouseEvent event) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
 				alert.setContentText("Wirklich zum Hauptmenü zurückkehren? Alle Änderungen gehen verloren");
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get()== ButtonType.OK) {
+				if (result.get() == ButtonType.OK) {
 					System.out.println("Ok Button gedrückt");
 					Parent root;
 					try {
 						root = FXMLLoader.load(getClass().getResource(hauptmenue()));
-					newScene = new Scene(root);
-					Stage stage = new Stage();
-					stage.setTitle("ResLearn");
-					stage.setMaximized(true);
-					stage.setScene(newScene);
-					stage.show();
+						newScene = new Scene(root);
+						Stage stage = new Stage();
+						stage.setTitle("ResLearn");
+						stage.setMaximized(true);
+						stage.setScene(newScene);
+						stage.show();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
