@@ -27,7 +27,7 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <ImageView fx:id="zurueck" fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" onMouseClicked="#zurueck" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
          <image>
             <Image url="@../images/pfeil.png" />
          </image>
@@ -121,7 +121,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
             </TextField>          
-            <Button alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Speichern" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <Button fx:id="speichern" alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" onAction="#speichern" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Speichern" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <GridPane.margin>
                   <Insets bottom="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -154,6 +154,7 @@
             </MenuButton>
          </children>
       </GridPane>
+      <Button fx:id="zurueck" layoutX="4.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="42.0" />
    </children>
    <opaqueInsets>
       <Insets />
