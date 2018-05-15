@@ -214,4 +214,19 @@ public class Arbeitspaket extends Paket {
 		this.id = id;
 	}
 
+	public Arbeitspaket copy() {
+
+		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.id, this.faz, this.fez, this.saz, this.sez,
+				this.vorgangsdauer, this.mitarbeiteranzahl, this.aufwand);
+
+		ArrayList<Teilpaket> neueTeilpaketListe = new ArrayList<Teilpaket>();
+
+		for (Teilpaket tp : this.teilpaketListe) {
+			neueTeilpaketListe.add(tp.copy());
+		}
+
+		return copyArbeitsPaket;
+
+	}
+
 }

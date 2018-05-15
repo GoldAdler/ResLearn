@@ -24,7 +24,7 @@ public class Main {
 		// erstelleTestDaten2_6(resCanvas);
 		// 2_7 wichtig
 		// erstelleTestDaten2_7(resCanvas);
-//		erstelleTestDaten2_8(resCanvas);
+		// erstelleTestDaten2_8(resCanvas);
 		// TODO: Team-Logik hier weitermachen
 		// für erstelleTestDaten2_8 prüfen ob Eingaben korrekt, und warum Lösung
 		// verwurschtelt
@@ -33,7 +33,7 @@ public class Main {
 		// erstelleAufgabeKinderuni(resCanvas);
 
 		// Prüfungsaufgabe
-		 erstellePruefungsAufgabe(resCanvas);
+		erstellePruefungsAufgabe(resCanvas);
 		// erstellePruefungsAufgabeMitE(resCanvas);
 		// erstellePruefungsAufgabeMitEBlosKleiner(resCanvas);
 		// TODO: Klutke fragen
