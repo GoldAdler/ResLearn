@@ -31,7 +31,7 @@
          </image>
       </ImageView>
       <Button fx:id="zurueck" layoutX="7.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
-      <Button layoutX="50.0" layoutY="7.0" mnemonicParsing="false" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
+      <Button fx:id="home" layoutX="50.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
    </children>
    <opaqueInsets>
       <Insets />
