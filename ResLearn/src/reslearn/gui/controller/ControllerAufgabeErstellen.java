@@ -30,16 +30,39 @@ import reslearn.gui.tableedit.MyIntegerStringConverter;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerAufgabeErstellen extends Controller {
-	@FXML
-	private Button zurueck;
-	@FXML
-	private Button home;
-
 	private int anzPakete, anzMaxPersonen;
 	final ToggleGroup rbGruppe = new ToggleGroup();
 	private String ergebnisValidierung = "";
 	private ObservableList<ArbeitspaketTableData> data = FXCollections.observableArrayList();
+	
+	public void initialize() {
+		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
+		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
+		// den Spalten die richtigen Attribute zuteilen
+		tabelle.setItems(data);
+		populate(retrieveData());
+		setupSpalteID();
+		setupSpalteFaz();
+		setupSpalteSaz();
+		setupSpalteFez();
+		setupSpalteSez();
+		setupSpalteAnzMitarbeiter();
+		setupSpalteAufwand();
+
+		// tabelle.setItems(getArbeitspaket());
+		setTableEditable();
+
+		radioButtonKapazitaet.setToggleGroup(rbGruppe);
+		radioButtonKapazitaet.setSelected(true);
+		radioButtonTermin.setToggleGroup(rbGruppe);
+	}
+	
+	@FXML
+	private Button zurueck;
+	@FXML
+	private Button home;
+	
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
@@ -66,7 +89,6 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setScene(newScene);
 			stage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		((Node) (event.getSource())).getScene().getWindow().hide();
@@ -85,7 +107,6 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setScene(newScene);
 			stage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		((Node) (event.getSource())).getScene().getWindow().hide();
@@ -105,34 +126,12 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setScene(newScene);
 			stage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
-	public void initialize() {
-		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
-		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
-		// den Spalten die richtigen Attribute zuteilen
-		tabelle.setItems(data);
-		populate(retrieveData());
-		setupSpalteID();
-		setupSpalteFaz();
-		setupSpalteSaz();
-		setupSpalteFez();
-		setupSpalteSez();
-		setupSpalteAnzMitarbeiter();
-		setupSpalteAufwand();
-
-		// tabelle.setItems(getArbeitspaket());
-		setTableEditable();
-
-		radioButtonKapazitaet.setToggleGroup(rbGruppe);
-		radioButtonKapazitaet.setSelected(true);
-		radioButtonTermin.setToggleGroup(rbGruppe);
-	}
 
 	// Zurück-Button ins Hauptmenü
 	@FXML
@@ -197,8 +196,11 @@ public class ControllerAufgabeErstellen extends Controller {
 	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(
+				new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -334,19 +336,17 @@ public class ControllerAufgabeErstellen extends Controller {
 		tabelle.setOnKeyPressed(event -> {
 			if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
 				editFocusedCell();
-				// } else if (event.getCode() == KeyCode.RIGHT || event.getCode() ==
-				// KeyCode.PLUS ||
-				// event.getCode() == KeyCode.TAB) {
-				// tabelle.getSelectionModel().selectNext();
-				// event.consume();
-				// } else if (event.getCode() == KeyCode.LEFT || event.getCode() ==
-				// KeyCode.MINUS) {
-				// // work around due to
-				// // TableView.getSelectionModel().selectPrevious() due to a bug
-				// // stopping it from working on
-				// // the first column in the last row of the table
-				// selectPrevious();
-				// event.consume();
+//			} else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.PLUS
+//					|| event.getCode() == KeyCode.TAB) {
+//				tabelle.getSelectionModel().selectNext();
+//				event.consume();
+//			} else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.MINUS) {
+//				// work around due to
+//				// TableView.getSelectionModel().selectPrevious() due to a bug
+//				// stopping it from working on
+//				// the first column in the last row of the table
+//				selectPrevious();
+//				event.consume();
 			}
 		});
 	}
@@ -358,31 +358,29 @@ public class ControllerAufgabeErstellen extends Controller {
 		tabelle.edit(focusedCell.getRow(), focusedCell.getTableColumn());
 	}
 
-	// @SuppressWarnings("unchecked")
-	// private void selectPrevious() {
-	// if (tabelle.getSelectionModel().isCellSelectionEnabled()) {
-	// // in cell selection mode, we have to wrap around, going from
-	// // right-to-left, and then wrapping to the end of the previous line
-	// TablePosition<ArbeitspaketTableData, ?> pos =
-	// tabelle.getFocusModel().getFocusedCell();
-	// if (pos.getColumn() - 1 >= 0) {
-	// // go to previous row
-	// tabelle.getSelectionModel().select(pos.getRow(),
-	// getTableColumn(pos.getTableColumn(), -1));
-	// } else if (pos.getRow() < tabelle.getItems().size()) {
-	// // wrap to end of previous row
-	// tabelle.getSelectionModel().select(pos.getRow() - 1,
-	// tabelle.getVisibleLeafColumn(tabelle.getVisibleLeafColumns().size() - 1));
-	// }
-	// } else {
-	// int focusIndex = tabelle.getFocusModel().getFocusedIndex();
-	// if (focusIndex == -1) {
-	// tabelle.getSelectionModel().select(tabelle.getItems().size() - 1);
-	// } else if (focusIndex > 0) {
-	// tabelle.getSelectionModel().select(focusIndex - 1);
-	// }
-	// }
-	// }
+//	@SuppressWarnings("unchecked")
+//	private void selectPrevious() {
+//		if (tabelle.getSelectionModel().isCellSelectionEnabled()) {
+//			// in cell selection mode, we have to wrap around, going from
+//			// right-to-left, and then wrapping to the end of the previous line
+//			TablePosition<ArbeitspaketTableData, ?> pos = tabelle.getFocusModel().getFocusedCell();
+//			if (pos.getColumn() - 1 >= 0) {
+//				// go to previous row
+//				tabelle.getSelectionModel().select(pos.getRow(), getTableColumn(pos.getTableColumn(), -1));
+//			} else if (pos.getRow() < tabelle.getItems().size()) {
+//				// wrap to end of previous row
+//				tabelle.getSelectionModel().select(pos.getRow() - 1,
+//						tabelle.getVisibleLeafColumn(tabelle.getVisibleLeafColumns().size() - 1));
+//			}
+//		} else {
+//			int focusIndex = tabelle.getFocusModel().getFocusedIndex();
+//			if (focusIndex == -1) {
+//				tabelle.getSelectionModel().select(tabelle.getItems().size() - 1);
+//			} else if (focusIndex > 0) {
+//				tabelle.getSelectionModel().select(focusIndex - 1);
+//			}
+//		}
+//	}
 
 	private TableColumn<ArbeitspaketTableData, ?> getTableColumn(final TableColumn<ArbeitspaketTableData, ?> column,
 			int offset) {
@@ -442,16 +440,17 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	Button buttonValidieren = new Button();
 
-	@FXML
-	private void handleButtonValidierenAction(ActionEvent event) {
-		paneErgebnis.setVisible(true);
-		Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
-		if (paketeValidieren(pakete)) {
-			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
-		} else {
-			labelErgebnis.setText(ergebnisValidierung);
-		}
-	}
+	// @FXML
+	// private void handleButtonValidierenAction(ActionEvent event) {
+	// paneErgebnis.setVisible(true);
+	// Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
+	// if (paketeValidieren(pakete)) {
+	// labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde
+	// gespeichert.");
+	// } else {
+	// labelErgebnis.setText(ergebnisValidierung);
+	// }
+	// }
 
 	// Ergebnis Validierung anzeigen
 	@FXML
