@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -21,13 +20,13 @@ import reslearn.gui.fxml.TutorialVideo;
 
 public class ControllerTutorialFragen extends Controller {
 
-	static int counter = 0;
-	static int counterFrageAntwort = 1;
+	int counter = 0;
+	int counterFrageAntwort = 1;
 
 	@FXML
-	private ImageView zurueck;
+	private Button zurueck;
 	@FXML
-	private ImageView home;
+	private Button home;
 	@FXML
 	private Button weiter;
 	@FXML
@@ -44,25 +43,39 @@ public class ControllerTutorialFragen extends Controller {
 	private RadioButton rb4;
 
 	@FXML
-	public void zurueck() throws Exception {
-		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				if (counter <= 0) {
-					TutorialVideo tut = new TutorialVideo();
-					try {
-						tut.start(TutorialVideo.classStage);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					((Node) (event.getSource())).getScene().getWindow().hide();
-				} else {
-					frage(counter-1);
-					counter = counter - 1;
-					System.out.println("ZurueckButton Gedrücht" + counter);
-				}
+	public void home(ActionEvent event) throws Exception {
+		Scene newScene;
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource(hauptmenue()));
+			newScene = new Scene(root);
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void zurueck(ActionEvent event) throws Exception {
+		if (counter <= 0) {
+			TutorialVideo tut = new TutorialVideo();
+			try {
+				tut.start(TutorialVideo.classStage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
+			((Node) (event.getSource())).getScene().getWindow().hide();
+		} else {
+			frage(--counter);
+			System.out.println("ZurueckButton Gedrücht" + counter);
+		}
 	}
 
 	@FXML
@@ -77,20 +90,20 @@ public class ControllerTutorialFragen extends Controller {
 				counterFrageAntwort = 1;
 				counter += 1;
 			}
-			
+
 		} else if (counter == 4) {
-			counter = -1;
+			counter = 0;
 			Scene newScene;
 			Parent root;
 			alleFenster.add("../fxml/TutorialFragen.fxml");
 			try {
 				root = FXMLLoader.load(getClass().getResource(hauptmenue()));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+				newScene = new Scene(root);
+				Stage stage = new Stage();
+				stage.setTitle("ResLearn");
+				stage.setMaximized(true);
+				stage.setScene(newScene);
+				stage.show();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,7 +112,6 @@ public class ControllerTutorialFragen extends Controller {
 		}
 	}
 
-	
 	public void antwort(int counter) {
 		if (counter == 0) {
 			if (rb1.isSelected()) {
@@ -112,7 +124,8 @@ public class ControllerTutorialFragen extends Controller {
 				rb4.setDisable(true);
 				rb4.setTextFill(Color.RED);
 			} else {
-				label.setText("Antwort " + tg.getSelectedToggle().getUserData() + " war falsch");
+				// label.setText("Antwort " + tg.getSelectedToggle().getUserData() + " war
+				// falsch");
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -121,7 +134,7 @@ public class ControllerTutorialFragen extends Controller {
 				rb4.setDisable(true);
 				rb4.setTextFill(Color.RED);
 			}
-			
+
 		} else if (counter == 1) {
 			label.setText("Antwort 1");
 			tg = new ToggleGroup();
@@ -157,51 +170,46 @@ public class ControllerTutorialFragen extends Controller {
 			rb4.setToggleGroup(tg);
 		}
 	}
-	
+
 	public void frage(int counter) {
 		if (counter == 0) {
-			label.setText("Frage 0");;
+			selektieren();
+			label.setText("Frage 0");
+			;
 			tg = new ToggleGroup();
-			rb1.setDisable(false);
-			rb1.setTextFill(Color.BLACK);
+
 			rb1.setText("Antwort 01");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
-			rb2.setDisable(false);
-			rb2.setTextFill(Color.BLACK);
+
 			rb2.setText("Antwort 02");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
-			rb3.setTextFill(Color.BLACK);
-			rb3.setDisable(false);
+
 			rb3.setText("Antwort 03");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
-			rb4.setTextFill(Color.BLACK);
-			rb4.setDisable(false);
+
 			rb4.setText("Antwort 04");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 		} else if (counter == 1) {
-			label.setText("Frage 1");;
+			selektieren();
+			label.setText("Frage 1");
 			tg = new ToggleGroup();
-			rb1.setDisable(false);
-			rb1.setTextFill(Color.BLACK);
+
 			rb1.setText("Antwort 1");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
-			rb2.setDisable(false);
-			rb2.setTextFill(Color.BLACK);
+
 			rb2.setText("Antwort 2");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
-			rb3.setDisable(false);
-			rb3.setTextFill(Color.BLACK);
+
 			rb3.setText("Antwort 3");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
-			rb4.setDisable(false);
-			rb4.setTextFill(Color.BLACK);
+
 			rb4.setText("Antwort 4");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
@@ -231,11 +239,23 @@ public class ControllerTutorialFragen extends Controller {
 
 	}
 
+	public void selektieren() {
+		rb1.setDisable(false);
+		rb1.setTextFill(Color.BLACK);
+		rb2.setDisable(false);
+		rb2.setTextFill(Color.BLACK);
+		rb3.setDisable(false);
+		rb3.setTextFill(Color.BLACK);
+		rb4.setDisable(false);
+		rb4.setTextFill(Color.BLACK);
+	}
+
 	@FXML
 	public void home() throws Exception {
 		home.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			Scene newScene;
 
+			@Override
 			public void handle(MouseEvent event) {
 				alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 				Parent root;
