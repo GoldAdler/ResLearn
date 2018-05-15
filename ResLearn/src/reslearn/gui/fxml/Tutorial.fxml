@@ -32,12 +32,12 @@
          </image>
       </ImageView>
       <Button fx:id="zurueck" layoutX="7.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="31.0" prefWidth="35.0" />
-      <Button fx:id="home" layoutX="48.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="31.0" prefWidth="35.0" />
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="48.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/home.png" />
          </image>
       </ImageView>
+      <Button fx:id="home" layoutX="48.0" layoutY="9.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="31.0" prefWidth="35.0" />
    </children>
    <opaqueInsets>
       <Insets />
