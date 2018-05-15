@@ -97,17 +97,24 @@ public class ArbeitspaketTableData extends Paket {
 		this.aufwand.set(aufwand);
 	}
 
-
 	@Override
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
+		// do nothing
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
+		// do nothing
+		return false;
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
+		// do nothing
+		return false;
 	}
+
+
+	
 
 }
