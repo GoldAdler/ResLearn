@@ -48,6 +48,7 @@ public class ControllerCanvas {
 	private ResCanvas resCanvas;
 	public static TableView<Pair<String, Object>> table = new TableView<>();
 	ObservableList<Pair<String, Object>> data;
+	public static int loeschMichInt = 1;
 
 	public ControllerCanvas(ResCanvas resCanvas) {
 		this.resCanvas = resCanvas;
@@ -111,6 +112,11 @@ public class ControllerCanvas {
 		@Override
 		public void handle(MouseEvent e) {
 
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+			System.out.println("          Durchlauf: " + loeschMichInt + " ANFANG");
+			System.out.println();
+
 			// 1. nur ein ResFeld (A) verschieben
 			// 2. die anderen ResFeld müssen sich an dem ersten Resfeld orientieren
 			// des offset von a auf andere übetragen
@@ -133,18 +139,8 @@ public class ControllerCanvas {
 			// Klötzchen verschoben werden soll
 			int differenzY = (int) ((neuePositionY - zeigerY) / 20); // Bsp. 440.0 - 420.0 -> 20.0/20.0 = 1
 
-			if (differenzX != 0 || differenzY != 0) {
-				System.out.println();
-			}
-
-			if (differenzX > 1 || differenzY != 0) {
-				System.out.println();
-			}
-
 			// differenzX -= differenzX % 20;
 			// differenzY -= differenzY % 20;
-
-			boolean verschiebbar = false;
 
 			// Verschiebung auf der X-Achse bewirkt logisches Verschieben im
 			// Koordinatensystem
@@ -155,90 +151,169 @@ public class ControllerCanvas {
 			System.out.println("neuePositionY: " + neuePositionY);
 			System.out.println("DifferenzX: " + differenzX);
 			System.out.println("DifferenzY: " + differenzY);
-			System.out.println("VerschiebungX: " + verschiebungX);
-			System.out.println("VerschiebungY: " + verschiebungY);
+			// System.out.println("VerschiebungX: " + verschiebungX);
+			// System.out.println("VerschiebungY: " + verschiebungY);
 
-			if (differenzX > verschiebungX) {
-				verschiebungX = differenzX;
-				// differenzX--;
-				System.out.println("DifferenzX: " + differenzX);
-				verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
+			System.out.println();
+			System.out.println("Start While Schleife Durchlauf " + loeschMichInt);
 
-				System.out.println(verschiebbar);
-				System.out.println("" + differenzX + " > " + verschiebungX);
-				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			while (differenzX != 0 || differenzY != 0) {
+
+				boolean verschiebbar = false;
+
+				if (differenzX > 0) {
+					// verschiebungX = differenzX;
+					differenzX--;
+					System.out.println("DifferenzX: " + (differenzX + 1));
+					System.out.println("Verschoben von");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
+					verschiebenX(verschiebbar, 1);
+					System.out.println(verschiebbar);
+					// System.out.println("" + differenzX +1 + " > " + verschiebungX);
+					System.out.println("Verschoben nach");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				}
+				if (differenzX < 0) {
+					// verschiebungX = differenzX;
+					differenzX++;
+					System.out.println("DifferenzX: " + (differenzX - 1));
+					System.out.println("Verschoben von");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
+					verschiebenX(verschiebbar, -1);
+					System.out.println(verschiebbar);
+					// System.out.println("" + differenzX + " < " + verschiebungX);
+					System.out.println("Verschoben nach");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				}
+				// if (differenzX == 0) {
+				// System.out.println("DifferenzX: " + 0);
+				// verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 0);
+				// System.out.println("i: " +
+				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				// }
+				//
+				// if (verschiebbar) {
+				// System.out.println("X if-Verschiebbar" + verschiebbar);
+				// // double offsetX = e.getSceneX() - zeigerX;
+				// // newTranslateX = translateX + offsetX;
+				// // newTranslateX -= newTranslateX % 20;
+				//
+				// if (differenzX + 1 > 0) {
+				// newTranslateX = translateX + 20;
+				// zeigerX += 20;
+				// } else if (differenzX - 1 < 0) {
+				// newTranslateX = translateX - 20;
+				// zeigerX -= 20;
+				// }
+				//
+				// bewegeX();
+				// translateX = rect.getTranslateX();
+				// }
+
+				// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
+				// Koordinatensystem
+
+				verschiebbar = false;
+
+				if (differenzY > 0) {
+					// verschiebungY = differenzY;
+					differenzY--;
+					System.out.println("DifferenzY: " + (differenzY + 1));
+					System.out.println("Verschoben von");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
+					verschiebenY(verschiebbar, 1);
+					System.out.println(verschiebbar);
+					// System.out.println("" + differenzY + " > " + verschiebungY);
+					System.out.println("Verschoben nach");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				}
+				if (differenzY < 0) {
+					// verschiebungY = differenzY;
+					differenzY++;
+					System.out.println("DifferenzY: " + (differenzY + 1));
+					System.out.println("Verschoben von");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
+					verschiebenY(verschiebbar, -1);
+					System.out.println(verschiebbar);
+					// System.out.println("" + differenzY + " < " + verschiebungY);
+					System.out.println("Verschoben nach");
+					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				}
+				// if (differenzY == 0) {
+				// System.out.println("DifferenzY: " + 0);
+				// verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 0);
+				// System.out.println("i: " +
+				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+				// }
+
+				// if (verschiebbar) {
+				// System.out.println("Y if-Verschiebbar" + verschiebbar);
+				// // double offsetY = e.getSceneY() - zeigerY;
+				// // newTranslateY = translateY + offsetY;
+				// // newTranslateY -= newTranslateY % 20;
+				// if (differenzY + 1 > 0) {
+				// newTranslateY = translateY - 20;
+				// zeigerY -= 20;
+				// } else if (differenzY - 1 < 0) {
+				// newTranslateY = translateY + 20;
+				// zeigerY += 20;
+				// }
+				// bewegeY();
+				// translateY = rect.getTranslateY();
+				// }
 			}
-			if (differenzX < verschiebungX) {
-				verschiebungX = differenzX;
-				// differenzX++;
-				System.out.println("DifferenzX: " + differenzX);
-				verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
 
-				System.out.println(verschiebbar);
-				System.out.println("" + differenzX + " < " + verschiebungX);
-				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-			}
-			// if (differenzX == 0) {
-			// System.out.println("DifferenzX: " + 0);
-			// verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 0);
-			// System.out.println("i: " +
-			// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-			// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-			// }
-
-			if (verschiebbar) {
-				System.out.println("X if-Verschiebbar" + verschiebbar);
-				double offsetX = e.getSceneX() - zeigerX;
-				newTranslateX = translateX + offsetX;
-				newTranslateX -= newTranslateX % 20;
-				bewegeX();
-
-			}
-
-			// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
-			// Koordinatensystem
-
-			verschiebbar = false;
-
-			if (differenzY > verschiebungY) {
-				verschiebungY = differenzY;
-				System.out.println("DifferenzY: " + differenzY);
-				verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
-				// differenzY--;
-				System.out.println(verschiebbar);
-				System.out.println("" + differenzY + " > " + verschiebungY);
-				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-			}
-			if (differenzY < verschiebungY) {
-				verschiebungY = differenzY;
-				System.out.println("DifferenzY: " + differenzY);
-				verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
-				System.out.println(verschiebbar);
-				System.out.println("" + differenzY + " < " + verschiebungY);
-				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-			}
-			// if (differenzY == 0) {
-			// System.out.println("DifferenzY: " + 0);
-			// verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 0);
-			// System.out.println("i: " +
-			// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-			// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-			// }
-
-			if (verschiebbar) {
-				System.out.println("Y if-Verschiebbar" + verschiebbar);
-				double offsetY = e.getSceneY() - zeigerY;
-				newTranslateY = translateY + offsetY;
-				newTranslateY -= newTranslateY % 20;
-				bewegeY();
-			}
+			System.out.println("------------------------------------------------------");
+			System.out.println("------------------------------------------------------");
+			System.out.println("          Durchlauf: " + loeschMichInt++ + " ENDE");
+			System.out.println();
 
 		}
 	};
+
+	public void verschiebenX(boolean verschiebbar, int vorzeichen) {
+		if (verschiebbar) {
+			System.out.println("X if-Verschiebbar" + verschiebbar);
+			// double offsetX = e.getSceneX() - zeigerX;
+			// newTranslateX = translateX + offsetX;
+			// newTranslateX -= newTranslateX % 20;
+
+			newTranslateX = translateX + 20 * vorzeichen;
+			zeigerX += 20 * vorzeichen;
+
+			bewegeX();
+			translateX = rect.getTranslateX();
+		}
+	}
+
+	public void verschiebenY(boolean verschiebbar, int vorzeichen) {
+		if (verschiebbar) {
+			System.out.println("X if-Verschiebbar" + verschiebbar);
+			// double offsetX = e.getSceneX() - zeigerX;
+			// newTranslateX = translateX + offsetX;
+			// newTranslateX -= newTranslateX % 20;
+
+			newTranslateY = translateY + 20 * vorzeichen;
+			zeigerY += 20 * vorzeichen;
+
+			bewegeY();
+			translateY = rect.getTranslateY();
+		}
+	}
 
 	public void bewege() {
 		for (ResFeld[] resAr : Diagramm.res) {
@@ -355,6 +430,7 @@ public class ControllerCanvas {
 				}
 			}
 			sliderY.setOnMousePressed(new EventHandler<MouseEvent>() {
+				@Override
 				public void handle(MouseEvent e) {
 					sliderX.setOpacity(0.4);
 					sliderY.setOpacity(1);
@@ -365,8 +441,8 @@ public class ControllerCanvas {
 
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-					if (arg2.doubleValue() % arg2.intValue() == 0 || arg2.intValue()==0) {
-						
+					if (arg2.doubleValue() % arg2.intValue() == 0 || arg2.intValue() == 0) {
+
 						System.out.println("CHANGE" + arg1 + " " + arg2);
 						int counter = 0;
 						for (ResFeld feld : resFeldListe) {
@@ -376,14 +452,14 @@ public class ControllerCanvas {
 
 						for (int i = 0; i < rect.getTeilpaket().getArbeitspaket().getVorgangsdauer(); i++) {
 							for (int j = 0; j < rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl(); j++) {
-								if (counter < arg2.intValue()*rect.getTeilpaket().getMitarbeiteranzahl()) {
+								if (counter < arg2.intValue() * rect.getTeilpaket().getMitarbeiteranzahl()) {
 									System.out.println("FELD ANMALEN");
 									ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
 									dummy.setFill(Color.GREY);
 									resFeldListe.add(dummy);
 									pane.getChildren().add(dummy);
 									counter++;
-								}else {
+								} else {
 									break;
 								}
 							}
@@ -393,6 +469,7 @@ public class ControllerCanvas {
 			});
 
 			sliderX.setOnMousePressed(new EventHandler<MouseEvent>() {
+				@Override
 				public void handle(MouseEvent e) {
 					sliderY.setOpacity(0.4);
 					sliderX.setOpacity(1);
