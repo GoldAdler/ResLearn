@@ -36,6 +36,34 @@ public class ResCanvas {
 	}
 
 	/**
+	 * true: verschiebbar, false: nicht verschiebbar
+	 *
+	 * @param tp
+	 * @param xMove
+	 * @param yMove
+	 * @return
+	 */
+	public boolean ueberpruefePosition(Teilpaket tp, int xMove, int yMove) {
+		ResEinheit tmp;
+		for (ResEinheit res : tp.getResEinheitListe()) {
+
+			Vektor2i neuePosition = res.getPosition();
+			int xPos = neuePosition.getxKoordinate() + xMove;
+			int yPos = neuePosition.getyKoordinate() - yMove;
+
+			if (xPos < 0 || xPos >= ResCanvas.koorBreite || yPos < 0 || yPos >= ResCanvas.koorHoehe) {
+				return false;
+			}
+
+			tmp = koordinatenSystem[yPos][xPos];
+			if (tmp != null && tmp.getTeilpaket() != res.getTeilpaket()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * entfernen des Arbeitspaket aus dem Koordinatensystem! Arbeitspaket ist nicht
 	 * gelöscht, sondern weiß immer noch die Position
 	 *

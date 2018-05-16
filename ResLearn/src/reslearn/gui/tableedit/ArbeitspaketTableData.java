@@ -15,10 +15,6 @@ public class ArbeitspaketTableData extends Paket {
 	private SimpleIntegerProperty mitarbeiteranzahl;
 	private SimpleIntegerProperty aufwand;
 
-	private static int anzPakete = 0;
-	private static ArbeitspaketTableData[] paketeTD = new ArbeitspaketTableData[10];
-	private static Arbeitspaket[] pakete;
-
 	public ArbeitspaketTableData(Arbeitspaket arbeitspaket) {
 		this.id = new SimpleStringProperty(arbeitspaket.getId());
 		this.faz = new SimpleIntegerProperty(arbeitspaket.getFaz());
@@ -27,13 +23,11 @@ public class ArbeitspaketTableData extends Paket {
 		this.sez = new SimpleIntegerProperty(arbeitspaket.getSez());
 		this.mitarbeiteranzahl = new SimpleIntegerProperty(arbeitspaket.getMitarbeiteranzahl());
 		this.aufwand = new SimpleIntegerProperty(arbeitspaket.getAufwand());
-
-		paketeTD[anzPakete++] = this;
 	}
 
 	public ArbeitspaketTableData(final String id, final int faz, final int saz, final int fez, final int sez,
 			final int vorgangsdauer, final int aufwand, final int mitarbeiteranzahl) {
-		super(vorgangsdauer, mitarbeiteranzahl, aufwand);
+		super.vorgangsdauer = vorgangsdauer;
 		this.id = new SimpleStringProperty(id);
 		this.faz = new SimpleIntegerProperty(faz);
 		this.saz = new SimpleIntegerProperty(saz);
@@ -41,30 +35,6 @@ public class ArbeitspaketTableData extends Paket {
 		this.sez = new SimpleIntegerProperty(sez);
 		this.mitarbeiteranzahl = new SimpleIntegerProperty(mitarbeiteranzahl);
 		this.aufwand = new SimpleIntegerProperty(aufwand);
-
-		paketeTD[anzPakete++] = this;
-	}
-	
-	private static void setArbeitspakete() {
-		pakete = new Arbeitspaket[anzPakete];
-
-		for (int i = 0; i <= anzPakete; i++) {
-			pakete[i].setId(paketeTD[i].getId());
-			pakete[i].setFaz(paketeTD[i].getFaz());
-			pakete[i].setSaz(paketeTD[i].getSaz());
-			pakete[i].setFez(paketeTD[i].getFez());
-			pakete[i].setSez(paketeTD[i].getSez());
-			pakete[i].setMitarbeiteranzahl(paketeTD[i].getMitarbeiteranzahl());
-			pakete[i].setAufwand(paketeTD[i].getAufwand());
-		}
-	}
-
-
-	public Arbeitspaket[] getArbeitspakete() {
-		if (pakete == null) {
-			setArbeitspakete();
-		}
-		return pakete;
 	}
 
 	public String getId() {
@@ -107,33 +77,44 @@ public class ArbeitspaketTableData extends Paket {
 		this.sez.set(sez);
 	}
 
+	@Override
 	public int getMitarbeiteranzahl() {
 		return mitarbeiteranzahl.get();
 	}
 
+	@Override
 	public void setMitarbeiteranzahl(final int mitarbeiteranzahl) {
 		this.mitarbeiteranzahl.set(mitarbeiteranzahl);
 	}
 
+	@Override
 	public int getAufwand() {
 		return aufwand.get();
 	}
 
+	@Override
 	public void setAufwand(final int aufwand) {
 		this.aufwand.set(aufwand);
 	}
 
-
 	@Override
 	public void bewegen(ResCanvas resCanvas, int yMove, int xMove) {
+		// do nothing
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
+		// do nothing
+		return false;
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
+		// do nothing
+		return false;
 	}
+
+
+	
 
 }

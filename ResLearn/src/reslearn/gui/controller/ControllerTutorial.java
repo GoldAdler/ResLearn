@@ -16,9 +16,9 @@ public class ControllerTutorial extends Controller {
 	@FXML
 	private Button zurueck;
 	@FXML
-	private Button home;
-	@FXML
 	private Button quizStarten;
+	@FXML
+	private Button home;
 
 	@FXML
 	public void quizStarten(ActionEvent event) throws Exception {

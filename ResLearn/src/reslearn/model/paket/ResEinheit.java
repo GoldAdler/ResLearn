@@ -28,23 +28,25 @@ public class ResEinheit extends Paket {
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
 
 		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
 		this.position.add(new Vektor2i(0, xMove));
 
 		resCanvas.updatePosition(this, altePosition);
 
+		return true;
+
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
 
 		Vektor2i altePosition = new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate());
 		this.position.add(new Vektor2i(yMove, 0));
 
 		resCanvas.updatePosition(this, altePosition);
-
+		return true;
 	}
 
 	public ResEinheit(Teilpaket teilpaket) {

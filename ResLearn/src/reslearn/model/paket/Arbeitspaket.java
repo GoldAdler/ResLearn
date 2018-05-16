@@ -147,17 +147,19 @@ public class Arbeitspaket extends Paket {
 	}
 
 	@Override
-	public void bewegeX(ResCanvas resCanvas, int xMove) {
+	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegeX(resCanvas, xMove);
 		}
+		return true;
 	}
 
 	@Override
-	public void bewegeY(ResCanvas resCanvas, int yMove) {
+	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
 		for (Teilpaket teilpaket : teilpaketListe) {
 			teilpaket.bewegeY(resCanvas, yMove);
 		}
+		return true;
 	}
 
 	public void entferneTeilpaket(Teilpaket teilpaket) {

@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -19,87 +20,97 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class ControllerEinstellungen extends Controller{
-/*////////////////////////////////////////////////////////////////////
-//  Dropdown Buttons in Einstellungen                 			   //
-//////////////////////////////////////////////////////////////////*/
+public class ControllerEinstellungen extends Controller {
+	/*
+	 * //////////////////////////////////////////////////////////////////// //
+	 * Dropdown Buttons in Einstellungen //
+	 * //////////////////////////////////////////////////////////////////
+	 */
 
 	@FXML
 	private MenuButton dropdownDesigntheme;
-	
+
 	@FXML
 	private MenuButton dropdownFarbschema;
 
 	@FXML
 	private MenuButton dropdownSchriftgroesse;
-	
+
 	@FXML
 	private MenuButton dropdownAufloesung;
-	
+
 	@FXML
 	private ImageView ordner1;
-	
+
 	@FXML
 	private TextField textField1;
-	
+
 	@FXML
 	private ImageView ordner2;
-	
+
 	@FXML
 	private TextField textField2;
-	
+
 	@FXML
-	private ImageView zurueck;
-	
-	
+	private Button zurueck;
+
+	@FXML
+	private Button speichern;
+
 	@FXML
 	public void initialize() {
-/*////////////////////////////////////////////////////////////////////
-//  			           DesignTheme			      			   //
-//////////////////////////////////////////////////////////////////*/
+		/*
+		 * //////////////////////////////////////////////////////////////////// //
+		 * DesignTheme //
+		 * //////////////////////////////////////////////////////////////////
+		 */
 		MenuItem modena = new MenuItem("Modena");
 		MenuItem caspian = new MenuItem("Caspian");
-		dropdownDesigntheme.getItems().addAll(modena,caspian);
-		
+		dropdownDesigntheme.getItems().addAll(modena, caspian);
+
 		modena.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	dropdownDesigntheme.setText(modena.getText());
-		    	Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				dropdownDesigntheme.setText(modena.getText());
+				Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+			}
 		});
 		caspian.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	dropdownDesigntheme.setText(caspian.getText());
-		    	Application.setUserAgentStylesheet(Application.STYLESHEET_CASPIAN);
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				dropdownDesigntheme.setText(caspian.getText());
+				Application.setUserAgentStylesheet(Application.STYLESHEET_CASPIAN);
+			}
 		});
 
-/*////////////////////////////////////////////////////////////////////
-//      					Farbschema				      		   //
-//////////////////////////////////////////////////////////////////*/
-		
+		/*
+		 * //////////////////////////////////////////////////////////////////// //
+		 * Farbschema //
+		 * //////////////////////////////////////////////////////////////////
+		 */
+
 		MenuItem lightheme = new MenuItem("Light Theme");
 		MenuItem darktheme = new MenuItem("Dark Theme");
-		dropdownFarbschema.getItems().addAll(lightheme,darktheme);
-		
+		dropdownFarbschema.getItems().addAll(lightheme, darktheme);
+
 		lightheme.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	dropdownFarbschema.setText(lightheme.getText());
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				dropdownFarbschema.setText(lightheme.getText());
+			}
 		});
 		darktheme.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	dropdownFarbschema.setText(darktheme.getText());
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				dropdownFarbschema.setText(darktheme.getText());
+			}
 		});
 
-/*////////////////////////////////////////////////////////////////////
-//							Schriftgröße			      		   //
-//////////////////////////////////////////////////////////////////*/
+		/*
+		 * //////////////////////////////////////////////////////////////////// //
+		 * Schriftgröße //
+		 * //////////////////////////////////////////////////////////////////
+		 */
 
 		MenuItem schrift12 = new MenuItem("12");
 		MenuItem schrift14 = new MenuItem("14");
@@ -138,10 +149,12 @@ public class ControllerEinstellungen extends Controller{
 				dropdownSchriftgroesse.setText(schrift20.getText());
 			}
 		});
-		
-/*////////////////////////////////////////////////////////////////////
-//							Auflösung				      		   //
-//////////////////////////////////////////////////////////////////*/
+
+		/*
+		 * //////////////////////////////////////////////////////////////////// //
+		 * Auflösung //
+		 * //////////////////////////////////////////////////////////////////
+		 */
 
 		MenuItem klein = new MenuItem("900x600");
 		MenuItem mittel = new MenuItem("1200x900");
@@ -166,56 +179,72 @@ public class ControllerEinstellungen extends Controller{
 				dropdownAufloesung.setText(gross.getText());
 			}
 		});
-	
+
 	}
-	
+
 	@FXML
 	public void ordnerOpen() {
 		ordner1.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
-            public void handle(MouseEvent event) {
-               FileChooser fileChooser = new FileChooser();
-               FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-               fileChooser.getExtensionFilters().add(extFilter);
-               File file = fileChooser.showOpenDialog(ordner1.getScene().getWindow());
-               textField1.setText(file.getAbsolutePath());
-           }
-       });
+			@Override
+			public void handle(MouseEvent event) {
+				FileChooser fileChooser = new FileChooser();
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+				fileChooser.getExtensionFilters().add(extFilter);
+				File file = fileChooser.showOpenDialog(ordner1.getScene().getWindow());
+				textField1.setText(file.getAbsolutePath());
+			}
+		});
 		ordner2.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
-            public void handle(MouseEvent event) {
-               FileChooser fileChooser = new FileChooser();
-               FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-               fileChooser.getExtensionFilters().add(extFilter);
-               File file = fileChooser.showOpenDialog(ordner2.getScene().getWindow());
-               textField2.setText(file.getAbsolutePath());
-           }
-       });
-	}
-	
-	@FXML
-	public void zurueck() throws Exception{
-		zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			Scene newScene;
+			@Override
 			public void handle(MouseEvent event) {
-				Parent root;
-				try {
-					root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-				newScene = new Scene(root);
-				Stage stage = new Stage();
-				stage.setTitle("ResLearn");
-				stage.setMaximized(true);
-				stage.setScene(newScene);
-				stage.show();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				((Node) (event.getSource())).getScene().getWindow().hide();
+				FileChooser fileChooser = new FileChooser();
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+				fileChooser.getExtensionFilters().add(extFilter);
+				File file = fileChooser.showOpenDialog(ordner2.getScene().getWindow());
+				textField2.setText(file.getAbsolutePath());
 			}
 		});
 	}
-	
-	
-}
 
+	@FXML
+	public void zurueck(ActionEvent event) throws Exception {
+		Scene newScene;
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+			newScene = new Scene(root);
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void speichern(ActionEvent event) {
+		// Einstellungen speichern fehlt noch
+		Scene newScene;
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+			newScene = new Scene(root);
+			Stage stage = new Stage();
+			stage.setTitle("ResLearn");
+			stage.setMaximized(true);
+			stage.setScene(newScene);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+}

@@ -30,7 +30,7 @@
             <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
-      <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="98.0" prefHeight="65.0" prefWidth="550.0" text="Was ist eine Voraussetzung damit der Terminplan für die Ressourcen erstellt werden kann?" textAlignment="CENTER" wrapText="true" AnchorPane.topAnchor="100.0">
+      <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="98.0" prefHeight="65.0" prefWidth="550.0" text="Frage 0" textAlignment="CENTER" wrapText="true" AnchorPane.topAnchor="100.0">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
@@ -46,10 +46,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <RadioButton fx:id="rb1" mnemonicParsing="false" text="Projektstrukturplan wurde erstellt" />
-            <RadioButton fx:id="rb2" mnemonicParsing="false" text="Produkt wurde getestet" GridPane.rowIndex="1" />
-            <RadioButton fx:id="rb3" mnemonicParsing="false" text="Hier könnte Ihre Werbung stehen" GridPane.rowIndex="2" />
-            <RadioButton fx:id="rb4" mnemonicParsing="false" text="Risikomanagement wurde abgeschlossen" GridPane.rowIndex="3" />
+            <RadioButton fx:id="rb1" mnemonicParsing="false" text="Antwort 01" />
+            <RadioButton fx:id="rb2" mnemonicParsing="false" text="Antwort 02" GridPane.rowIndex="1" />
+            <RadioButton fx:id="rb3" mnemonicParsing="false" text="Antwort 03" GridPane.rowIndex="2" />
+            <RadioButton fx:id="rb4" mnemonicParsing="false" text="Antwort 04" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Button fx:id="weiter" alignment="CENTER" graphicTextGap="5.0" layoutX="650.0" layoutY="461.0" mnemonicParsing="false" onAction="#weiter" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Weiter" textFill="WHITE">
@@ -64,6 +64,11 @@
       </ImageView>
       <Button fx:id="zurueck" layoutX="7.0" layoutY="6.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="46.0" />
       <Button fx:id="home" layoutX="56.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="46.0" />
+      <Label fx:id="labelErgebnis" alignment="CENTER" layoutX="201.0" layoutY="333.0" prefHeight="109.0" prefWidth="550.0" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
    <opaqueInsets>
       <Insets />
