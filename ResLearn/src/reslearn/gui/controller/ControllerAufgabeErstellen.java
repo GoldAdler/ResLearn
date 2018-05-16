@@ -3,6 +3,7 @@ package reslearn.gui.controller;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,7 +13,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -81,11 +85,11 @@ public class ControllerAufgabeErstellen extends Controller {
 	Button buttonMaxPersonenPlus = new Button();
 	@FXML
 	TextField textFieldMaxPersonen = new TextField();
-	
+
 	// Button zur Validierung
 	@FXML
 	Button buttonValidieren;
-	
+
 	// Ergebnis Validierung anzeigen
 	@FXML
 	Pane paneErgebnis;
@@ -118,13 +122,21 @@ public class ControllerAufgabeErstellen extends Controller {
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
 		Arbeitspaket[] pakete = getArbeitspaketArray(retrieveData());
-		if (paketeValidieren(pakete)) {
-			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
+		// if (paketeValidieren(pakete)) {
+		labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("Aufgabe speichern");
+		alert.setContentText("Wollen Sie die Aufgabe speichern");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
 
 			weiter(event);
 		} else {
-			labelErgebnis.setText(ergebnisValidierung);
+			alert.close();
 		}
+		// } else {
+		// labelErgebnis.setText(ergebnisValidierung);
+		// }
 	}
 
 	@FXML
@@ -208,11 +220,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-		return Arrays.asList(
-				new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -375,8 +384,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		panePersonen.setVisible(false);
 	}
 
-	
-
 	// @FXML
 	// private void handleButtonValidierenAction(ActionEvent event) {
 	// paneErgebnis.setVisible(true);
@@ -388,8 +395,6 @@ public class ControllerAufgabeErstellen extends Controller {
 	// labelErgebnis.setText(ergebnisValidierung);
 	// }
 	// }
-
-
 
 	public boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
