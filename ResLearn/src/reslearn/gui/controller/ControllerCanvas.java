@@ -374,7 +374,6 @@ public class ControllerCanvas {
 						}
 						resFeldListe.clear();
 
-						
 						for (int i = 0; i < rect.getTeilpaket().getArbeitspaket().getVorgangsdauer(); i++) {
 							for (int j = 0; j < rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl(); j++) {
 								if (counter < arg2.intValue()*rect.getTeilpaket().getMitarbeiteranzahl()) {
