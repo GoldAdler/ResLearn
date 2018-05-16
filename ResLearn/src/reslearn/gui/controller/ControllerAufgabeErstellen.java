@@ -1,18 +1,26 @@
 package reslearn.gui.controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -21,8 +29,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import reslearn.gui.ImportExport.CsvWriter;
 import reslearn.gui.tableedit.ArbeitspaketTableData;
 import reslearn.gui.tableedit.EditCell;
 import reslearn.gui.tableedit.MyIntegerStringConverter;
@@ -81,16 +91,18 @@ public class ControllerAufgabeErstellen extends Controller {
 	Button buttonMaxPersonenPlus = new Button();
 	@FXML
 	TextField textFieldMaxPersonen = new TextField();
-	
+
 	// Button zur Validierung
 	@FXML
 	Button buttonValidieren;
-	
+
 	// Ergebnis Validierung anzeigen
 	@FXML
 	Pane paneErgebnis;
 	@FXML
 	Label labelErgebnis;
+
+	TextField dateiname;
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
@@ -118,13 +130,63 @@ public class ControllerAufgabeErstellen extends Controller {
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
 		Arbeitspaket[] pakete = getArbeitspaketArray(retrieveData());
-		if (paketeValidieren(pakete)) {
-			labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
+		// if (paketeValidieren(pakete)) {
+		labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
 
-			weiter(event);
-		} else {
-			labelErgebnis.setText(ergebnisValidierung);
-		}
+		// Create the custom dialog.
+		Dialog<String> dialog = new Dialog<>();
+		dialog.setTitle("Speichern");
+		dialog.setHeaderText("Wollen Sie die Aufgabe speichern?");
+
+		// Set the button types.
+		ButtonType speichernButton = new ButtonType("Speichern", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(speichernButton, ButtonType.CANCEL);
+
+		// Create the username and password labels and fields.
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+
+		dateiname = new TextField();
+		dateiname.setPromptText("Dateiname");
+
+		grid.add(new Label("Dateiname:"), 0, 0);
+		grid.add(dateiname, 1, 0);
+
+		// Enable/Disable login button depending on whether a username was entered.
+		Node loginButton = dialog.getDialogPane().lookupButton(speichernButton);
+		loginButton.setDisable(true);
+
+		// Do some validation (using the Java 8 lambda syntax).
+		dateiname.textProperty().addListener((observable, oldValue, newValue) -> {
+			loginButton.setDisable(newValue.trim().isEmpty());
+		});
+
+		dialog.getDialogPane().setContent(grid);
+
+		// Request focus on the username field by default.
+		Platform.runLater(() -> dateiname.requestFocus());
+
+		// Convert the result to a username-password-pair when the login button is
+		// clicked.
+		// dialog.setResultConverter(dialogButton -> {
+		// if (dialogButton == speichernButton) {
+		// return new Pair<>(dateiname.getText(), password.getText());
+		// }
+		// return null;
+		// });
+
+		Optional<String> result = dialog.showAndWait();
+
+		// export(pakete);
+		// result.ifPresent(hallo -> {
+		// weiter(event);
+		// });
+
+		// } else {
+		// labelErgebnis.setText(ergebnisValidierung);
+		// }
 	}
 
 	@FXML
@@ -208,11 +270,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-		return Arrays.asList(
-				new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -375,8 +434,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		panePersonen.setVisible(false);
 	}
 
-	
-
 	// @FXML
 	// private void handleButtonValidierenAction(ActionEvent event) {
 	// paneErgebnis.setVisible(true);
@@ -388,8 +445,6 @@ public class ControllerAufgabeErstellen extends Controller {
 	// labelErgebnis.setText(ergebnisValidierung);
 	// }
 	// }
-
-
 
 	public boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
@@ -464,6 +519,51 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 
 		return paketKorrekt;
+	}
+
+	public void export(Arbeitspaket[] arbeitspakete) {
+		String outputFile = "C:\\Users\\Public\\Desktop\\" + dateiname.getText() + ".csv";
+		boolean alreadyExists = new File(outputFile).exists();
+		String spalten[] = new String[8];
+
+		spalten[0] = "Id";
+		spalten[1] = "FAZ";
+		spalten[2] = "FEZ";
+		spalten[3] = "SAZ";
+		spalten[4] = "SEZ";
+		spalten[5] = "Vorgangsdauer";
+		spalten[6] = "Mitarbeiteranzahl";
+		spalten[7] = "Aufwand";
+
+		try {
+			// use FileWriter constructor that specifies open for appending
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ';');
+
+			// if the file didn't already exist then we need to write out the header line
+			if (!alreadyExists) {
+				csvOutput.writeRecord(spalten);
+			}
+			// else assume that the file already has the correct header line
+
+			// write out a few records
+			for (Arbeitspaket ap : arbeitspakete) {
+				int vorgangsdauer = ap.getSez() - ap.getFez();
+				csvOutput.write(ap.getId().toString());
+				csvOutput.write(String.valueOf(ap.getFaz()));
+				csvOutput.write(String.valueOf(ap.getFez()));
+				csvOutput.write(String.valueOf(ap.getSaz()));
+				csvOutput.write(String.valueOf(ap.getSez()));
+				csvOutput.write(String.valueOf(vorgangsdauer));
+				csvOutput.write(String.valueOf(ap.getMitarbeiteranzahl()));
+				csvOutput.write(String.valueOf(ap.getAufwand()));
+				csvOutput.endRecord();
+			}
+
+			csvOutput.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
