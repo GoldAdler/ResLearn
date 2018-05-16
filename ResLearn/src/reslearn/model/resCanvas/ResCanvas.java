@@ -322,16 +322,50 @@ public class ResCanvas {
 
 	public void aktuallisiereHistorie() {
 
-		if (historieKoordinatenSystem.isEmpty()) {
+		this.neueHistorie();
 
-		} else {
-
+		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
+			Algorithmus.ausgeben(koordinatenSystem);
 		}
 
 	}
 
-	private void pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
+	private boolean pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
 			ArrayList<Arbeitspaket> aktuelleArbeitspaketListe) {
+
+		for (int i = 0; i <= historienArbeitspaketListe.size(); i++) {
+			Arbeitspaket apHistorie = historienArbeitspaketListe.get(i);
+			Arbeitspaket apAktuell = aktuelleArbeitspaketListe.get(i);
+
+			ArrayList<Teilpaket> tpListeHistorie = apHistorie.getTeilpaketListe();
+			ArrayList<Teilpaket> tpListeAktuell = apAktuell.getTeilpaketListe();
+
+			if (tpListeHistorie.size() != tpListeAktuell.size()) {
+				return false;
+			}
+
+			for (int a = 0; a <= tpListeHistorie.size(); a++) {
+
+				ArrayList<ResEinheit> resListeHistorie = tpListeHistorie.get(a).getResEinheitListe();
+				ArrayList<ResEinheit> resListeAktuell = tpListeAktuell.get(a).getResEinheitListe();
+
+				for (int b = 0; b <= resListeHistorie.size(); b++) {
+					int xPosHistorie = resListeHistorie.get(b).getPosition().getxKoordinate();
+					int yPosHistorie = resListeHistorie.get(b).getPosition().getyKoordinate();
+
+					int xPosAktuell = resListeAktuell.get(b).getPosition().getxKoordinate();
+					int yPosAktuell = resListeAktuell.get(b).getPosition().getyKoordinate();
+
+					if (xPosHistorie != xPosAktuell || yPosHistorie != yPosAktuell) {
+						return false;
+					}
+
+				}
+
+			}
+
+		}
+		return true;
 
 	}
 

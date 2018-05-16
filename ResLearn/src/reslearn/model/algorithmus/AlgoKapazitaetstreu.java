@@ -40,9 +40,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		// Damit wir die Ausgangssituation des AlgoKapazitaetstreu geschaffen.
 		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
 				.getKoordinatenSystem();
-		
+
 		resCanvas.herunterfallenAlleTeilpakete();
-		
+
 		kapazitaetsOptimierung(resCanvas, koordinatenSystem);
 
 		zeitValidierung(resCanvas);
@@ -77,14 +77,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			ap.zusammenfuegen();
 		}
 
-		
-		for(Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			ap.ueberpruefeVorgangsunterbrechung(resCanvas);
-			
+
 		}
 		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaket());
 		ausgeben(resCanvas.getKoordinatenSystem());
-		
+
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			ap.zusammenfuegen();
 			resCanvas.aufschliessen();
@@ -98,7 +97,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			}
 
-			ausgeben(resCanvas.getKoordinatenSystem());
+			// ausgeben(resCanvas.getKoordinatenSystem());
+			resCanvas.aktuallisiereHistorie();
 			zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
 
 		}
@@ -118,7 +118,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	private void zeitOptimieren(ResCanvas resCanvas, Arbeitspaket ap, ArrayList<Teilpaket> tpListe,
 			Teilpaket letztesTeilpaket) {
 
-	
 		Teilpaket erstesTeilpaket = tpListe.get(0);
 		ResEinheit ersteResEinheit = erstesTeilpaket.getResEinheitListe().get(0);
 		boolean gesetzt = false;
