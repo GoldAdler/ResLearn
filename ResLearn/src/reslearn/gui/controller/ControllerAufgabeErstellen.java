@@ -532,7 +532,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		spalten[5] = "Vorgangsdauer";
 		spalten[6] = "Mitarbeiteranzahl";
 		spalten[7] = "Aufwand";
-
+		// TEst
 		try {
 			// use FileWriter constructor that specifies open for appending
 			CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ';');
