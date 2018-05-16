@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import reslearn.gui.View;
 
 public class ControllerUebungAuswaehlen extends Controller {
 
@@ -17,6 +18,18 @@ public class ControllerUebungAuswaehlen extends Controller {
 	private Button zurueck;
 	@FXML
 	private Button home;
+	@FXML
+	private Button aufgabe1;
+	@FXML
+	private Button aufgabe2;
+	@FXML
+	private Button aufgabe3;
+	@FXML
+	private Button aufgabe4;
+	@FXML
+	private Button aufgabe5;
+	@FXML
+	private Button aufgabe6;
 
 	@FXML
 	public void home(ActionEvent event) throws Exception {
@@ -50,6 +63,90 @@ public class ControllerUebungAuswaehlen extends Controller {
 			stage.setScene(newScene);
 			stage.show();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter1(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 1;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter2(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 2;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter3(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 3;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter4(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 4;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter5(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 5;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((Node) (event.getSource())).getScene().getWindow().hide();
+	}
+
+	@FXML
+	public void weiter6(ActionEvent event) {
+		View view = new View();
+		try {
+			AufgabenNummer = 6;
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

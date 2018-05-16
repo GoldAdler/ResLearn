@@ -18,6 +18,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerAufgabeLaden">
    <children>
+      <ImageView fitHeight="211.0" fitWidth="198.0" layoutX="351.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/ordner.png" />
+         </image>
+      </ImageView>
       <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" style="-fx-background-color: #eeeeee; -fx-border-color: #afafaf;" text="ResLearn" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="30.0" />
@@ -35,7 +40,7 @@
       </ImageView>
       <Button fx:id="zurueck" layoutX="7.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
       <Button fx:id="home" layoutX="49.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
-      <Button fx:id="dateiauswaehlen" layoutX="351.0" layoutY="96.0" mnemonicParsing="false" onAction="#dateiauswaehlen" opacity="0.0" prefHeight="204.0" prefWidth="198.0" />
+      <Button fx:id="dateiauswaehlen" layoutX="351.0" layoutY="96.0" mnemonicParsing="false" onAction="#dateiauswaehlen" opacity="0.0" prefHeight="198.0" prefWidth="198.0" />
       <Label fx:id="labellDateiname" alignment="CENTER" layoutX="38.0" layoutY="359.0" prefHeight="20.0" prefWidth="835.0" visible="false">
          <font>
             <Font size="14.0" />
