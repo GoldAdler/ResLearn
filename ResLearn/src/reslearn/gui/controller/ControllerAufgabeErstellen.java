@@ -103,7 +103,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	Label labelErgebnis;
 
 	TextField dateiname;
-	String dateipfad = "C:\\Users\\";
+	String dateipfad;
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
@@ -519,7 +519,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	public void export(Arbeitspaket[] arbeitspakete) {
-		String outputFile = dateipfad + dateiname.getText() + ".csv";
+		// TODO dateipfad gibt es ein Berechtigungsproblem
+		String outputFile = dateiname.getText() + ".csv";
 		System.out.println(outputFile);
 		boolean alreadyExists = new File(outputFile).exists();
 		String spalten[] = new String[8];
@@ -532,7 +533,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		spalten[5] = "Vorgangsdauer";
 		spalten[6] = "Mitarbeiteranzahl";
 		spalten[7] = "Aufwand";
-		// TEst
+
 		try {
 			// use FileWriter constructor that specifies open for appending
 			CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ';');
