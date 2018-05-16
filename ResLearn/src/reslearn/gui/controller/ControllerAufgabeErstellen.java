@@ -103,6 +103,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	Label labelErgebnis;
 
 	TextField dateiname;
+	String dateipfad = "C:\\Users\\";
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
@@ -155,12 +156,12 @@ public class ControllerAufgabeErstellen extends Controller {
 		grid.add(dateiname, 1, 0);
 
 		// Enable/Disable login button depending on whether a username was entered.
-		Node loginButton = dialog.getDialogPane().lookupButton(speichernButton);
-		loginButton.setDisable(true);
+		Node nodeSpeichern = dialog.getDialogPane().lookupButton(speichernButton);
+		nodeSpeichern.setDisable(true);
 
 		// Do some validation (using the Java 8 lambda syntax).
 		dateiname.textProperty().addListener((observable, oldValue, newValue) -> {
-			loginButton.setDisable(newValue.trim().isEmpty());
+			nodeSpeichern.setDisable(newValue.trim().isEmpty());
 		});
 
 		dialog.getDialogPane().setContent(grid);
@@ -168,16 +169,12 @@ public class ControllerAufgabeErstellen extends Controller {
 		// Request focus on the username field by default.
 		Platform.runLater(() -> dateiname.requestFocus());
 
-		// Convert the result to a username-password-pair when the login button is
-		// clicked.
-		// dialog.setResultConverter(dialogButton -> {
-		// if (dialogButton == speichernButton) {
-		// return new Pair<>(dateiname.getText(), password.getText());
-		// }
-		// return null;
-		// });
-
 		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			export(pakete);
+			weiter(event);
+		}
+		// dialog.getDialogPane().get
 
 		// export(pakete);
 		// result.ifPresent(hallo -> {
@@ -522,7 +519,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	public void export(Arbeitspaket[] arbeitspakete) {
-		String outputFile = "C:\\Users\\Public\\Desktop\\" + dateiname.getText() + ".csv";
+		String outputFile = dateipfad + dateiname.getText() + ".csv";
+		System.out.println(outputFile);
 		boolean alreadyExists = new File(outputFile).exists();
 		String spalten[] = new String[8];
 
