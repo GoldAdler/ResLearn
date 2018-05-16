@@ -82,6 +82,8 @@ public class ControllerCanvas {
 			altePositionX = rect.getBoundsInParent().getMinX();
 			altePositionY = rect.getBoundsInParent().getMinY();
 			System.out.println("PosaltX: " + altePositionX);
+			System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+					+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 
 			verschiebungX = 0;
 			verschiebungY = 0;
@@ -154,85 +156,85 @@ public class ControllerCanvas {
 			System.out.println("VerschiebungX: " + verschiebungX);
 			System.out.println("VerschiebungY: " + verschiebungY);
 
-			while (differenzX != 0 || differenzY != 0) {
-				if (differenzX > 0) {
-					differenzX--;
-					verschiebungX = differenzX;
-					System.out.println("DifferenzX: " + differenzX);
-					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
-					System.out.println(verschiebbar);
-					System.out.println("" + differenzX + " > " + verschiebungX);
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				}
-				if (differenzX < 0) {
-					differenzX++;
-					verschiebungX = differenzX;
-					System.out.println("DifferenzX: " + differenzX);
-					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
-					System.out.println(verschiebbar);
-					System.out.println("" + differenzX + " < " + verschiebungX);
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				}
-				// if (differenzX == 0) {
-				// System.out.println("DifferenzX: " + 0);
-				// verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 0);
-				// System.out.println("i: " +
-				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				// }
+			if (differenzX > verschiebungX) {
+				verschiebungX = differenzX;
+				// differenzX--;
+				System.out.println("DifferenzX: " + differenzX);
+				verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
 
-				if (verschiebbar) {
-					System.out.println("X if-Verschiebbar" + verschiebbar);
-					double offsetX = e.getSceneX() - zeigerX;
-					newTranslateX = translateX + offsetX;
-					newTranslateX -= newTranslateX % 20;
-					bewegeX();
-
-				}
-
-				// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
-				// Koordinatensystem
-
-				verschiebbar = false;
-
-				if (differenzY > 0) {
-					differenzY--;
-					verschiebungY = differenzY;
-					System.out.println("DifferenzY: " + differenzY);
-					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
-					System.out.println(verschiebbar);
-					System.out.println("" + differenzY + " > " + verschiebungY);
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				}
-				if (differenzY < 0) {
-					differenzY++;
-					verschiebungY = differenzY;
-					System.out.println("DifferenzY: " + differenzY);
-					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
-					System.out.println(verschiebbar);
-					System.out.println("" + differenzY + " < " + verschiebungY);
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				}
-				// if (differenzY == 0) {
-				// System.out.println("DifferenzY: " + 0);
-				// verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 0);
-				// System.out.println("i: " +
-				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				// }
-
-				if (verschiebbar) {
-					System.out.println("Y if-Verschiebbar" + verschiebbar);
-					double offsetY = e.getSceneY() - zeigerY;
-					newTranslateY = translateY + offsetY;
-					newTranslateY -= newTranslateY % 20;
-					bewegeY();
-				}
+				System.out.println(verschiebbar);
+				System.out.println("" + differenzX + " > " + verschiebungX);
+				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 			}
+			if (differenzX < verschiebungX) {
+				verschiebungX = differenzX;
+				// differenzX++;
+				System.out.println("DifferenzX: " + differenzX);
+				verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
+
+				System.out.println(verschiebbar);
+				System.out.println("" + differenzX + " < " + verschiebungX);
+				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			}
+			// if (differenzX == 0) {
+			// System.out.println("DifferenzX: " + 0);
+			// verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 0);
+			// System.out.println("i: " +
+			// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+			// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			// }
+
+			if (verschiebbar) {
+				System.out.println("X if-Verschiebbar" + verschiebbar);
+				double offsetX = e.getSceneX() - zeigerX;
+				newTranslateX = translateX + offsetX;
+				newTranslateX -= newTranslateX % 20;
+				bewegeX();
+
+			}
+
+			// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
+			// Koordinatensystem
+
+			verschiebbar = false;
+
+			if (differenzY > verschiebungY) {
+				verschiebungY = differenzY;
+				System.out.println("DifferenzY: " + differenzY);
+				verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
+				// differenzY--;
+				System.out.println(verschiebbar);
+				System.out.println("" + differenzY + " > " + verschiebungY);
+				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			}
+			if (differenzY < verschiebungY) {
+				verschiebungY = differenzY;
+				System.out.println("DifferenzY: " + differenzY);
+				verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
+				System.out.println(verschiebbar);
+				System.out.println("" + differenzY + " < " + verschiebungY);
+				System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+						+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			}
+			// if (differenzY == 0) {
+			// System.out.println("DifferenzY: " + 0);
+			// verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 0);
+			// System.out.println("i: " +
+			// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
+			// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
+			// }
+
+			if (verschiebbar) {
+				System.out.println("Y if-Verschiebbar" + verschiebbar);
+				double offsetY = e.getSceneY() - zeigerY;
+				newTranslateY = translateY + offsetY;
+				newTranslateY -= newTranslateY % 20;
+				bewegeY();
+			}
+
 		}
 	};
 
@@ -276,7 +278,7 @@ public class ControllerCanvas {
 	EventHandler<MouseEvent> OnMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
-			// View.pane.getChildren().remove(bound);
+
 		}
 	};
 
