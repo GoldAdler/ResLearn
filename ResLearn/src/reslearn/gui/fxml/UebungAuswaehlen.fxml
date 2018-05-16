@@ -35,7 +35,7 @@
             <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
-      <Pane layoutX="125.0" layoutY="100.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
+      <Pane layoutX="125.0" layoutY="58.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
          <children>
             <BarChart layoutX="2.0" prefHeight="150.0" prefWidth="144.0">
               <xAxis>
@@ -70,7 +70,7 @@
             </GridPane>
          </children>
       </Pane>
-      <Pane layoutX="379.0" layoutY="100.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
+      <Pane layoutX="378.0" layoutY="58.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
          <children>
             <BarChart layoutX="2.0" prefHeight="150.0" prefWidth="144.0">
                <xAxis>
@@ -105,7 +105,7 @@
             </GridPane>
          </children>
       </Pane>
-      <Pane layoutX="635.0" layoutY="100.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
+      <Pane layoutX="635.0" layoutY="58.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
          <children>
             <BarChart layoutX="2.0" prefHeight="150.0" prefWidth="144.0">
                <xAxis>
@@ -147,6 +147,41 @@
       </ImageView>
       <Button fx:id="zurueck" layoutX="4.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="42.0" />
       <Button fx:id="home" layoutX="50.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="42.0" />
+      <Pane layoutX="125.0" layoutY="336.0" prefHeight="250.0" prefWidth="200.0" styleClass="karteUebung" stylesheets="@Stylesheet.css">
+         <children>
+            <BarChart layoutX="2.0" prefHeight="150.0" prefWidth="144.0">
+               <xAxis>
+                  <CategoryAxis side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis side="LEFT" />
+               </yAxis>
+            </BarChart>
+            <Label layoutY="142.0" prefHeight="58.0" prefWidth="200.0" text="Kapazitätstreue Optimierung 1" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+            </Label>
+            <GridPane layoutX="91.0" layoutY="211.0" prefHeight="28.0" prefWidth="96.0">
+               <children>
+                  <Circle fill="#36ae4e" radius="15.0" stroke="#259021" strokeType="INSIDE" strokeWidth="5.0" />
+                  <Circle fill="#5b615c" radius="15.0" stroke="#5b615c" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="1" />
+                  <Circle fill="#5b615c" radius="15.0" stroke="#5b615c" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="2" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </children>
+      </Pane>
    </children>
    <opaqueInsets>
       <Insets />
