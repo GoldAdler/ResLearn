@@ -17,6 +17,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -103,7 +105,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	Label labelErgebnis;
 
 	TextField dateiname;
-	String dateipfad;
+	String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
@@ -169,17 +171,13 @@ public class ControllerAufgabeErstellen extends Controller {
 		// Request focus on the username field by default.
 		Platform.runLater(() -> dateiname.requestFocus());
 
+		// TODO Eric beim Abrechen sollte keine Datei erstellt werden. Funktion nur auf
+		// dem SpeichernButton
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {
 			export(pakete);
 			weiter(event);
 		}
-		// dialog.getDialogPane().get
-
-		// export(pakete);
-		// result.ifPresent(hallo -> {
-		// weiter(event);
-		// });
 
 		// } else {
 		// labelErgebnis.setText(ergebnisValidierung);
@@ -520,7 +518,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	public void export(Arbeitspaket[] arbeitspakete) {
 		// TODO dateipfad gibt es ein Berechtigungsproblem
-		String outputFile = dateiname.getText() + ".csv";
+		String outputFile = dateipfad + dateiname.getText() + ".csv";
 		System.out.println(outputFile);
 		boolean alreadyExists = new File(outputFile).exists();
 		String spalten[] = new String[8];
@@ -541,6 +539,16 @@ public class ControllerAufgabeErstellen extends Controller {
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists) {
 				csvOutput.writeRecord(spalten);
+			} else {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setHeaderText("Warnung");
+				alert.setContentText("Der Dateiname existiert bereits. Datei überschreiben");
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK) {
+					System.out.println("Datei wird überschrieben");
+				} else {
+					alert.close();
+				}
 			}
 			// else assume that the file already has the correct header line
 
