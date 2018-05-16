@@ -3,6 +3,7 @@ package reslearn.gui.controller;
 import java.util.LinkedList;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -275,16 +277,38 @@ public class ControllerCanvas {
 
 			Pane pane = new Pane();
 			Label arbeitspaket = new Label("neues Arbeitspaket: A2");
-			Label farbe = new Label("Farbe: ");
+			Label farbe = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 			Button teilen = new Button("Teile Arbeitspaket");
+
+			Slider sliderX = new Slider();
+			sliderX.setMin(0);
+			sliderX.setMax(rect.getTeilpaket().getVorgangsdauer());
+			sliderX.setShowTickLabels(true);
+			sliderX.setMajorTickUnit(1);
+			sliderX.setMinorTickCount(0);
+			sliderX.setSnapToTicks(true);
+
+			Slider sliderY = new Slider();
+			sliderY.setMaxWidth(120);
+			sliderY.setRotate(270);
+			sliderY.setMin(0);
+			sliderY.setMax(rect.getTeilpaket().getMitarbeiteranzahl());
+			sliderY.setShowTickLabels(true);
+			sliderY.setMajorTickUnit(1);
+			sliderY.setMinorTickCount(0);
+			sliderY.setSnapToTicks(true);
 
 			LinkedList<ResFeld> resFeldListe = new LinkedList<ResFeld>();
 			arbeitspaket.setLayoutX(15);
 			arbeitspaket.setLayoutY(5);
 			farbe.setLayoutX(15);
 			farbe.setLayoutY(30);
+			sliderY.setLayoutX(180);
+			sliderY.setLayoutY(100);
+			sliderX.setLayoutX(60);
+			sliderX.setLayoutY(170);
 			teilen.setLayoutX(15);
-			teilen.setLayoutY(200);
+			teilen.setLayoutY(210);
 
 			for (int i = 0; i < rect.getTeilpaket().getArbeitspaket().getVorgangsdauer(); i++) {
 				for (int j = 0; j < rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl(); j++) {
@@ -308,8 +332,53 @@ public class ControllerCanvas {
 
 				}
 			}
+			sliderY.setOnMousePressed(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {
+					sliderX.setOpacity(0.4);
+					sliderY.setOpacity(1);
+				}
+			});
 
-			pane.getChildren().addAll(arbeitspaket, farbe, teilen);
+			sliderX.valueProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+					if (arg2.doubleValue() % arg2.intValue() == 0 || arg2.intValue()==0) {
+						
+						System.out.println("CHANGE" + arg1 + " " + arg2);
+						int counter = 0;
+						for (ResFeld feld : resFeldListe) {
+							pane.getChildren().remove(feld);
+						}
+						resFeldListe.clear();
+
+						
+						for (int i = 0; i < rect.getTeilpaket().getArbeitspaket().getVorgangsdauer(); i++) {
+							for (int j = 0; j < rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl(); j++) {
+								if (counter < arg2.intValue()*rect.getTeilpaket().getMitarbeiteranzahl()) {
+									System.out.println("FELD ANMALEN");
+									ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
+									dummy.setFill(Color.GREY);
+									resFeldListe.add(dummy);
+									pane.getChildren().add(dummy);
+									counter++;
+								}else {
+									break;
+								}
+							}
+						}
+					}
+				}
+			});
+
+			sliderX.setOnMousePressed(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {
+					sliderY.setOpacity(0.4);
+					sliderX.setOpacity(1);
+				}
+			});
+
+			pane.getChildren().addAll(arbeitspaket, farbe, teilen, sliderX, sliderY);
 			Scene scene = new Scene(pane, 300, 250);
 			Stage bearbeitungsmodus = new Stage();
 
