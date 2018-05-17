@@ -162,7 +162,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 							// #################### ANFANG BLOCK #######################
 							Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
 							Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
-							letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+							// letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+							letztesTeilpaket.trenneTeilpaketHorizontal(gesetzteResEinheiten);
 
 							ap.entferneTeilpaket(letztesTeilpaket);
 
@@ -202,7 +203,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					// #################### ANFANG BLOCK #######################
 					Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
 					Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
-					letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+					// letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten, 1);
+					letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten);
 					Collections.sort(tpListe, new ComperatorTeilpaket());
 					letztesTeilpaket = tpListe.get(tpListe.size() - 1);
 					zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
@@ -387,7 +389,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 				}
 
-				neuesTeilpaket.trenneTeilpaketVertikal(gesezteResEinheiten, 1);
+				// neuesTeilpaket.trenneTeilpaketVertikal(gesezteResEinheiten, 1);
+				neuesTeilpaket.trenneTeilpaketHorizontal(gesezteResEinheiten);
 
 				gesetzt = true;
 				break;
@@ -682,14 +685,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		ArrayList<ResEinheit> grenzeUeberschrittenListe = new ArrayList<ResEinheit>();
 		ResEinheit tempResEinheit;
 		Teilpaket neuesTeilpaket = null;
-		int vorgangsdauer = 0;
+		// int vorgangsdauer = 0;
 		for (int x = 0; x < ResCanvas.koorBreite; x++) {
 
 			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
 			// deswegen maxBegrenzung -2
 			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
 			if (tempResEinheit != null) {
-				vorgangsdauer++;
+				// vorgangsdauer++;
 				grenzeUeberschrittenListe.add(tempResEinheit);
 
 				for (int y = ResCanvas.koorHoehe - maxBegrenzung - 2; y >= 0; y--) {
@@ -703,7 +706,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		}
 		if (!grenzeUeberschrittenListe.isEmpty()) {
 			neuesTeilpaket = grenzeUeberschrittenListe.get(0).getTeilpaket()
-					.trenneTeilpaketVertikal(grenzeUeberschrittenListe, vorgangsdauer);
+					.trenneTeilpaketHorizontal(grenzeUeberschrittenListe);
+			// .trenneTeilpaketVertikal(grenzeUeberschrittenListe, vorgangsdauer);
+
 		}
 
 		return neuesTeilpaket;

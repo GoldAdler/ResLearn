@@ -128,7 +128,8 @@ public class ResCanvas {
 		Teilpaket tmp = teilpaket;
 		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
 				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
-			tmp = teilpaket.trenneTeilpaketHorizontal(resEinheitFuerNeuesTeilpaket);
+			// TODO: LUKAS SEI GEPRIESSEN NICHT ÄNDERN
+			tmp = teilpaket.trenneTeilpaketVertikal(resEinheitFuerNeuesTeilpaket);
 
 		}
 
@@ -322,11 +323,12 @@ public class ResCanvas {
 
 	public void aktuallisiereHistorie() {
 
-		this.neueHistorie();
-
-		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
-			Algorithmus.ausgeben(koordinatenSystem);
-		}
+		// this.neueHistorie();
+		//
+		// if (pruefeHistorienAenderung(this.historienArbeitspaketListe,
+		// this.arbeitspaketListe)) {
+		// Algorithmus.ausgeben(koordinatenSystem);
+		// }
 
 	}
 

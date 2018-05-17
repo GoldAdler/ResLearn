@@ -38,49 +38,117 @@ public class Teilpaket extends Paket {
 
 	}
 
+	private Teilpaket(Teilpaket teilpaket, ArrayList<ResEinheit> neueResEinheitListe) {
+		for (ResEinheit zuEntfernen : neueResEinheitListe) {
+			teilpaket.resEinheitListe.remove(zuEntfernen);
+		}
+		this.arbeitspaket = teilpaket.getArbeitspaket();
+		this.resEinheitListe = neueResEinheitListe;
+		for (ResEinheit resEinheit : resEinheitListe) {
+			resEinheit.setTeilpaket(this);
+		}
+		this.aufwand = neueResEinheitListe.size();
+
+		if (teilpaket.getResEinheitListe().isEmpty()) {
+			this.arbeitspaket.entferneTeilpaket(teilpaket);
+		}
+		this.arbeitspaket.getTeilpaketListe().add(this);
+
+	}
+
 	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		Teilpaket neuesTeilpaket = null;
 
 		if (!neueResEinheitListe.isEmpty()) {
-			// && resEinheitListe.size() != neueResEinheitListe.size()
-			// && !(resEinheitListe.containsAll(neueResEinheitListe)
 
-			for (ResEinheit zuEntfernen : neueResEinheitListe) {
-				this.resEinheitListe.remove(zuEntfernen);
+			neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
+
+			if (this.getArbeitspaket().getId().equals("D")) {
+				System.out.println("JA LECK");
 			}
 
-			if (!resEinheitListe.isEmpty()) {
-				this.aufwand = resEinheitListe.size();
-				this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
-			} else {
-				this.arbeitspaket.entferneTeilpaket(this);
-			}
+			neuesTeilpaket.setVorgangsdauer(this.getVorgangsdauer());
+			neuesTeilpaket.setMitarbeiteranzahl(neuesTeilpaket.getAufwand() / neuesTeilpaket.getVorgangsdauer());
 
-			neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
-			this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
+			this.setMitarbeiteranzahl(this.getMitarbeiteranzahl() - neuesTeilpaket.getMitarbeiteranzahl());
+
 		}
 
 		return neuesTeilpaket;
+
 	}
 
-	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe, int vorgangsdauer) {
+	// public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit>
+	// neueResEinheitListe) {
+	//
+	// Teilpaket neuesTeilpaket = null;
+	//
+	// if (!neueResEinheitListe.isEmpty()) {
+	// // && resEinheitListe.size() != neueResEinheitListe.size()
+	// // && !(resEinheitListe.containsAll(neueResEinheitListe)
+	//
+	// for (ResEinheit zuEntfernen : neueResEinheitListe) {
+	// this.resEinheitListe.remove(zuEntfernen);
+	// }
+	//
+	// if (!resEinheitListe.isEmpty()) {
+	// this.aufwand = resEinheitListe.size();
+	// //this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double)
+	// mitarbeiteranzahl));
+	// } else {
+	// this.arbeitspaket.entferneTeilpaket(this);
+	// }
+	//
+	// neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
+	// this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
+	// }
+	//
+	// return neuesTeilpaket;
+	// }
+	//
+	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		Teilpaket neuesTeilpaket = null;
 
 		if (!neueResEinheitListe.isEmpty()) {
 
-			neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
+			neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
 
-			neuesTeilpaket.vorgangsdauer = vorgangsdauer;
-			neuesTeilpaket.aufwand = neueResEinheitListe.size();
-			neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
+			neuesTeilpaket.setMitarbeiteranzahl(this.getMitarbeiteranzahl());
+			neuesTeilpaket.setVorgangsdauer(neuesTeilpaket.getAufwand() / neuesTeilpaket.getMitarbeiteranzahl());
+
+			if (this.getArbeitspaket().getId().equals("D")) {
+				System.out.println("JA LECK");
+			}
+
+			this.setVorgangsdauer(this.getVorgangsdauer() - neuesTeilpaket.getVorgangsdauer());
 
 		}
 
 		return neuesTeilpaket;
 
 	}
+
+	// public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit>
+	// neueResEinheitListe, int vorgangsdauer) {
+	//
+	// Teilpaket neuesTeilpaket = null;
+	//
+	// if (!neueResEinheitListe.isEmpty()) {
+	//
+	// neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
+	//
+	// neuesTeilpaket.vorgangsdauer = vorgangsdauer;
+	// neuesTeilpaket.aufwand = neueResEinheitListe.size();
+	// neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double)
+	// neuesTeilpaket.aufwand / (double) vorgangsdauer));
+	//
+	// }
+	//
+	// return neuesTeilpaket;
+	//
+	// }
 
 	/**
 	 * Zwei Teilpakete eines gemeinsamen Arbeitspaketes werden zu einem gemeinsamen

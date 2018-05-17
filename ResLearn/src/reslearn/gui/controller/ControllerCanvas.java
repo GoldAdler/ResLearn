@@ -198,7 +198,7 @@ public class ControllerCanvas {
 		public void handle(ActionEvent e) {
 
 			Pane pane = new Pane();
-			Label arbeitspaket = new Label("neues Arbeitspaket: A2");
+			Label arbeitspaket = new Label("neues Arbeitspaket: " + rect.getTeilpaket().getArbeitspaket().getId());
 			Label farbe = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 			Button teilen = new Button("Teile Arbeitspaket");
 
@@ -362,7 +362,9 @@ public class ControllerCanvas {
 							int vorgangsdauer = resFeldListe.size() / rect.getTeilpaket().getMitarbeiteranzahl();
 							System.out.println("Vorgangsdauer: " + vorgangsdauer);
 
-							rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe, vorgangsdauer);
+							// rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe,
+							// vorgangsdauer);
+							rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe);
 							System.out.println("vertikal");
 						} else {
 							rect.getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
