@@ -21,7 +21,6 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,20 +34,15 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public class ControllerCanvas {
 
-	double zeigerX, zeigerY;
-	double translateX, translateY;
-	double altePositionX, altePositionY;
-	double newTranslateX, newTranslateY;
-	private static int verschiebungX, verschiebungY;
-	private static double merkeX, merkeY;
-	Teilpaket teilpaketClicked;
-	ResFeld feld, rect;
-	ColorPicker colorPicker;
-	Rectangle bound;
+	private double zeigerX, zeigerY;
+	private double translateX, translateY;
+	private double newTranslateX, newTranslateY;
+	private Teilpaket teilpaketClicked;
+	private ResFeld feld, rect;
+	private ColorPicker colorPicker;
 	private ResCanvas resCanvas;
 	public static TableView<Pair<String, Object>> table = new TableView<>();
-	ObservableList<Pair<String, Object>> data;
-	public static int loeschMichInt = 1;
+	private ObservableList<Pair<String, Object>> data;
 
 	public ControllerCanvas(ResCanvas resCanvas) {
 		this.resCanvas = resCanvas;
@@ -65,7 +59,6 @@ public class ControllerCanvas {
 
 	// Event Handler Maus klicken
 	EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
-		@SuppressWarnings("unchecked")
 		@Override
 		public void handle(MouseEvent e) {
 
@@ -75,34 +68,10 @@ public class ControllerCanvas {
 			rect = (ResFeld) e.getSource();
 			teilpaketClicked = rect.getResEinheit().getTeilpaket();
 
-			// bound = rect.getTeilpaketBounds(teilpaketClicked);
-			// bound.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.2));
-			// View.pane.getChildren().add(bound);
-
 			translateX = rect.getTranslateX();
 			translateY = rect.getTranslateY();
 
-			altePositionX = rect.getBoundsInParent().getMinX();
-			altePositionY = rect.getBoundsInParent().getMinY();
-			System.out.println("PosaltX: " + altePositionX);
-			System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-					+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-
-			verschiebungX = 0;
-			verschiebungY = 0;
-
-			// Erstellen der Informationsleiste links
-			data = FXCollections.observableArrayList(
-					pair("Arbeitspaket", rect.getTeilpaket().getArbeitspaket().getId()), pair("Farbe", rect.getFill()),
-					pair("FAZ", rect.getTeilpaket().getArbeitspaket().getFaz()),
-					pair("FEZ", rect.getTeilpaket().getArbeitspaket().getFez()),
-					pair("SAZ", rect.getTeilpaket().getArbeitspaket().getSaz()),
-					pair("SEZ", rect.getTeilpaket().getArbeitspaket().getSez()),
-					pair("Vorgangsdauer", rect.getTeilpaket().getArbeitspaket().getVorgangsdauer()),
-					pair("Mitarbeiter", rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
-					pair("Aufwand", rect.getTeilpaket().getArbeitspaket().getAufwand()));
-
-			table.setItems(data);
+			befuelleTabelle();
 
 		}
 	};
@@ -112,110 +81,37 @@ public class ControllerCanvas {
 		@Override
 		public void handle(MouseEvent e) {
 
-			System.out.println("------------------------------------------------------");
-			System.out.println("------------------------------------------------------");
-			System.out.println("          Durchlauf: " + loeschMichInt + " ANFANG");
-			System.out.println();
-
 			// 1. nur ein ResFeld (A) verschieben
-			// 2. die anderen ResFeld müssen sich an dem ersten Resfeld orientieren
-			// des offset von a auf andere übetragen
-			// 3. Offset muss gemerkt werden ( falls etwas rückgängig gemacht werden muss)
+			// 2. die anderen ResFelder müssen sich an dem ersten Resfeld orientieren
+			// 3. offset von a auf andere übetragen
+			// 4. Offset muss gemerkt werden ( falls etwas rückgängig gemacht werden muss)
 
 			// Überprüfung ( logische verschieben abgschlossen, aber noch nicht in der Gui
 			// dargestellt)
 
-			// Überpüfung boundries
-			// füre jede resEinheit (for
-			// ist resG.getBoundsInParent() ist es außerhabl der Boundries
-			// Dann mit dem gemekrten offstet (3.) die operation wieder rückgängig
+			double neuePositionZeigerX = e.getSceneX();
+			double neuePositionZeigerY = e.getSceneY();
 
-			// übeprüfung kollision mit anderen Paketen
-
-			double neuePositionX = e.getSceneX();
-			double neuePositionY = e.getSceneY();
-
-			int differenzX = (int) ((neuePositionX - zeigerX) / 20); // gibt immer die Zahl zurück, um die das
-			// Klötzchen verschoben werden soll
-			int differenzY = (int) ((neuePositionY - zeigerY) / 20); // Bsp. 440.0 - 420.0 -> 20.0/20.0 = 1
-
-			// differenzX -= differenzX % 20;
-			// differenzY -= differenzY % 20;
+			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / 20); // neue Position Mauszeiger - alte
+			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / 20); // Position Mauszeiger
 
 			// Verschiebung auf der X-Achse bewirkt logisches Verschieben im
 			// Koordinatensystem
-
-			System.out.println("zeigerX: " + zeigerX);
-			System.out.println("zeigerY: " + zeigerY);
-			System.out.println("neuePositionX: " + neuePositionX);
-			System.out.println("neuePositionY: " + neuePositionY);
-			System.out.println("DifferenzX: " + differenzX);
-			System.out.println("DifferenzY: " + differenzY);
-			// System.out.println("VerschiebungX: " + verschiebungX);
-			// System.out.println("VerschiebungY: " + verschiebungY);
-
-			System.out.println();
-			System.out.println("Start While Schleife Durchlauf " + loeschMichInt);
 
 			while (differenzX != 0 || differenzY != 0) {
 
 				boolean verschiebbar = false;
 
 				if (differenzX > 0) {
-					// verschiebungX = differenzX;
 					differenzX--;
-					System.out.println("DifferenzX: " + (differenzX + 1));
-					System.out.println("Verschoben von");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
 					verschiebenX(verschiebbar, 1);
-					System.out.println(verschiebbar);
-					// System.out.println("" + differenzX +1 + " > " + verschiebungX);
-					System.out.println("Verschoben nach");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 				}
 				if (differenzX < 0) {
-					// verschiebungX = differenzX;
 					differenzX++;
-					System.out.println("DifferenzX: " + (differenzX - 1));
-					System.out.println("Verschoben von");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
 					verschiebenX(verschiebbar, -1);
-					System.out.println(verschiebbar);
-					// System.out.println("" + differenzX + " < " + verschiebungX);
-					System.out.println("Verschoben nach");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 				}
-				// if (differenzX == 0) {
-				// System.out.println("DifferenzX: " + 0);
-				// verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 0);
-				// System.out.println("i: " +
-				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				// }
-				//
-				// if (verschiebbar) {
-				// System.out.println("X if-Verschiebbar" + verschiebbar);
-				// // double offsetX = e.getSceneX() - zeigerX;
-				// // newTranslateX = translateX + offsetX;
-				// // newTranslateX -= newTranslateX % 20;
-				//
-				// if (differenzX + 1 > 0) {
-				// newTranslateX = translateX + 20;
-				// zeigerX += 20;
-				// } else if (differenzX - 1 < 0) {
-				// newTranslateX = translateX - 20;
-				// zeigerX -= 20;
-				// }
-				//
-				// bewegeX();
-				// translateX = rect.getTranslateX();
-				// }
 
 				// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
 				// Koordinatensystem
@@ -223,78 +119,23 @@ public class ControllerCanvas {
 				verschiebbar = false;
 
 				if (differenzY > 0) {
-					// verschiebungY = differenzY;
 					differenzY--;
-					System.out.println("DifferenzY: " + (differenzY + 1));
-					System.out.println("Verschoben von");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
 					verschiebenY(verschiebbar, 1);
-					System.out.println(verschiebbar);
-					// System.out.println("" + differenzY + " > " + verschiebungY);
-					System.out.println("Verschoben nach");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 				}
 				if (differenzY < 0) {
-					// verschiebungY = differenzY;
 					differenzY++;
-					System.out.println("DifferenzY: " + (differenzY + 1));
-					System.out.println("Verschoben von");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
 					verschiebenY(verschiebbar, -1);
-					System.out.println(verschiebbar);
-					// System.out.println("" + differenzY + " < " + verschiebungY);
-					System.out.println("Verschoben nach");
-					System.out.println("i: " + rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-							+ rect.getResEinheit().getPosition().getyKoordinate() + "\n");
 				}
-				// if (differenzY == 0) {
-				// System.out.println("DifferenzY: " + 0);
-				// verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 0);
-				// System.out.println("i: " +
-				// rect.getResEinheit().getPosition().getxKoordinate() + " j: "
-				// + rect.getResEinheit().getPosition().getyKoordinate() + "\n");
-				// }
-
-				// if (verschiebbar) {
-				// System.out.println("Y if-Verschiebbar" + verschiebbar);
-				// // double offsetY = e.getSceneY() - zeigerY;
-				// // newTranslateY = translateY + offsetY;
-				// // newTranslateY -= newTranslateY % 20;
-				// if (differenzY + 1 > 0) {
-				// newTranslateY = translateY - 20;
-				// zeigerY -= 20;
-				// } else if (differenzY - 1 < 0) {
-				// newTranslateY = translateY + 20;
-				// zeigerY += 20;
-				// }
-				// bewegeY();
-				// translateY = rect.getTranslateY();
-				// }
 			}
-
-			System.out.println("------------------------------------------------------");
-			System.out.println("------------------------------------------------------");
-			System.out.println("          Durchlauf: " + loeschMichInt++ + " ENDE");
-			System.out.println();
-
 		}
 	};
 
 	public void verschiebenX(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
-			System.out.println("X if-Verschiebbar" + verschiebbar);
-			// double offsetX = e.getSceneX() - zeigerX;
-			// newTranslateX = translateX + offsetX;
-			// newTranslateX -= newTranslateX % 20;
-
 			newTranslateX = translateX + 20 * vorzeichen;
 			zeigerX += 20 * vorzeichen;
-
 			bewegeX();
 			translateX = rect.getTranslateX();
 		}
@@ -302,29 +143,10 @@ public class ControllerCanvas {
 
 	public void verschiebenY(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
-			System.out.println("X if-Verschiebbar" + verschiebbar);
-			// double offsetX = e.getSceneX() - zeigerX;
-			// newTranslateX = translateX + offsetX;
-			// newTranslateX -= newTranslateX % 20;
-
 			newTranslateY = translateY + 20 * vorzeichen;
 			zeigerY += 20 * vorzeichen;
-
 			bewegeY();
 			translateY = rect.getTranslateY();
-		}
-	}
-
-	public void bewege() {
-		for (ResFeld[] resAr : Diagramm.res) {
-			for (ResFeld teilpaket : resAr) {
-				if (teilpaket != null) {
-					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
-						teilpaket.setTranslateX(newTranslateX);
-						teilpaket.setTranslateY(newTranslateY);
-					}
-				}
-			}
 		}
 	}
 
@@ -411,21 +233,20 @@ public class ControllerCanvas {
 				for (int j = 0; j < rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl(); j++) {
 					ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
 					dummy.setFill(rect.getFill());
-					// dummy.setStroke(Color.GRAY);
 					pane.getChildren().add(dummy);
 
-					dummy.setOnMouseClicked(new EventHandler<MouseEvent>() {
-						@Override
-						public void handle(MouseEvent e) {
-							dummy.setStroke(Color.GRAY);
-
-							for (int a = 0; a < rect.getTeilpaket().getAufwand(); a++) {
-								resFeldListe.add(dummy);
-
-							}
-
-						}
-					});
+					// dummy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					// @Override
+					// public void handle(MouseEvent e) {
+					// dummy.setStroke(Color.GRAY);
+					//
+					// for (int a = 0; a < rect.getTeilpaket().getAufwand(); a++) {
+					// resFeldListe.add(dummy);
+					//
+					// }
+					//
+					// }
+					// });
 
 				}
 			}
@@ -491,9 +312,24 @@ public class ControllerCanvas {
 		}
 	};
 
-	//////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
-	//////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
+	@SuppressWarnings("unchecked")
+	public void befuelleTabelle() {
+		// Erstellen der Informationsleiste links
+		data = FXCollections.observableArrayList(pair("Arbeitspaket", rect.getTeilpaket().getArbeitspaket().getId()),
+				pair("Farbe", rect.getFill()), pair("FAZ", rect.getTeilpaket().getArbeitspaket().getFaz()),
+				pair("FEZ", rect.getTeilpaket().getArbeitspaket().getFez()),
+				pair("SAZ", rect.getTeilpaket().getArbeitspaket().getSaz()),
+				pair("SEZ", rect.getTeilpaket().getArbeitspaket().getSez()),
+				pair("Vorgangsdauer", rect.getTeilpaket().getArbeitspaket().getVorgangsdauer()),
+				pair("Mitarbeiter", rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
+				pair("Aufwand", rect.getTeilpaket().getArbeitspaket().getAufwand()));
+
+		table.setItems(data);
+	}
 
 	@SuppressWarnings("unchecked")
 	public void erstelleTabelle() {
@@ -560,7 +396,7 @@ public class ControllerCanvas {
 					setGraphic(null);
 				} else if (item instanceof Color) {
 					colorPicker = new ColorPicker();
-					colorPicker.setStyle("-fx-color-label-visible: false ;");
+					colorPicker.setStyle("-fx-color-label-visible: false;");
 					colorPicker.setValue((Color) rect.getFill());
 					setGraphic(colorPicker);
 					wechsleFarbe();
@@ -573,9 +409,7 @@ public class ControllerCanvas {
 	}
 
 	public void wechsleFarbe() {
-
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
 				for (ResFeld[] resAr : Diagramm.res) {
