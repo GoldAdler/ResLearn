@@ -296,6 +296,7 @@ public class ControllerCanvas {
 			});
 
 			sliderY.setOnMousePressed(new EventHandler<MouseEvent>() {
+				@Override
 				public void handle(MouseEvent e) {
 					sliderX.setOpacity(0.4);
 					sliderY.setOpacity(1);
@@ -306,10 +307,10 @@ public class ControllerCanvas {
 			sliderX.valueProperty().addListener(new ChangeListener<Number>() {
 
 				@Override
-				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-					if (arg2.doubleValue() % arg2.intValue() == 0 || arg2.intValue() == 0) {
+				public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number neuerWert) {
+					if (neuerWert.doubleValue() % neuerWert.intValue() == 0 || neuerWert.intValue() == 0) {
 
-						System.out.println("CHANGE" + arg1 + " " + arg2);
+						System.out.println("CHANGE" + arg1 + " " + neuerWert);
 						int counter = 0;
 						for (ResFeld feld : resFeldListe) {
 							pane.getChildren().remove(feld);
@@ -318,12 +319,14 @@ public class ControllerCanvas {
 
 						for (int i = 0; i < rect.getTeilpaket().getVorgangsdauer(); i++) {
 							for (int j = 0; j < rect.getTeilpaket().getMitarbeiteranzahl(); j++) {
-								if (counter < arg2.intValue() * rect.getTeilpaket().getMitarbeiteranzahl()) {
+								if (counter < neuerWert.intValue() * rect.getTeilpaket().getMitarbeiteranzahl()) {
 									System.out.println("FELD ANMALEN");
 									ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
 									dummy.setStroke(Color.GREY);
 									dummy.setTeilpaket(rect.getTeilpaket());
-									dummy.setResEinheit(rect.getTeilpaket().getResEinheitListe().get(counter+j*rect.getTeilpaket().getVorgangsdauer()-(arg2.intValue()*j)));
+									dummy.setResEinheit(rect.getTeilpaket().getResEinheitListe()
+											.get((j * rect.getTeilpaket().getVorgangsdauer()) + i));
+									System.out.println();
 									resFeldListe.add(dummy);
 									pane.getChildren().add(dummy);
 									counter++;
@@ -335,8 +338,10 @@ public class ControllerCanvas {
 					}
 				}
 			});
-
+			// counter + j * rect.getTeilpaket().getVorgangsdauer() - (neuerWert.intValue()
+			// * j)
 			sliderX.setOnMousePressed(new EventHandler<MouseEvent>() {
+				@Override
 				public void handle(MouseEvent e) {
 					sliderY.setOpacity(0.4);
 					sliderX.setOpacity(1);
@@ -355,6 +360,8 @@ public class ControllerCanvas {
 					if (neueResEinheitListe.size() != 0) {
 						if (vertikal) {
 							int vorgangsdauer = resFeldListe.size() / rect.getTeilpaket().getMitarbeiteranzahl();
+							System.out.println("Vorgangsdauer: " + vorgangsdauer);
+
 							rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe, vorgangsdauer);
 							System.out.println("vertikal");
 						} else {
