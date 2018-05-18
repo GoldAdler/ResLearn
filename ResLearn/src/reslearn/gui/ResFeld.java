@@ -2,6 +2,7 @@ package reslearn.gui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
@@ -20,6 +21,7 @@ public class ResFeld extends Rectangle {
 	Rectangle bound;
 	private LinkedList<ResFeld> resFeldListe = new LinkedList<ResFeld>();
 	private static HashMap<Arbeitspaket, Color> arbeitspaketFarben = new HashMap<Arbeitspaket, Color>();
+	private static final Random random = new Random();
 
 	public ResFeld(double x, double y, double width, double height) {
 		super(x, y, width, height);
@@ -42,14 +44,39 @@ public class ResFeld extends Rectangle {
 			return arbeitspaketFarben.get(arbeitspaket);
 		}
 
-		Random rand = new Random();
-		double r = rand.nextDouble();
-		double g = rand.nextDouble();
-		double b = rand.nextDouble();
-		Color color = Color.color(r, g, b, 0.7);
-		color = color.saturate(); // Mehr Sättigung
+		double hue = random.nextInt(18) * 20.0;
+
+		System.out.println("Farbe zum anlegen in echt: " + hue);
+
+		double saturation = 0.7d + 0.3d * Math.round(Math.random());// 1.0 for brilliant, 0.0 for dull
+		hue = pruefeFarbeBereitsBenutzt(hue);
+		double luminance = 1.0d; // 1.0 for brighter, 0.0 for black
+		Color color = Color.hsb(hue, saturation, luminance, 0.7);
+		// color.get
+		// color.deriveColor(1, 1, 1, 0.5);
+		System.out.println("Saturation: " + saturation);
 		arbeitspaketFarben.put(arbeitspaket, color);
 		return color;
+	}
+
+	private static double pruefeFarbeBereitsBenutzt(double hue) {
+		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketFarben.entrySet()) {
+			double entryHue = entry.getValue().getHue();
+			System.out.println("EntryHue:" + entryHue);
+			if (entryHue % 1 > 0.0001)
+				entryHue = Math.floor(entryHue) + 1;
+			else
+				entryHue = Math.floor(entryHue);
+			System.out.println("EntryHue:" + entryHue + ", Hue: " + hue);
+			if (entryHue == hue) {
+				System.out.println("Treffer gefunden!");
+				hue = random.nextInt(18) * 20.0;
+				System.out.println("Neue Farbe: " + hue);
+				hue = pruefeFarbeBereitsBenutzt(hue);
+
+			}
+		}
+		return hue;
 	}
 
 	public Rectangle getTeilpaketBounds(Teilpaket teilpaketClicked) {
