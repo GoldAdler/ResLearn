@@ -323,19 +323,18 @@ public class ResCanvas {
 
 	public void aktuallisiereHistorie() {
 
-		// this.neueHistorie();
-		//
-		// if (pruefeHistorienAenderung(this.historienArbeitspaketListe,
-		// this.arbeitspaketListe)) {
-		// Algorithmus.ausgeben(koordinatenSystem);
-		// }
+		this.neueHistorie();
+
+		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
+			Algorithmus.ausgeben(koordinatenSystem);
+		}
 
 	}
 
 	private boolean pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
 			ArrayList<Arbeitspaket> aktuelleArbeitspaketListe) {
 
-		for (int i = 0; i <= historienArbeitspaketListe.size(); i++) {
+		for (int i = 0; i < historienArbeitspaketListe.size(); i++) {
 			Arbeitspaket apHistorie = historienArbeitspaketListe.get(i);
 			Arbeitspaket apAktuell = aktuelleArbeitspaketListe.get(i);
 
@@ -346,12 +345,12 @@ public class ResCanvas {
 				return false;
 			}
 
-			for (int a = 0; a <= tpListeHistorie.size(); a++) {
+			for (int a = 0; a < tpListeHistorie.size(); a++) {
 
 				ArrayList<ResEinheit> resListeHistorie = tpListeHistorie.get(a).getResEinheitListe();
 				ArrayList<ResEinheit> resListeAktuell = tpListeAktuell.get(a).getResEinheitListe();
 
-				for (int b = 0; b <= resListeHistorie.size(); b++) {
+				for (int b = 0; b < resListeHistorie.size(); b++) {
 					int xPosHistorie = resListeHistorie.get(b).getPosition().getxKoordinate();
 					int yPosHistorie = resListeHistorie.get(b).getPosition().getyKoordinate();
 
@@ -384,7 +383,7 @@ public class ResCanvas {
 		for (Arbeitspaket ap : neueArbeitspaketListe) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				for (ResEinheit re : tp.getResEinheitListe()) {
-					koordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition().getyKoordinate()] = re;
+					neuesKoordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition().getxKoordinate()] = re;
 				}
 			}
 		}
@@ -392,6 +391,10 @@ public class ResCanvas {
 		this.historieKoordinatenSystem.add(neuesKoordinatenSystem);
 		this.historienArbeitspaketListe = neueArbeitspaketListe;
 
+	}
+
+	public ArrayList<ResEinheit[][]> getHistorieKoordinatenSystem() {
+		return historieKoordinatenSystem;
 	}
 
 }

@@ -3,6 +3,7 @@ package reslearn.main;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
+import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class Main {
@@ -54,6 +55,13 @@ public class Main {
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
+
+		System.out.println("----------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
+		System.out.println("--------------Historien-Ausgabe---------------------------");
+		for (ResEinheit[][] koor : resCanvas.getHistorieKoordinatenSystem()) {
+			Algorithmus.ausgeben(koor);
+		}
 
 	}
 

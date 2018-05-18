@@ -26,6 +26,13 @@ public class Teilpaket extends Paket {
 		}
 	}
 
+	/**
+	 * Dieser Konstruktor wurde ausschließlich zur Verwendung in den Methoden
+	 * {@link #copy()} und {@link #trenneVariabel(ArrayList)} angelegt.
+	 *
+	 * @param arbeitspaket
+	 * @param resEinheitListe
+	 */
 	private Teilpaket(Arbeitspaket arbeitspaket, ArrayList<ResEinheit> resEinheitListe) {
 		this.arbeitspaket = arbeitspaket;
 		for (ResEinheit resEinheit : resEinheitListe) {
@@ -35,7 +42,6 @@ public class Teilpaket extends Paket {
 		this.mitarbeiteranzahl = arbeitspaket.getMitarbeiteranzahl();
 		this.aufwand = resEinheitListe.size();
 		this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
-
 	}
 
 	/**
@@ -102,6 +108,32 @@ public class Teilpaket extends Paket {
 
 		return neuesTeilpaket;
 
+	}
+
+	public void trenneVariabel(ArrayList<ResEinheit> gesezteResEinheiten) {
+		if (!gesezteResEinheiten.isEmpty()) {
+			Teilpaket neuesTeilpaket = new Teilpaket(this.arbeitspaket, gesezteResEinheiten);
+			neuesTeilpaket.getArbeitspaket().teilpaketHinzufuegen(neuesTeilpaket);
+
+			for (ResEinheit zuEntfernen : gesezteResEinheiten) {
+				this.resEinheitListe.remove(zuEntfernen);
+			}
+
+			neuesTeilpaket.vorgangsdauer = 1;
+			neuesTeilpaket.aufwand = gesezteResEinheiten.size();
+			neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double) aufwand / (double) vorgangsdauer));
+
+			if (!resEinheitListe.isEmpty()) {
+				this.aufwand = resEinheitListe.size();
+				this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double) mitarbeiteranzahl));
+			} else {
+				this.arbeitspaket.entferneTeilpaket(this);
+			}
+
+			// neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
+			// this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
+
+		}
 	}
 
 	/**

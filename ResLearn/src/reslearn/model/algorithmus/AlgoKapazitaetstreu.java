@@ -18,6 +18,7 @@ import reslearn.model.utils.Vektor2i;
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
+	private boolean vorgangsdauerVeraenderbar = true;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
 	private static int maxBegrenzung = 5;
@@ -99,7 +100,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			// ausgeben(resCanvas.getKoordinatenSystem());
 			resCanvas.aktuallisiereHistorie();
-			zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
+			// zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
 
 		}
 
@@ -231,24 +232,52 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param verschiebenRechts
 	 */
 	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschiebenRechts) {
-		resCanvas.entferneArbeitspaket(ap);
-		resCanvas.herunterfallenAlleTeilpakete();
-		ap.neuSetzen(verschiebenRechts, resCanvas);
+		boolean durchfuehren = this.vorgangsdauerVeraenderbar;
 
-		ausgeben(resCanvas.getKoordinatenSystem());
+		// TODO TEAM-Logik hier weitermachen
 
-		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
+		if (!durchfuehren) {
+			// TODO berechnen ob verschiebbar
+			// wenn verschiebbar, dann durchführen = true;
+			// #verschiebenLinks und Rechts werden dann auch nicht mehr aufgerufen
+			for (int x = ap.getFaz() - 1; x <= ap.getSez() - 1; x++) {
+				int counter = 0;
+				for (int y = ResCanvas.koorHoehe - 1; y > (ResCanvas.koorHoehe - maxBegrenzung - 1); y--) {
 
-		if (neuesTeilpaket != null) {
+					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+					if (koordinatenSystem[y][x] != null) {
+						counter++;
+					} else {
+						if (counter + ap.getMitarbeiteranzahl() <= maxBegrenzung) {
 
-			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+						}
+					}
 
-			ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
-			ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+				}
 
-			verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+			}
+		}
 
-			verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+		if (durchfuehren) {
+			resCanvas.entferneArbeitspaket(ap);
+			resCanvas.herunterfallenAlleTeilpakete();
+			ap.neuSetzen(verschiebenRechts, resCanvas);
+
+			ausgeben(resCanvas.getKoordinatenSystem());
+
+			Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
+
+			if (neuesTeilpaket != null) {
+
+				int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+
+				ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+				ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+				verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+
+				verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
+			}
 		}
 	}
 
@@ -279,6 +308,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					break;
 				}
 
+				Collections.sort(ap.getTeilpaketListe(), new ComperatorTeilpaket());
+
 				gesetzt = setzeResEinheitenNeu(resCanvas, ap, neuesTeilpaket, grenze, gesezteResEinheiten,
 						zuSetzendeResEinheiten, koordinatenSystem, x, gesetzt);
 
@@ -308,9 +339,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			Collections.sort(ap.getTeilpaketListe(), new ComperatorTeilpaket());
 			Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
 
-			// int xPosRechts = zuSetzendeResEinheiten.get(neuesTeilpaket.getVorgangsdauer()
-			// - 1).getPosition()
-			// .getxKoordinate();
 			Teilpaket tp = ap.getTeilpaketListe().get(ap.getTeilpaketListe().size() - 1);
 			int xPosRechts = tp.getResEinheitListe().get(tp.getVorgangsdauer() - 1).getPosition().getxKoordinate();
 
@@ -369,6 +397,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			} else if (koordinatenSystem[y][x] == null) {
 
+				Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iX());
+
 				for (int i = y; i > grenze; i--) {
 					if (gesezteResEinheiten.size() < zuSetzendeResEinheiten.size()
 							&& gleicheResEinheiten < ap.getMitarbeiteranzahl()) {
@@ -387,8 +417,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 				}
 
-				// neuesTeilpaket.trenneTeilpaketVertikal(gesezteResEinheiten, 1);
-				neuesTeilpaket.trenneTeilpaketHorizontal(gesezteResEinheiten);
+				Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
+
+				neuesTeilpaket.trenneVariabel(gesezteResEinheiten);
 
 				gesetzt = true;
 				break;

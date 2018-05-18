@@ -225,6 +225,8 @@ public class Arbeitspaket extends Paket {
 			neueTeilpaketListe.add(tp.copy());
 		}
 
+		copyArbeitsPaket.setTeilpaketListe(neueTeilpaketListe);
+
 		return copyArbeitsPaket;
 
 	}
