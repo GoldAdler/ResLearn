@@ -38,6 +38,14 @@ public class Teilpaket extends Paket {
 
 	}
 
+	/**
+	 * Dieser Konstruktor wurde ausschließlich zur Verwendung in den Methoden
+	 * {@link #trenneTeilpaketHorizontal(ArrayList)} und
+	 * {@link #trenneTeilpaketVertikal(ArrayList)} angelegt.
+	 *
+	 * @param teilpaket
+	 * @param neueResEinheitListe
+	 */
 	private Teilpaket(Teilpaket teilpaket, ArrayList<ResEinheit> neueResEinheitListe) {
 		for (ResEinheit zuEntfernen : neueResEinheitListe) {
 			teilpaket.resEinheitListe.remove(zuEntfernen);
@@ -48,12 +56,14 @@ public class Teilpaket extends Paket {
 			resEinheit.setTeilpaket(this);
 		}
 		this.aufwand = neueResEinheitListe.size();
-
+		teilpaket.setAufwand(teilpaket.getResEinheitListe().size());
 		if (teilpaket.getResEinheitListe().isEmpty()) {
 			this.arbeitspaket.entferneTeilpaket(teilpaket);
 		}
 		this.arbeitspaket.getTeilpaketListe().add(this);
 
+		Collections.sort(this.resEinheitListe, new ComperatorVektor2iY());
+		Collections.sort(teilpaket.getResEinheitListe(), new ComperatorVektor2iY());
 	}
 
 	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
@@ -63,10 +73,6 @@ public class Teilpaket extends Paket {
 		if (!neueResEinheitListe.isEmpty()) {
 
 			neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
-
-			if (this.getArbeitspaket().getId().equals("D")) {
-				System.out.println("JA LECK");
-			}
 
 			neuesTeilpaket.setVorgangsdauer(this.getVorgangsdauer());
 			neuesTeilpaket.setMitarbeiteranzahl(neuesTeilpaket.getAufwand() / neuesTeilpaket.getVorgangsdauer());
@@ -79,34 +85,6 @@ public class Teilpaket extends Paket {
 
 	}
 
-	// public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit>
-	// neueResEinheitListe) {
-	//
-	// Teilpaket neuesTeilpaket = null;
-	//
-	// if (!neueResEinheitListe.isEmpty()) {
-	// // && resEinheitListe.size() != neueResEinheitListe.size()
-	// // && !(resEinheitListe.containsAll(neueResEinheitListe)
-	//
-	// for (ResEinheit zuEntfernen : neueResEinheitListe) {
-	// this.resEinheitListe.remove(zuEntfernen);
-	// }
-	//
-	// if (!resEinheitListe.isEmpty()) {
-	// this.aufwand = resEinheitListe.size();
-	// //this.vorgangsdauer = (int) Math.ceil(((double) aufwand / (double)
-	// mitarbeiteranzahl));
-	// } else {
-	// this.arbeitspaket.entferneTeilpaket(this);
-	// }
-	//
-	// neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
-	// this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
-	// }
-	//
-	// return neuesTeilpaket;
-	// }
-	//
 	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		Teilpaket neuesTeilpaket = null;
@@ -118,10 +96,6 @@ public class Teilpaket extends Paket {
 			neuesTeilpaket.setMitarbeiteranzahl(this.getMitarbeiteranzahl());
 			neuesTeilpaket.setVorgangsdauer(neuesTeilpaket.getAufwand() / neuesTeilpaket.getMitarbeiteranzahl());
 
-			if (this.getArbeitspaket().getId().equals("D")) {
-				System.out.println("JA LECK");
-			}
-
 			this.setVorgangsdauer(this.getVorgangsdauer() - neuesTeilpaket.getVorgangsdauer());
 
 		}
@@ -129,26 +103,6 @@ public class Teilpaket extends Paket {
 		return neuesTeilpaket;
 
 	}
-
-	// public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit>
-	// neueResEinheitListe, int vorgangsdauer) {
-	//
-	// Teilpaket neuesTeilpaket = null;
-	//
-	// if (!neueResEinheitListe.isEmpty()) {
-	//
-	// neuesTeilpaket = trenneTeilpaketHorizontal(neueResEinheitListe);
-	//
-	// neuesTeilpaket.vorgangsdauer = vorgangsdauer;
-	// neuesTeilpaket.aufwand = neueResEinheitListe.size();
-	// neuesTeilpaket.mitarbeiteranzahl = (int) Math.ceil(((double)
-	// neuesTeilpaket.aufwand / (double) vorgangsdauer));
-	//
-	// }
-	//
-	// return neuesTeilpaket;
-	//
-	// }
 
 	/**
 	 * Zwei Teilpakete eines gemeinsamen Arbeitspaketes werden zu einem gemeinsamen
@@ -248,23 +202,6 @@ public class Teilpaket extends Paket {
 		return false;
 
 	}
-
-	// private void bewegeRechts(ResCanvas resCanvas, int yMove, int xMove) {
-	// ListIterator<ResEinheit> li;
-	// li = resEinheitListe.listIterator();
-	// while (li.hasNext()) {
-	// li.next().bewegen(resCanvas, yMove, xMove);
-	// }
-	// }
-	//
-	// private void bewegeLinks(ResCanvas resCanvas, int yMove, int xMove) {
-	// ListIterator<ResEinheit> li;
-	// li = resEinheitListe.listIterator(resEinheitListe.size());
-	// // Iterate in reverse.
-	// while (li.hasPrevious()) {
-	// li.previous().bewegen(resCanvas, yMove, xMove);
-	// }
-	// }
 
 	/**
 	 * Überprüfe die Position jeder Reseinheit eines Teilpakets, ob diese die
