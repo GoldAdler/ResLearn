@@ -13,8 +13,8 @@ import reslearn.model.paket.Teilpaket;
 
 public class ResFeld extends Rectangle {
 
-	public static int breite = 20;
-	public static int laenge = 20;
+	public static int breite = DisplayCanvas.resFeldBreite;
+	public static int laenge = DisplayCanvas.resFeldLaenge;
 	private ResEinheit resEinheit;
 	ResFeld resFeld;
 	Teilpaket teilpaket;
@@ -29,7 +29,7 @@ public class ResFeld extends Rectangle {
 
 	public ResFeld setzeFeld(int i, int j, ResEinheit resEinheit) {
 		this.resEinheit = resEinheit;
-		resFeld = new ResFeld(i * 20, j * 20, breite, laenge);
+		resFeld = new ResFeld(i * breite, j * laenge, breite, laenge);
 		resFeld.setFill(setzeFarbe(resEinheit));
 		resFeld.setResEinheit(resEinheit);
 		resFeld.setTeilpaket(resEinheit.getTeilpaket());
@@ -80,8 +80,8 @@ public class ResFeld extends Rectangle {
 
 							bound = new Rectangle(resFeldListe.getFirst().getBoundsInParent().getMinX(),
 									resFeldListe.getFirst().getBoundsInParent().getMinY(),
-									Diagramm.res[i][j].getTeilpaket().getVorgangsdauer() * 20,
-									Diagramm.res[i][j].getTeilpaket().getMitarbeiteranzahl() * 20);
+									Diagramm.res[i][j].getTeilpaket().getVorgangsdauer() * breite,
+									Diagramm.res[i][j].getTeilpaket().getMitarbeiteranzahl() * laenge);
 						}
 					}
 				}

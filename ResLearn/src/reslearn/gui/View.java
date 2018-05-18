@@ -33,9 +33,9 @@ public class View extends Application {
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
 
 		// Erstelle Canvas-Zeichenfläche & Gruppe
-		Canvas canvas = new Canvas(900, 600);
-		canvas.setLayoutX(230);
-		canvas.setLayoutY(80);
+		Canvas canvas = new Canvas(DisplayCanvas.canvasBreite, DisplayCanvas.canvasLaenge);
+		canvas.setLayoutX(DisplayCanvas.canvasStartpunktX);
+		canvas.setLayoutY(DisplayCanvas.canvasStartpunktY);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Group group = new Group();
 
@@ -46,10 +46,10 @@ public class View extends Application {
 		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
 		// der Unterszene hinzu
 		pane = new Pane();
-		pane.setPrefWidth(860);
-		pane.setPrefHeight(560);
-		pane.setLayoutX(255);
-		pane.setLayoutY(95);
+		pane.setPrefWidth(DisplayCanvas.paneBreite);
+		pane.setPrefHeight(DisplayCanvas.paneLaenge);
+		pane.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX);
+		pane.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.resFeldLaenge);
 
 		group.getChildren().addAll(canvas, pane, ControllerCanvas.table);
 
@@ -76,6 +76,7 @@ public class View extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
+
 	}
 
 	private static void erstelleTestDaten(ResCanvas resCanvas) {
