@@ -55,11 +55,10 @@ public class ControllerTutorialFragen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -68,20 +67,17 @@ public class ControllerTutorialFragen extends Controller {
 			TutorialVideo tut = new TutorialVideo();
 			try {
 				tut.start(TutorialVideo.classStage);
+				((Node) (event.getSource())).getScene().getWindow().hide();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else {
 			frage(--counter);
-			System.out.println("ZurueckButton Gedrücht" + counter);
 		}
 	}
 
 	@FXML
 	public void weiter(ActionEvent event) {
-		System.out.println("Button gedrückt" + counter);
 		if (counter < 4) {
 			if (counter == 0) {
 				antwort(counter);
@@ -118,11 +114,10 @@ public class ControllerTutorialFragen extends Controller {
 				stage.setMaximized(true);
 				stage.setScene(newScene);
 				stage.show();
+				((Node) (event.getSource())).getScene().getWindow().hide();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			((Node) (event.getSource())).getScene().getWindow().hide();
 		}
 	}
 
