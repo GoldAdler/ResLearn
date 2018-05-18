@@ -45,16 +45,10 @@ public class ResFeld extends Rectangle {
 		}
 
 		double hue = random.nextInt(18) * 20.0;
-
-		System.out.println("Farbe zum anlegen in echt: " + hue);
-
 		double saturation = 0.7d + 0.3d * Math.round(Math.random());// 1.0 for brilliant, 0.0 for dull
 		hue = pruefeFarbeBereitsBenutzt(hue);
 		double luminance = 1.0d; // 1.0 for brighter, 0.0 for black
 		Color color = Color.hsb(hue, saturation, luminance, 0.7);
-		// color.get
-		// color.deriveColor(1, 1, 1, 0.5);
-		System.out.println("Saturation: " + saturation);
 		arbeitspaketFarben.put(arbeitspaket, color);
 		return color;
 	}
@@ -62,18 +56,14 @@ public class ResFeld extends Rectangle {
 	private static double pruefeFarbeBereitsBenutzt(double hue) {
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketFarben.entrySet()) {
 			double entryHue = entry.getValue().getHue();
-			System.out.println("EntryHue:" + entryHue);
-			if (entryHue % 1 > 0.0001)
+			if (entryHue % 1 > 0.0001) {
 				entryHue = Math.floor(entryHue) + 1;
-			else
+			} else {
 				entryHue = Math.floor(entryHue);
-			System.out.println("EntryHue:" + entryHue + ", Hue: " + hue);
+			}
 			if (entryHue == hue) {
-				System.out.println("Treffer gefunden!");
 				hue = random.nextInt(18) * 20.0;
-				System.out.println("Neue Farbe: " + hue);
 				hue = pruefeFarbeBereitsBenutzt(hue);
-
 			}
 		}
 		return hue;
