@@ -1,9 +1,12 @@
 package reslearn.gui;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 
@@ -16,6 +19,7 @@ public class ResFeld extends Rectangle {
 	Teilpaket teilpaket;
 	Rectangle bound;
 	private LinkedList<ResFeld> resFeldListe = new LinkedList<ResFeld>();
+	private static HashMap<Arbeitspaket, Color> arbeitspaketFarben = new HashMap<Arbeitspaket, Color>();
 
 	public ResFeld(double x, double y, double width, double height) {
 		super(x, y, width, height);
@@ -31,22 +35,21 @@ public class ResFeld extends Rectangle {
 	}
 
 	public static Color setzeFarbe(ResEinheit resEinheit) {
-		switch (resEinheit.getTeilpaket().getArbeitspaket().getId()) {
-		case "A":
-			return Color.FIREBRICK.deriveColor(1, 1, 1, 0.7);
-		case "B":
-			return Color.GREEN.deriveColor(1, 1, 1, 0.7);
-		case "C":
-			return Color.ROYALBLUE.deriveColor(1, 1, 1, 0.7);
-		case "D":
-			return Color.GOLD.deriveColor(1, 1, 1, 0.7);
-		case "E":
-			return Color.GOLDENROD.deriveColor(1, 1, 1, 0.7);
-		case "F":
-			return Color.CORAL.deriveColor(1, 1, 1, 0.7);
-		default:
-			return Color.WHITE;
+		Arbeitspaket arbeitspaket = resEinheit.getTeilpaket().getArbeitspaket();
+
+		// Arbeitspaket hat bereits eine zugewiesene Farbe
+		if (arbeitspaketFarben.containsKey(arbeitspaket)) {
+			return arbeitspaketFarben.get(arbeitspaket);
 		}
+
+		Random rand = new Random();
+		double r = rand.nextDouble();
+		double g = rand.nextDouble();
+		double b = rand.nextDouble();
+		Color color = Color.color(r, g, b, 0.7);
+		color = color.saturate(); // Mehr Sättigung
+		arbeitspaketFarben.put(arbeitspaket, color);
+		return color;
 	}
 
 	public Rectangle getTeilpaketBounds(Teilpaket teilpaketClicked) {
