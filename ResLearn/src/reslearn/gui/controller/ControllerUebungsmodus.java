@@ -30,7 +30,6 @@ public class ControllerUebungsmodus extends Controller {
 		alert.setContentText("Wirklich zum Hauptmenü zurückkehren? Alle Änderungen gehen verloren");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
-			System.out.println("Ok Button gedrückt");
 			Parent root;
 			try {
 				root = FXMLLoader.load(getClass().getResource(hauptmenue()));
@@ -57,7 +56,6 @@ public class ControllerUebungsmodus extends Controller {
 		alert.setContentText("Wirklich zum vorherigen Fenster zurückkehren");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
-			System.out.println("Ok Button gedrückt");
 			Parent root;
 			try {
 				root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
@@ -67,84 +65,13 @@ public class ControllerUebungsmodus extends Controller {
 				stage.setMaximized(true);
 				stage.setScene(newScene);
 				stage.show();
+				((Node) (event.getSource())).getScene().getWindow().hide();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else {
 			alert.close();
 		}
 	}
-	// @FXML
-	// public void zurueck() throws Exception {
-	// zurueck.addEventFilter(MouseEvent.MOUSE_CLICKED, new
-	// EventHandler<MouseEvent>() {
-	// Scene newScene;
-	//
-	// @Override
-	// public void handle(MouseEvent event) {
-	// Alert alert = new Alert(AlertType.CONFIRMATION);
-	// alert.setHeaderText("Warnung");
-	// alert.setContentText("Wirklich zum vorherigen Fenster zurückkehren");
-	// Optional<ButtonType> result = alert.showAndWait();
-	// if (result.get() == ButtonType.OK) {
-	// System.out.println("Ok Button gedrückt");
-	// Parent root;
-	// try {
-	// root =
-	// FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-	// newScene = new Scene(root);
-	// Stage stage = new Stage();
-	// stage.setTitle("ResLearn");
-	// stage.setMaximized(true);
-	// stage.setScene(newScene);
-	// stage.show();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } else {
-	// alert.close();
-	// }
-	//
-	// }
-	// });
-	// }
-	//
-	// @FXML
-	// public void home() throws Exception {
-	// home.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
-	// {
-	// Scene newScene;
-	//
-	// @Override
-	// public void handle(MouseEvent event) {
-	// Alert alert = new Alert(AlertType.CONFIRMATION);
-	// alert.setHeaderText("Warnung");
-	// alert.setContentText("Wirklich zum Hauptmenü zurückkehren? Alle Änderungen
-	// gehen verloren");
-	// Optional<ButtonType> result = alert.showAndWait();
-	// if (result.get() == ButtonType.OK) {
-	// System.out.println("Ok Button gedrückt");
-	// Parent root;
-	// try {
-	// root = FXMLLoader.load(getClass().getResource(hauptmenue()));
-	// newScene = new Scene(root);
-	// Stage stage = new Stage();
-	// stage.setTitle("ResLearn");
-	// stage.setMaximized(true);
-	// stage.setScene(newScene);
-	// stage.show();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } else {
-	// alert.close();
-	// }
-	//
-	// }
-	// });
-	// }
 
 }

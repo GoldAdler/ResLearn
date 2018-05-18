@@ -43,11 +43,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -62,11 +61,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -76,11 +74,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 1;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -90,11 +87,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 2;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -104,11 +100,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 3;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -118,11 +113,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 4;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -132,11 +126,10 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 5;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -146,10 +139,9 @@ public class ControllerUebungAuswaehlen extends Controller {
 			AufgabenNummer = 6;
 			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
 			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 }

@@ -7,12 +7,6 @@ import reslearn.model.paket.ResEinheit;
 
 public class Diagramm {
 
-	static int abstandX = 20;
-	static int abstandY = 20;
-	static int spaltX = 5;
-	static int spaltY = 5;
-	static int x = abstandX + spaltX;
-	static int y = +abstandY - spaltY;
 	public static int zeile = 430;
 	public static int spalte = 280;
 	ResFeld[][] feld;
@@ -30,31 +24,37 @@ public class Diagramm {
 
 		gc.setLineWidth(4);
 		gc.setStroke(Color.rgb(205, 133, 63));
-		gc.strokeLine(abstandX, canvas.getHeight() - abstandY, abstandX, abstandY - spaltY);
-		gc.strokeLine(abstandX, canvas.getHeight() - abstandY, canvas.getWidth() - abstandX + spaltX,
-				canvas.getHeight() - abstandY);
+		gc.strokeLine(DisplayCanvas.resFeldBreite, canvas.getHeight() - DisplayCanvas.resFeldLaenge,
+				DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY);
+		gc.strokeLine(DisplayCanvas.resFeldBreite, canvas.getHeight() - DisplayCanvas.resFeldLaenge,
+				canvas.getWidth() - DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX,
+				canvas.getHeight() - DisplayCanvas.resFeldLaenge);
 		gc.bezierCurveTo(20, 30, 40, 50, 60, 70);
 		// Koordinatenbeschriftung
 		gc.setLineWidth(1);
 		gc.setStroke(Color.BLACK);
-		for (double i = abstandX + spaltX; i < canvas.getWidth(); i += 100) {
-			if (i != abstandX + spaltX) {
-				gc.strokeLine(i, canvas.getHeight() - abstandX / 2, i, canvas.getHeight() - abstandY - spaltY);
+		for (double i = DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX; i < canvas.getWidth(); i += 100) {
+			if (i != DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX) {
+				gc.strokeLine(i, canvas.getHeight() - DisplayCanvas.resFeldBreite / 2, i,
+						canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY);
 				counterYAchse += 5;
-				gc.strokeText(String.valueOf(counterYAchse), i - spaltX, canvas.getHeight());
+				gc.strokeText(String.valueOf(counterYAchse), i - DisplayCanvas.spaltX, canvas.getHeight());
 			}
 		}
-		for (double i = canvas.getHeight() - abstandY - spaltY; i > abstandY + spaltY; i -= 100) {
-			if (i != canvas.getHeight() - abstandY - spaltY) {
-				gc.strokeLine(abstandX - abstandX / 2, i, abstandX + spaltX, i);
+		for (double i = canvas.getHeight() - DisplayCanvas.resFeldLaenge
+				- DisplayCanvas.spaltY; i > DisplayCanvas.resFeldLaenge + DisplayCanvas.spaltY; i -= 100) {
+			if (i != canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY) {
+				gc.strokeLine(DisplayCanvas.resFeldBreite - DisplayCanvas.resFeldBreite / 2, i,
+						DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX, i);
 				counterXAchse += 5;
-				gc.strokeText(String.valueOf(counterXAchse), 0, i + spaltY);
+				gc.strokeText(String.valueOf(counterXAchse), 0, i + DisplayCanvas.spaltY);
 			}
 		}
 
 		// Achsenbeschriftung
-		gc.strokeText("Tage", canvas.getWidth() - abstandX - spaltX * 2, canvas.getHeight() - spaltY);
-		gc.strokeText("Personen", 2, spaltY * 2 + 1);
+		gc.strokeText("Tage", canvas.getWidth() - DisplayCanvas.resFeldBreite - DisplayCanvas.spaltX * 2,
+				canvas.getHeight() - DisplayCanvas.spaltY);
+		gc.strokeText("Personen", 2, DisplayCanvas.spaltY * 2 + 1);
 
 		zeichneArray();
 	}
@@ -64,7 +64,8 @@ public class Diagramm {
 		feld = new ResFeld[zeile][spalte];
 		for (int i = 0; i < zeile; i += 10) {
 			for (int j = 0; j < spalte; j += 10) {
-				feld[i][j] = new ResFeld(i * 2, j * 2, ResFeld.breite, ResFeld.laenge);
+				feld[i][j] = new ResFeld(i * (DisplayCanvas.resFeldBreite / 10.0),
+						j * (DisplayCanvas.resFeldBreite / 10.0), ResFeld.breite, ResFeld.laenge);
 				feld[i][j].setFill(Color.WHITE);
 				feld[i][j].setStroke(Color.GRAY);
 				View.pane.getChildren().add(feld[i][j]);

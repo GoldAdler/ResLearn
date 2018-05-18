@@ -134,51 +134,8 @@ public class ControllerAufgabeErstellen extends Controller {
 		paneErgebnis.setVisible(true);
 		Arbeitspaket[] pakete = getArbeitspaketArray(retrieveData());
 		// if (paketeValidieren(pakete)) {
-		labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde gespeichert.");
-
-		// Create the custom dialog.
-		Dialog<String> dialog = new Dialog<>();
-		dialog.setTitle("Speichern");
-		dialog.setHeaderText("Wollen Sie die Aufgabe speichern?");
-
-		// Set the button types.
-		ButtonType speichernButton = new ButtonType("Speichern", ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(speichernButton, ButtonType.CANCEL);
-
-		// Create the username and password labels and fields.
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(20, 150, 10, 10));
-
-		dateiname = new TextField();
-		dateiname.setPromptText("Dateiname");
-
-		grid.add(new Label("Dateiname:"), 0, 0);
-		grid.add(dateiname, 1, 0);
-
-		// Enable/Disable login button depending on whether a username was entered.
-		Node nodeSpeichern = dialog.getDialogPane().lookupButton(speichernButton);
-		nodeSpeichern.setDisable(true);
-
-		// Do some validation (using the Java 8 lambda syntax).
-		dateiname.textProperty().addListener((observable, oldValue, newValue) -> {
-			nodeSpeichern.setDisable(newValue.trim().isEmpty());
-		});
-
-		dialog.getDialogPane().setContent(grid);
-
-		// Request focus on the username field by default.
-		Platform.runLater(() -> dateiname.requestFocus());
-
-		// TODO Eric beim Abrechen sollte keine Datei erstellt werden. Funktion nur auf
-		// dem SpeichernButton
-		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent()) {
-			export(pakete);
-			weiter(event);
-		}
-
+		labelErgebnis.setText("Validierung erfolgreich");
+		speichern(pakete, event);
 		// } else {
 		// labelErgebnis.setText(ergebnisValidierung);
 		// }
@@ -196,10 +153,10 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -214,10 +171,10 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -233,10 +190,10 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -429,18 +386,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		panePersonen.setVisible(false);
 	}
 
-	// @FXML
-	// private void handleButtonValidierenAction(ActionEvent event) {
-	// paneErgebnis.setVisible(true);
-	// Arbeitspaket pakete[] = getArbeitspaketArray(getArbeitspaket());
-	// if (paketeValidieren(pakete)) {
-	// labelErgebnis.setText("Validierung erfolgreich, die Aufgabe wurde
-	// gespeichert.");
-	// } else {
-	// labelErgebnis.setText(ergebnisValidierung);
-	// }
-	// }
-
 	public boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
 		String[] id = new String[arbeitspaket.length];
@@ -516,10 +461,9 @@ public class ControllerAufgabeErstellen extends Controller {
 		return paketKorrekt;
 	}
 
-	public void export(Arbeitspaket[] arbeitspakete) {
-		// TODO dateipfad gibt es ein Berechtigungsproblem
+	public void export(Arbeitspaket[] arbeitspakete, ActionEvent event) {
+		// TODO Mit anderen dateipfaden gibt es ein Berechtigungsproblem
 		String outputFile = dateipfad + dateiname.getText() + ".csv";
-		System.out.println(outputFile);
 		boolean alreadyExists = new File(outputFile).exists();
 		String spalten[] = new String[8];
 
@@ -539,15 +483,17 @@ public class ControllerAufgabeErstellen extends Controller {
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists) {
 				csvOutput.writeRecord(spalten);
+				weiter(event);
 			} else {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
 				alert.setContentText("Der Dateiname existiert bereits. Datei überschreiben");
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
-					System.out.println("Datei wird überschrieben");
+					weiter(event);
 				} else {
 					alert.close();
+					return;
 				}
 			}
 			// else assume that the file already has the correct header line
@@ -571,6 +517,51 @@ public class ControllerAufgabeErstellen extends Controller {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void speichern(Arbeitspaket[] arbeitspakete, ActionEvent event) {
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setTitle("Speichern");
+		dialog.setHeaderText("Wollen Sie die Aufgabe speichern?");
+
+		ButtonType speichernButton = new ButtonType("Speichern", ButtonData.OK_DONE);
+		ButtonType weiterButton = new ButtonType("Weiter", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(speichernButton, weiterButton);
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+
+		dateiname = new TextField();
+		dateiname.setPromptText("Dateiname");
+
+		grid.add(new Label("Dateiname:"), 0, 0);
+		grid.add(dateiname, 1, 0);
+
+		Node nodeSpeichern = dialog.getDialogPane().lookupButton(speichernButton);
+		nodeSpeichern.setDisable(true);
+
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+		Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+		closeButton.managedProperty().bind(closeButton.visibleProperty());
+		closeButton.setVisible(false);
+
+		dateiname.textProperty().addListener((observable, oldValue, newValue) -> {
+			nodeSpeichern.setDisable(newValue.trim().isEmpty());
+		});
+
+		dialog.getDialogPane().setContent(grid);
+		Platform.runLater(() -> dateiname.requestFocus());
+
+		Optional<ButtonType> result = dialog.showAndWait();
+		if (result.get() == speichernButton) {
+			export(arbeitspakete, event);
+		} else if (result.get() == weiterButton) {
+			weiter(event);
+		} else {
+			dialog.close();
+		}
 	}
 
 }

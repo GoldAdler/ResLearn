@@ -28,6 +28,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import reslearn.gui.Diagramm;
+import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.View;
 import reslearn.model.paket.ResEinheit;
@@ -95,8 +96,10 @@ public class ControllerCanvas {
 			double neuePositionZeigerX = e.getSceneX();
 			double neuePositionZeigerY = e.getSceneY();
 
-			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / 20); // neue Position Mauszeiger - alte
-			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / 20); // Position Mauszeiger
+			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / DisplayCanvas.resFeldBreite); // neue Position
+																									// Mauszeiger - alte
+			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / DisplayCanvas.resFeldLaenge); // Position
+																									// Mauszeiger
 
 			// Verschiebung auf der X-Achse bewirkt logisches Verschieben im
 			// Koordinatensystem
@@ -137,8 +140,8 @@ public class ControllerCanvas {
 
 	public void verschiebenX(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
-			newTranslateX = translateX + 20 * vorzeichen;
-			zeigerX += 20 * vorzeichen;
+			newTranslateX = translateX + DisplayCanvas.resFeldBreite * vorzeichen;
+			zeigerX += DisplayCanvas.resFeldBreite * vorzeichen;
 			bewegeX();
 			translateX = rect.getTranslateX();
 		}
@@ -146,8 +149,8 @@ public class ControllerCanvas {
 
 	public void verschiebenY(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
-			newTranslateY = translateY + 20 * vorzeichen;
-			zeigerY += 20 * vorzeichen;
+			newTranslateY = translateY + DisplayCanvas.resFeldLaenge * vorzeichen;
+			zeigerY += DisplayCanvas.resFeldLaenge * vorzeichen;
 			bewegeY();
 			translateY = rect.getTranslateY();
 		}
