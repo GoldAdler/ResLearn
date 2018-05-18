@@ -9,9 +9,6 @@ public class Controller {
 	public static int AufgabenNummer = 5;
 
 	public String vorherigesFenster(ArrayList<String> list) {
-		for (String ausgabe : alleFenster) {
-			System.out.println(ausgabe);
-		}
 		String string = list.get(list.size() - 1);
 		list.remove(list.get(list.size() - 1));
 		return string;

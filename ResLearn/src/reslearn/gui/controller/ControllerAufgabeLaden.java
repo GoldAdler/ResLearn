@@ -131,11 +131,10 @@ public class ControllerAufgabeLaden extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -150,11 +149,10 @@ public class ControllerAufgabeLaden extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	public void weiter(ActionEvent event) {
@@ -169,11 +167,10 @@ public class ControllerAufgabeLaden extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		((Node) (event.getSource())).getScene().getWindow().hide();
 	}
 
 	public static Arbeitspaket[] getArbeitspaketArray(ArrayList<Arbeitspaket> pakete) {
