@@ -3,6 +3,7 @@ package reslearn.gui;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import reslearn.model.paket.ResEinheit;
 
 public class Diagramm {
@@ -16,6 +17,7 @@ public class Diagramm {
 
 	public void zeichneCanvas(GraphicsContext gc, Canvas canvas) {
 		// Zeichne 4 x Rahmen & 2 x Koordinaten-Achsen
+		gc.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		gc.setStroke(Color.GRAY);
 		gc.strokeLine(0, canvas.getHeight(), 0, 0);
 		gc.strokeLine(0, canvas.getHeight(), canvas.getWidth(), canvas.getHeight());
@@ -25,36 +27,38 @@ public class Diagramm {
 		gc.setLineWidth(4);
 		gc.setStroke(Color.rgb(205, 133, 63));
 		gc.strokeLine(DisplayCanvas.resFeldBreite, canvas.getHeight() - DisplayCanvas.resFeldLaenge,
-				DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY);
+				DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY); // Y-Achse
 		gc.strokeLine(DisplayCanvas.resFeldBreite, canvas.getHeight() - DisplayCanvas.resFeldLaenge,
-				canvas.getWidth() - DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX,
-				canvas.getHeight() - DisplayCanvas.resFeldLaenge);
+				canvas.getWidth() - DisplayCanvas.gesamtAbstandX + DisplayCanvas.spaltX,
+				canvas.getHeight() - DisplayCanvas.resFeldLaenge); // X-Achse
 		gc.bezierCurveTo(20, 30, 40, 50, 60, 70);
 		// Koordinatenbeschriftung
 		gc.setLineWidth(1);
 		gc.setStroke(Color.BLACK);
-		for (double i = DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX; i < canvas.getWidth(); i += 100) {
-			if (i != DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX) {
-				gc.strokeLine(i, canvas.getHeight() - DisplayCanvas.resFeldBreite / 2, i,
+
+		for (double i = DisplayCanvas.gesamtAbstandX; i < canvas.getWidth(); i += 5 * DisplayCanvas.resFeldBreite) {
+			if (i != DisplayCanvas.gesamtAbstandX) {
+				gc.strokeLine(i, canvas.getHeight() - DisplayCanvas.resFeldBreite / 1.5, i,
 						canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY);
 				counterYAchse += 5;
-				gc.strokeText(String.valueOf(counterYAchse), i - DisplayCanvas.spaltX, canvas.getHeight());
+
+				gc.fillText(String.valueOf(counterYAchse), i - DisplayCanvas.spaltX, canvas.getHeight());
 			}
 		}
 		for (double i = canvas.getHeight() - DisplayCanvas.resFeldLaenge
-				- DisplayCanvas.spaltY; i > DisplayCanvas.resFeldLaenge + DisplayCanvas.spaltY; i -= 100) {
+				- DisplayCanvas.spaltY; i > DisplayCanvas.gesamtAbstandY; i -= 5 * DisplayCanvas.resFeldBreite) {
 			if (i != canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY) {
-				gc.strokeLine(DisplayCanvas.resFeldBreite - DisplayCanvas.resFeldBreite / 2, i,
-						DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX, i);
+				gc.strokeLine(DisplayCanvas.resFeldBreite - DisplayCanvas.resFeldBreite / 4, i,
+						DisplayCanvas.gesamtAbstandX, i);
 				counterXAchse += 5;
-				gc.strokeText(String.valueOf(counterXAchse), 0, i + DisplayCanvas.spaltY);
+				gc.fillText(String.valueOf(counterXAchse), 0, i + DisplayCanvas.spaltY);
 			}
 		}
 
 		// Achsenbeschriftung
-		gc.strokeText("Tage", canvas.getWidth() - DisplayCanvas.resFeldBreite - DisplayCanvas.spaltX * 2,
+		gc.fillText("Tage", canvas.getWidth() - DisplayCanvas.resFeldBreite - DisplayCanvas.spaltX * 2,
 				canvas.getHeight() - DisplayCanvas.spaltY);
-		gc.strokeText("Personen", 2, DisplayCanvas.spaltY * 2 + 1);
+		gc.fillText("Personen", 2, DisplayCanvas.spaltY * 2 + 1);
 
 		zeichneArray();
 	}

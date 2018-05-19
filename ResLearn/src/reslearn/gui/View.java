@@ -48,8 +48,8 @@ public class View extends Application {
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
-		pane.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.resFeldBreite + DisplayCanvas.spaltX);
-		pane.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.resFeldLaenge);
+		pane.setLayoutX(DisplayCanvas.paneLayoutX);
+		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
 		group.getChildren().addAll(canvas, pane, ControllerCanvas.table);
 
