@@ -85,7 +85,7 @@ public class View extends Application {
 			// Erster Test
 			Arbeitspaket apA1 = new Arbeitspaket("A", 1, 2, 3, 4, 2, 3, 6);
 			Arbeitspaket apB1 = new Arbeitspaket("B", 1, 2, 4, 4, 2, 4, 8);
-			Arbeitspaket apC1 = new Arbeitspaket("C", 3, 5, 5, 7, 2, 3, 6);
+			Arbeitspaket apC1 = new Arbeitspaket("C", 3, 5, 5, 7, 3, 2, 6);
 			resCanvas.hinzufuegen(apB1);
 			resCanvas.hinzufuegen(apC1);
 			resCanvas.hinzufuegen(apA1);
