@@ -128,7 +128,6 @@ public class ResCanvas {
 		Teilpaket tmp = teilpaket;
 		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
 				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
-			// TODO: LUKAS SEI GEPRIESSEN NICHT ÄNDERN
 			tmp = teilpaket.trenneTeilpaketVertikal(resEinheitFuerNeuesTeilpaket);
 
 		}
@@ -321,6 +320,11 @@ public class ResCanvas {
 		this.arbeitspaketListe = arbeitspaketListe;
 	}
 
+	/**
+	 * Erstellt einen Historieneintrag des aktuellen Koordinatenssystems. Dies
+	 * findet dabei nur statt, wenn tatsälich eine Änderung zum voherigen
+	 * gespeichterten Historieeintrag festgestellt wurde.
+	 */
 	public void aktuallisiereHistorie() {
 
 		this.neueHistorie();
@@ -331,6 +335,15 @@ public class ResCanvas {
 
 	}
 
+	/**
+	 * Prüft ob der neu einzufügende Historieneintrag sich von dem voherigen
+	 * gespeichterten Historieeintrag unterscheidet. Wenn nicht, wird der neue
+	 * Eintrag nicht gespeichtert.
+	 *
+	 * @param historienArbeitspaketListe
+	 * @param aktuelleArbeitspaketListe
+	 * @return
+	 */
 	private boolean pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
 			ArrayList<Arbeitspaket> aktuelleArbeitspaketListe) {
 
@@ -370,15 +383,29 @@ public class ResCanvas {
 
 	}
 
+	/**
+	 * Erstellt den neuen Historieneintrag. Dabei handelt sich um eine Kopie des
+	 * aktuellen Koordinatensystems inklusive der Pakete.
+	 *
+	 */
 	private void neueHistorie() {
 
+		ArrayList<Arbeitspaket> neueArbeitspaketListe = copyArbeitspaketliste();
+
+		this.historienArbeitspaketListe = neueArbeitspaketListe;
+
+		ResEinheit[][] neuesKoordinatenSystem = copyKoordinatenSystem(neueArbeitspaketListe);
+
+		this.historieKoordinatenSystem.add(neuesKoordinatenSystem);
+
+	}
+
+	/**
+	 * @param neueArbeitspaketListe
+	 * @return
+	 */
+	private ResEinheit[][] copyKoordinatenSystem(ArrayList<Arbeitspaket> neueArbeitspaketListe) {
 		ResEinheit[][] neuesKoordinatenSystem = new ResEinheit[koorHoehe][koorBreite];
-
-		ArrayList<Arbeitspaket> neueArbeitspaketListe = new ArrayList<Arbeitspaket>();
-
-		for (Arbeitspaket ap : this.arbeitspaketListe) {
-			neueArbeitspaketListe.add(ap.copy());
-		}
 
 		for (Arbeitspaket ap : neueArbeitspaketListe) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
@@ -387,14 +414,36 @@ public class ResCanvas {
 				}
 			}
 		}
+		return neuesKoordinatenSystem;
+	}
 
-		this.historieKoordinatenSystem.add(neuesKoordinatenSystem);
-		this.historienArbeitspaketListe = neueArbeitspaketListe;
+	/**
+	 * @return
+	 */
+	private ArrayList<Arbeitspaket> copyArbeitspaketliste() {
+		ArrayList<Arbeitspaket> neueArbeitspaketListe = new ArrayList<Arbeitspaket>();
 
+		for (Arbeitspaket ap : this.arbeitspaketListe) {
+			neueArbeitspaketListe.add(ap.copy());
+		}
+		return neueArbeitspaketListe;
 	}
 
 	public ArrayList<ResEinheit[][]> getHistorieKoordinatenSystem() {
 		return historieKoordinatenSystem;
+	}
+
+	/**
+	 * Erstellt eine Kopie des aktuellen KoordinatenSystems.
+	 *
+	 * @return
+	 */
+	public ResEinheit[][] kloneKoordinatenSystem() {
+
+		ArrayList<Arbeitspaket> neueArbeitspaketListe = this.copyArbeitspaketliste();
+
+		return copyKoordinatenSystem(neueArbeitspaketListe);
+
 	}
 
 }
