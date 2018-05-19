@@ -132,6 +132,24 @@ public class ResCanvas {
 
 		}
 
+		// TODO TEAM-LOGIK HIER WEITERMACHEN!!!!
+		/*
+		 * .............DDDDD.........................
+		 * .............DDDDD.........................
+		 * .............DDDDD.........................
+		 * .............DDDDD.........................
+		 * .............DDDDD.........................
+		 * ..............CC...........................
+		 * AAAAAA........CC...........................
+		 * AAAAAA...BBBBBBB...........EEEEEE..........
+		 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
+		 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
+		 *
+		 * Es werden nur zwei TEilpakete erstellt. Das heißt ein Teilpaket, das über den
+		 * 4 C ist und ein Teilpaket, das auseinandergerissen ist.
+		 *
+		 */
+
 		if (!tmp.getResEinheitListe().isEmpty()) {
 			ResEinheit ausgangspunkt = tmp.getResEinheitListe().get(0);
 
@@ -188,7 +206,6 @@ public class ResCanvas {
 		if (minAbstand != 0) {
 			tmp.bewegeY(this, -minAbstand);
 			for (Teilpaket teilpaket : zuVerschiebenListe) {
-				// teilpaket.bewegen(this, -minAbstand, 0);
 				herunterfallen(teilpaket);
 			}
 		}
@@ -433,17 +450,53 @@ public class ResCanvas {
 		return historieKoordinatenSystem;
 	}
 
+	private void setHistorieKoordinatenSystem(ArrayList<ResEinheit[][]> historieKoordinatenSystem) {
+		this.historieKoordinatenSystem = historieKoordinatenSystem;
+	}
+
+	// TODO vermutlich löschen
+	// /**
+	// * Erstellt eine Kopie des aktuellen KoordinatenSystems.
+	// *
+	// * @return
+	// */
+	// public ResEinheit[][] kloneKoordinatenSystem() {
+	//
+	// ArrayList<Arbeitspaket> neueArbeitspaketListe = this.copyArbeitspaketliste();
+	//
+	// return copyKoordinatenSystem(neueArbeitspaketListe);
+	//
+	// }
+
+	public ResCanvas copyResCanvas() {
+
+		ResCanvas kopieResCanvas = new ResCanvas();
+
+		kopieResCanvas.setArbeitspaketListe(this.copyArbeitspaketliste());
+		kopieResCanvas.setKoordinatenSystem(this.copyKoordinatenSystem(kopieResCanvas.getArbeitspaketListe()));
+		kopieResCanvas.setHistorieKoordinatenSystem(historieKoordinatenSystem);
+
+		return kopieResCanvas;
+	}
+
 	/**
-	 * Erstellt eine Kopie des aktuellen KoordinatenSystems.
+	 * Ermittelt die Anzahl anzahl an Stellen, welche eins unter der Obergrenze
+	 * liegen.
 	 *
 	 * @return
 	 */
-	public ResEinheit[][] kloneKoordinatenSystem() {
+	public int ermittleStellen(Arbeitspaket arbeitspaket, int mitarbeiterObergrenze) {
 
-		ArrayList<Arbeitspaket> neueArbeitspaketListe = this.copyArbeitspaketliste();
+		int stellen = 0;
 
-		return copyKoordinatenSystem(neueArbeitspaketListe);
+		for (Teilpaket teilpaket : arbeitspaket.getTeilpaketListe()) {
+			ResEinheit ersteResEinheit = teilpaket.getResEinheitListe().get(0);
+			int abstand = mitarbeiterObergrenze + ersteResEinheit.getPosition().getyKoordinate()
+					- teilpaket.getMitarbeiteranzahl();
+			stellen += (abstand * teilpaket.getVorgangsdauer());
 
+		}
+		return stellen;
 	}
 
 }

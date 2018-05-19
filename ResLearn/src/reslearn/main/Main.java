@@ -21,12 +21,14 @@ public class Main {
 		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		erstelleTestDaten2_5(resCanvas);
+		// erstelleTestDaten2_5(resCanvas);
+		// erstelleTestDaten2_55(resCanvas);
+		erstelleTestDaten2_56(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// 2_7 wichtig
 		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
-		// TODO: Team-Logik hier weitermachen
+		// TODO: Team-Logik hier noch mal kucken
 		// für erstelleTestDaten2_8 prüfen ob Eingaben korrekt, und warum Lösung
 		// verwurschtelt
 
@@ -128,6 +130,54 @@ public class Main {
 	}
 
 	private static void erstelleTestDaten2_5(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 8, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 5, 25);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstelleTestDaten2_55(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 8, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 3, 15);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstelleTestDaten2_56(ResCanvas resCanvas) {
 		// ---------------------------------------------------------------------
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------Anfang--------------------------------

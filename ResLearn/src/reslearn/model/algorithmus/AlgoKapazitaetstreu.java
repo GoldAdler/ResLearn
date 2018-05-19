@@ -18,7 +18,7 @@ import reslearn.model.utils.Vektor2i;
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
-	private boolean vorgangsdauerVeraenderbar = true;
+	private boolean vorgangsdauerVeraenderbar = false;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
 	private static int maxBegrenzung = 5;
@@ -91,10 +91,10 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			ArrayList<Teilpaket> tpListe = ap.getTeilpaketListe();
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
-			int verschiebenRechts = letztesTeilpaket.ueberpruefeZeiten();
-			if (verschiebenRechts != 0) {
+			int verschieben = letztesTeilpaket.ueberpruefeZeiten();
+			if (verschieben != 0) {
 
-				verschiebeZeitueberschreitendePakete(resCanvas, ap, verschiebenRechts);
+				verschiebeZeitueberschreitendePakete(resCanvas, ap, verschieben);
 
 			}
 
@@ -222,47 +222,53 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	}
 
 	/**
-	 * Die Pakete bei dennen die Zeitvaldierung verstöße feststellt werden gelöscht
-	 * und um die entsprechende Differenz wieder eingefügt. Falls ResEinheiten die
-	 * Obergrenze überscheiten werden diese entsprechend nach Links oder nach Rechts
-	 * verschoben.
+	 * Wenn Vorgangsdauer veränderbar: Die Pakete bei dennen die Zeitvaldierung
+	 * verstöße feststellt werden gelöscht und um die entsprechende Differenz wieder
+	 * eingefügt. Falls ResEinheiten die Obergrenze überscheiten werden diese
+	 * entsprechend nach Links oder nach Rechts verschoben.
+	 *
+	 * Wenn Vorgangsdauer nicht veränderbar:
 	 *
 	 * @param resCanvas
 	 * @param ap
 	 * @param verschiebenRechts
 	 */
-	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschiebenRechts) {
-		boolean durchfuehren = this.vorgangsdauerVeraenderbar;
+	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschieben) {
 
-		// TODO TEAM-Logik hier weitermachen
+		// TODO vermutlich löschen
+		// boolean durchfuehren = this.vorgangsdauerVeraenderbar;
+		// if (!durchfuehren) {
+		// TODO berechnen ob verschiebbar
+		// wenn verschiebbar, dann durchführen = true;
+		// #verschiebenLinks und Rechts werden dann auch nicht mehr aufgerufen
+		// for (int x = ap.getFaz() - 1; x <= ap.getSez() - 1; x++) {
+		// int counter = 0;
+		// for (int y = ResCanvas.koorHoehe - 1; y > (ResCanvas.koorHoehe -
+		// maxBegrenzung - 1); y--) {
+		//
+		// ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+		// if (koordinatenSystem[y][x] != null) {
+		// counter++;
+		// } else {
+		// if (counter + ap.getMitarbeiteranzahl() <= maxBegrenzung) {
+		//
+		// }
+		// }
+		//
+		// }
+		//
+		// }
+		// }
 
-		if (!durchfuehren) {
-			// TODO berechnen ob verschiebbar
-			// wenn verschiebbar, dann durchführen = true;
-			// #verschiebenLinks und Rechts werden dann auch nicht mehr aufgerufen
-			for (int x = ap.getFaz() - 1; x <= ap.getSez() - 1; x++) {
-				int counter = 0;
-				for (int y = ResCanvas.koorHoehe - 1; y > (ResCanvas.koorHoehe - maxBegrenzung - 1); y--) {
+		if (vorgangsdauerVeraenderbar) {
 
-					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
-					if (koordinatenSystem[y][x] != null) {
-						counter++;
-					} else {
-						if (counter + ap.getMitarbeiteranzahl() <= maxBegrenzung) {
+			// TODO LOGIK e-Problem
 
-						}
-					}
-
-				}
-
-			}
-		}
-
-		if (durchfuehren) {
 			resCanvas.entferneArbeitspaket(ap);
 			resCanvas.herunterfallenAlleTeilpakete();
-			ap.neuSetzen(verschiebenRechts, resCanvas);
 
+			ap.neuSetzen(verschieben, resCanvas);
+			// resCanvas.aufschliessen();
 			ausgeben(resCanvas.getKoordinatenSystem());
 
 			Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
@@ -278,7 +284,156 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 				verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
 			}
+		} else {
+
+			if (verschieben < 0) {
+				// Paket ist zu spät | SEZ verletzt
+
+				/*
+				 * Erklärung des folgenden Algorithmus
+				 *
+				 * D ist zu spät. Das heißt D muss nach Möglichkeit nach links verschoben
+				 * werden. Ist dies nicht möglich. Belasse D wo es ist.
+				 *
+				 * ...........................................
+				 * .........ZZZ.........DDDDD.................
+				 * AAAAAA...ZZZ.........DDDDD.................
+				 * AAAAAABBBBBBB........DDDDDEEEEEE...........
+				 * AAAAAABBBBBBBCCCCCCCCDDDDDEEEEEE...........
+				 * AAAAAABBBBBBBCCCCCCCCDDDDDEEEEEE...........
+				 *
+				 * 1. Kopie des ResCanvas anlegen (Ausgangssituation)
+				 *
+				 * 2. Simulation starten: D rauslöschen
+				 *
+				 * In eigenen Kopien wird versucht
+				 *
+				 * D von FAZ bis SEZ versuchen einzufügen und obergrenze prüfen. Wenn obergrenze
+				 * inordnung wird eine Kopie der Simulation einer Liste hinzugefügt. Ist die
+				 * Simulation beendet, müssen diese Kopien danach überprüft werden, ob die
+				 * Position eine möglichst gerine Anzahl an parallen Arbeiten Mitarbeitern
+				 * gewährleistet.
+				 *
+				 * Wird keine Möglichkeit gefunden, D einzufügen, wird mit der Kopie der
+				 * Ausgangssituation weitergearbeitet. Mit anderen Worten D wird dort belassen,
+				 * wo es ursprünglich lag.
+				 *
+				 */
+
+				// ResCanvas ausgangssituation = resCanvas.copyResCanvas();
+
+				ResCanvas simulation = null;
+				ArrayList<ResCanvas> listeSimulationen = new ArrayList<ResCanvas>();
+				Arbeitspaket zuVerschiebenAp = null;
+
+				for (int x = ap.getFaz() - 1; x < ap.getSez(); x++) {
+
+					simulation = resCanvas.copyResCanvas();
+
+					for (Arbeitspaket simAp : simulation.getArbeitspaketListe()) {
+						if (simAp.getId() == ap.getId()) {
+							zuVerschiebenAp = simAp;
+						}
+					}
+
+					simulation.entferneArbeitspaket(zuVerschiebenAp);
+					int xStart = zuVerschiebenAp.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
+							.getxKoordinate();
+
+					Algorithmus.ausgeben(simulation.getKoordinatenSystem());
+
+					simulation.herunterfallenAlleTeilpakete();
+
+					int abstand = x - xStart;
+					zuVerschiebenAp.neuSetzen(abstand, simulation);
+
+					Algorithmus.ausgeben(simulation.getKoordinatenSystem());
+
+					if (ueberpruefeObergrenzeUeberschritten(simulation)) {
+						listeSimulationen.add(simulation);
+					}
+
+				}
+
+				if (listeSimulationen.isEmpty()) {
+					// Wenn das Arbeitspaket nicht verschoben werden kann, wird ohne Veränderung mit
+					// aktuellen Koordinatensystem des ResCanvas weitergearbeitet.
+
+					// resCanvas = ausgangssituation;
+				} else if (listeSimulationen.size() == 1) {
+					resCanvas = listeSimulationen.get(0);
+				} else {
+
+					int maxStellen = Integer.MIN_VALUE;
+					ResCanvas optimalesResCanvas = null;
+
+					for (ResCanvas resCanvasSimulation : listeSimulationen) {
+						int stellen = resCanvasSimulation.ermittleStellen(zuVerschiebenAp,
+								AlgoKapazitaetstreu.maxBegrenzung);
+						if (stellen > maxStellen) {
+							maxStellen = stellen;
+							optimalesResCanvas = resCanvasSimulation;
+						}
+					}
+
+					resCanvas = optimalesResCanvas;
+
+				}
+
+			} else if (verschieben > 0) {
+				// Paket ist zu früh | FAZ verletzt
+			}
+
+			/*
+			 * -----------------------------------------------------------------------------
+			 *
+			 *
+			 * -----------------------------------------------------------------------------
+			 * Z ist zu früh. Das heißt Z muss nach rechts verschoben werden.
+			 *
+			 * 1. Szenario
+			 *
+			 * ..............CC......DDDDD................
+			 * AAAAAA........CC......DDDDD................
+			 * AAAAAA...BBBBBBB......DDDDDEEEEEE..........
+			 * AAAAAAZZZBBBBBBBCCCCCCDDDDDEEEEEE..........
+			 * AAAAAAZZZBBBBBBBCCCCCCDDDDDEEEEEE..........
+			 *
+			 * unter Z liegt nichts. Das heißt die Pakete die direkt rechts neben Z
+			 * liegeben, in diesem Beispiel B, müssen um die Vorgangsdauer von Z verschoben
+			 * werden. Herunterfallen. Simulation startet, arbeitet bei jedem Versuch mit
+			 * unterschiedlichen Kopien. Z von FAZ bis SEZ versuchen einzufügen und
+			 * obergrenze prüfen. Wenn obergrenze inordnung wird eine Kopie der Simulation
+			 * einer Liste hinzugefügt. Ist die Simulation beendet, müssen diese Kopien
+			 * danach überprüft werden, ob die Position eine möglichst gerine Anzahl an
+			 * parallen Arbeiten Mitarbeitern gewährleistet. Mit dem optimalsten Ergebnis
+			 * wird anschließend weitergearbeitet.
+			 *
+			 * 2. Szenario
+			 *
+			 * ......ZZZ|.CC......DDDDD................
+			 * AAAAAAZZZ|.CC......DDDDD................
+			 * AAAAAABBBBBBB......DDDDDEEEEEE..........
+			 * AAAAAABBBBBBBCCCCCCDDDDDEEEEEE..........
+			 * AAAAAABBBBBBBCCCCCCDDDDDEEEEEE..........
+			 *
+			 * | = eine leere Lücke, dient nur der erklärung im Folgetext
+			 *
+			 * unter Z liegt bereits etwas. Das Paket das unter Z liegt, darf nicht
+			 * verschoben werden. Aber um zu gewährleisten, dass Z so früh wie möglich und
+			 * so optimal wie möglich, das heißt eine möglichst gerine Anzahl an parallel
+			 * arbeitend Mitarbeitern ereicht ist, müssen trotzdem Pakete nach rechts
+			 * verschoben werden. Hirzu werden, beginnend dirket neben dem Paket Z ( im Bild
+			 * gekennzeichnet mit |), alle Pakete die ungleich den Paketen sind, die direkt
+			 * unter Z und B sind, in eine Liste aufgenommen. Die aufgennomen Pakete werden
+			 * umd die Vorgansdauer von Z nach rechts verschoben. Im Anschluss beginnt die
+			 * Simulation. Siehe Szenario 1.
+			 *
+			 *
+			 */
+
 		}
+
 	}
 
 	/**
@@ -677,7 +832,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 	/**
 	 * Überprüft ob Teilpakete über der Maximalgrenze an parallel arbeitenden
-	 * Mitarbeitern liegen. Wenn ja, wer diesen in eine LinkList gespeichtert.
+	 * Mitarbeitern liegen. Wenn ja, werden diese in eine LinkList gespeichtert.
 	 *
 	 * @param resCanvas
 	 * @param koordinatenSystem
@@ -738,6 +893,27 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		}
 
 		return neuesTeilpaket;
+	}
+
+	private boolean ueberpruefeObergrenzeUeberschritten(ResCanvas resCanvas) {
+		boolean ueberschritten = false;
+
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		ResEinheit tempResEinheit;
+
+		for (int x = 0; x < ResCanvas.koorBreite; x++) {
+
+			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
+			// deswegen maxBegrenzung -2
+			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
+			if (tempResEinheit != null) {
+				ueberschritten = true;
+				break;
+			}
+		}
+
+		return ueberschritten;
 	}
 
 }
