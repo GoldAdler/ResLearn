@@ -25,6 +25,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -86,7 +87,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	Pane panePersonen = new Pane();
 
-	// maximale Personen Parallel (kapazitätstreu)
+	// maximale Personen Parallel (kapazitÃ¤tstreu)
 	@FXML
 	Button buttonMaxPersonenMinus = new Button();
 	@FXML
@@ -123,6 +124,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		setupSpalteAnzMitarbeiter();
 		setupSpalteAufwand();
 		setTableEditable();
+		setupScrollPane();
 
 		radioButtonKapazitaet.setToggleGroup(rbGruppe);
 		radioButtonKapazitaet.setSelected(true);
@@ -214,12 +216,12 @@ public class ControllerAufgabeErstellen extends Controller {
 			anzPakete++;
 			textFieldAnzPakete.setText(Integer.toString(anzPakete));
 
-			// neue Zeile hinzufügen
+			// neue Zeile hinzufÃ¼gen
 			tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
 		}
 	}
 
-	// Tabelle mit Default-Werten befüllen
+	// Tabelle mit Default-Werten befÃ¼llen
 	private List<Arbeitspaket> retrieveData() {
 
 		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
@@ -333,6 +335,11 @@ public class ControllerAufgabeErstellen extends Controller {
 			tabelle.refresh();
 		});
 	}
+	
+	private void setupScrollPane() {
+		ScrollPane scrollPaneTabelle = new ScrollPane();
+		scrollPaneTabelle.setContent(tabelle);
+	}
 
 	private void setTableEditable() {
 		tabelle.setEditable(true);
@@ -400,7 +407,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 
-			// ID prüfen (einzigartig?)
+			// ID prÃ¼fen (einzigartig?)
 			for (int j = i - 1; j >= 0; j--) {
 				if (id[i] != id[j]) {
 					idKorrekt = true;
@@ -412,47 +419,47 @@ public class ControllerAufgabeErstellen extends Controller {
 				}
 			}
 
-			// FAZ prüfen
+			// FAZ prÃ¼fen
 			if (faz >= 1) {
 				fazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getId()
+				ergebnisValidierung = "Der Wert FAZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens 1 sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SAZ prüfen
+			// SAZ prÃ¼fen
 			if (saz >= faz) {
 				sazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
+				ergebnisValidierung = "Der Wert SAZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens gleich gro wie der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// FEZ prüfen
+			// FEZ prÃ¼fen
 			if (fez > faz) {
 				fezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss größer als der Wert FAZ sein";
+				ergebnisValidierung = "Der Wert FEZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss grÃ¶ÃŸer als der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SEZ prüfen
+			// SEZ prÃ¼fen
 			if (sez >= fez) {
 				sezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich groß wie der Wert FEZ sein";
+				ergebnisValidierung = "Der Wert SEZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss mindestens gleich groÃŸ wie der Wert FEZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// Alle Bedingungen prüfen
+			// Alle Bedingungen prÃ¼fen
 			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt) {
 				paketKorrekt = true;
 			}
@@ -487,7 +494,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			} else {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
-				alert.setContentText("Der Dateiname existiert bereits. Datei überschreiben");
+				alert.setContentText("Der Dateiname existiert bereits. Datei Ã¼berschreiben");
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					weiter(event);

@@ -403,18 +403,20 @@ public class ControllerCanvas {
 	public void erstelleTabelle() {
 
 		table.setEditable(true);
-		table.setLayoutX(15);
-		table.setLayoutY(200);
-		table.setPrefSize(200, 300);
+		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		table.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		// table.
+		// table.setPrefSize(DisplayCanvas.tabelleBreite, DisplayCanvas.tabelleLaenge);
+		table.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		TableColumn<Pair<String, Object>, String> name = new TableColumn<>("Name");
 		name.setCellValueFactory(new PairKeyFactory());
-		name.setMinWidth(99);
+		name.setMinWidth(DisplayCanvas.tabelleBreite / 2);
 		name.setSortable(false);
 
 		TableColumn<Pair<String, Object>, Object> wert = new TableColumn<>("Wert");
 		wert.setCellValueFactory(new PairValueFactory());
-		wert.setMinWidth(99);
+		wert.setMinWidth(DisplayCanvas.tabelleBreite / 2);
 		wert.setSortable(false);
 
 		table.getColumns().addAll(name, wert);
