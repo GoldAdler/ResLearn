@@ -110,6 +110,12 @@ public class Teilpaket extends Paket {
 
 	}
 
+	/**
+	 * Trennt die mitgegebene ResEinheiten-Liste aus dem Teilpaket und erstellt ein
+	 * neues Teilpaket mit Vorgangsdauer 1.
+	 *
+	 * @param gesezteResEinheiten
+	 */
 	public void trenneVariabel(ArrayList<ResEinheit> gesezteResEinheiten) {
 		if (!gesezteResEinheiten.isEmpty()) {
 			Teilpaket neuesTeilpaket = new Teilpaket(this.arbeitspaket, gesezteResEinheiten);
@@ -129,9 +135,6 @@ public class Teilpaket extends Paket {
 			} else {
 				this.arbeitspaket.entferneTeilpaket(this);
 			}
-
-			// neuesTeilpaket = new Teilpaket(this.arbeitspaket, neueResEinheitListe);
-			// this.arbeitspaket.teilpaketHinzufuegen(neuesTeilpaket);
 
 		}
 	}
