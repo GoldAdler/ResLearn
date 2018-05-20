@@ -12,6 +12,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.controller.Controller;
+import reslearn.gui.controller.ControllerAufgabeErstellen;
+import reslearn.gui.controller.ControllerAufgabeLaden;
 import reslearn.gui.controller.ControllerCanvas;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
@@ -152,6 +154,54 @@ public class View extends Application {
 			resCanvas.hinzufuegen(apC6);
 			resCanvas.hinzufuegen(apA6);
 			resCanvas.hinzufuegen(apD6);
+			break;
+		case 7:
+			int i = 0;
+			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
+				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
+						ControllerAufgabeLaden.paketeArray[i].getFaz(), ControllerAufgabeLaden.paketeArray[i].getFez(),
+						ControllerAufgabeLaden.paketeArray[i].getSaz(), ControllerAufgabeLaden.paketeArray[i].getSez(),
+						ControllerAufgabeLaden.paketeArray[i].getVorgangsdauer(),
+						ControllerAufgabeLaden.paketeArray[i].getMitarbeiteranzahl(),
+						ControllerAufgabeLaden.paketeArray[i].getAufwand());
+				resCanvas.hinzufuegen(ap);
+				i++;
+			}
+			break;
+		case 8:
+			int j = 0;
+			// Schmeißt noch eine Exception, weil in der Klasse ControllerAufgabeErstellen
+			// noch die Default werten zurückgegeben werden
+			for (Arbeitspaket ap : ControllerAufgabeErstellen.pakete) {
+				ap = new Arbeitspaket(ControllerAufgabeErstellen.pakete[j].getId(),
+						ControllerAufgabeErstellen.pakete[j].getFaz(), ControllerAufgabeErstellen.pakete[j].getFez(),
+						ControllerAufgabeErstellen.pakete[j].getSaz(), ControllerAufgabeErstellen.pakete[j].getSez(),
+						ControllerAufgabeErstellen.pakete[j].getVorgangsdauer(),
+						ControllerAufgabeErstellen.pakete[j].getMitarbeiteranzahl(),
+						ControllerAufgabeErstellen.pakete[j].getAufwand());
+				resCanvas.hinzufuegen(ap);
+				j++;
+			}
+			// for (Arbeitspaket ap : ControllerAufgabeErstellen.pakete) {
+			// System.out.print(ap.getId().toString());
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getFaz()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getFez()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getSaz()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getSez()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getVorgangsdauer()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getMitarbeiteranzahl()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getAufwand()));
+			// System.out.print(", ");
+			// System.out.println();
+			//
+			// }
 			break;
 		}
 	}

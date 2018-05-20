@@ -108,6 +108,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	TextField dateiname;
 	String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
 
+	public static Arbeitspaket[] pakete;
+
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
 		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
@@ -134,7 +136,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
-		Arbeitspaket[] pakete = getArbeitspaketArray(retrieveData());
+		pakete = getArbeitspaketArray(retrieveData());
 		// if (paketeValidieren(pakete)) {
 		labelErgebnis.setText("Validierung erfolgreich");
 		speichern(pakete, event);
@@ -192,6 +194,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			AufgabenNummer = 8;
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -335,7 +338,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			tabelle.refresh();
 		});
 	}
-	
+
 	private void setupScrollPane() {
 		ScrollPane scrollPaneTabelle = new ScrollPane();
 		scrollPaneTabelle.setContent(tabelle);

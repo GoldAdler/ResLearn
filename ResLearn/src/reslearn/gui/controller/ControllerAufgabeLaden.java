@@ -31,7 +31,7 @@ public class ControllerAufgabeLaden extends Controller {
 	@FXML
 	private Button dateiauswaehlen;
 
-	Arbeitspaket[] paketeArray;
+	public static Arbeitspaket[] paketeArray;
 	private String name;
 	private String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
 
@@ -86,29 +86,6 @@ public class ControllerAufgabeLaden extends Controller {
 			arbeitspaketImport.close();
 
 			paketeArray = getArbeitspaketArray(pakete);
-
-			System.out.println("Gib was aus " + pakete.get(3));
-
-			for (Arbeitspaket ap : paketeArray) {
-				System.out.print(ap.getId().toString());
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getFaz()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getFez()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getSaz()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getSez()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getVorgangsdauer()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getMitarbeiteranzahl()));
-				System.out.print(", ");
-				System.out.print(String.valueOf(ap.getAufwand()));
-				System.out.print(", ");
-				System.out.println();
-
-			}
 
 			weiter(event);
 
@@ -167,6 +144,7 @@ public class ControllerAufgabeLaden extends Controller {
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
+			AufgabenNummer = 7;
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
