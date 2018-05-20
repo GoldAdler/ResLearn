@@ -156,6 +156,7 @@ public class View extends Application {
 			resCanvas.hinzufuegen(apD6);
 			break;
 		case 7:
+			// Daten von Aufgabe laden
 			int i = 0;
 			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
 				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
@@ -169,6 +170,7 @@ public class View extends Application {
 			}
 			break;
 		case 8:
+			// Daten von Aufgabe erstellen
 			int j = 0;
 			// Schmeißt noch eine Exception, weil in der Klasse ControllerAufgabeErstellen
 			// noch die Default werten zurückgegeben werden
