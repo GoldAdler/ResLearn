@@ -18,6 +18,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -31,6 +32,7 @@ import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.View;
+import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
@@ -76,6 +78,7 @@ public class ControllerCanvas {
 			translateY = rect.getTranslateY();
 
 			befuelleTabelle();
+			markiereArbeitspaketInTabelle(teilpaketClicked.getArbeitspaket());
 
 		}
 	};
@@ -493,5 +496,69 @@ public class ControllerCanvas {
 				}
 			}
 		});
+	}
+	
+	
+//////////////////////////////////////////////////////////////////////////////////
+//Erstellung der Tabelle zur Anzeige der Arbeitspakete			    //
+//////////////////////////////////////////////////////////////////////////////////
+
+	public static TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
+	private ObservableList<Arbeitspaket> dataPakete;
+
+	@SuppressWarnings("unchecked")
+	public void erstelleTabelleArbeitspakete() {
+		dataPakete = FXCollections.observableArrayList();
+		ArrayList<Arbeitspaket> arbeitspaketeArrayList = resCanvas.getArbeitspaketListe();
+		arbeitspaketeArrayList.forEach(p -> dataPakete.add(p));
+		
+		int breite = DisplayCanvas.tabelleArbeitspaketBreite;
+		if (dataPakete.size() > 2) {
+			breite -= 12;
+		}
+
+		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
+		apId.setMinWidth(breite / 7);
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setSortType(TableColumn.SortType.ASCENDING);
+
+		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
+		apFaz.setMinWidth(breite / 7);
+		apFaz.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("faz"));
+
+		TableColumn<Arbeitspaket, Integer> apSaz = new TableColumn<>("SAZ");
+		apSaz.setMinWidth(breite / 7);
+		apSaz.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("saz"));
+
+		TableColumn<Arbeitspaket, Integer> apFez = new TableColumn<>("FEZ");
+		apFez.setMinWidth(breite / 7);
+		apFez.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("fez"));
+
+		TableColumn<Arbeitspaket, Integer> apSez = new TableColumn<>("SEZ");
+		apSez.setMinWidth(breite / 7);
+		apSez.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("sez"));
+
+		TableColumn<Arbeitspaket, Integer> apAnzMitarbeiter = new TableColumn<>("Max. Personen");
+		apAnzMitarbeiter.setMinWidth(breite / 7);
+		apAnzMitarbeiter.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("mitarbeiteranzahl"));
+
+		TableColumn<Arbeitspaket, Integer> apAufwand = new TableColumn<>("Aufwand (PT)");
+		apAufwand.setMinWidth(breite / 7);
+		apAufwand.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, Integer>("aufwand"));
+
+		tabelleArbeitspakete.setItems(dataPakete);
+		tabelleArbeitspakete.setEditable(true);
+		tabelleArbeitspakete.setLayoutX(DisplayCanvas.tabelleArbeitspaketLayoutX);
+		tabelleArbeitspakete.setLayoutY(DisplayCanvas.tabelleArbeitspaketLayoutY);
+		tabelleArbeitspakete.setPrefSize(DisplayCanvas.tabelleArbeitspaketBreite, DisplayCanvas.tabelleArbeitspaketLaenge);
+		tabelleArbeitspakete.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
+		tabelleArbeitspakete.getColumns().addAll(apId, apFaz, apSaz, apFez, apSez, apAnzMitarbeiter, apAufwand);
+		tabelleArbeitspakete.getSortOrder().add(apId);
+	}
+	
+	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
+		tabelleArbeitspakete.getSelectionModel().select(ap);
+		tabelleArbeitspakete.scrollTo(ap);
 	}
 }

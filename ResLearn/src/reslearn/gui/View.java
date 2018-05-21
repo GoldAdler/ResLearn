@@ -53,7 +53,7 @@ public class View extends Application {
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		group.getChildren().addAll(canvas, pane, ControllerCanvas.table);
+		group.getChildren().addAll(canvas, pane, ControllerCanvas.table, ControllerCanvas.tabelleArbeitspakete);
 
 		// Durchführen des Algorithmus
 		ResCanvas resCanvas = new ResCanvas();
@@ -72,6 +72,7 @@ public class View extends Application {
 		menu.getItems().addAll(ap, reset);
 
 		cc.erstelleTabelle();
+		cc.erstelleTabelleArbeitspakete();
 
 		classStage = stage;
 		stage.setMaximized(true);
