@@ -8,6 +8,7 @@ import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
+import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
@@ -16,12 +17,9 @@ public class ResCanvas {
 	private ArrayList<Arbeitspaket> arbeitspaketListe;
 	private ArrayList<Arbeitspaket> historienArbeitspaketListe;
 	private ResEinheit[][] koordinatenSystem;
-	// TODO Historie der sich veränderten koordiantenSysteme anlegen
-	// dient dafür im Lösungsmodus die einzelnen Schritte anzuzeigen
 	private ArrayList<ResEinheit[][]> historieKoordinatenSystem;
 	public static final int koorHoehe = 28;
 	public static final int koorBreite = 43;
-	private int maxMitarbeiter = koorHoehe - 1;
 
 	public ResCanvas() {
 		arbeitspaketListe = new ArrayList<Arbeitspaket>();
@@ -106,6 +104,25 @@ public class ResCanvas {
 	}
 
 	/**
+	 * Jedes Teilpaket, außer eines, dass im Canvas heruntergesenkt werden kann,
+	 * wird heruntergelassen.
+	 */
+	public void herunterfallenAlleTeilpaketeAußerEines(Arbeitspaket nichtHerunterfallen) {
+		for (Arbeitspaket arbeitspaket : this.getArbeitspaketListe()) {
+
+			if (arbeitspaket != nichtHerunterfallen) {
+
+				var teilpaketListe = arbeitspaket.getTeilpaketListe();
+				for (int i = 0; i < teilpaketListe.size(); i++) {
+					this.herunterfallen(teilpaketListe.get(i));
+
+					Algorithmus.ausgeben(koordinatenSystem);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Das übergebene Teilpaket wird soweit nach unten gesenkt, wie möglich. Bei
 	 * Kollision wird das Paket in mehrere Teilpaket aufgetrennt. Die neu
 	 * entstandenen Teilpakete werden wieder herabgesenkt.
@@ -125,43 +142,107 @@ public class ResCanvas {
 		// muss kein neues Teilpaket angelegt werden. Dies liegt daran, da das alte und
 		// das
 		// neue Teilpaket identisch währen.
-		Teilpaket tmp = teilpaket;
+
+		ArrayList<Teilpaket> zuFallendeTeilpakete = new ArrayList<Teilpaket>();
+		ArrayList<ResEinheit> herauszutrennendeResEinheiten = null;
+		Teilpaket tmp = null;
 		if (altesTeilpaketResEinheiten.size() != resEinheitFuerNeuesTeilpaket.size()
 				&& !resEinheitFuerNeuesTeilpaket.isEmpty()) {
-			tmp = teilpaket.trenneTeilpaketVertikal(resEinheitFuerNeuesTeilpaket);
 
+			// Prüfe hier, ob Vorgangsunterbrechungen in der resEinheitFuerNeuesTeilpaket
+			// stattfindet. Wenn ja mehre Teilpakete erstellen und in eine Liste aufnehmen
+
+			/*
+			 * .............DDDDD.........................
+			 * .............DDDDD.........................
+			 * .............DDDDD.........................
+			 * .............DDDDD.........................
+			 * .............DDDDD.........................
+			 * ..............CC...........................
+			 * AAAAAA........CC...........................
+			 * AAAAAA...BBBBBBB...........EEEEEE..........
+			 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
+			 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
+			 *
+			 */
+
+			do {
+
+				herauszutrennendeResEinheiten = ueberpruefeVorgangsunterbrechungHerunterfallen(
+						resEinheitFuerNeuesTeilpaket);
+
+				tmp = teilpaket.trenneTeilpaketVertikal(herauszutrennendeResEinheiten);
+				zuFallendeTeilpakete.add(tmp);
+
+			} while (!resEinheitFuerNeuesTeilpaket.isEmpty());
+
+		} else {
+			zuFallendeTeilpakete.add(teilpaket);
 		}
 
-		// TODO TEAM-LOGIK HIER WEITERMACHEN!!!!
-		/*
-		 * .............DDDDD.........................
-		 * .............DDDDD.........................
-		 * .............DDDDD.........................
-		 * .............DDDDD.........................
-		 * .............DDDDD.........................
-		 * ..............CC...........................
-		 * AAAAAA........CC...........................
-		 * AAAAAA...BBBBBBB...........EEEEEE..........
-		 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
-		 * AAAAAAZZZBBBBBBBCCCCCC.....EEEEEE..........
-		 *
-		 * Es werden nur zwei TEilpakete erstellt. Das heißt ein Teilpaket, das über den
-		 * 4 C ist und ein Teilpaket, das auseinandergerissen ist.
-		 *
-		 */
+		for (Teilpaket lasseFallen : zuFallendeTeilpakete) {
 
-		if (!tmp.getResEinheitListe().isEmpty()) {
-			ResEinheit ausgangspunkt = tmp.getResEinheitListe().get(0);
+			// if (!tmp.getResEinheitListe().isEmpty()) {
+			ResEinheit ausgangspunkt = lasseFallen.getResEinheitListe().get(0);
 
-			boolean kollision = falle(tmp, ausgangspunkt, zuVerschiebenListe);
+			boolean kollision = falle(lasseFallen, ausgangspunkt, zuVerschiebenListe);
 
 			if (kollision) {
 
 				Algorithmus.ausgeben(koordinatenSystem);
 
-				this.herunterfallen(tmp);
+				this.herunterfallen(lasseFallen);
 			}
+			// }
 		}
+	}
+
+	/**
+	 * Überprüft eine ArrayList<ResEinheiten> darauf, ob in ihr eine
+	 * Vorgangsunterbrechung stattfindet. Wenn ja wird eine neue
+	 * ArrayList<ResEinheiten> zurückgegeben, die keine Vorgangsunterbrechung mehr
+	 * enthällt. Ansonsten wird die übergeben ArrayList resEinheitFuerNeuesTeilpaket
+	 * zurückgegeben.
+	 *
+	 * @param resEinheitFuerNeuesTeilpaket
+	 * @return
+	 */
+	private ArrayList<ResEinheit> ueberpruefeVorgangsunterbrechungHerunterfallen(
+			ArrayList<ResEinheit> resEinheitFuerNeuesTeilpaket) {
+
+		ArrayList<ResEinheit> result = new ArrayList<ResEinheit>();
+
+		Collections.sort(resEinheitFuerNeuesTeilpaket, new ComperatorVektor2iX());
+
+		int xPos = resEinheitFuerNeuesTeilpaket.get(0).getPosition().getxKoordinate();
+		int xPosZuPruefen = 0;
+
+		for (ResEinheit resEinheit : resEinheitFuerNeuesTeilpaket) {
+
+			xPosZuPruefen = resEinheit.getPosition().getxKoordinate();
+
+			if (xPos == xPosZuPruefen) {
+				result.add(resEinheit);
+			} else if (xPos + 1 == xPosZuPruefen) {
+				xPos = xPosZuPruefen;
+				result.add(resEinheit);
+			} else {
+				break;
+			}
+
+		}
+
+		for (ResEinheit zuEntfernen : result) {
+			resEinheitFuerNeuesTeilpaket.remove(zuEntfernen);
+		}
+
+		if (!resEinheitFuerNeuesTeilpaket.isEmpty()) {
+			Collections.sort(resEinheitFuerNeuesTeilpaket, new ComperatorVektor2iY());
+		}
+
+		Collections.sort(result, new ComperatorVektor2iY());
+
+		return result;
 	}
 
 	/**
@@ -321,14 +402,6 @@ public class ResCanvas {
 		this.koordinatenSystem = koordinatenSystem;
 	}
 
-	public int getMaxMitarbeiter() {
-		return maxMitarbeiter;
-	}
-
-	public void setMaxMitarbeiter(int maxMitarbeiter) {
-		this.maxMitarbeiter = maxMitarbeiter;
-	}
-
 	public ArrayList<Arbeitspaket> getArbeitspaketListe() {
 		return arbeitspaketListe;
 	}
@@ -468,6 +541,19 @@ public class ResCanvas {
 	//
 	// }
 
+	private ArrayList<Arbeitspaket> getHistorienArbeitspaketListe() {
+		return historienArbeitspaketListe;
+	}
+
+	private void setHistorienArbeitspaketListe(ArrayList<Arbeitspaket> historienArbeitspaketListe) {
+		this.historienArbeitspaketListe = historienArbeitspaketListe;
+	}
+
+	/**
+	 * Erstellt eine Kopie des ResCanvas
+	 *
+	 * @return
+	 */
 	public ResCanvas copyResCanvas() {
 
 		ResCanvas kopieResCanvas = new ResCanvas();
@@ -475,6 +561,41 @@ public class ResCanvas {
 		kopieResCanvas.setArbeitspaketListe(this.copyArbeitspaketliste());
 		kopieResCanvas.setKoordinatenSystem(this.copyKoordinatenSystem(kopieResCanvas.getArbeitspaketListe()));
 		kopieResCanvas.setHistorieKoordinatenSystem(historieKoordinatenSystem);
+		kopieResCanvas.setHistorienArbeitspaketListe(historienArbeitspaketListe);
+
+		return kopieResCanvas;
+	}
+
+	/**
+	 * Erstellt eine Kopie des ResCanvas. Das übergebene Arbeitspaket wird dabei
+	 * nicht in die neue Kopie des Koordinatensystems übernommen.
+	 *
+	 * @param nichtKopierenOrginal
+	 * @return
+	 */
+	public ResCanvas copyResCanvas(Arbeitspaket nichtKopierenOrginal) {
+		ResCanvas kopieResCanvas = new ResCanvas();
+
+		kopieResCanvas.setArbeitspaketListe(this.copyArbeitspaketliste());
+
+		ArrayList<Arbeitspaket> kopieArbeitspaketListe = kopieResCanvas.getArbeitspaketListe();
+		Arbeitspaket nichtKopierenKopie = null;
+
+		for (Arbeitspaket ap : kopieResCanvas.getArbeitspaketListe()) {
+			if (ap.getId() == nichtKopierenOrginal.getId()) {
+				nichtKopierenKopie = ap;
+				break;
+			}
+		}
+
+		kopieArbeitspaketListe.remove(nichtKopierenKopie);
+
+		kopieResCanvas.setKoordinatenSystem(this.copyKoordinatenSystem(kopieArbeitspaketListe));
+
+		kopieArbeitspaketListe.add(nichtKopierenKopie);
+
+		kopieResCanvas.setHistorieKoordinatenSystem(historieKoordinatenSystem);
+		kopieResCanvas.setHistorienArbeitspaketListe(historienArbeitspaketListe);
 
 		return kopieResCanvas;
 	}
@@ -497,6 +618,25 @@ public class ResCanvas {
 
 		}
 		return stellen;
+	}
+
+	/**
+	 * Austausch der Attribute des aktuellen ResCanvas mit einem veränderten
+	 * ResCanvas.
+	 *
+	 * Muss aufgerufen werden, da siehe https://stackoverflow.com/a/11699969
+	 *
+	 * What gets passed to a method is a copy of the reference of the object. So, no
+	 * matter how many times you re-assign the references, the original reference
+	 * will not be affected.
+	 *
+	 * @param resCanvas
+	 */
+	public void swap(ResCanvas resCanvas) {
+		this.setArbeitspaketListe(resCanvas.getArbeitspaketListe());
+		this.setHistorieKoordinatenSystem(resCanvas.getHistorieKoordinatenSystem());
+		this.setKoordinatenSystem(resCanvas.getKoordinatenSystem());
+		this.setHistorienArbeitspaketListe(resCanvas.getHistorienArbeitspaketListe());
 	}
 
 }

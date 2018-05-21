@@ -222,7 +222,7 @@ public class Arbeitspaket extends Paket {
 		ArrayList<Teilpaket> neueTeilpaketListe = new ArrayList<Teilpaket>();
 
 		for (Teilpaket tp : this.teilpaketListe) {
-			neueTeilpaketListe.add(tp.copy());
+			neueTeilpaketListe.add(tp.copy(copyArbeitsPaket));
 		}
 
 		copyArbeitsPaket.setTeilpaketListe(neueTeilpaketListe);

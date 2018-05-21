@@ -72,6 +72,13 @@ public class Teilpaket extends Paket {
 		Collections.sort(teilpaket.getResEinheitListe(), new ComperatorVektor2iY());
 	}
 
+	/**
+	 * Damit diese Methode funktionieren kann, muss die zu übergebende ArrayList mit
+	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert worden sein.
+	 *
+	 * @param neueResEinheitListe
+	 * @return
+	 */
 	public Teilpaket trenneTeilpaketHorizontal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		Teilpaket neuesTeilpaket = null;
@@ -85,12 +92,23 @@ public class Teilpaket extends Paket {
 
 			this.setMitarbeiteranzahl(this.getMitarbeiteranzahl() - neuesTeilpaket.getMitarbeiteranzahl());
 
+			if (this.resEinheitListe.isEmpty()) {
+				this.arbeitspaket.entferneTeilpaket(this);
+			}
+
 		}
 
 		return neuesTeilpaket;
 
 	}
 
+	/**
+	 * Damit diese Methode funktionieren kann, muss die zu übergebende ArrayList mit
+	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert worden sein.
+	 *
+	 * @param neueResEinheitListe
+	 * @return
+	 */
 	public Teilpaket trenneTeilpaketVertikal(ArrayList<ResEinheit> neueResEinheitListe) {
 
 		Teilpaket neuesTeilpaket = null;
@@ -104,6 +122,10 @@ public class Teilpaket extends Paket {
 
 			this.setVorgangsdauer(this.getVorgangsdauer() - neuesTeilpaket.getVorgangsdauer());
 
+			if (this.resEinheitListe.isEmpty()) {
+				this.arbeitspaket.entferneTeilpaket(this);
+			}
+
 		}
 
 		return neuesTeilpaket;
@@ -113,6 +135,9 @@ public class Teilpaket extends Paket {
 	/**
 	 * Trennt die mitgegebene ResEinheiten-Liste aus dem Teilpaket und erstellt ein
 	 * neues Teilpaket mit Vorgangsdauer 1.
+	 *
+	 * Damit diese Methode funktionieren kann, muss die zu übergebende ArrayList mit
+	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert worden sein.
 	 *
 	 * @param gesezteResEinheiten
 	 */
@@ -283,7 +308,7 @@ public class Teilpaket extends Paket {
 		this.resEinheitListe = resEinheitListe;
 	}
 
-	public Teilpaket copy() {
+	public Teilpaket copy(Arbeitspaket copyArbeitspaket) {
 
 		ArrayList<ResEinheit> neueResEinheitListe = new ArrayList<ResEinheit>();
 
@@ -291,7 +316,7 @@ public class Teilpaket extends Paket {
 			neueResEinheitListe.add(re.copy());
 		}
 
-		return new Teilpaket(arbeitspaket, neueResEinheitListe);
+		return new Teilpaket(copyArbeitspaket, neueResEinheitListe);
 
 	}
 
