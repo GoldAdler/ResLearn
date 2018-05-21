@@ -184,7 +184,7 @@ public class ControllerCanvas {
 		public void handle(ActionEvent e) {
 
 			@SuppressWarnings("unused")
-			Bearbeitungsfenster fenster = new Bearbeitungsfenster(rect);
+			Bearbeitungsfenster bearbeitungsFenster = new Bearbeitungsfenster(rect);
 		}
 	};
 

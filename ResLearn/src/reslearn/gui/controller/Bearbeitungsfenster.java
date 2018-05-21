@@ -27,7 +27,7 @@ public class Bearbeitungsfenster extends Pane {
 	private boolean vertikal;
 
 	private Label arbeitspaket;
-	private Label text;
+	private Label hilfetext;
 	private Button teilen;
 
 	private Slider sliderX;
@@ -36,7 +36,7 @@ public class Bearbeitungsfenster extends Pane {
 	public Bearbeitungsfenster(ResFeld rect) {
 
 		arbeitspaket = new Label("Teile Arbeitspaket: " + rect.getTeilpaket().getArbeitspaket().getId());
-		text = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
+		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 		teilen = new Button("Teile Arbeitspaket");
 
 		resFeldListe = new LinkedList<ResFeld>();
@@ -59,7 +59,7 @@ public class Bearbeitungsfenster extends Pane {
 		sliderY.setMinorTickCount(0);
 		sliderY.setSnapToTicks(true);
 
-		this.getChildren().addAll(arbeitspaket, text, teilen, sliderX, sliderY);
+		this.getChildren().addAll(arbeitspaket, hilfetext, teilen, sliderX, sliderY);
 		scene = new Scene(this, 300, 250);
 		bearbeitungsmodus = new Stage();
 
@@ -199,6 +199,7 @@ public class Bearbeitungsfenster extends Pane {
 					}
 				}
 				bearbeitungsmodus.close();
+
 			}
 		});
 	}
