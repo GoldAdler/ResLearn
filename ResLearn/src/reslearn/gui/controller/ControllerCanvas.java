@@ -514,7 +514,7 @@ public class ControllerCanvas {
 		
 		int breite = DisplayCanvas.tabelleArbeitspaketBreite;
 		if (dataPakete.size() > 2) {
-			breite -= 12;
+			breite -= 15;
 		}
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
