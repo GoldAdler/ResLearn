@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.controller.Controller;
 import reslearn.gui.controller.ControllerAufgabeErstellen;
-import reslearn.gui.controller.ControllerAufgabeLaden;
 import reslearn.gui.controller.ControllerCanvas;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
@@ -156,20 +155,20 @@ public class View extends Application {
 			resCanvas.hinzufuegen(apA6);
 			resCanvas.hinzufuegen(apD6);
 			break;
-		case 7:
-			// Daten von Aufgabe laden
-			int i = 0;
-			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
-				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
-						ControllerAufgabeLaden.paketeArray[i].getFaz(), ControllerAufgabeLaden.paketeArray[i].getFez(),
-						ControllerAufgabeLaden.paketeArray[i].getSaz(), ControllerAufgabeLaden.paketeArray[i].getSez(),
-						ControllerAufgabeLaden.paketeArray[i].getVorgangsdauer(),
-						ControllerAufgabeLaden.paketeArray[i].getMitarbeiteranzahl(),
-						ControllerAufgabeLaden.paketeArray[i].getAufwand());
-				resCanvas.hinzufuegen(ap);
-				i++;
-			}
-			break;
+//		case 7:
+//			// Daten von Aufgabe laden
+//			int i = 0;
+//			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
+//				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
+//						ControllerAufgabeLaden.paketeArray[i].getFaz(), ControllerAufgabeLaden.paketeArray[i].getFez(),
+//						ControllerAufgabeLaden.paketeArray[i].getSaz(), ControllerAufgabeLaden.paketeArray[i].getSez(),
+//						ControllerAufgabeLaden.paketeArray[i].getVorgangsdauer(),
+//						ControllerAufgabeLaden.paketeArray[i].getMitarbeiteranzahl(),
+//						ControllerAufgabeLaden.paketeArray[i].getAufwand());
+//				resCanvas.hinzufuegen(ap);
+//				i++;
+//			}
+//			break;
 		case 8:
 			// Daten von Aufgabe erstellen
 			int j = 0;

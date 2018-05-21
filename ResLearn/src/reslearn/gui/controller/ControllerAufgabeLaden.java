@@ -1,9 +1,7 @@
 package reslearn.gui.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import reslearn.gui.ImportExport.CsvReader;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerAufgabeLaden extends Controller {
@@ -31,7 +29,7 @@ public class ControllerAufgabeLaden extends Controller {
 	@FXML
 	private Button dateiauswaehlen;
 
-	public static Arbeitspaket[] paketeArray;
+	public Arbeitspaket[] paketeArray;
 	private String name;
 	private String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
 
@@ -51,49 +49,12 @@ public class ControllerAufgabeLaden extends Controller {
 
 	@FXML
 	public void laden(ActionEvent event) {
-		try {
-
-			CsvReader arbeitspaketImport = new CsvReader(dateipfad + name);
-
-			arbeitspaketImport.readHeaders();
-			ArrayList<Arbeitspaket> pakete = new ArrayList<Arbeitspaket>();
-
-			while (arbeitspaketImport.readRecord()) {
-
-				Arbeitspaket ap = new Arbeitspaket();
-
-				try {
-					String zeile = arbeitspaketImport.get(0);
-					String[] spalten = zeile.split(";");
-
-					if (spalten.length == 8) {
-						ap.setId(spalten[0]);
-						ap.setFaz(Integer.valueOf(spalten[1]));
-						ap.setFez(Integer.valueOf(spalten[2]));
-						ap.setSaz(Integer.valueOf(spalten[3]));
-						ap.setSez(Integer.valueOf(spalten[4]));
-						ap.setVorgangsdauer(Integer.valueOf(spalten[5]));
-						ap.setMitarbeiteranzahl(Integer.valueOf(spalten[6]));
-						ap.setAufwand(Integer.valueOf(spalten[7]));
-					}
-
-					pakete.add(ap);
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			}
-
-			arbeitspaketImport.close();
-
-			paketeArray = getArbeitspaketArray(pakete);
+		AufgabeLadenImport importAufgabe = new AufgabeLadenImport();
+		
+		paketeArray = importAufgabe.aufgabeLaden(dateipfad + name);
 
 			weiter(event);
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@FXML
@@ -150,13 +111,10 @@ public class ControllerAufgabeLaden extends Controller {
 			e.printStackTrace();
 		}
 	}
-
-	public static Arbeitspaket[] getArbeitspaketArray(ArrayList<Arbeitspaket> pakete) {
-		Arbeitspaket arbeitspakete[] = new Arbeitspaket[pakete.size()];
-		int i = 0;
-		for (Arbeitspaket ap : pakete) {
-			arbeitspakete[i++] = ap;
-		}
-		return arbeitspakete;
+	
+	public Arbeitspaket[] getPaketeArray() {
+		return paketeArray;
 	}
+
+	
 }
