@@ -1,5 +1,6 @@
 package reslearn.gui.controller;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -14,6 +15,9 @@ import reslearn.gui.View;
 
 public class ControllerUebungAuswaehlen extends Controller {
 
+	File f = new File("C:/Programme");
+	File[] fileArray = f.listFiles();
+	
 	@FXML
 	private Button zurueck;
 	@FXML

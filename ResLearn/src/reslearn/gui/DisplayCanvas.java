@@ -50,9 +50,9 @@ public final class DisplayCanvas {
 	public static final int tabelleArbeitspaketLayoutX = paneLayoutX;
 	
 	// Tabelle überhalb des Canvas (am Rand bündig)
-//	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY - tabelleArbeitspaketLaenge;
+	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY - tabelleArbeitspaketLaenge;
 	
 	//Tabelle unterhalb des Canvas (ein Feld Abstand)
-	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY + canvasLaenge + resFeldLaenge;
+//	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY + canvasLaenge + resFeldLaenge;
 
 }
