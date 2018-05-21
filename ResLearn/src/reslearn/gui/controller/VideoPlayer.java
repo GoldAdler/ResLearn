@@ -5,7 +5,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -13,12 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -60,10 +53,11 @@ public class VideoPlayer extends BorderPane{
 		ImageView playIcon = new ImageView(new Image(getClass().getResource("../images/play.png").toExternalForm(), 20, 30, true, true));
 		ImageView pauseIcon = new ImageView(new Image(getClass().getResource("../images/pause.png").toExternalForm(), 20, 30, true, true));
 		ImageView repeatIcon = new ImageView(new Image(getClass().getResource("../images/repeat.png").toExternalForm(), 20, 30, true, true));
-		
+
 		playButton.setGraphic(playIcon);
 
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent e) {
 				Status status = mp.getStatus();
 
@@ -86,12 +80,14 @@ public class VideoPlayer extends BorderPane{
 		});
 
 		mp.currentTimeProperty().addListener(new InvalidationListener() {
+			@Override
 			public void invalidated(Observable ov) {
 				updateValues();
 			}
 		});
 
 		mp.setOnPlaying(new Runnable() {
+			@Override
 			public void run() {
 				if (stopRequested) {
 					mp.pause();
@@ -103,12 +99,14 @@ public class VideoPlayer extends BorderPane{
 		});
 
 		mp.setOnPaused(new Runnable() {
+			@Override
 			public void run() {
 				playButton.setGraphic(playIcon);
 			}
 		});
 
 		mp.setOnReady(new Runnable() {
+			@Override
 			public void run() {
 				duration = mp.getMedia().getDuration();
 				updateValues();
@@ -117,6 +115,7 @@ public class VideoPlayer extends BorderPane{
 
 		mp.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
 		mp.setOnEndOfMedia(new Runnable() {
+			@Override
 			public void run() {
 				if (!repeat) {
 					playButton.setGraphic(repeatIcon);
@@ -143,6 +142,7 @@ public class VideoPlayer extends BorderPane{
 		timeSlider.setMaxWidth(Double.MAX_VALUE);
 
 		timeSlider.valueProperty().addListener(new InvalidationListener() {
+			@Override
 			public void invalidated(Observable ov) {
 				if (timeSlider.isValueChanging()) {
 					// multiply duration by percentage calculated by slider position
@@ -170,6 +170,7 @@ public class VideoPlayer extends BorderPane{
 		volumeSlider.setMinWidth(30);
 
 		volumeSlider.valueProperty().addListener(new InvalidationListener() {
+			@Override
 			public void invalidated(Observable ov) {
 				if (volumeSlider.isValueChanging()) {
 					mp.setVolume(volumeSlider.getValue() / 100.0);
@@ -186,6 +187,7 @@ public class VideoPlayer extends BorderPane{
 	protected void updateValues() {
 		if (playTime != null && timeSlider != null && volumeSlider != null) {
 			Platform.runLater(new Runnable() {
+				@Override
 				public void run() {
 					Duration currentTime = mp.getCurrentTime();
 					playTime.setText(formatTime(currentTime, duration));

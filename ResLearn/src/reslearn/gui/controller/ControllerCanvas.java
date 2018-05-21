@@ -28,30 +28,32 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public class ControllerCanvas {
 
+
 	private double zeigerX, zeigerY;
 	private double translateX, translateY;
 	private double newTranslateX, newTranslateY;
+	private Diagramm diagramm;
 	private Teilpaket teilpaketClicked;
-	private ResFeld feld, rect;
-	private ColorPicker colorPicker;
+	private ResFeld rect;
 	private ResCanvas resCanvas;
-	public static TableView<Pair<String, Object>> table = new TableView<>();
-	private ObservableList<Pair<String, Object>> data;
+	private ColorPicker colorPicker;
+	private View view = new View();
 
-	public ControllerCanvas(ResCanvas resCanvas) {
+	public ControllerCanvas(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
+		this.diagramm = diagramm;
+		erstelleTabelle();
 	}
 
 	public void makeDraggable(ResFeld feld) {
-		this.feld = feld;
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		View.ap.setOnAction(OnMenuItemApEventHandler);
+		view.ap.setOnAction(OnMenuItemApEventHandler);
 	}
 
 	// Event Handler Maus klicken
-	EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
+	private EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
 
@@ -65,13 +67,14 @@ public class ControllerCanvas {
 			translateY = rect.getTranslateY();
 
 			befuelleTabelle();
+			erstelleTabelleArbeitspakete();
 			markiereArbeitspaketInTabelle(teilpaketClicked.getArbeitspaket());
 
 		}
 	};
 
 	// Event Handler Maus ziehen
-	EventHandler<MouseEvent> OnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+	private EventHandler<MouseEvent> OnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
 
@@ -87,9 +90,9 @@ public class ControllerCanvas {
 			double neuePositionZeigerY = e.getSceneY();
 
 			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / DisplayCanvas.resFeldBreite); // neue Position
-																									// Mauszeiger - alte
+			// Mauszeiger - alte
 			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / DisplayCanvas.resFeldLaenge); // Position
-																									// Mauszeiger
+			// Mauszeiger
 
 			// Verschiebung auf der X-Achse bewirkt logisches Verschieben im
 			// Koordinatensystem
@@ -100,12 +103,12 @@ public class ControllerCanvas {
 
 				if (differenzX > 0) {
 					differenzX--;
-					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, 1);
+					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeX(resCanvas, 1);
 					verschiebenX(verschiebbar, 1);
 				}
 				if (differenzX < 0) {
 					differenzX++;
-					verschiebbar = rect.getTeilpaket().bewegeX(resCanvas, -1);
+					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeX(resCanvas, -1);
 					verschiebenX(verschiebbar, -1);
 				}
 
@@ -116,19 +119,19 @@ public class ControllerCanvas {
 
 				if (differenzY > 0) {
 					differenzY--;
-					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, -1);
+					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeY(resCanvas, -1);
 					verschiebenY(verschiebbar, 1);
 				}
 				if (differenzY < 0) {
 					differenzY++;
-					verschiebbar = rect.getTeilpaket().bewegeY(resCanvas, 1);
+					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeY(resCanvas, 1);
 					verschiebenY(verschiebbar, -1);
 				}
 			}
 		}
 	};
 
-	public void verschiebenX(boolean verschiebbar, int vorzeichen) {
+	private void verschiebenX(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
 			newTranslateX = translateX + DisplayCanvas.resFeldBreite * vorzeichen;
 			zeigerX += DisplayCanvas.resFeldBreite * vorzeichen;
@@ -137,7 +140,7 @@ public class ControllerCanvas {
 		}
 	}
 
-	public void verschiebenY(boolean verschiebbar, int vorzeichen) {
+	private void verschiebenY(boolean verschiebbar, int vorzeichen) {
 		if (verschiebbar) {
 			newTranslateY = translateY + DisplayCanvas.resFeldLaenge * vorzeichen;
 			zeigerY += DisplayCanvas.resFeldLaenge * vorzeichen;
@@ -146,20 +149,21 @@ public class ControllerCanvas {
 		}
 	}
 
-	public void bewegeX() {
-		for (ResFeld[] resAr : Diagramm.res) {
+	private void bewegeX() {
+		for (ResFeld[] resAr : diagramm.getResFeldArray()) {
 			for (ResFeld teilpaket : resAr) {
 				if (teilpaket != null) {
 					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
 						teilpaket.setTranslateX(newTranslateX);
+						System.out.println(""+diagramm.getResFeldArray());
 					}
 				}
 			}
 		}
 	}
 
-	public void bewegeY() {
-		for (ResFeld[] resAr : Diagramm.res) {
+	private void bewegeY() {
+		for (ResFeld[] resAr : diagramm.getResFeldArray()) {
 			for (ResFeld teilpaket : resAr) {
 				if (teilpaket != null) {
 					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
@@ -171,15 +175,15 @@ public class ControllerCanvas {
 	}
 
 	// Zeige KontextMenü mit Rechtsklick
-	EventHandler<ContextMenuEvent> OnMouseSecondaryEventHandler = new EventHandler<ContextMenuEvent>() {
+	private EventHandler<ContextMenuEvent> OnMouseSecondaryEventHandler = new EventHandler<ContextMenuEvent>() {
 		@Override
 		public void handle(ContextMenuEvent e) {
-			View.menu.show(feld, e.getSceneX(), e.getSceneY());
+			view.menu.show(rect, e.getSceneX(), e.getSceneY());
 		}
 	};
 
 	// MenuItem Arbeitspaket teilen
-	EventHandler<ActionEvent> OnMenuItemApEventHandler = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnMenuItemApEventHandler = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent e) {
 
@@ -192,23 +196,27 @@ public class ControllerCanvas {
 	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
 	///////////////////////////////////////////////////////////////////////
 
+	private TableView<Pair<String, Object>> table = new TableView<>();
+	private ObservableList<Pair<String, Object>> data;
+
 	@SuppressWarnings("unchecked")
-	public void befuelleTabelle() {
+	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
-		data = FXCollections.observableArrayList(pair("Arbeitspaket", rect.getTeilpaket().getArbeitspaket().getId()),
-				pair("Farbe", rect.getFill()), pair("FAZ", rect.getTeilpaket().getArbeitspaket().getFaz()),
-				pair("FEZ", rect.getTeilpaket().getArbeitspaket().getFez()),
-				pair("SAZ", rect.getTeilpaket().getArbeitspaket().getSaz()),
-				pair("SEZ", rect.getTeilpaket().getArbeitspaket().getSez()),
-				pair("Vorgangsdauer", rect.getTeilpaket().getArbeitspaket().getVorgangsdauer()),
-				pair("Mitarbeiter", rect.getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
-				pair("Aufwand", rect.getTeilpaket().getArbeitspaket().getAufwand()));
+		data = FXCollections.observableArrayList(pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
+				pair("Farbe", rect.getFill()),
+				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
+				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
+				pair("SAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSaz()),
+				pair("SEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSez()),
+				pair("Vorgangsdauer", rect.getResEinheit().getTeilpaket().getArbeitspaket().getVorgangsdauer()),
+				pair("Mitarbeiter", rect.getResEinheit().getTeilpaket().getArbeitspaket().getMitarbeiteranzahl()),
+				pair("Aufwand", rect.getResEinheit().getTeilpaket().getArbeitspaket().getAufwand()));
 
 		table.setItems(data);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void erstelleTabelle() {
+	private void erstelleTabelle() {
 
 		table.setEditable(true);
 		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
@@ -243,7 +251,7 @@ public class ControllerCanvas {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -251,7 +259,7 @@ public class ControllerCanvas {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -286,15 +294,15 @@ public class ControllerCanvas {
 		}
 	}
 
-	public void wechsleFarbe() {
+	private void wechsleFarbe() {
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				for (ResFeld[] resAr : Diagramm.res) {
-					for (ResFeld resG : resAr) {
-						if (resG != null) {
-							if (teilpaketClicked == resG.getResEinheit().getTeilpaket()) {
-								resG.setFill(colorPicker.getValue());
+				for (ResFeld[] resAr : diagramm.getResFeldArray()) {
+					for (ResFeld teilpaket : resAr) {
+						if (teilpaket != null) {
+							if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
+								teilpaket.setFill(colorPicker.getValue());
 							}
 						}
 					}
@@ -307,11 +315,11 @@ public class ControllerCanvas {
 	// Erstellung der Tabelle zur Anzeige der Arbeitspakete //
 	//////////////////////////////////////////////////////////////////////////////////
 
-	public static TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
+	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
 	private ObservableList<Arbeitspaket> dataPakete;
 
 	@SuppressWarnings("unchecked")
-	public void erstelleTabelleArbeitspakete() {
+	private void erstelleTabelleArbeitspakete() {
 		dataPakete = FXCollections.observableArrayList();
 		ArrayList<Arbeitspaket> arbeitspaketeArrayList = resCanvas.getArbeitspaketListe();
 		arbeitspaketeArrayList.forEach(p -> dataPakete.add(p));
@@ -365,5 +373,13 @@ public class ControllerCanvas {
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
 		tabelleArbeitspakete.getSelectionModel().select(ap);
 		tabelleArbeitspakete.scrollTo(ap);
+	}
+
+	public TableView<Arbeitspaket> getTabelleArbeitspakete(){
+		return tabelleArbeitspakete;
+	}
+
+	public TableView<Pair<String, Object>> getTable(){
+		return table;
 	}
 }

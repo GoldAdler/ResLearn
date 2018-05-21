@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.View;
 import reslearn.model.paket.ResEinheit;
@@ -32,10 +33,11 @@ public class Bearbeitungsfenster extends Pane {
 
 	private Slider sliderX;
 	private Slider sliderY;
+	View view = new View();
 
 	public Bearbeitungsfenster(ResFeld rect) {
 
-		arbeitspaket = new Label("Teile Arbeitspaket: " + rect.getTeilpaket().getArbeitspaket().getId());
+		arbeitspaket = new Label("Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
 		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 		teilen = new Button("Teile Arbeitspaket");
 
@@ -43,7 +45,7 @@ public class Bearbeitungsfenster extends Pane {
 
 		sliderX = new Slider();
 		sliderX.setMin(0);
-		sliderX.setMax(rect.getTeilpaket().getVorgangsdauer());
+		sliderX.setMax(rect.getResEinheit().getTeilpaket().getVorgangsdauer());
 		sliderX.setShowTickLabels(true);
 		sliderX.setMajorTickUnit(1);
 		sliderX.setMinorTickCount(0);
@@ -53,7 +55,7 @@ public class Bearbeitungsfenster extends Pane {
 		sliderY.setMaxWidth(120);
 		sliderY.setRotate(270);
 		sliderY.setMin(0);
-		sliderY.setMax(rect.getTeilpaket().getMitarbeiteranzahl());
+		sliderY.setMax(rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl());
 		sliderY.setShowTickLabels(true);
 		sliderY.setMajorTickUnit(1);
 		sliderY.setMinorTickCount(0);
@@ -65,19 +67,19 @@ public class Bearbeitungsfenster extends Pane {
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
 		bearbeitungsmodus.initStyle(StageStyle.UTILITY);
-		bearbeitungsmodus.initOwner(View.classStage);
+		bearbeitungsmodus.initOwner(view.classStage);
 		bearbeitungsmodus.setTitle("Arbeitspaket bearbeiten");
 		bearbeitungsmodus.setScene(scene);
-		bearbeitungsmodus.setX(View.classStage.getWidth() / 2);
-		bearbeitungsmodus.setY(View.classStage.getHeight() / 2);
+		bearbeitungsmodus.setX(view.classStage.getWidth() / 2);
+		bearbeitungsmodus.setY(view.classStage.getHeight() / 2);
 		bearbeitungsmodus.show();
 
 		/*
 		 * geklicktes Teilpaket im Pop-Up nachzeichnen
 		 */
-		for (int i = 0; i < rect.getTeilpaket().getVorgangsdauer(); i++) {
-			for (int j = 0; j < rect.getTeilpaket().getMitarbeiteranzahl(); j++) {
-				ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
+		for (int i = 0; i < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); i++) {
+			for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
+				ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit());
 				dummy.setFill(rect.getFill());
 				// dummy.setStroke(Color.GRAY);
 				getChildren().add(dummy);
@@ -102,14 +104,14 @@ public class Bearbeitungsfenster extends Pane {
 
 					// Wert des Sliders entspricht der Anzahl der Spalten die abgeschnitten werden
 					// sollen
-					for (int i = rect.getTeilpaket().getMitarbeiteranzahl(); i > 0; i--) {
-						for (int j = 0; j < rect.getTeilpaket().getVorgangsdauer(); j++) {
-							if (counter < neuerWert.intValue() * rect.getTeilpaket().getVorgangsdauer()) {
+					for (int i = rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); i > 0; i--) {
+						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); j++) {
+							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
 								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(j * 20 + 65, i * 20 + 45, 20, 20);
+								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65, i * DisplayCanvas.resFeldLaenge + 45, rect.getResEinheit());
 								dummy.setStroke(rect.getFill());
-								dummy.setTeilpaket(rect.getTeilpaket());
-								dummy.setResEinheit(rect.getTeilpaket().getResEinheitListe().get(counter));
+								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
+								dummy.setResEinheit(rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);
 								counter++;
@@ -144,15 +146,15 @@ public class Bearbeitungsfenster extends Pane {
 					}
 					resFeldListe.clear();
 
-					for (int i = 0; i < rect.getTeilpaket().getVorgangsdauer(); i++) {
-						for (int j = 0; j < rect.getTeilpaket().getMitarbeiteranzahl(); j++) {
-							if (counter < neuerWert.intValue() * rect.getTeilpaket().getMitarbeiteranzahl()) {
+					for (int i = 0; i < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); i++) {
+						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
+							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl()) {
 								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(i * 20 + 65, j * 20 + 65, 20, 20);
+								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit());
 								dummy.setStroke(Color.GREY);
-								dummy.setTeilpaket(rect.getTeilpaket());
-								dummy.setResEinheit(rect.getTeilpaket().getResEinheitListe()
-										.get((j * rect.getTeilpaket().getVorgangsdauer()) + i));
+								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
+								dummy.setResEinheit(rect.getResEinheit().getTeilpaket().getResEinheitListe()
+										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								System.out.println();
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);
@@ -186,15 +188,15 @@ public class Bearbeitungsfenster extends Pane {
 				}
 				if (neueResEinheitListe.size() != 0) {
 					if (vertikal) {
-						int vorgangsdauer = resFeldListe.size() / rect.getTeilpaket().getMitarbeiteranzahl();
+						int vorgangsdauer = resFeldListe.size() / rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl();
 						System.out.println("Vorgangsdauer: " + vorgangsdauer);
 
 						// rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe,
 						// vorgangsdauer);
-						rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe);
+						rect.getResEinheit().getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe);
 						System.out.println("vertikal");
 					} else {
-						rect.getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
+						rect.getResEinheit().getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
 						System.out.println("horizontal");
 					}
 				}

@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
@@ -21,12 +20,13 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public class View extends Application {
 
-	public static Stage classStage = new Stage();
-	public static Pane pane;
-	public static ControllerCanvas cc;
-	public static ContextMenu menu = new ContextMenu();
-	public static MenuItem ap = new MenuItem("Teile Arbeitspaket");
-	public static MenuItem reset = new MenuItem("Zurücksetzen");
+	public Stage classStage = new Stage();
+	public Pane pane;
+	public ControllerCanvas controllerCanvas;
+	private Diagramm diagramm = new Diagramm();
+	public ContextMenu menu = new ContextMenu();
+	public MenuItem ap = new MenuItem("Teile Arbeitspaket");
+	public MenuItem reset = new MenuItem("Zurücksetzen");
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -37,7 +37,7 @@ public class View extends Application {
 		Canvas canvas = new Canvas(DisplayCanvas.canvasBreite, DisplayCanvas.canvasLaenge);
 		canvas.setLayoutX(DisplayCanvas.canvasStartpunktX);
 		canvas.setLayoutY(DisplayCanvas.canvasStartpunktY);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+
 		Group group = new Group();
 
 		// Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Canvas
@@ -52,26 +52,21 @@ public class View extends Application {
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		group.getChildren().addAll(canvas, pane, ControllerCanvas.table, ControllerCanvas.tabelleArbeitspakete);
+		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(), controllerCanvas.getTabelleArbeitspakete());
 
 		// Durchführen des Algorithmus
 		ResCanvas resCanvas = new ResCanvas();
 		erstelleTestDaten(resCanvas);
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
-				.getKoordinatenSystem();
-
-		cc = new ControllerCanvas(resCanvas);
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
 
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
 
-		Diagramm meincanvas = new Diagramm();
-		meincanvas.zeichneCanvas(gc, canvas);
-		meincanvas.zeichnePaket(koordinatenSystem);
+		controllerCanvas = new ControllerCanvas(resCanvas, diagramm);
+
+		diagramm.zeichneCanvas(canvas);
+		diagramm.zeichneTeilpakete(koordinatenSystem);
 
 		menu.getItems().addAll(ap, reset);
-
-		cc.erstelleTabelle();
-		cc.erstelleTabelleArbeitspakete();
 
 		classStage = stage;
 		stage.setMaximized(true);
@@ -155,20 +150,20 @@ public class View extends Application {
 			resCanvas.hinzufuegen(apA6);
 			resCanvas.hinzufuegen(apD6);
 			break;
-//		case 7:
-//			// Daten von Aufgabe laden
-//			int i = 0;
-//			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
-//				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
-//						ControllerAufgabeLaden.paketeArray[i].getFaz(), ControllerAufgabeLaden.paketeArray[i].getFez(),
-//						ControllerAufgabeLaden.paketeArray[i].getSaz(), ControllerAufgabeLaden.paketeArray[i].getSez(),
-//						ControllerAufgabeLaden.paketeArray[i].getVorgangsdauer(),
-//						ControllerAufgabeLaden.paketeArray[i].getMitarbeiteranzahl(),
-//						ControllerAufgabeLaden.paketeArray[i].getAufwand());
-//				resCanvas.hinzufuegen(ap);
-//				i++;
-//			}
-//			break;
+			//		case 7:
+			//			// Daten von Aufgabe laden
+			//			int i = 0;
+			//			for (Arbeitspaket ap : ControllerAufgabeLaden.paketeArray) {
+			//				ap = new Arbeitspaket(ControllerAufgabeLaden.paketeArray[i].getId(),
+			//						ControllerAufgabeLaden.paketeArray[i].getFaz(), ControllerAufgabeLaden.paketeArray[i].getFez(),
+			//						ControllerAufgabeLaden.paketeArray[i].getSaz(), ControllerAufgabeLaden.paketeArray[i].getSez(),
+			//						ControllerAufgabeLaden.paketeArray[i].getVorgangsdauer(),
+			//						ControllerAufgabeLaden.paketeArray[i].getMitarbeiteranzahl(),
+			//						ControllerAufgabeLaden.paketeArray[i].getAufwand());
+			//				resCanvas.hinzufuegen(ap);
+			//				i++;
+			//			}
+			//			break;
 		case 8:
 			// Daten von Aufgabe erstellen
 			int j = 0;
