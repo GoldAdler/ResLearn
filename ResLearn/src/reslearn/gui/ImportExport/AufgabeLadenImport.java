@@ -11,7 +11,7 @@ public class AufgabeLadenImport {
 	public Arbeitspaket[] aufgabeLaden(String dateipfad) {
 		Arbeitspaket[] paketeArray = null;
 		try {
-		
+
 			CsvReader arbeitspaketImport = new CsvReader(dateipfad);
 
 			arbeitspaketImport.readHeaders();
@@ -45,7 +45,6 @@ public class AufgabeLadenImport {
 			arbeitspaketImport.close();
 
 			paketeArray = getArbeitspaketArray(pakete);
-		
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

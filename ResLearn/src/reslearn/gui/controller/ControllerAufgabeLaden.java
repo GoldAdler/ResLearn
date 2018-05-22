@@ -50,10 +50,10 @@ public class ControllerAufgabeLaden extends Controller {
 	@FXML
 	public void laden(ActionEvent event) {
 		AufgabeLadenImport importAufgabe = new AufgabeLadenImport();
-		
+
 		paketeArray = importAufgabe.aufgabeLaden(dateipfad + name);
 
-			weiter(event);
+		weiter(event);
 
 	}
 
@@ -111,10 +111,9 @@ public class ControllerAufgabeLaden extends Controller {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Arbeitspaket[] getPaketeArray() {
 		return paketeArray;
 	}
 
-	
 }

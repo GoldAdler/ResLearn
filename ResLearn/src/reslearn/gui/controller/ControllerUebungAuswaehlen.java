@@ -2,6 +2,8 @@ package reslearn.gui.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,28 +14,65 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import reslearn.gui.View;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
+import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
 
-	File f = new File("C:/Programme");
+	private List<Button> buttonlist = new ArrayList<>();
+	public Arbeitspaket[] paketeArray;
+	File f = new File("..\\dateien\\uebungen");
 	File[] fileArray = f.listFiles();
-	
+
+	// public void initialize() {
+	// buttonErstellen();
+	// }
+
+	// @FXML
+	public void buttonErstellen(ActionEvent event) throws Exception {
+
+		for (int i = 0; i < fileArray.length; i++) {
+			String name = fileArray[i].getName();
+			buttonlist.add(new Button(name));
+		}
+	}
+
+	public void aufgabeLadenKlick(ActionEvent event) {
+		View view = new View();
+		try {
+			String buttonName = event.getSource().toString() + ".csv";
+			for (int i = 0; i < buttonlist.size(); i++) {
+				if (buttonName == buttonlist.get(i).toString()) {
+					AufgabeLadenImport importAufgabe = new AufgabeLadenImport();
+					paketeArray = importAufgabe.aufgabeLaden(fileArray[i].getPath());
+				}
+			}
+
+			alleFenster.add("../fxml/UebungAuswaehlen.fxml");
+			view.start(View.classStage);
+			((Node) (event.getSource())).getScene().getWindow().hide();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@FXML
 	private Button zurueck;
 	@FXML
 	private Button home;
-	@FXML
-	private Button aufgabe1;
-	@FXML
-	private Button aufgabe2;
-	@FXML
-	private Button aufgabe3;
-	@FXML
-	private Button aufgabe4;
-	@FXML
-	private Button aufgabe5;
-	@FXML
-	private Button aufgabe6;
+
+	// @FXML
+	// private Button aufgabe1;
+	// @FXML
+	// private Button aufgabe2;
+	// @FXML
+	// private Button aufgabe3;
+	// @FXML
+	// private Button aufgabe4;
+	// @FXML
+	// private Button aufgabe5;
+	// @FXML
+	// private Button aufgabe6;
 
 	@FXML
 	public void home(ActionEvent event) throws Exception {
