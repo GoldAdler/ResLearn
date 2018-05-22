@@ -31,7 +31,6 @@ public class View extends Application {
 		// Lade FXML
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
 
-
 		// Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Canvas
 		hauptszene = new Scene(root);
 		//Scene unterszene = new Scene(group);
