@@ -1,14 +1,30 @@
 package reslearn.gui;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import reslearn.gui.controller.ControllerCanvas;
+import reslearn.model.algorithmus.AlgoErsteSchritt;
+import reslearn.model.paket.Arbeitspaket;
+import reslearn.model.paket.ResEinheit;
+import reslearn.model.resCanvas.ResCanvas;
 
 public class View extends Application {
 	private static View view;
+	private Stage stage;
+	private ContextMenu menu;
+	private MenuItem ap;
+	private MenuItem reset;
 
 	public static View getInstance() {
 		if (view == null) {
@@ -17,76 +33,74 @@ public class View extends Application {
 		return view;
 	}
 
-	private Stage stage;
-
-	// TODO: ausgliedern
-	// public Pane pane;
-	// public ContextMenu menu = new ContextMenu();
-	// public MenuItem ap = new MenuItem("Teile Arbeitspaket");
-	// public MenuItem reset = new MenuItem("Zurücksetzen");
-	private Scene hauptszene;
-
 	@Override
 	public void start(Stage stage) throws Exception {
+
+
+	}
+
+
+	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
+
+		stage = new Stage();
 		// Lade FXML
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
+		Scene hauptszene = new Scene(root);
 
-		// Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Canvas
-		hauptszene = new Scene(root);
-		//Scene unterszene = new Scene(group);
+		ResCanvas resCanvas = new ResCanvas();
 
+		for (Arbeitspaket arbeitspaket: arbeitspakete) {
+			resCanvas.hinzufuegen(arbeitspaket);
+		}
 
+		Canvas canvas = new Canvas(DisplayCanvas.canvasBreite, DisplayCanvas.canvasLaenge);
+		canvas.setLayoutX(DisplayCanvas.canvasStartpunktX);
+		canvas.setLayoutY(DisplayCanvas.canvasStartpunktY);
 
-		//((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
+		Group group = new Group();
 
+		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
+		// der Unterszene hinzu
+		Pane pane = new Pane();
+		pane.setPrefWidth(DisplayCanvas.paneBreite);
+		pane.setPrefHeight(DisplayCanvas.paneLaenge);
+		pane.setLayoutX(DisplayCanvas.paneLayoutX);
+		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
+		Diagramm diagramm = new Diagramm();
+		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
+		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
+		ControllerCanvas controllerCanvas = new ControllerCanvas(resCanvas, diagramm);
 
-		this.stage = stage;
+		menu = new ContextMenu();
+		ap = new MenuItem("Teile Arbeitspaket");
+		reset = new MenuItem("Zurücksetzen");
+
+		menu.getItems().addAll(ap, reset);
+
+		for(Rectangle[] rectangleZeile : weisseFelder) {
+			for(Rectangle rectangle : rectangleZeile) {
+				pane.getChildren().add(rectangle);
+			}
+		}
+
+		for(ResFeld[] resFeldZeile : teilpakete) {
+			for(ResFeld resFeld : resFeldZeile) {
+				pane.getChildren().add(resFeld);
+				controllerCanvas.makeDraggable(resFeld);
+			}
+		}
+
+		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(), controllerCanvas.getTabelleArbeitspakete());
+
+		Scene unterszene = new Scene(group);
+		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
+
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
-	}
-
-	public void aendereSzene(Scene unterszene) {
-
-		((Pane) hauptszene.getRoot()).getChildren().clear();
-		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
-
-		// stage.setScene(hauptszene) und stage.show() notwendig?
-		// hauptszene wurde ja abgeändert (unterszene)
-
-		//TODO: ausgliedern
-
-		//		controllerCanvas = new ControllerCanvas(resCanvas, diagramm);
-		//
-		//		diagramm.zeichneCanvas(canvas);
-		//		diagramm.zeichneTeilpakete(koordinatenSystem);
-		//
-		//		menu.getItems().addAll(ap, reset);
-
-		//		// Durchführen des Algorithmus
-		//		ResCanvas resCanvas = new ResCanvas();
-		//		erstelleTestDaten(resCanvas);
-		//		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
-		//
-		//		// Erstelle Canvas-Zeichenfläche & Gruppe
-		//		Canvas canvas = new Canvas(DisplayCanvas.canvasBreite, DisplayCanvas.canvasLaenge);
-		//		canvas.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		//		canvas.setLayoutY(DisplayCanvas.canvasStartpunktY);
-		//
-		//		Group group = new Group();
-		//
-		//		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
-		//		// der Unterszene hinzu
-		//		pane = new Pane();
-		//		pane.setPrefWidth(DisplayCanvas.paneBreite);
-		//		pane.setPrefHeight(DisplayCanvas.paneLaenge);
-		//		pane.setLayoutX(DisplayCanvas.paneLayoutX);
-		//		pane.setLayoutY(DisplayCanvas.paneLayoutY);
-		//
-		//		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(), controllerCanvas.getTabelleArbeitspakete());
-
 	}
 
 	//	private static void erstelleTestDaten(ResCanvas resCanvas) {
@@ -222,5 +236,17 @@ public class View extends Application {
 
 	public Stage getStage() {
 		return stage;
+	}
+
+	public ContextMenu getMenu() {
+		return menu;
+	}
+
+	public MenuItem getAp() {
+		return ap;
+	}
+
+	public MenuItem getReset() {
+		return reset;
 	}
 }

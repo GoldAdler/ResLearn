@@ -21,6 +21,7 @@ import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
+import reslearn.gui.View;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
@@ -48,7 +49,7 @@ public class ControllerCanvas {
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
 		//TODO: Wo und wie wird der OnMenuItemApEventHandler gesetzt
-		//view.ap.setOnAction(OnMenuItemApEventHandler);
+		View.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
 	}
 
 	// Event Handler Maus klicken
@@ -177,7 +178,7 @@ public class ControllerCanvas {
 		@Override
 		public void handle(ContextMenuEvent e) {
 			//TODO: Wo und wie wird das Menü angezeigt
-			//view.menu.show(rect, e.getSceneX(), e.getSceneY());
+			View.getInstance().getMenu().show(rect, e.getSceneX(), e.getSceneY());
 		}
 	};
 
