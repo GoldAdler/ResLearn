@@ -16,13 +16,18 @@ import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
+// TODO 1 KLUTKE ERZÄHLEN
+// Siehe Kinder UNI maxBegrenzung 2
+// ist nicht lösbar, da kompllet neuer Algo nötig währe
+// TODO Fange Fehler ab, wenn ein AP größer ist als maxBegrenzung
+
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
-	private boolean vorgangsdauerVeraenderbar = false;
+	private boolean vorgangsdauerVeraenderbar = true;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int maxBegrenzung = 5;
+	private static int maxBegrenzung = 3;
 
 	private AlgoKapazitaetstreu() {
 	}
@@ -748,7 +753,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			while (!rechtsVonunterhalbStack.isEmpty()) {
 				Teilpaket tp = rechtsVonunterhalbStack.pop();
-				tp.bewegen(resCanvas, 0, xMove);
+				// tp.bewegen(resCanvas, 0, xMove);
+				tp.bewegeX(resCanvas, xMove);
 
 				ausgeben(koordinatenSystem);
 			}
