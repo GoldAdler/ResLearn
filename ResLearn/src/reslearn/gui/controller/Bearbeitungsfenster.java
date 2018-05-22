@@ -67,11 +67,11 @@ public class Bearbeitungsfenster extends Pane {
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
 		bearbeitungsmodus.initStyle(StageStyle.UTILITY);
-		bearbeitungsmodus.initOwner(view.classStage);
+		bearbeitungsmodus.initOwner(View.getInstance().getStage());
 		bearbeitungsmodus.setTitle("Arbeitspaket bearbeiten");
 		bearbeitungsmodus.setScene(scene);
-		bearbeitungsmodus.setX(view.classStage.getWidth() / 2);
-		bearbeitungsmodus.setY(view.classStage.getHeight() / 2);
+		bearbeitungsmodus.setX(View.getInstance().getStage().getWidth() / 2);
+		bearbeitungsmodus.setY(View.getInstance().getStage().getHeight() / 2);
 		bearbeitungsmodus.show();
 
 		/*
@@ -108,10 +108,9 @@ public class Bearbeitungsfenster extends Pane {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); j++) {
 							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
 								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65, i * DisplayCanvas.resFeldLaenge + 45, rect.getResEinheit());
+								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65, i * DisplayCanvas.resFeldLaenge + 45, rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
-								dummy.setResEinheit(rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);
 								counter++;
@@ -150,11 +149,10 @@ public class Bearbeitungsfenster extends Pane {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
 							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl()) {
 								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit());
+								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit().getTeilpaket().getResEinheitListe()
+										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								dummy.setStroke(Color.GREY);
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
-								dummy.setResEinheit(rect.getResEinheit().getTeilpaket().getResEinheitListe()
-										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								System.out.println();
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);

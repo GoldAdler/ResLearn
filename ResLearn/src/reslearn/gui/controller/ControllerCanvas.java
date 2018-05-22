@@ -21,35 +21,34 @@ import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
-import reslearn.gui.View;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class ControllerCanvas {
 
-
 	private double zeigerX, zeigerY;
 	private double translateX, translateY;
 	private double newTranslateX, newTranslateY;
 	private Diagramm diagramm;
+	private ResCanvas resCanvas;
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
-	private ResCanvas resCanvas;
 	private ColorPicker colorPicker;
-	private View view = new View();
 
 	public ControllerCanvas(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
 		erstelleTabelle();
+		erstelleTabelleArbeitspakete();
 	}
 
 	public void makeDraggable(ResFeld feld) {
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		view.ap.setOnAction(OnMenuItemApEventHandler);
+		//TODO: Wo und wie wird der OnMenuItemApEventHandler gesetzt
+		//view.ap.setOnAction(OnMenuItemApEventHandler);
 	}
 
 	// Event Handler Maus klicken
@@ -67,7 +66,6 @@ public class ControllerCanvas {
 			translateY = rect.getTranslateY();
 
 			befuelleTabelle();
-			erstelleTabelleArbeitspakete();
 			markiereArbeitspaketInTabelle(teilpaketClicked.getArbeitspaket());
 
 		}
@@ -178,7 +176,8 @@ public class ControllerCanvas {
 	private EventHandler<ContextMenuEvent> OnMouseSecondaryEventHandler = new EventHandler<ContextMenuEvent>() {
 		@Override
 		public void handle(ContextMenuEvent e) {
-			view.menu.show(rect, e.getSceneX(), e.getSceneY());
+			//TODO: Wo und wie wird das Menü angezeigt
+			//view.menu.show(rect, e.getSceneX(), e.getSceneY());
 		}
 	};
 
