@@ -24,10 +24,10 @@ import reslearn.model.utils.Vektor2i;
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
-	private boolean vorgangsdauerVeraenderbar = true;
+	private boolean vorgangsdauerVeraenderbar = false;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int maxBegrenzung = 3;
+	private static int maxBegrenzung = 5;
 
 	private AlgoKapazitaetstreu() {
 	}

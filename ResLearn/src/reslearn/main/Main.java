@@ -22,14 +22,14 @@ public class Main {
 
 		// Random Datensätze
 		// erstelleTestDaten2_5(resCanvas);
-		// erstelleTestDaten2_55(resCanvas);
+		erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
 
 		// Kinder-Uni
-		erstelleAufgabeKinderuni(resCanvas);
+		// erstelleAufgabeKinderuni(resCanvas);
 
 		// Prüfungsaufgabe
 		// erstellePruefungsAufgabe(resCanvas);
