@@ -9,17 +9,13 @@ import reslearn.model.paket.ResEinheit;
 
 public class Diagramm {
 
-	private int resFeldZeile = DisplayCanvas.resFeldZeile;
-	private int resFeldSpalte = DisplayCanvas.resFeldSpalte;
-	ResFeld[][] resFeldArray;
-	Rectangle[][] rectangleArray;
-	View view = new View();
+	private ResFeld[][] resFeldArray;
 
 	public Diagramm() {
 
 	}
 
-	public void zeichneCanvas(Canvas canvas) {
+	public Rectangle[][] zeichneCanvas(Canvas canvas) {
 		// Zeichne 4 x Rahmen & 2 x Koordinaten-Achsen
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -62,39 +58,38 @@ public class Diagramm {
 				canvas.getHeight() - DisplayCanvas.spaltY);
 		gc.fillText("Personen", 2, DisplayCanvas.spaltY * 2 + 1);
 
-		zeichneWeisseFelder();
+		return zeichneWeisseFelder();
 	}
 
 	// Weiße Klötzchen
-	private void zeichneWeisseFelder() {
-		rectangleArray = new Rectangle[resFeldZeile][resFeldSpalte];
-		for (int i = 0; i < resFeldZeile; i++) {
-			for (int j = 0; j < resFeldSpalte; j++) {
+	private Rectangle[][] zeichneWeisseFelder() {
+		Rectangle[][] rectangleArray = new Rectangle[DisplayCanvas.resFeldZeile][DisplayCanvas.resFeldSpalte];
+		for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
+			for (int j = 0; j < DisplayCanvas.resFeldSpalte; j++) {
 				rectangleArray[i][j] = new Rectangle(i * DisplayCanvas.resFeldBreite, j * DisplayCanvas.resFeldLaenge, DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge);
 				rectangleArray[i][j].setFill(Color.WHITE);
 				rectangleArray[i][j].setStroke(Color.GRAY);
-				view.pane.getChildren().add(rectangleArray[i][j]);
+				//TODO: auch noch ausgliedern
+				//pane.getChildren().add(rectangleArray[i][j]);
 			}
 		}
+		return rectangleArray;
 	}
 
 	// Farbige Pakete
 	public ResFeld[][] zeichneTeilpakete(ResEinheit[][] koordinatenSystem) {
-		resFeldArray = new ResFeld[resFeldZeile][resFeldSpalte];
+		resFeldArray = new ResFeld[DisplayCanvas.resFeldZeile][DisplayCanvas.resFeldSpalte];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge, koordinatenSystem[i][j]);
-					view.pane.getChildren().add(resFeldArray[i][j]);
-					view.controllerCanvas.makeDraggable(resFeldArray[i][j]);
+					//TODO: auch noch ausgliedern
+					//view.pane.getChildren().add(resFeldArray[i][j]);
+					//view.controllerCanvas.makeDraggable(resFeldArray[i][j]);
 				}
 			}
 		}
 		return resFeldArray;
-	}
-
-	public Rectangle[][] getRectangleArray(){
-		return rectangleArray;
 	}
 
 	public ResFeld[][] getResFeldArray(){

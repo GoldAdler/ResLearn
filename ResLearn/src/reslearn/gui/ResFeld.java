@@ -12,6 +12,7 @@ import reslearn.model.paket.ResEinheit;
 public class ResFeld extends Rectangle {
 
 	private ResEinheit resEinheit;
+
 	private HashMap<Arbeitspaket, Color> arbeitspaketFarben = new HashMap<Arbeitspaket, Color>();
 	private final Random random = new Random();
 
@@ -19,8 +20,6 @@ public class ResFeld extends Rectangle {
 		super(x, y, DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge);
 		this.resEinheit = resEinheit;
 		setFill(setFarbe(resEinheit));
-		//		setResEinheit(resEinheit);
-		//		setTeilpaket(resEinheit.getTeilpaket());
 	}
 
 	private Color setFarbe(ResEinheit resEinheit) {
@@ -38,6 +37,7 @@ public class ResFeld extends Rectangle {
 		double luminance = 1.0d; // 1.0 for brighter, 0.0 for black
 		Color color = Color.hsb(hue, saturation, luminance, 0.7);
 		arbeitspaketFarben.put(arbeitspaket, color);
+
 		return color;
 	}
 
@@ -55,10 +55,6 @@ public class ResFeld extends Rectangle {
 			}
 		}
 		return hue;
-	}
-
-	public void setResEinheit(ResEinheit resEinheit) {
-		this.resEinheit = resEinheit;
 	}
 
 	public ResEinheit getResEinheit() {
