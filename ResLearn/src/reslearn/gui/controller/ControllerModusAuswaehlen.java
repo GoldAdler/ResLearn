@@ -29,37 +29,13 @@ public class ControllerModusAuswaehlen extends Controller {
 	public void weiter(ActionEvent event) throws Exception {
 		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
 		if (event.getSource() == ersterSchritt) {
-			// newScene = new
-			// Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
-			// Stage stage = new Stage();
-			// stage.setTitle("ResLearn");
-			// stage.setMaximized(true);
-			// stage.setScene(newScene);
-			// stage.show();
-			View view = new View();
-			view.start(View.classStage);
+			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == uebungsmodus) {
-			// newScene = new
-			// Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
-			// Stage stage = new Stage();
-			// stage.setTitle("ResLearn");
-			// stage.setMaximized(true);
-			// stage.setScene(newScene);
-			// stage.show();
-			View view = new View();
-			view.start(View.classStage);
+			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == loesungsmodus) {
-			// newScene = new
-			// Scene(FXMLLoader.load(getClass().getResource("../fxml/Uebungsmodus.fxml")));
-			// Stage stage = new Stage();
-			// stage.setTitle("ResLearn");
-			// stage.setMaximized(true);
-			// stage.setScene(newScene);
-			// stage.show();
-			View view = new View();
-			view.start(View.classStage);
+			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}
 	}
