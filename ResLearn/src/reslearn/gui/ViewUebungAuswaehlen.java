@@ -4,13 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.controller.ControllerUebungAuswaehlen;
 
 public class ViewUebungAuswaehlen extends Application {
 	public static Stage classStage = new Stage();
-	private Pane pane;
+	// private Pane pane;
 
 	private static ViewUebungAuswaehlen view;
 
@@ -26,12 +27,15 @@ public class ViewUebungAuswaehlen extends Application {
 		// Lade FXML
 		System.out.println("Juhuuuu");
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/UebungAuswaehlen.fxml"));
-		Scene scene = new Scene(root);
+		Scene hauptscene = new Scene(root);
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
-		Pane pane = cua.erstellePane();
-		((Pane) scene.getRoot()).getChildren().add(pane);
+		ScrollPane pane = cua.erstellePane();
 		stage.setMaximized(true);
-		stage.setScene(scene);
+		Scene unterscene = new Scene(pane);
+
+		// TODO Scheiﬂ Scrollbar funktioniert nicht
+		((Pane) hauptscene.getRoot()).getChildren().add(unterscene.getRoot());
+		stage.setScene(hauptscene);
 		stage.setTitle("ResLearn");
 		stage.show();
 		classStage = stage;
@@ -42,8 +46,8 @@ public class ViewUebungAuswaehlen extends Application {
 		launch(args);
 	}
 
-	public Pane getPane() {
-		return pane;
-	}
+	// public Pane getPane() {
+	// return pane;
+	// }
 
 }

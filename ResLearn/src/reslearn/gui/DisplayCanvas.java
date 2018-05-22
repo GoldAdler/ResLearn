@@ -43,16 +43,20 @@ public final class DisplayCanvas {
 
 	public static final int tabelleLayoutX = resFeldBreite;
 	public static final int tabelleLayoutY = canvasStartpunktY;
-	
+
 	public static final int tabelleArbeitspaketBreite = paneBreite + spaltX;
 	public static final int tabelleArbeitspaketLaenge = canvasStartpunktY - 2 * resFeldLaenge;
-	
+
 	public static final int tabelleArbeitspaketLayoutX = paneLayoutX;
-	
+
 	// Tabelle überhalb des Canvas (am Rand bündig)
 	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY - tabelleArbeitspaketLaenge;
-	
-	//Tabelle unterhalb des Canvas (ein Feld Abstand)
-//	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY + canvasLaenge + resFeldLaenge;
+
+	// Tabelle unterhalb des Canvas (ein Feld Abstand)
+	// public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY +
+	// canvasLaenge + resFeldLaenge;
+
+	public static final int aufgabeLadenBreite = (int) bounds.getWidth();
+	public static final int aufgabeLadenHoehe = (int) bounds.getHeight();
 
 }

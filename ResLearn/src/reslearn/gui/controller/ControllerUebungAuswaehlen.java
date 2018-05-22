@@ -9,13 +9,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import reslearn.gui.DisplayCanvas;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
@@ -30,26 +32,44 @@ public class ControllerUebungAuswaehlen extends Controller {
 
 	}
 
-	public Pane erstellePane() {
+	public ScrollPane erstellePane() {
 
-		pane = new Pane();
-		pane.setPrefWidth(DisplayCanvas.paneBreite);
-		pane.setPrefHeight(DisplayCanvas.paneLaenge);
-		pane.setLayoutX(DisplayCanvas.paneLayoutX);
-		pane.setLayoutY(DisplayCanvas.paneLayoutY);
+		// pane = new Pane();
+		// pane.setPrefWidth(DisplayCanvas.aufgabeLadenBreite);
+		// pane.setPrefHeight(DisplayCanvas.aufgabeLadenHoehe);
+		// // // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
+		// // // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
 
-		for (int i = 0; i < 5; i++) {
+		int buttonHoehe = 250;
+		int buttonBreite = 200;
+		int buttonXPosition = 100;
+		int buttonYPosition = 100;
+
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(5));
+		grid.setHgap(5);
+		grid.setVgap(5);
+
+		ScrollPane scrollPane = new ScrollPane(grid);
+
+		for (int i = 0; i < 12; i++) {
 			System.out.println("TOLL ein BUTTONG: " + i);
 			Button b = new Button("Hallo" + i);
 			b.setOnAction(ButtonAction);
-			b.setPrefHeight(i * 50);
-			b.setPrefWidth(i * 50);
-			b.setLayoutX(i * 50);
-			b.setLayoutY(i * 100);
-			// b.setAlignment(i * 50);
-			pane.getChildren().add(b);
+			if (i % 5 == 0 && i != 0) {
+				buttonYPosition += 300;
+				buttonXPosition = 100;
+			}
+
+			b.setPrefHeight(buttonHoehe);
+			b.setPrefWidth(buttonBreite);
+			b.setLayoutX(buttonXPosition);
+			b.setLayoutY(buttonYPosition);
+			grid.add(b, i, i);
+			buttonXPosition += 250;
 		}
-		return pane;
+
+		return scrollPane;
 	}
 
 	// Event Handler Maus klicken
