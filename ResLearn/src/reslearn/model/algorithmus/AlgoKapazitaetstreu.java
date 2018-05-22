@@ -79,7 +79,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		 * nicht müssen wir vertikal schneiden.
 		 */
 
-		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketRL());
+		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketLR());
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			ap.zusammenfuegen();
 		}
@@ -88,7 +88,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			ap.ueberpruefeVorgangsunterbrechung(resCanvas);
 
 		}
-		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketRL());
+		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketLR());
 		ausgeben(resCanvas.getKoordinatenSystem());
 
 		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
@@ -99,7 +99,10 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null);
 
-		System.out.println("Des läuft!");
+		System.out.println("HALT STOPP");
+		for (ResCanvas lul : moeglicheLoesungenResCanvas) {
+			Algorithmus.ausgeben(lul.getKoordinatenSystem());
+		}
 
 		// TODO BEWERTUNG HIER DURCHFUEHREN!!!!!
 
@@ -123,7 +126,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
 
-		Collections.sort(arbeitspaketListe, new ComperatorArbeitspaketRL());
+		Collections.sort(arbeitspaketListe, new ComperatorArbeitspaketLR());
 
 		int startAP = 0;
 		if (!(nichtMehrAnschauenApID == null)) {
@@ -164,6 +167,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
 				moeglicheLoesungenResCanvas.add(simResCanvas);
+				Algorithmus.ausgeben(simResCanvas.getKoordinatenSystem());
 			}
 
 			int nummer = 0;
@@ -448,7 +452,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 					}
 
-					Collections.sort(rechtsListe, new ComperatorArbeitspaketLR());
+					Collections.sort(rechtsListe, new ComperatorArbeitspaketRL());
 
 					for (Arbeitspaket arbeitspaket : rechtsListe) {
 						arbeitspaket.bewegeX(vorbereitungSimulation, ap.getVorgangsdauer());
@@ -549,6 +553,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			if (!ueberpruefeObergrenzeUeberschritten(simulation)) {
 				loesungGefunden = true;
+				simulation.aufschliessen();
 				simLoesungenResCanvas.add(simulation);
 			}
 

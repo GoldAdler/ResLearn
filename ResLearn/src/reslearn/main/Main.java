@@ -22,8 +22,8 @@ public class Main {
 
 		// Random Datensätze
 		// erstelleTestDaten2_5(resCanvas);
-		erstelleTestDaten2_54(resCanvas);
-		// erstelleTestDaten2_55(resCanvas);
+		// erstelleTestDaten2_54(resCanvas);
+		erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// erstelleTestDaten2_7(resCanvas);

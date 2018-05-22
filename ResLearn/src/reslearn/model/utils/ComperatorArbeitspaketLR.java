@@ -6,7 +6,7 @@ import reslearn.model.paket.Arbeitspaket;
 
 /**
  * Sortiert die Arbeitspaketet nach den Vektor2i-Positionen. Sortiert die Pakete
- * von Rechts nach Links.
+ * von Links nach Rechts.
  *
  */
 public class ComperatorArbeitspaketLR implements Comparator<Arbeitspaket> {
@@ -18,7 +18,7 @@ public class ComperatorArbeitspaketLR implements Comparator<Arbeitspaket> {
 		Vektor2i vek1 = ap1.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition();
 		Vektor2i vek2 = ap2.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition();
 
-		result = vek2.getxKoordinate() - vek1.getxKoordinate();
+		result = vek1.getxKoordinate() - vek2.getxKoordinate();
 
 		if (result == 0) {
 			result = vek2.getyKoordinate() - vek1.getyKoordinate();
