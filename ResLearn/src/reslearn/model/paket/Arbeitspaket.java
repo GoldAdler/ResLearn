@@ -99,6 +99,8 @@ public class Arbeitspaket extends Paket {
 
 		}
 
+		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
+
 	}
 
 	public void neuSetzen(int abstand, ResCanvas resCanvas) {
