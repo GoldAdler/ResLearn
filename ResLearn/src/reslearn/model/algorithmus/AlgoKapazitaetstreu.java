@@ -91,23 +91,90 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketRL());
 		ausgeben(resCanvas.getKoordinatenSystem());
 
-		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
-			ap.zusammenfuegen();
+		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
+
+		// TODO Unterscheidung zwishcen Vorgangsunterbrechung durchführen
+
+		System.out.println("Simulation start");
+
+		simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null);
+
+		System.out.println("Des läuft!");
+
+		// TODO BEWERTUNG HIER DURCHFUEHREN!!!!!
+
+	}
+
+	private void simulationDurchfuehren(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
+			String nichtMehrAnschauenApID) {
+
+		ResCanvas bevorSimulationStartResCanvs = resCanvas.copyResCanvas();
+
+		// hier für z simulation aufrufen : man bekommt fünf ergebnisse / extra Liste
+		// ErgebnissevonZListe
+		// diese fünf ergebnisse den meoglichenLoesungen hinzufügen
+
+		// ErgebnissevonZListe: entnehmen lösungen und simuliere für jede davon
+		// simulationDurchfuehren foreach
+
+		ArrayList<ResCanvas> simLoesungenResCanvas = new ArrayList<ResCanvas>();
+
+		String apID = null;
+
+		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
+
+		Collections.sort(arbeitspaketListe, new ComperatorArbeitspaketRL());
+
+		int startAP = 0;
+		if (!(nichtMehrAnschauenApID == null)) {
+			for (Arbeitspaket simAp : arbeitspaketListe) {
+				if (simAp.getId() == nichtMehrAnschauenApID) {
+					startAP++;
+					break;
+				}
+				startAP++;
+			}
+		}
+
+		for (int i = startAP; i < arbeitspaketListe.size(); i++) {
+			// for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+
+			arbeitspaketListe.get(i).zusammenfuegen();
 			resCanvas.aufschliessen();
 
-			ArrayList<Teilpaket> tpListe = ap.getTeilpaketListe();
+			ArrayList<Teilpaket> tpListe = arbeitspaketListe.get(i).getTeilpaketListe();
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
 			int verschieben = letztesTeilpaket.ueberpruefeZeiten();
 			if (verschieben != 0) {
-
-				verschiebeZeitueberschreitendePakete(resCanvas, ap, verschieben);
-
+				apID = arbeitspaketListe.get(i).getId();
+				System.out.println("Beginn Sim für AP: " + arbeitspaketListe.get(i).getId());
+				verschiebeZeitueberschreitendePakete(resCanvas, arbeitspaketListe.get(i), verschieben,
+						simLoesungenResCanvas);
+				break;
 			}
 
 			// ausgeben(resCanvas.getKoordinatenSystem());
-			resCanvas.aktuallisiereHistorie();
 			// zeitOptimieren(resCanvas, ap, tpListe, letztesTeilpaket);
 
+		}
+
+		if (simLoesungenResCanvas.isEmpty()) {
+			moeglicheLoesungenResCanvas.add(bevorSimulationStartResCanvs);
+		} else {
+
+			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
+				moeglicheLoesungenResCanvas.add(simResCanvas);
+			}
+
+			int nummer = 0;
+			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
+				++nummer;
+				System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer + " von "
+						+ simLoesungenResCanvas.size());
+
+				simulationDurchfuehren(simResCanvas, moeglicheLoesungenResCanvas, apID);
+
+			}
 		}
 
 	}
@@ -239,11 +306,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param ap
 	 * @param verschiebenRechts
 	 */
-	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschieben) {
+	private void verschiebeZeitueberschreitendePakete(ResCanvas resCanvas, Arbeitspaket ap, int verschieben,
+			ArrayList<ResCanvas> simLoesungenResCanvas) {
 
 		if (vorgangsdauerVeraenderbar) {
 
 			// TODO LOGIK e-Problem
+			// TODO Heraustrennen dieses Bereiches in andere Methode und umstrukturierung
 
 			resCanvas.entferneArbeitspaket(ap);
 			resCanvas.herunterfallenAlleTeilpakete();
@@ -386,7 +455,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					}
 
 					vorbereitungSimulation.herunterfallenAlleTeilpaketeAußerEines(zuVerschiebenAp);
-					simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp);
+					simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp,
+							simLoesungenResCanvas);
 
 				} else if (verschieben < 0) {
 					// Paket ist zu spät | SEZ verletzt
@@ -422,7 +492,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					 *
 					 */
 
-					simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp);
+					simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp,
+							simLoesungenResCanvas);
 
 				}
 			}
@@ -445,13 +516,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param zuVerschiebenAp
 	 */
 	private void simuliere(ResCanvas resCanvas, ResCanvas ausgangssituationResCanvs, ResCanvas vorbereitungSimulation,
-			Arbeitspaket zuVerschiebenAp) {
+			Arbeitspaket zuVerschiebenAp, ArrayList<ResCanvas> simLoesungenResCanvas) {
 
 		ResCanvas simulation = null;
-		ArrayList<ResCanvas> listeSimulationen = new ArrayList<ResCanvas>();
 		Arbeitspaket copyZuVerschiebenAP = null;
+		boolean loesungGefunden = false;
 
-		for (int x = zuVerschiebenAp.getFaz() - 1; x < zuVerschiebenAp.getSez(); x++) {
+		for (int x = zuVerschiebenAp.getFaz() - 1; x < zuVerschiebenAp.getSaz(); x++) {
 
 			simulation = vorbereitungSimulation.copyResCanvas(zuVerschiebenAp);
 
@@ -474,45 +545,53 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 
+			System.out.println("Lösung gefunden");
+
 			if (!ueberpruefeObergrenzeUeberschritten(simulation)) {
-				listeSimulationen.add(simulation);
+				loesungGefunden = true;
+				simLoesungenResCanvas.add(simulation);
 			}
 
 		}
 
-		if (listeSimulationen.isEmpty()) {
-			// Wenn das Arbeitspaket nicht verschoben werden kann, wird ohne Veränderung der
-			// Ausgangssituation weiter gearbeitet
-			resCanvas.swap(ausgangssituationResCanvs);
-		} else if (listeSimulationen.size() == 1) {
-			resCanvas.swap(listeSimulationen.get(0));
-		} else {
-
-			// Bewertung der Koordinatensysteme
-
-			int maxStellen = Integer.MIN_VALUE;
-			ResCanvas optimalesResCanvas = null;
-
-			for (ResCanvas resCanvasSimulation : listeSimulationen) {
-
-				for (Arbeitspaket simAp : resCanvasSimulation.getArbeitspaketListe()) {
-					if (simAp.getId() == zuVerschiebenAp.getId()) {
-						copyZuVerschiebenAP = simAp;
-						break;
-					}
-				}
-
-				int stellen = resCanvasSimulation.ermittleStellen(copyZuVerschiebenAP,
-						AlgoKapazitaetstreu.maxBegrenzung);
-				if (stellen > maxStellen) {
-					maxStellen = stellen;
-					optimalesResCanvas = resCanvasSimulation;
-				}
-			}
-
-			resCanvas.swap(optimalesResCanvas);
-
+		if (!loesungGefunden) {
+			simLoesungenResCanvas.add(ausgangssituationResCanvs);
 		}
+
+		// if (listeSimulationen.isEmpty()) {
+		// // Wenn das Arbeitspaket nicht verschoben werden kann, wird ohne Veränderung
+		// der
+		// // Ausgangssituation weiter gearbeitet
+		// resCanvas.swap(ausgangssituationResCanvs);
+		// } else if (listeSimulationen.size() == 1) {
+		// resCanvas.swap(listeSimulationen.get(0));
+		// } else {
+		//
+		// // Bewertung der Koordinatensysteme
+		//
+		// int maxStellen = Integer.MIN_VALUE;
+		// ResCanvas optimalesResCanvas = null;
+		//
+		// for (ResCanvas resCanvasSimulation : listeSimulationen) {
+		//
+		// for (Arbeitspaket simAp : resCanvasSimulation.getArbeitspaketListe()) {
+		// if (simAp.getId() == zuVerschiebenAp.getId()) {
+		// copyZuVerschiebenAP = simAp;
+		// break;
+		// }
+		// }
+		//
+		// int stellen = resCanvasSimulation.ermittleStellen(copyZuVerschiebenAP,
+		// AlgoKapazitaetstreu.maxBegrenzung);
+		// if (stellen > maxStellen) {
+		// maxStellen = stellen;
+		// optimalesResCanvas = resCanvasSimulation;
+		// }
+		// }
+		//
+		// resCanvas.swap(optimalesResCanvas);
+		//
+		// }
 	}
 
 	/**
@@ -988,7 +1067,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			// maxBegrenzung nicht -1, weil Paket innerhalb der Begrenzung noch valide ist!
 			// deswegen maxBegrenzung -2
-			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 2][x];
+			tempResEinheit = koordinatenSystem[ResCanvas.koorHoehe - maxBegrenzung - 1][x];
 			if (tempResEinheit != null) {
 				ueberschritten = true;
 				break;
