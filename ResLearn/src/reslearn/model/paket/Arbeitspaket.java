@@ -80,7 +80,7 @@ public class Arbeitspaket extends Paket {
 			if (xStart != xEnde + 1 && xEnde != 0) {
 				resCanvas.entferneArbeitspaket(tp.getArbeitspaket());
 				resCanvas.herunterfallenAlleTeilpakete();
-				resCanvas.aufschliessen();
+				resCanvas.aufschliessenTeilpaket();
 				ResEinheit[][] koordinatensystem = resCanvas.getKoordinatenSystem();
 				int abstand = 0;
 				for (int x = 0; x < ResCanvas.koorBreite; x++) {

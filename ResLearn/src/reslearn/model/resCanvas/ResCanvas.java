@@ -386,9 +386,12 @@ public class ResCanvas {
 
 	/**
 	 * Wenn im Koordinatensystem Lücken in der untersten Ebene zwischen Teilpaketen
-	 * sind, werden diese durch das verschieben der Teilpakete geschlossen.
+	 * sind, werden diese durch das verschieben der Teilpakete geschlossen. Dabei
+	 * werden allerdings nur die untersten Teilpakete verschoben. Teilpakete vom
+	 * selben Arbeitspaket die nicht in der untersten Reihe liegen, bleiben wo sie
+	 * sind.
 	 */
-	public void aufschliessen() {
+	public void aufschliessenTeilpaket() {
 		boolean untersteReiheLeer = false;
 		int laengeLuecke = 0;
 
@@ -415,6 +418,41 @@ public class ResCanvas {
 			}
 
 		}
+	}
+
+	/**
+	 * Wenn im Koordinatensystem Lücken in der untersten Ebene zwischen Teilpaketen
+	 * sind, werden diese durch das verschieben der Teilpakete geschlossen. Dabei
+	 * werden alle Teilpakete eines Arbeitspaketes verschoben.
+	 */
+	public void aufschliessenArbeitspaket() {
+		boolean untersteReiheLeer = false;
+		int laengeLuecke = 0;
+
+		for (int x = 0; x < ResCanvas.koorBreite; x++) {
+			ResEinheit untersteReihe = koordinatenSystem[ResCanvas.koorHoehe - 1][x];
+
+			if (untersteReihe == null) {
+				untersteReiheLeer = true;
+				laengeLuecke++;
+			}
+
+			if (untersteReiheLeer && untersteReihe != null) {
+
+				Arbeitspaket verschiebe = untersteReihe.getTeilpaket().getArbeitspaket();
+				verschiebe.bewegeX(this, -laengeLuecke);
+
+				Algorithmus.ausgeben(koordinatenSystem);
+
+				untersteReiheLeer = false;
+				laengeLuecke = 0;
+				x = untersteReihe.getTeilpaket().getResEinheitListe().get(0).getPosition().getxKoordinate()
+						+ untersteReihe.getVorgangsdauer();
+			}
+
+		}
+
+		this.herunterfallenAlleTeilpakete();
 	}
 
 	/**
@@ -639,26 +677,6 @@ public class ResCanvas {
 		kopieResCanvas.setHistorienArbeitspaketListe(historienArbeitspaketListe);
 
 		return kopieResCanvas;
-	}
-
-	/**
-	 * Ermittelt die Anzahl anzahl an Stellen, welche eins unter der Obergrenze
-	 * liegen.
-	 *
-	 * @return
-	 */
-	public int ermittleStellen(Arbeitspaket arbeitspaket, int mitarbeiterObergrenze) {
-
-		int stellen = 0;
-
-		for (Teilpaket teilpaket : arbeitspaket.getTeilpaketListe()) {
-			ResEinheit ersteResEinheit = teilpaket.getResEinheitListe().get(0);
-			int abstand = mitarbeiterObergrenze + ersteResEinheit.getPosition().getyKoordinate()
-					- teilpaket.getMitarbeiteranzahl();
-			stellen += (abstand * teilpaket.getVorgangsdauer());
-
-		}
-		return stellen;
 	}
 
 	/**
