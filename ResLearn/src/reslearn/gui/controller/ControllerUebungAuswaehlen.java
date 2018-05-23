@@ -9,10 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.DisplayCanvas;
@@ -37,6 +39,16 @@ public class ControllerUebungAuswaehlen extends Controller {
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.aufgabeLadenBreite);
 		pane.setPrefHeight(DisplayCanvas.aufgabeLadenHoehe);
+
+		ScrollBar scrolli = new ScrollBar();
+		scrolli.setOrientation(Orientation.VERTICAL);
+		scrolli.setMin(0);
+		scrolli.setMax(100);
+		scrolli.setValue(50);
+		scrolli.setLayoutX(pane.getWidth() - scrolli.getWidth() - 100);
+		scrolli.setPrefHeight(180);
+		pane.getChildren().add(scrolli);
+
 		// // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
 		// // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
 

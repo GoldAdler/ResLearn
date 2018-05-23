@@ -37,9 +37,11 @@ public class ControllerModusAuswaehlen extends Controller {
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == uebungsmodus) {
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == loesungsmodus) {
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}
