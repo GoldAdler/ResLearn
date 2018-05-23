@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import reslearn.gui.View;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
+import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerModusAuswaehlen extends Controller {
 
@@ -28,7 +30,33 @@ public class ControllerModusAuswaehlen extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
 		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
+		AufgabeLadenImport ali = new AufgabeLadenImport();
+		System.out.println(cua.f + "\\Aufgabe3" + ".csv");
 		if (event.getSource() == ersterSchritt) {
+			Arbeitspaket[] paketeArray = ali.aufgabeLaden("..\\Reslearn\\bin\\reslearn\\gui\\uebungen\\Aufgabe3.csv");
+			// for (Arbeitspaket ap : paketeArray) {
+			// System.out.print(ap.getId().toString());
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getFaz()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getFez()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getSaz()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getSez()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getVorgangsdauer()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getMitarbeiteranzahl()));
+			// System.out.print(", ");
+			// System.out.print(String.valueOf(ap.getAufwand()));
+			// System.out.print(", ");
+			// System.out.println();
+
+			// }
+
+			View.getInstance().initializeCanvasView(paketeArray);
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == uebungsmodus) {
