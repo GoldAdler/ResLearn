@@ -19,21 +19,16 @@ public class AufgabeLadenImport {
 
 			while (arbeitspaketImport.readRecord()) {
 
-				Arbeitspaket ap = new Arbeitspaket();
+				Arbeitspaket ap = null;
 
 				try {
 					String zeile = arbeitspaketImport.get(0);
 					String[] spalten = zeile.split(";");
 
 					if (spalten.length == 8) {
-						ap.setId(spalten[0]);
-						ap.setFaz(Integer.valueOf(spalten[1]));
-						ap.setFez(Integer.valueOf(spalten[2]));
-						ap.setSaz(Integer.valueOf(spalten[3]));
-						ap.setSez(Integer.valueOf(spalten[4]));
-						ap.setVorgangsdauer(Integer.valueOf(spalten[5]));
-						ap.setMitarbeiteranzahl(Integer.valueOf(spalten[6]));
-						ap.setAufwand(Integer.valueOf(spalten[7]));
+						ap = new Arbeitspaket(spalten[0], Integer.valueOf(spalten[1]), Integer.valueOf(spalten[2]),
+								Integer.valueOf(spalten[3]), Integer.valueOf(spalten[4]), Integer.valueOf(spalten[5]),
+								Integer.valueOf(spalten[6]), Integer.valueOf(spalten[7]));
 					}
 
 					pakete.add(ap);

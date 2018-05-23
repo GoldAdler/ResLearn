@@ -9,15 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import reslearn.gui.DisplayCanvas;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
@@ -25,36 +24,41 @@ public class ControllerUebungAuswaehlen extends Controller {
 	private List<Button> buttonlist = new ArrayList<>();
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
-	File f = new File("..\\uebungen");
+	final VBox vb = new VBox();
+	File f = new File("..\\Reslearn\\bin\\reslearn\\gui\\uebungen");
 	File[] fileArray = f.listFiles();
+	public Button dateiname;
+	public static String datei;
 
 	public void initialize() {
 
 	}
 
-	public ScrollPane erstellePane() {
+	public Pane erstellePane() {
 
-		// pane = new Pane();
-		// pane.setPrefWidth(DisplayCanvas.aufgabeLadenBreite);
-		// pane.setPrefHeight(DisplayCanvas.aufgabeLadenHoehe);
-		// // // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
-		// // // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
+		pane = new Pane();
+		pane.setMinWidth(DisplayCanvas.aufgabeLadenBreite);
+		pane.setMinHeight(DisplayCanvas.aufgabeLadenHoehe);
+
+		// // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
+		// // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
 
 		int buttonHoehe = 250;
 		int buttonBreite = 200;
 		int buttonXPosition = 100;
 		int buttonYPosition = 100;
 
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(5));
-		grid.setHgap(5);
-		grid.setVgap(5);
+		// GridPane grid = new GridPane();
+		// grid.setPadding(new Insets(5));
+		// grid.setHgap(5);
+		// grid.setVgap(5);
 
-		ScrollPane scrollPane = new ScrollPane(grid);
+		// ScrollPane scrollPane = new ScrollPane(grid);
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < fileArray.length; i++) {
 			System.out.println("TOLL ein BUTTONG: " + i);
-			Button b = new Button("Hallo" + i);
+			Button b = new Button(fileArray[i].getName().substring(0, fileArray[i].getName().length() - 4));
+			b.setId(fileArray[i].getName());
 			b.setOnAction(ButtonAction);
 			if (i % 5 == 0 && i != 0) {
 				buttonYPosition += 300;
@@ -65,11 +69,11 @@ public class ControllerUebungAuswaehlen extends Controller {
 			b.setPrefWidth(buttonBreite);
 			b.setLayoutX(buttonXPosition);
 			b.setLayoutY(buttonYPosition);
-			grid.add(b, i, i);
+			// grid.add(b, i, i);
+			pane.getChildren().add(b);
 			buttonXPosition += 250;
 		}
-
-		return scrollPane;
+		return pane;
 	}
 
 	// Event Handler Maus klicken
@@ -87,7 +91,9 @@ public class ControllerUebungAuswaehlen extends Controller {
 		Scene newScene;
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			dateiname = (Button) event.getSource();
+			datei = dateiname.getId();
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -99,58 +105,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 			e.printStackTrace();
 		}
 	}
-
-	// public void buttonZuordnen() {
-	// // buttonlist.add(button1);
-	// // buttonlist.add(button2);
-	// // buttonlist.add(button3);
-	// // buttonlist.add(button4);
-	// // buttonlist.add(button5);
-	// // buttonlist.add(button6);
-	// // buttonlist.add(button7);
-	// // buttonlist.add(button8);
-	// // buttonlist.add(button9);
-	// // buttonlist.add(button10);
-	// // buttonlist.add(button11);
-	// // buttonlist.add(button12);
-	// button5.setVisible(true);
-	// // for (int i = 0; i < 5; i++) {
-	// // System.out.println("jkhgbjhvjkbk");
-	// // buttonlist.get(i).setVisible(true);
-	// // // buttonlist.get(i).setText(fileArray[i].getName());
-	// // }
-	//
-	// // weiter(event, name) übergeben, mit Name aufgabe auswählen
-	// // aufgabe laden aufrufen
-	// }
-
-	// // @FXML
-	// public void buttonErstellen(ActionEvent event) throws Exception {
-	//
-	// for (int i = 0; i < fileArray.length; i++) {
-	// String name = fileArray[i].getName();
-	// buttonlist.add(new Button(name));
-	// }
-	// }
-	//
-	// public void aufgabeLadenKlick(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// String buttonName = event.getSource().toString() + ".csv";
-	// for (int i = 0; i < buttonlist.size(); i++) {
-	// if (buttonName == buttonlist.get(i).toString()) {
-	// AufgabeLadenImport importAufgabe = new AufgabeLadenImport();
-	// paketeArray = importAufgabe.aufgabeLaden(fileArray[i].getPath());
-	// }
-	// }
-	//
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 
 	@FXML
 	private Button zurueck;
@@ -192,82 +146,4 @@ public class ControllerUebungAuswaehlen extends Controller {
 			e.printStackTrace();
 		}
 	}
-
-	// @FXML
-	// public void weiter1(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 1;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter2(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 2;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter3(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 3;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter4(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 4;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter5(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 5;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter6(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 6;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 }

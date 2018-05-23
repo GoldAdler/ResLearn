@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import reslearn.gui.View;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 
 public class ControllerModusAuswaehlen extends Controller {
 
@@ -25,16 +26,22 @@ public class ControllerModusAuswaehlen extends Controller {
 	@FXML
 	private Button home;
 
+	@SuppressWarnings("static-access")
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
 		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
+		AufgabeLadenImport ali = new AufgabeLadenImport();
 		if (event.getSource() == ersterSchritt) {
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == uebungsmodus) {
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == loesungsmodus) {
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		}
