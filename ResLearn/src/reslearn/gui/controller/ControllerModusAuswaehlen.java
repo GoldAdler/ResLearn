@@ -1,5 +1,6 @@
 package reslearn.gui.controller;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -33,7 +34,8 @@ public class ControllerModusAuswaehlen extends Controller {
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
 		AufgabeLadenImport ali = new AufgabeLadenImport();
 		if (event.getSource() == ersterSchritt) {
-			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
+			System.out.println(cua.f + File.separator + cua.datei);
+			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + File.separator + cua.datei));
 			View.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == uebungsmodus) {

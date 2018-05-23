@@ -25,7 +25,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
 	final VBox vb = new VBox();
-	File f = new File("..\\Reslearn\\bin\\reslearn\\gui\\uebungen");
+	File f = new File(".." + File.separator + "Reslearn" + File.separator +"bin"+File.separator+"reslearn"+File.separator+"gui"+File.separator+"uebungen");;
 	File[] fileArray = f.listFiles();
 	public Button dateiname;
 	public static String datei;
@@ -35,7 +35,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 	}
 
 	public Pane erstellePane() {
-
 		pane = new Pane();
 		pane.setMinWidth(DisplayCanvas.aufgabeLadenBreite);
 		pane.setMinHeight(DisplayCanvas.aufgabeLadenHoehe);

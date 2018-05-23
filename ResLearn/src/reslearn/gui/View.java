@@ -1,6 +1,7 @@
 package reslearn.gui;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +12,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import reslearn.gui.controller.ControllerCanvas;
+import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -73,9 +76,20 @@ public class View extends Application {
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
 		ControllerCanvas controllerCanvas = new ControllerCanvas(resCanvas, diagramm);
 
+		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
+
+		int farbenNummer = 0;
 		for (ResFeld[] zeile : teilpakete) {
 			for (ResFeld resFeld : zeile) {
-				System.out.println(resFeld);
+				if (resFeld != null) {
+					Arbeitspaket resFeldAp = resFeld.getResEinheit().getTeilpaket().getArbeitspaket();
+					if (!arbeitspaketeMitFarbe.containsKey(resFeldAp)) {
+						arbeitspaketeMitFarbe.put(resFeldAp, StandardColors.getInstance().getColor(farbenNummer));
+						farbenNummer++;
+					}
+					resFeld.setFill(arbeitspaketeMitFarbe.get(resFeldAp));
+					System.out.println(resFeld);
+				}
 			}
 		}
 

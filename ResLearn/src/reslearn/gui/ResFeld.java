@@ -19,7 +19,7 @@ public class ResFeld extends Rectangle {
 	public ResFeld(double x, double y, ResEinheit resEinheit) {
 		super(x, y, DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge);
 		this.resEinheit = resEinheit;
-		setFill(setFarbe(resEinheit));
+		//setFill(setFarbe(resEinheit));
 	}
 
 	private Color setFarbe(ResEinheit resEinheit) {
