@@ -23,8 +23,9 @@ public class Main {
 		// Random Datensätze
 		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_54(resCanvas);
-		erstelleTestDaten2_55(resCanvas);
+		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
+		// erstelleTestDaten2_57(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
@@ -53,6 +54,9 @@ public class Main {
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 
+		System.out.println("----------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
+		System.out.println("--------------Endergebnis---------------------------");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 
 		System.out.println("----------------------------------------------------------");
@@ -207,6 +211,30 @@ public class Main {
 		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
 		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 5, 25);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstelleTestDaten2_57(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 8, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 16, 23, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 3, 15);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
 		Arbeitspaket apZ = new Arbeitspaket("Z", 10, 12, 10, 12, 3, 2, 6);
 

@@ -11,6 +11,16 @@ import reslearn.model.utils.Vektor2i;
 public class Teilpaket extends Paket {
 
 	/**
+	 * Gibt an in welche Richtung ein Teilpaket und das zugehörige Arbeitspaket
+	 * verschoben werden muss. FAZ steht dabei für kann an der selben stelle
+	 * bleiben, da es bereits am optimalsten Zeitpunkt liegt.
+	 *
+	 */
+	public enum VerschiebeRichtung {
+		RECHTS, LINKS, FAZ
+	}
+
+	/**
 	 * Referenz auf das Arbeitspaket
 	 */
 	private Arbeitspaket arbeitspaket;
@@ -289,6 +299,22 @@ public class Teilpaket extends Paket {
 				}
 			}
 		}
+		return verschieben;
+	}
+
+	public VerschiebeRichtung ueberpruefeZeitenEnum() {
+		VerschiebeRichtung verschieben = null;
+
+		int xPos = resEinheitListe.get(0).getPosition().getxKoordinate();
+
+		if (this.arbeitspaket.getFaz() > xPos + 1) {
+			verschieben = VerschiebeRichtung.RECHTS;
+		} else if (this.arbeitspaket.getFaz() == xPos) {
+			verschieben = VerschiebeRichtung.FAZ;
+		} else {
+			verschieben = VerschiebeRichtung.LINKS;
+		}
+
 		return verschieben;
 	}
 
