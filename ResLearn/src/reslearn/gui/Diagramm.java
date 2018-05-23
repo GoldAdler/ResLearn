@@ -69,8 +69,6 @@ public class Diagramm {
 				rectangleArray[i][j] = new Rectangle(i * DisplayCanvas.resFeldBreite, j * DisplayCanvas.resFeldLaenge, DisplayCanvas.resFeldBreite, DisplayCanvas.resFeldLaenge);
 				rectangleArray[i][j].setFill(Color.WHITE);
 				rectangleArray[i][j].setStroke(Color.GRAY);
-				//TODO: auch noch ausgliedern
-				//pane.getChildren().add(rectangleArray[i][j]);
 			}
 		}
 		return rectangleArray;
@@ -83,9 +81,6 @@ public class Diagramm {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge, koordinatenSystem[i][j]);
-					//TODO: auch noch ausgliedern
-					//view.pane.getChildren().add(resFeldArray[i][j]);
-					//view.controllerCanvas.makeDraggable(resFeldArray[i][j]);
 				}
 			}
 		}

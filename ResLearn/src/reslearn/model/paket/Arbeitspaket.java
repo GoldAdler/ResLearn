@@ -103,6 +103,26 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	public boolean ueberpruefeVorgangsunterbrechungSimulation() {
+		Collections.sort(teilpaketListe, new ComperatorTeilpaket());
+
+		if (this.teilpaketListe.size() != 1) {
+
+			Teilpaket tp1 = this.teilpaketListe.get(0);
+			Teilpaket tp2 = this.teilpaketListe.get(1);
+
+			int xTp1 = tp1.getResEinheitListe().get(0).getPosition().getxKoordinate() + tp1.getVorgangsdauer() - 1;
+			int xTp2 = tp2.getResEinheitListe().get(0).getPosition().getxKoordinate();
+
+			if (xTp1 + 1 != xTp2) {
+				return true;
+			}
+
+		}
+		return false;
+
+	}
+
 	public void neuSetzen(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
