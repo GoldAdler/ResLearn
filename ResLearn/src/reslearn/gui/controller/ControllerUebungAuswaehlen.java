@@ -25,7 +25,8 @@ public class ControllerUebungAuswaehlen extends Controller {
 	private Pane pane;
 	File f = new File("..\\Reslearn\\bin\\reslearn\\gui\\uebungen");
 	File[] fileArray = f.listFiles();
-	public String dateiname;
+	public Button dateiname;
+	public static String datei;
 
 	public void initialize() {
 
@@ -89,9 +90,8 @@ public class ControllerUebungAuswaehlen extends Controller {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
-			// Hier n Button anstatt nem String nehmen und dann die Id nehmen
-			dateiname = event.getSource().toString();
-			System.out.println(dateiname);
+			dateiname = (Button) event.getSource();
+			datei = dateiname.getId();
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -103,58 +103,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 			e.printStackTrace();
 		}
 	}
-
-	// public void buttonZuordnen() {
-	// // buttonlist.add(button1);
-	// // buttonlist.add(button2);
-	// // buttonlist.add(button3);
-	// // buttonlist.add(button4);
-	// // buttonlist.add(button5);
-	// // buttonlist.add(button6);
-	// // buttonlist.add(button7);
-	// // buttonlist.add(button8);
-	// // buttonlist.add(button9);
-	// // buttonlist.add(button10);
-	// // buttonlist.add(button11);
-	// // buttonlist.add(button12);
-	// button5.setVisible(true);
-	// // for (int i = 0; i < 5; i++) {
-	// // System.out.println("jkhgbjhvjkbk");
-	// // buttonlist.get(i).setVisible(true);
-	// // // buttonlist.get(i).setText(fileArray[i].getName());
-	// // }
-	//
-	// // weiter(event, name) übergeben, mit Name aufgabe auswählen
-	// // aufgabe laden aufrufen
-	// }
-
-	// // @FXML
-	// public void buttonErstellen(ActionEvent event) throws Exception {
-	//
-	// for (int i = 0; i < fileArray.length; i++) {
-	// String name = fileArray[i].getName();
-	// buttonlist.add(new Button(name));
-	// }
-	// }
-	//
-	// public void aufgabeLadenKlick(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// String buttonName = event.getSource().toString() + ".csv";
-	// for (int i = 0; i < buttonlist.size(); i++) {
-	// if (buttonName == buttonlist.get(i).toString()) {
-	// AufgabeLadenImport importAufgabe = new AufgabeLadenImport();
-	// paketeArray = importAufgabe.aufgabeLaden(fileArray[i].getPath());
-	// }
-	// }
-	//
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 
 	@FXML
 	private Button zurueck;
@@ -196,82 +144,4 @@ public class ControllerUebungAuswaehlen extends Controller {
 			e.printStackTrace();
 		}
 	}
-
-	// @FXML
-	// public void weiter1(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 1;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter2(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 2;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter3(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 3;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter4(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 4;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter5(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 5;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @FXML
-	// public void weiter6(ActionEvent event) {
-	// View view = new View();
-	// try {
-	// AufgabenNummer = 6;
-	// alleFenster.add("../fxml/UebungAuswaehlen.fxml");
-	// view.start(View.classStage);
-	// ((Node) (event.getSource())).getScene().getWindow().hide();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 }

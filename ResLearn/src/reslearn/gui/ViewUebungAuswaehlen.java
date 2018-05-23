@@ -24,7 +24,6 @@ public class ViewUebungAuswaehlen extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		// Lade FXML
-		System.out.println("Juhuuuu");
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/UebungAuswaehlen.fxml"));
 		Scene scene = new Scene(root);
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
