@@ -37,7 +37,8 @@ public class Bearbeitungsfenster extends Pane {
 
 	public Bearbeitungsfenster(ResFeld rect) {
 
-		arbeitspaket = new Label("Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
+		arbeitspaket = new Label(
+				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
 		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 		teilen = new Button("Teile Arbeitspaket");
 
@@ -61,6 +62,17 @@ public class Bearbeitungsfenster extends Pane {
 		sliderY.setMinorTickCount(0);
 		sliderY.setSnapToTicks(true);
 
+		arbeitspaket.setLayoutX(15);
+		arbeitspaket.setLayoutY(5);
+		hilfetext.setLayoutX(15);
+		hilfetext.setLayoutY(30);
+		sliderY.setLayoutX(180);
+		sliderY.setLayoutY(100);
+		sliderX.setLayoutX(60);
+		sliderX.setLayoutY(170);
+		teilen.setLayoutX(15);
+		teilen.setLayoutY(210);
+
 		this.getChildren().addAll(arbeitspaket, hilfetext, teilen, sliderX, sliderY);
 		scene = new Scene(this, 300, 250);
 		bearbeitungsmodus = new Stage();
@@ -79,7 +91,8 @@ public class Bearbeitungsfenster extends Pane {
 		 */
 		for (int i = 0; i < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); i++) {
 			for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
-				ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit());
+				ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65,
+						rect.getResEinheit());
 				dummy.setFill(rect.getFill());
 				// dummy.setStroke(Color.GRAY);
 				getChildren().add(dummy);
@@ -95,7 +108,6 @@ public class Bearbeitungsfenster extends Pane {
 					// nur bei ganzzahligem Wertwechsel des Sliders soll das Paket aktualisiert
 					// werden
 
-					System.out.println("CHANGE" + arg1 + " " + neuerWert);
 					int counter = 0;
 					for (ResFeld feld : resFeldListe) {
 						getChildren().remove(feld);
@@ -106,9 +118,11 @@ public class Bearbeitungsfenster extends Pane {
 					// sollen
 					for (int i = rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); i > 0; i--) {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); j++) {
-							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
-								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65, i * DisplayCanvas.resFeldLaenge + 45, rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
+							if (counter < neuerWert.intValue()
+									* rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
+								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65,
+										i * DisplayCanvas.resFeldLaenge + 65 - DisplayCanvas.resFeldLaenge,
+										rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);
@@ -138,7 +152,6 @@ public class Bearbeitungsfenster extends Pane {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number neuerWert) {
 				if (neuerWert.doubleValue() % neuerWert.intValue() == 0 || neuerWert.intValue() == 0) {
 
-					System.out.println("CHANGE" + arg1 + " " + neuerWert);
 					int counter = 0;
 					for (ResFeld feld : resFeldListe) {
 						getChildren().remove(feld);
@@ -147,13 +160,14 @@ public class Bearbeitungsfenster extends Pane {
 
 					for (int i = 0; i < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); i++) {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
-							if (counter < neuerWert.intValue() * rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl()) {
-								System.out.println("FELD ANMALEN");
-								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65, rect.getResEinheit().getTeilpaket().getResEinheitListe()
-										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
+							if (counter < neuerWert.intValue()
+									* rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl()) {
+								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65,
+										j * DisplayCanvas.resFeldLaenge + 65,
+										rect.getResEinheit().getTeilpaket().getResEinheitListe()
+												.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								dummy.setStroke(Color.GREY);
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
-								System.out.println();
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);
 								counter++;
@@ -186,16 +200,9 @@ public class Bearbeitungsfenster extends Pane {
 				}
 				if (neueResEinheitListe.size() != 0) {
 					if (vertikal) {
-						int vorgangsdauer = resFeldListe.size() / rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl();
-						System.out.println("Vorgangsdauer: " + vorgangsdauer);
-
-						// rect.getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe,
-						// vorgangsdauer);
 						rect.getResEinheit().getTeilpaket().trenneTeilpaketVertikal(neueResEinheitListe);
-						System.out.println("vertikal");
 					} else {
 						rect.getResEinheit().getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
-						System.out.println("horizontal");
 					}
 				}
 				bearbeitungsmodus.close();
