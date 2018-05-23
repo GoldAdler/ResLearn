@@ -9,13 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import reslearn.gui.DisplayCanvas;
 import reslearn.model.paket.Arbeitspaket;
@@ -25,6 +24,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 	private List<Button> buttonlist = new ArrayList<>();
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
+	final VBox vb = new VBox();
 	File f = new File("..\\Reslearn\\bin\\reslearn\\gui\\uebungen");
 	File[] fileArray = f.listFiles();
 	public Button dateiname;
@@ -37,17 +37,8 @@ public class ControllerUebungAuswaehlen extends Controller {
 	public Pane erstellePane() {
 
 		pane = new Pane();
-		pane.setPrefWidth(DisplayCanvas.aufgabeLadenBreite);
-		pane.setPrefHeight(DisplayCanvas.aufgabeLadenHoehe);
-
-		ScrollBar scrolli = new ScrollBar();
-		scrolli.setOrientation(Orientation.VERTICAL);
-		scrolli.setMin(0);
-		scrolli.setMax(100);
-		scrolli.setValue(50);
-		scrolli.setLayoutX(pane.getWidth() - scrolli.getWidth() - 100);
-		scrolli.setPrefHeight(180);
-		pane.getChildren().add(scrolli);
+		pane.setMinWidth(DisplayCanvas.aufgabeLadenBreite);
+		pane.setMinHeight(DisplayCanvas.aufgabeLadenHoehe);
 
 		// // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
 		// // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
@@ -82,7 +73,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 			pane.getChildren().add(b);
 			buttonXPosition += 250;
 		}
-
 		return pane;
 	}
 
