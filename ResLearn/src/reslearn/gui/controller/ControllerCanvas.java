@@ -48,7 +48,6 @@ public class ControllerCanvas {
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		// TODO: Wo und wie wird der OnMenuItemApEventHandler gesetzt
 		View.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
 	}
 
@@ -154,7 +153,6 @@ public class ControllerCanvas {
 				if (teilpaket != null) {
 					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
 						teilpaket.setTranslateX(newTranslateX);
-						// System.out.println(""+diagramm.getResFeldArray());
 					}
 				}
 			}
@@ -177,7 +175,6 @@ public class ControllerCanvas {
 	private EventHandler<ContextMenuEvent> OnMouseSecondaryEventHandler = new EventHandler<ContextMenuEvent>() {
 		@Override
 		public void handle(ContextMenuEvent e) {
-			// TODO: Wo und wie wird das Menü angezeigt
 			View.getInstance().getMenu().show(rect, e.getSceneX(), e.getSceneY());
 		}
 	};
@@ -222,8 +219,6 @@ public class ControllerCanvas {
 		table.setEditable(true);
 		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
 		table.setLayoutY(DisplayCanvas.tabelleLayoutY);
-		// table.
-		// table.setPrefSize(DisplayCanvas.tabelleBreite, DisplayCanvas.tabelleLaenge);
 		table.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		TableColumn<Pair<String, Object>, String> name = new TableColumn<>("Name");
@@ -252,7 +247,7 @@ public class ControllerCanvas {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -260,7 +255,7 @@ public class ControllerCanvas {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
