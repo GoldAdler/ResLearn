@@ -25,7 +25,7 @@ public class Main {
 		// erstelleTestDaten2_54(resCanvas);
 		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
-		erstelleTestDaten2_57(resCanvas);
+		// erstelleTestDaten2_57(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
 		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
@@ -54,6 +54,9 @@ public class Main {
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 
+		System.out.println("----------------------------------------------------------");
+		System.out.println("----------------------------------------------------------");
+		System.out.println("--------------Endergebnis---------------------------");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 
 		System.out.println("----------------------------------------------------------");

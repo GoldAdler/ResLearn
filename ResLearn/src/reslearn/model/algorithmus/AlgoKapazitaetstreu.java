@@ -231,6 +231,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	private void rankingHarteKriterien(ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
 			ArrayList<ResCanvas> keineZeitueberschreitung) {
 		int ueberschreitung = 0;
+		ArrayList<ResCanvas> zuLoeschenListe = new ArrayList<ResCanvas>();
 		for (ResCanvas resCanvas : moeglicheLoesungenResCanvas) {
 			LOOP: for (Arbeitspaket arbeitspaket : resCanvas.getArbeitspaketListe()) {
 				for (Teilpaket teilpaket : arbeitspaket.getTeilpaketListe()) {
@@ -242,8 +243,20 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			}
 			if (ueberschreitung == 0) {
 				keineZeitueberschreitung.add(resCanvas);
+
+			} else if (ueberschreitung > 0) {
+
+				// ist FAZ verletzt, so muss dieses Canvas aus der Liste der möglichen
+				// Lösungen entfernt werden. Da dies nie als mögliche Lösung akzeptiert werden
+				// darf
+				zuLoeschenListe.add(resCanvas);
 			}
 		}
+
+		for (ResCanvas canvas : zuLoeschenListe) {
+			moeglicheLoesungenResCanvas.remove(canvas);
+		}
+
 		System.out.println("bewerte");
 		for (ResCanvas lul : keineZeitueberschreitung) {
 			Algorithmus.ausgeben(lul.getKoordinatenSystem());
