@@ -32,7 +32,7 @@ import reslearn.model.utils.Vektor2i;
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
-	private boolean vorgangsdauerVeraenderbar = false;
+	private boolean vorgangsdauerVeraenderbar = true;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
 	private static int maxBegrenzung = 5;
@@ -87,15 +87,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
-		if (vorgangsdauerVeraenderbar) {
-
-			zeitValidierungVorgangsdauerVeraenderbar(resCanvas);
-
-		} else {
-
-			zeitValidierungFesteVorgangsdauer(resCanvas, moeglicheLoesungenResCanvas);
-
-		}
+		zeitValidierung(resCanvas, moeglicheLoesungenResCanvas);
 
 	}
 
@@ -111,8 +103,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param resCanvas
 	 * @param moeglicheLoesungenResCanvas
 	 */
-	private void zeitValidierungFesteVorgangsdauer(ResCanvas resCanvas,
-			ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
+	private void zeitValidierung(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
 
 		System.out.println("Simulation start");
 
@@ -128,48 +119,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		// TODO überprüfen ob Arbeitspakete eingemauert sind und beheben
 
 		resCanvas.swap(ergebnis);
-	}
-
-	/**
-	 * Diese Methode überpüft für jedes Arbeitspaket ob die zugehörigen Teilpakete
-	 * innerhalb der zeitlichen Rahmenbedingen (FAZ - SEZ) liegen. Wenn die
-	 * Rahmenbedingung verletzt worden ist, versucht die Methode die Pakete zu
-	 * verschieben, damit die Position gültig ist.
-	 *
-	 * @param resCanvas
-	 */
-	private void zeitValidierungVorgangsdauerVeraenderbar(ResCanvas resCanvas) {
-
-		// TODO LOGIK e-Problem
-
-		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
-
-			int verschieben = ap.getTeilpaketListe().get(0).ueberpruefeZeiten();
-
-			if (verschieben != 0) {
-
-				resCanvas.entferneArbeitspaket(ap);
-				resCanvas.herunterfallenAlleTeilpakete();
-
-				ap.neuSetzen(verschieben, resCanvas);
-				// resCanvas.aufschliessen();
-				ausgeben(resCanvas.getKoordinatenSystem());
-
-				Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(resCanvas, resCanvas.getKoordinatenSystem());
-
-				if (neuesTeilpaket != null) {
-
-					int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
-
-					ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
-					ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
-
-					verschiebeLinks(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
-
-					verschiebeRechts(resCanvas, ap, neuesTeilpaket, grenze, zuSetzendeResEinheiten, koordinatenSystem);
-				}
-			}
-		}
 	}
 
 	/**
@@ -411,6 +360,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		if (simLoesungenResCanvas.isEmpty()) {
 			moeglicheLoesungenResCanvas.add(bevorSimulationStartResCanvs);
 		} else {
+
+			// TODO Lösche identische Lösungen aus der Liste simLoesungenResCanvas heraus,
+			// das für diese nicht auch noch mal millionfach simuliert wird
 
 			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
 				moeglicheLoesungenResCanvas.add(simResCanvas);
@@ -767,9 +719,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			System.out.println("Lösung gefunden");
 
 			if (!ueberpruefeObergrenzeUeberschritten(simulation)) {
+
 				loesungGefunden = true;
 				simulation.aufschliessenArbeitspaket();
 				simLoesungenResCanvas.add(simulation);
+
+			} else if (ueberpruefeObergrenzeUeberschritten(simulation) && vorgangsdauerVeraenderbar) {
+
+				simuliereVorgangsdauerAnpassen(simLoesungenResCanvas, simulation);
 			}
 
 		}
@@ -778,6 +735,39 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			simLoesungenResCanvas.add(ausgangssituationResCanvs);
 		}
 
+	}
+
+	/**
+	 * ResEinheiten die über der Begrenzung, der maximallen Anzahl an parallel
+	 * arbeitenden Mitarbeitern liegt, werden je nach Sitation entweder nach links
+	 * oder rechts gesetzt.
+	 *
+	 * @param simLoesungenResCanvas
+	 * @param simulation
+	 */
+	private void simuliereVorgangsdauerAnpassen(ArrayList<ResCanvas> simLoesungenResCanvas, ResCanvas simulation) {
+		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(simulation, simulation.getKoordinatenSystem());
+
+		if (neuesTeilpaket != null) {
+
+			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
+
+			ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+			ResEinheit[][] koordinatenSystem = simulation.getKoordinatenSystem();
+
+			verschiebeLinks(simulation, neuesTeilpaket.getArbeitspaket(), neuesTeilpaket, grenze,
+					zuSetzendeResEinheiten, koordinatenSystem);
+
+			verschiebeRechts(simulation, neuesTeilpaket.getArbeitspaket(), neuesTeilpaket, grenze,
+					zuSetzendeResEinheiten, koordinatenSystem);
+
+			simulation.aufschliessenArbeitspaket();
+			simLoesungenResCanvas.add(simulation);
+
+			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
+			System.out.println("Lösung gefunden variable Vorgangsdauer");
+
+		}
 	}
 
 	/**
@@ -858,7 +848,60 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					break;
 				}
 			}
+
+			// wenn eine Vorgangsunterbrechung gefunden wird, muss das erste Teilpaket
+			// genommen werden und hinten angefügt werden.
+
+			if (ap.ueberpruefeVorgangsunterbrechungSimulation()) {
+
+				korriegiereVorgangsunterbrechung(resCanvas, ap, koordinatenSystem);
+
+			}
 		}
+	}
+
+	/**
+	 * Methode behebt die Vorgangsunterbrechung indem das erste Teilpaket hinter dem
+	 * letzten Teilpaket des aktuellen Arbeitspaketes gesetzt wird.
+	 *
+	 *
+	 * @param resCanvas
+	 * @param ap
+	 * @param koordinatenSystem
+	 */
+	private void korriegiereVorgangsunterbrechung(ResCanvas resCanvas, Arbeitspaket ap,
+			ResEinheit[][] koordinatenSystem) {
+		Teilpaket tp1 = ap.getTeilpaketListe().get(0);
+		ArrayList<ResEinheit> resListe = tp1.getResEinheitListe();
+		Teilpaket tp2 = ap.getTeilpaketListe().get(ap.getTeilpaketListe().size() - 1);
+
+		int xPos = tp2.getResEinheitListe().get(0).getPosition().getxKoordinate() + tp2.getVorgangsdauer();
+		int index = 0;
+		int mitarbeiterAnzahl = 0;
+
+		Loop: for (int x = xPos; x < ResCanvas.koorBreite; x++) {
+			for (int y = ResCanvas.koorHoehe - 1; y > ResCanvas.koorHoehe - maxBegrenzung; y--) {
+				if (koordinatenSystem[y][x] == null) {
+					ResEinheit res = resListe.get(index++);
+					mitarbeiterAnzahl++;
+					Vektor2i altePos = res.getPosition();
+
+					res.setPosition(new Vektor2i(y, x));
+					resCanvas.updatePosition(res, altePos);
+
+					if (index > resListe.size() - 1) {
+						break Loop;
+					}
+					if (mitarbeiterAnzahl == ap.getMitarbeiteranzahl()) {
+						mitarbeiterAnzahl = 0;
+						break;
+					}
+				}
+			}
+
+		}
+
+		tp1.getArbeitspaket().zusammenfuegen();
 	}
 
 	/**

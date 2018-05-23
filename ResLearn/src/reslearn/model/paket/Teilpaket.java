@@ -307,9 +307,9 @@ public class Teilpaket extends Paket {
 
 		int xPos = resEinheitListe.get(0).getPosition().getxKoordinate();
 
-		if (this.arbeitspaket.getFaz() > xPos + 1) {
+		if (this.arbeitspaket.getFaz() - 1 > xPos) {
 			verschieben = VerschiebeRichtung.RECHTS;
-		} else if (this.arbeitspaket.getFaz() == xPos) {
+		} else if (this.arbeitspaket.getFaz() - 1 == xPos) {
 			verschieben = VerschiebeRichtung.FAZ;
 		} else {
 			verschieben = VerschiebeRichtung.LINKS;
