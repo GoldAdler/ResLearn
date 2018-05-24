@@ -29,6 +29,8 @@ public class View extends Application {
 	private MenuItem ap;
 	private MenuItem reset;
 
+	private Pane pane;
+
 	public static View getInstance() {
 		if (view == null) {
 			view = new View();
@@ -63,7 +65,7 @@ public class View extends Application {
 
 		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
 		// der Unterszene hinzu
-		Pane pane = new Pane();
+		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
@@ -88,7 +90,6 @@ public class View extends Application {
 						farbenNummer++;
 					}
 					resFeld.setFill(arbeitspaketeMitFarbe.get(resFeldAp));
-					System.out.println(resFeld);
 				}
 			}
 		}
@@ -144,5 +145,9 @@ public class View extends Application {
 
 	public MenuItem getReset() {
 		return reset;
+	}
+
+	public Pane getPane() {
+		return pane;
 	}
 }

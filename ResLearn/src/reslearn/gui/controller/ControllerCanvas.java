@@ -22,7 +22,9 @@ import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.View;
+import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
+import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 
@@ -49,6 +51,7 @@ public class ControllerCanvas {
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
 		View.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
+		View.getInstance().getReset().setOnAction(OnMenuItemResetEventHandler);
 	}
 
 	// Event Handler Maus klicken
@@ -189,6 +192,48 @@ public class ControllerCanvas {
 		}
 	};
 
+	// MenuItem Arbeitspaket zurücksetzen
+	EventHandler<ActionEvent> OnMenuItemResetEventHandler = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent e) {
+			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(resCanvas);
+
+			for (ResFeld[] resFeld : diagramm.getResFeldArray()) {
+				for (ResFeld res : resFeld) {
+					if (res != null) {
+						if (res.getResEinheit().getTeilpaket().getArbeitspaket() == rect.getResEinheit().getTeilpaket()
+								.getArbeitspaket()) {
+							View.getInstance().getPane().getChildren().remove(res);
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < koordinatenSystem.length; i++) {
+				for (int j = 0; j < koordinatenSystem[i].length; j++) {
+					if (koordinatenSystem[i][j] != null) {
+						if (koordinatenSystem[i][j].getTeilpaket().getArbeitspaket() == rect.getResEinheit()
+								.getTeilpaket().getArbeitspaket()) {
+							ResFeld resFeld = new ResFeld(j * DisplayCanvas.resFeldBreite,
+									i * DisplayCanvas.resFeldLaenge, koordinatenSystem[i][j]);
+							resFeld.getResEinheit().setTeilpaket(koordinatenSystem[i][j].getTeilpaket());
+
+							resFeld.setFill(rect.getFill());
+
+							View.getInstance().getPane().getChildren().add(resFeld);
+							makeDraggable(resFeld);
+
+							diagramm.getResFeldArray()[i][j] = resFeld;
+						}
+					}
+				}
+			}
+
+			Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
+
+		}
+	};
+
 	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
 	///////////////////////////////////////////////////////////////////////
@@ -247,7 +292,7 @@ public class ControllerCanvas {
 	}
 
 	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -255,7 +300,7 @@ public class ControllerCanvas {
 	}
 
 	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {

@@ -157,6 +157,49 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	public ResEinheit[][] reset(ResCanvas resCanvas) {
+		ArrayList<ResEinheit> resListe = new ArrayList<>();
+
+		resCanvas.entferneArbeitspaket(this);
+
+		for (Teilpaket teilpaket : teilpaketListe) {
+			for (ResEinheit res : teilpaket.getResEinheitListe()) {
+				resListe.add(res);
+			}
+		}
+
+		teilpaketListe.clear();
+
+		Teilpaket vereint = new Teilpaket(this);
+		vereint.setAufwand(this.getAufwand());
+		vereint.setMitarbeiteranzahl(this.getMitarbeiteranzahl());
+		vereint.setVorgangsdauer(this.getVorgangsdauer());
+		teilpaketListe.add(vereint);
+
+		vereint.setResEinheitListe(resListe);
+
+		// this.setPosition(new Vektor2i(0, 0));
+		vereint.setPosition(new Vektor2i(0, 0));
+
+		ArrayList<ResEinheit> resEinheitenListe = vereint.getResEinheitListe();
+		Iterator<ResEinheit> it = resEinheitenListe.iterator();
+
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		for (int y = 0; y < this.mitarbeiteranzahl; y++) {
+			for (int x = 0; x < this.vorgangsdauer; x++) {
+				if (koordinatenSystem[y][x] == null) {
+					if (it.hasNext()) {
+						koordinatenSystem[y][x] = it.next();
+						koordinatenSystem[y][x].setPosition(new Vektor2i(y, x));
+						koordinatenSystem[y][x].setTeilpaket(vereint);
+					}
+				}
+			}
+		}
+		return koordinatenSystem;
+	}
+
 	public void teilpaketHinzufuegen(Teilpaket teilpaket) {
 		teilpaketListe.add(teilpaket);
 	}
