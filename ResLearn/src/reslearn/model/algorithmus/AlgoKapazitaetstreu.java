@@ -36,6 +36,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
 	private static int maxBegrenzung = 5;
+	// TODO maxBegrenzung ist zu hoch fall
+	// z.B maxBegrenzung = 10;
+	// warum werden die Pakete angefasst, obwohl sie in FAZ liegen? Verändert dürfte
+	// sich nicht, da wenn maxBegrenzung zu hoch ist, passiert in
+	// #kapazitaetsOptimierung eigentlich nichts
+
+	// TODO: Vorläufige Integer. Wieder löschen!!!!
+	private static int simZaehler = 0;
 
 	private AlgoKapazitaetstreu() {
 	}
@@ -118,7 +126,15 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		// TODO überprüfen ob Arbeitspakete eingemauert sind und beheben
 
+		Algorithmus.ausgeben(ergebnis.getKoordinatenSystem());
+		Algorithmus.ausgebenTrotzdem(ergebnis.getKoordinatenSystem());
+
 		resCanvas.swap(ergebnis);
+
+		System.out.println("Ergebnis");
+		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
+		Algorithmus.ausgebenTrotzdem(resCanvas.getKoordinatenSystem());
+
 	}
 
 	/**
@@ -147,7 +163,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		ArrayList<ResCanvas> optimalListe = null;
 
 		if (keineZeitueberschreitung.isEmpty()) {
-
+			moeglicheLoesungenResCanvas = geringsteVerstoesse(moeglicheLoesungenResCanvas);
 			optimalListe = rankingWeicheKriterien(moeglicheLoesungenResCanvas);
 		} else {
 			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung);
@@ -163,9 +179,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		// rankingWeicheKriterien.
 
 		ResCanvas ergebnis = sucheFruehesteLage(optimalListe);
-
-		System.out.println("Ergebnis");
-		Algorithmus.ausgeben(ergebnis.getKoordinatenSystem());
 
 		return ergebnis;
 	}
@@ -286,6 +299,46 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		return optimalListe;
 	}
 
+	public ArrayList<ResCanvas> geringsteVerstoesse(ArrayList<ResCanvas> Zeitueberschreitung) {
+		int min = Integer.MAX_VALUE;
+
+		ArrayList<ResCanvas> durchlaufenListe = Zeitueberschreitung;
+		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
+		ResEinheit[][] koordinatenSystem = null;
+		for (int y = (ResCanvas.koorHoehe - maxBegrenzung); y < ResCanvas.koorHoehe; y++) {
+
+			for (ResCanvas canvas : durchlaufenListe) {
+				koordinatenSystem = canvas.getKoordinatenSystem();
+				int counter = 0;
+				for (Arbeitspaket arbeitspaket : canvas.getArbeitspaketListe()) {
+					for (Teilpaket teilpaket : arbeitspaket.getTeilpaketListe()) {
+						int ueberschreitung = teilpaket.ueberpruefeZeiten();
+						if (ueberschreitung != 0) {
+							counter++;
+							break;
+						}
+					}
+
+				}
+
+				if (counter < min) {
+					optimalListe.clear();
+					optimalListe.add(canvas);
+					min = counter;
+				} else if (counter == min) {
+					optimalListe.add(canvas);
+				}
+			}
+			durchlaufenListe.clear();
+			for (ResCanvas rescanvas : optimalListe) {
+				durchlaufenListe.add(rescanvas);
+			}
+
+		}
+		return optimalListe;
+
+	}
+
 	/**
 	 * Alle Arbeitspakete die nicht in FAZ liegen, werden simuliert. Das heißt, sie
 	 * werden zwischen FAZ und SAZ eingefügt. Aus diesen Simulationen werden mehre
@@ -344,9 +397,18 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			ArrayList<Teilpaket> tpListe = arbeitspaketListe.get(i).getTeilpaketListe();
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
+			// TODO: HIER WEITERMACHEN LOGIK warum letztesTeilpaket überprüfen nach Faz?
+			// Möglicherweise muss erstes
+			// Teilpaket überprüft werden nicht das letzte. Wenn nach dem ersten
+			// SchrittModus pakete herunterfallen, läuft er trotzdem in die schleife, da das
+			// letzte tp nicht mehr in faz. Aber arbeitspaket liegt in faz
 			VerschiebeRichtung verschieben = letztesTeilpaket.ueberpruefeZeitenEnum();
 			if (verschieben != VerschiebeRichtung.FAZ) {
 				apID = arbeitspaketListe.get(i).getId();
+				System.out.println("simZaehler = " + ++simZaehler);
+				if (simZaehler == 3) {
+					System.out.println("Da ist die Kacke am dampfen!!!");
+				}
 				System.out.println("Beginn Sim für AP: " + arbeitspaketListe.get(i).getId());
 				simulationStarten(resCanvas, arbeitspaketListe.get(i), verschieben, simLoesungenResCanvas);
 				break;
@@ -367,6 +429,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
 				moeglicheLoesungenResCanvas.add(simResCanvas);
 				Algorithmus.ausgeben(simResCanvas.getKoordinatenSystem());
+				Algorithmus.ausgebenTrotzdem(simResCanvas.getKoordinatenSystem());
 			}
 
 			int nummer = 0;
@@ -374,6 +437,11 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				++nummer;
 				System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer + " von "
 						+ simLoesungenResCanvas.size());
+
+				// TODO Löschen
+				if (apID == "Z") {
+					System.out.println("jo");
+				}
 
 				simulationDurchfuehren(simResCanvas, moeglicheLoesungenResCanvas, apID);
 
@@ -697,12 +765,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			simulation = vorbereitungSimulation.copyResCanvas(zuVerschiebenAp);
 
-			for (Arbeitspaket simAp : simulation.getArbeitspaketListe()) {
-				if (simAp.getId() == zuVerschiebenAp.getId()) {
-					copyZuVerschiebenAP = simAp;
-					break;
-				}
-			}
+			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getId());
 
 			int xStart = copyZuVerschiebenAP.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
 					.getxKoordinate();
@@ -716,13 +779,15 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 
-			System.out.println("Lösung gefunden");
+			System.out.println("Lösung gefunden bearbeiten");
 
 			if (!ueberpruefeObergrenzeUeberschritten(simulation)) {
 
 				loesungGefunden = true;
 				simulation.aufschliessenArbeitspaket();
 				simLoesungenResCanvas.add(simulation);
+
+				System.out.println("Lösung gefunden fertig");
 
 			} else if (ueberpruefeObergrenzeUeberschritten(simulation) && vorgangsdauerVeraenderbar) {
 
@@ -746,23 +811,37 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * @param simulation
 	 */
 	private void simuliereVorgangsdauerAnpassen(ArrayList<ResCanvas> simLoesungenResCanvas, ResCanvas simulation) {
-		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(simulation, simulation.getKoordinatenSystem());
 
+		ResCanvas copySimulation = simulation.copyResCanvas();
+		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(simulation, simulation.getKoordinatenSystem());
+		Teilpaket copyNeuesTeilpaket = ueberpruefeObergrenzeResEinheit(copySimulation,
+				copySimulation.getKoordinatenSystem());
 		if (neuesTeilpaket != null) {
 
 			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
 
-			ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
-			ResEinheit[][] koordinatenSystem = simulation.getKoordinatenSystem();
+			verschiebeLinks(copySimulation, copyNeuesTeilpaket, grenze);
+			verschiebeLinks(simulation, neuesTeilpaket, grenze);
 
-			verschiebeLinks(simulation, neuesTeilpaket.getArbeitspaket(), neuesTeilpaket, grenze,
-					zuSetzendeResEinheiten, koordinatenSystem);
+			copySimulation.aufschliessenArbeitspaket();
 
-			verschiebeRechts(simulation, neuesTeilpaket.getArbeitspaket(), neuesTeilpaket, grenze,
-					zuSetzendeResEinheiten, koordinatenSystem);
+			boolean hinzufuegen = false;
+
+			// verschiebe für copysimulation
+			hinzufuegen = verschiebeRechts(copySimulation, copyNeuesTeilpaket, grenze);
+			Algorithmus.ausgeben(copySimulation.getKoordinatenSystem());
+			if (!copyNeuesTeilpaket.getArbeitspaket().ueberpruefeVorgangsunterbrechungSimulation() && hinzufuegen) {
+				simLoesungenResCanvas.add(copySimulation);
+			}
+
+			// verschiebe für orginal simulation
+
+			hinzufuegen = verschiebeRechts(simulation, neuesTeilpaket, grenze);
 
 			simulation.aufschliessenArbeitspaket();
-			simLoesungenResCanvas.add(simulation);
+			if (!neuesTeilpaket.getArbeitspaket().ueberpruefeVorgangsunterbrechungSimulation() && hinzufuegen) {
+				simLoesungenResCanvas.add(simulation);
+			}
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 			System.out.println("Lösung gefunden variable Vorgangsdauer");
@@ -774,20 +853,19 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * Verschiebt nach Links wenn möglich.
 	 *
 	 * @param resCanvas
-	 * @param ap
 	 * @param neuesTeilpaket
 	 * @param grenze
-	 * @param zuSetzendeResEinheiten
-	 * @param koordinatenSystem
 	 */
-	private void verschiebeLinks(ResCanvas resCanvas, Arbeitspaket ap, Teilpaket neuesTeilpaket, int grenze,
-			ArrayList<ResEinheit> zuSetzendeResEinheiten, ResEinheit[][] koordinatenSystem) {
+	private void verschiebeLinks(ResCanvas resCanvas, Teilpaket neuesTeilpaket, int grenze) {
 		ArrayList<ResEinheit> gesezteResEinheiten;
+		ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+		Arbeitspaket ap = neuesTeilpaket.getArbeitspaket();
 
 		if (!zuSetzendeResEinheiten.isEmpty()) {
 
 			int xPosLinks = zuSetzendeResEinheiten.get(0).getPosition().getxKoordinate();
-			for (int x = xPosLinks - 1; x >= ap.getFaz(); x--) {
+			for (int x = xPosLinks - 1; x >= ap.getFaz() - 1; x--) {
 
 				boolean gesetzt = false;
 				gesezteResEinheiten = new ArrayList<ResEinheit>();
@@ -813,16 +891,15 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * Verschiebt nach Rechts wenn möglich.
 	 *
 	 * @param resCanvas
-	 * @param ap
 	 * @param neuesTeilpaket
 	 * @param grenze
-	 * @param zuSetzendeResEinheiten
-	 * @param koordinatenSystem
 	 */
-	private void verschiebeRechts(ResCanvas resCanvas, Arbeitspaket ap, Teilpaket neuesTeilpaket, int grenze,
-			ArrayList<ResEinheit> zuSetzendeResEinheiten, ResEinheit[][] koordinatenSystem) {
+	private boolean verschiebeRechts(ResCanvas resCanvas, Teilpaket neuesTeilpaket, int grenze) {
 		ArrayList<ResEinheit> gesezteResEinheiten;
+		ArrayList<ResEinheit> zuSetzendeResEinheiten = neuesTeilpaket.getResEinheitListe();
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 
+		Arbeitspaket ap = neuesTeilpaket.getArbeitspaket();
 		if (!zuSetzendeResEinheiten.isEmpty()) {
 
 			Collections.sort(ap.getTeilpaketListe(), new ComperatorTeilpaket());
@@ -845,7 +922,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						zuSetzendeResEinheiten, koordinatenSystem, x, gesetzt);
 
 				if (!gesetzt) {
-					break;
+					return false;
 				}
 			}
 
@@ -858,6 +935,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			}
 		}
+		return true;
 	}
 
 	/**
@@ -880,7 +958,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		int mitarbeiterAnzahl = 0;
 
 		Loop: for (int x = xPos; x < ResCanvas.koorBreite; x++) {
-			for (int y = ResCanvas.koorHoehe - 1; y > ResCanvas.koorHoehe - maxBegrenzung; y--) {
+			for (int y = ResCanvas.koorHoehe - 1; y > ResCanvas.koorHoehe - maxBegrenzung - 1; y--) {
 				if (koordinatenSystem[y][x] == null) {
 					ResEinheit res = resListe.get(index++);
 					mitarbeiterAnzahl++;
@@ -952,7 +1030,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						gesezteResEinheiten.add(zuSetzen);
 						gleicheResEinheiten++;
 					} else {
-						break;
+						return false;
 					}
 
 					ausgeben(resCanvas.getKoordinatenSystem());

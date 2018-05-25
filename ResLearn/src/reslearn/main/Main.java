@@ -18,10 +18,10 @@ public class Main {
 		// erstelleTestDaten1(resCanvas);
 
 		// PTMA_U09
-		// erstelleTestDaten2(resCanvas);
+		erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		erstelleTestDaten2_5(resCanvas);
+		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_54(resCanvas);
 		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
