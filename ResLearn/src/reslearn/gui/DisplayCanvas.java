@@ -8,7 +8,7 @@ public final class DisplayCanvas {
 
 	private static Screen screen = Screen.getPrimary();
 	private static Rectangle2D bounds = screen.getVisualBounds();
-	private static final double faktor = bounds.getWidth() / 1920.0;
+	public static final double faktor = bounds.getWidth() / 1920.0;
 
 	public static final int schriftGroesse = (int) (faktor * 15);
 	public static final int resFeldBreite = (int) (faktor * 25);
@@ -56,7 +56,18 @@ public final class DisplayCanvas {
 	// public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY +
 	// canvasLaenge + resFeldLaenge;
 
-	public static final int aufgabeLadenBreite = (int) bounds.getWidth();
-	public static final int aufgabeLadenHoehe = (int) bounds.getHeight();
+	public static final int paneAufgabeLadenBreite = (int) bounds.getWidth();
+	public static final int paneAufgabeLadenHoehe = (int) bounds.getHeight();
+
+	public static final int hoeheUeberschrift = (int) (faktor * 60);
+
+	public static final int scrolliHoehe = (int) (paneAufgabeLadenHoehe - hoeheUeberschrift * 1.5);
+
+	public static final int buttonBreite = (int) (faktor * 250);
+	public static final int buttonHoehe = (int) (faktor * 300);
+	public static final int abstandButtonX = (paneAufgabeLadenBreite - 5 * buttonBreite) / 6;
+	public static final int abstandButtonY = buttonHoehe + abstandButtonX;
+	public static final int buttonXStart = abstandButtonX;
+	public static final int buttonYStart = hoeheUeberschrift * 2;
 
 }

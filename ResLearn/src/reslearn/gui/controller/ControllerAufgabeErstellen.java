@@ -227,8 +227,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
+				new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4, 1, 2, 2));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {

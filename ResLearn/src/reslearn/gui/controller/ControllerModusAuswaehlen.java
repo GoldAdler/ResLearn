@@ -30,14 +30,23 @@ public class ControllerModusAuswaehlen extends Controller {
 	@SuppressWarnings("static-access")
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
-		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
 		AufgabeLadenImport ali = new AufgabeLadenImport();
+		ControllerAufgabeErstellen cae = new ControllerAufgabeErstellen();
 		if (event.getSource() == ersterSchritt) {
-			System.out.println(cua.f + File.separator + cua.datei);
-			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + File.separator + cua.datei));
-			View.getInstance().start(new Stage());
-			((Node) (event.getSource())).getScene().getWindow().hide();
+			System.out.println(alleFenster.get(alleFenster.size() - 1));
+			if (alleFenster.get(alleFenster.size() - 1) == "../fxml/AufgabeErstellen.fxml") {
+				View.getInstance().initializeCanvasView(cae.pakete);
+				View.getInstance().start(new Stage());
+				alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			} else {
+				View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + File.separator + cua.datei));
+				View.getInstance().start(new Stage());
+				alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+				((Node) (event.getSource())).getScene().getWindow().hide();
+
+			}
 		} else if (event.getSource() == uebungsmodus) {
 			View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" + cua.datei));
 			View.getInstance().start(new Stage());

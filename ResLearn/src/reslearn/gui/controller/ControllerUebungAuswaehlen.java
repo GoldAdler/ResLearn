@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import reslearn.gui.DisplayCanvas;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
@@ -26,7 +27,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 	final VBox vb = new VBox();
 	File f = new File(".." + File.separator + "Reslearn" + File.separator + "bin" + File.separator + "reslearn"
 			+ File.separator + "gui" + File.separator + "uebungen");;
-	File[] fileArray = f.listFiles();
+	public File[] fileArray = f.listFiles();
 	public Button dateiname;
 	public static String datei;
 
@@ -35,36 +36,29 @@ public class ControllerUebungAuswaehlen extends Controller {
 	}
 
 	public Pane erstellePane() {
+
 		pane = new Pane();
 
-		int buttonHoehe = 250;
-		int buttonBreite = 200;
-		int buttonXPosition = 100;
-		int buttonYPosition = 100;
-
-		// GridPane grid = new GridPane();
-		// grid.setPadding(new Insets(5));
-		// grid.setHgap(5);
-		// grid.setVgap(5);
-
-		// ScrollPane scrollPane = new ScrollPane(grid);
+		int buttonXPosition = 0;
+		int buttonYPosition = 0;
 
 		for (int i = 0; i < fileArray.length; i++) {
-			System.out.println("TOLL ein BUTTONG: " + i);
 			Button b = new Button(fileArray[i].getName().substring(0, fileArray[i].getName().length() - 4));
 			b.setId(fileArray[i].getName());
 			b.setOnAction(ButtonAction);
 			if (i % 5 == 0 && i != 0) {
-				buttonYPosition += 300;
-				buttonXPosition = 100;
+				buttonYPosition += DisplayCanvas.abstandButtonY;
+				buttonXPosition = 0;
 			}
-			b.setPrefHeight(buttonHoehe);
-			b.setPrefWidth(buttonBreite);
-			b.setLayoutX(buttonXPosition);
-			b.setLayoutY(buttonYPosition);
-			// grid.add(b, i, i);
+			b.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
+			b.setPrefHeight(DisplayCanvas.buttonHoehe);
+			b.setPrefWidth(DisplayCanvas.buttonBreite);
+			b.setLayoutX(DisplayCanvas.buttonXStart + buttonXPosition);
+			b.setLayoutY(DisplayCanvas.buttonYStart + buttonYPosition);
+
 			pane.getChildren().add(b);
-			buttonXPosition += 250;
+			buttonXPosition += DisplayCanvas.abstandButtonX + DisplayCanvas.buttonBreite;
+
 		}
 		return pane;
 	}
