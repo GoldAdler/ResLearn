@@ -16,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import reslearn.gui.DisplayCanvas;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
@@ -25,7 +24,8 @@ public class ControllerUebungAuswaehlen extends Controller {
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
 	final VBox vb = new VBox();
-	File f = new File(".." + File.separator + "Reslearn" + File.separator +"bin"+File.separator+"reslearn"+File.separator+"gui"+File.separator+"uebungen");;
+	File f = new File(".." + File.separator + "Reslearn" + File.separator + "bin" + File.separator + "reslearn"
+			+ File.separator + "gui" + File.separator + "uebungen");;
 	File[] fileArray = f.listFiles();
 	public Button dateiname;
 	public static String datei;
@@ -36,11 +36,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 
 	public Pane erstellePane() {
 		pane = new Pane();
-		pane.setMinWidth(DisplayCanvas.aufgabeLadenBreite);
-		pane.setMinHeight(DisplayCanvas.aufgabeLadenHoehe);
-
-		// // pane.setLayoutX(DisplayCanvas.aufgabeLadenX);
-		// // pane.setLayoutY(DisplayCanvas.aufgabeLadenY);
 
 		int buttonHoehe = 250;
 		int buttonBreite = 200;
@@ -63,7 +58,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 				buttonYPosition += 300;
 				buttonXPosition = 100;
 			}
-
 			b.setPrefHeight(buttonHoehe);
 			b.setPrefWidth(buttonBreite);
 			b.setLayoutX(buttonXPosition);

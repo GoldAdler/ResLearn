@@ -31,12 +31,10 @@ public class ViewUebungAuswaehlen extends Application {
 		// Lade FXML
 
 		Parent root = FXMLLoader.load(getClass().getResource("./fxml/UebungAuswaehlen.fxml"));
-		Scene hauptszene = new Scene(root);
 
 		Group group = new Group();
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();
 		Pane pane = cua.erstellePane();
-
 		ScrollBar scrolli = new ScrollBar();
 		scrolli.setOrientation(Orientation.VERTICAL);
 		scrolli.setLayoutX(DisplayCanvas.aufgabeLadenBreite - scrolli.getWidth());
@@ -45,16 +43,16 @@ public class ViewUebungAuswaehlen extends Application {
 		scrolli.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-				// TODO Nur Button und nicht das Pane verschieben
 				pane.setLayoutY(-new_val.doubleValue());
+				pane.getParent().toBack();
 			}
 		});
-
+		Scene hauptszene = new Scene(root);
 		group.getChildren().addAll(pane, scrolli);
 
 		Scene unterszene = new Scene(group);
-		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
 
+		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
 		stage.setMaximized(true);
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
