@@ -71,6 +71,13 @@ public class Arbeitspaket extends Paket {
 		}
 	}
 
+	/**
+	 * Überprüft ob eine Vorgangsunterbrechung im Arbeitspaket stattfindet. Wenn ja,
+	 * wird diese Behoben, in dem das ganze Arbeitspaket gelöscht wird und hinten im
+	 * Koordinatensystem eingefügt wird.
+	 *
+	 * @param resCanvas
+	 */
 	public void ueberpruefeVorgangsunterbrechung(ResCanvas resCanvas) {
 		Collections.sort(teilpaketListe, new ComperatorTeilpaket());
 		int xEnde = 0;
@@ -103,24 +110,26 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	/**
+	 * Überprüft ob eine Vorgangsunterbrechung im Arbeitspaket stattfindet. Wenn ja,
+	 * wird true zurückgegeben.
+	 *
+	 * @return
+	 */
 	public boolean ueberpruefeVorgangsunterbrechungSimulation() {
+
 		Collections.sort(teilpaketListe, new ComperatorTeilpaket());
+		int xEnde = 0;
+		for (Teilpaket tp : teilpaketListe) {
+			int xStart = tp.getResEinheitListe().get(0).getPosition().getxKoordinate();
 
-		if (this.teilpaketListe.size() != 1) {
-
-			Teilpaket tp1 = this.teilpaketListe.get(0);
-			Teilpaket tp2 = this.teilpaketListe.get(1);
-
-			int xTp1 = tp1.getResEinheitListe().get(0).getPosition().getxKoordinate() + tp1.getVorgangsdauer() - 1;
-			int xTp2 = tp2.getResEinheitListe().get(0).getPosition().getxKoordinate();
-
-			if (xTp1 + 1 != xTp2) {
+			if (xStart != xEnde + 1 && xEnde != 0) {
 				return true;
 			}
 
+			xEnde = xStart + tp.getVorgangsdauer() - 1;
 		}
 		return false;
-
 	}
 
 	public void neuSetzen(int abstand, ResCanvas resCanvas) {

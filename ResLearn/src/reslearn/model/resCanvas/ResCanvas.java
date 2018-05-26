@@ -496,6 +496,9 @@ public class ResCanvas {
 	 */
 	public void aktuallisiereHistorie() {
 
+		// TODO: HIER WEITERMACHEN LOGIK BEVOR TERMINALGO
+		// finden der zwischenschritte damit GUI testen kann
+
 		this.neueHistorie();
 
 		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
@@ -696,6 +699,23 @@ public class ResCanvas {
 		this.setHistorieKoordinatenSystem(resCanvas.getHistorieKoordinatenSystem());
 		this.setKoordinatenSystem(resCanvas.getKoordinatenSystem());
 		this.setHistorienArbeitspaketListe(resCanvas.getHistorienArbeitspaketListe());
+	}
+
+	/**
+	 * Sucht in der ArbeitspaketListe das Arbeitspaket mit der übergebenen ID.
+	 *
+	 * @param zuFindenID
+	 * @return
+	 */
+	public Arbeitspaket findeAPnachID(String zuFindenID) {
+		Arbeitspaket result = null;
+		for (Arbeitspaket ap : getArbeitspaketListe()) {
+			if (ap.getId() == zuFindenID) {
+				result = ap;
+				break;
+			}
+		}
+		return result;
 	}
 
 }

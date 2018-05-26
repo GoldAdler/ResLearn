@@ -5,7 +5,10 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public abstract class Algorithmus {
 
-	static final boolean testModus = true;
+	static final boolean testModus = false;
+	static final boolean trotzdem = true;
+	public static int zaehlerTest = 0;
+	public static int zaehlerTrotzdem = 0;
 
 	public abstract ResCanvas algoDurchfuehren(ResCanvas resCanvas);
 
@@ -20,6 +23,35 @@ public abstract class Algorithmus {
 	public static void ausgeben(ResEinheit[][] koordinatenSystem) {
 
 		if (testModus) {
+			System.out.println("zaehlerTest: " + ++zaehlerTest);
+			for (ResEinheit[] a : koordinatenSystem) {
+				for (ResEinheit b : a) {
+					if (b == null) {
+						System.out.print(".");
+					} else {
+						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+
+		// TODO löschen
+		if (zaehlerTest == 128) {
+			System.out.println("Pause");
+		}
+
+	}
+
+	/*
+	 * Gibt aus wenn trotzdem true ist.
+	 *
+	 */
+	public static void ausgebenTrotzdem(ResEinheit[][] koordinatenSystem) {
+
+		if (trotzdem) {
+			System.out.println("zaehlerTest: " + ++zaehlerTrotzdem);
 			for (ResEinheit[] a : koordinatenSystem) {
 				for (ResEinheit b : a) {
 					if (b == null) {
@@ -33,4 +65,5 @@ public abstract class Algorithmus {
 			System.out.println();
 		}
 	}
+
 }
