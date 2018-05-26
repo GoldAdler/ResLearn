@@ -186,7 +186,7 @@ public class Arbeitspaket extends Paket {
 
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 
-		for (int y = 0; y < this.mitarbeiteranzahl; y++) {
+		for (int y = this.mitarbeiteranzahl - 1; y >= 0; y--) {
 			for (int x = 0; x < this.vorgangsdauer; x++) {
 				if (koordinatenSystem[y][x] == null) {
 					if (it.hasNext()) {

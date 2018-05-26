@@ -1,6 +1,9 @@
 package reslearn.gui.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +30,7 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.Vektor2i;
 
 public class ControllerCanvas {
 
@@ -105,11 +109,13 @@ public class ControllerCanvas {
 				if (differenzX > 0) {
 					differenzX--;
 					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeX(resCanvas, 1);
+					Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 					verschiebenX(verschiebbar, 1);
 				}
 				if (differenzX < 0) {
 					differenzX++;
 					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeX(resCanvas, -1);
+					Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 					verschiebenX(verschiebbar, -1);
 				}
 
@@ -121,14 +127,17 @@ public class ControllerCanvas {
 				if (differenzY > 0) {
 					differenzY--;
 					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeY(resCanvas, -1);
+					Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 					verschiebenY(verschiebbar, 1);
 				}
 				if (differenzY < 0) {
 					differenzY++;
 					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeY(resCanvas, 1);
+					Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 					verschiebenY(verschiebbar, -1);
 				}
 			}
+
 		}
 	};
 
@@ -136,7 +145,7 @@ public class ControllerCanvas {
 		if (verschiebbar) {
 			newTranslateX = translateX + DisplayCanvas.resFeldBreite * vorzeichen;
 			zeigerX += DisplayCanvas.resFeldBreite * vorzeichen;
-			bewegeX();
+			bewegeX(vorzeichen);
 			translateX = rect.getTranslateX();
 		}
 	}
@@ -145,32 +154,75 @@ public class ControllerCanvas {
 		if (verschiebbar) {
 			newTranslateY = translateY + DisplayCanvas.resFeldLaenge * vorzeichen;
 			zeigerY += DisplayCanvas.resFeldLaenge * vorzeichen;
-			bewegeY();
+			bewegeY(vorzeichen);
 			translateY = rect.getTranslateY();
 		}
 	}
 
-	private void bewegeX() {
-		for (ResFeld[] resAr : diagramm.getResFeldArray()) {
-			for (ResFeld teilpaket : resAr) {
-				if (teilpaket != null) {
-					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
-						teilpaket.setTranslateX(newTranslateX);
+	private void bewegeX(int vorzeichen) {
+		// for (ResFeld[] resAr : diagramm.getResFeldArray()) {
+		// for (ResFeld teilpaket : resAr) {
+		// if (teilpaket != null) {
+		// if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
+		// teilpaket.setTranslateX(newTranslateX);
+		// }
+		// }
+		// }
+		// }
+
+		HashMap<ResFeld, Vektor2i> resFeldMapTmp = new HashMap<ResFeld, Vektor2i>();
+		for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
+			for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
+				ResFeld resFeld = diagramm.getResFeldArray()[i][j];
+				if (resFeld != null) {
+
+					if (teilpaketClicked == resFeld.getResEinheit().getTeilpaket()) {
+						resFeld.setTranslateX(newTranslateX);
+						resFeldMapTmp.put(resFeld, new Vektor2i(i, j));
+						diagramm.getResFeldArray()[i][j] = null;
 					}
 				}
 			}
 		}
+
+		Iterator<Entry<ResFeld, Vektor2i>> it = resFeldMapTmp.entrySet().iterator();
+		while (it.hasNext()) {
+			HashMap.Entry<ResFeld, Vektor2i> entry = it.next();
+			Vektor2i vektor = entry.getValue();
+			diagramm.getResFeldArray()[vektor.getyKoordinate()][vektor.getxKoordinate() + vorzeichen] = entry.getKey();
+		}
 	}
 
-	private void bewegeY() {
-		for (ResFeld[] resAr : diagramm.getResFeldArray()) {
-			for (ResFeld teilpaket : resAr) {
-				if (teilpaket != null) {
-					if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
-						teilpaket.setTranslateY(newTranslateY);
+	private void bewegeY(int vorzeichen) {
+		// for (ResFeld[] resAr : diagramm.getResFeldArray()) {
+		// for (ResFeld teilpaket : resAr) {
+		// if (teilpaket != null) {
+		// if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
+		// teilpaket.setTranslateY(newTranslateY);
+		// }
+		// }
+		// }
+		// }
+		HashMap<ResFeld, Vektor2i> resFeldMapTmp = new HashMap<ResFeld, Vektor2i>();
+		for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
+			for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
+				ResFeld resFeld = diagramm.getResFeldArray()[i][j];
+				if (resFeld != null) {
+
+					if (teilpaketClicked == resFeld.getResEinheit().getTeilpaket()) {
+						resFeld.setTranslateY(newTranslateY);
+						resFeldMapTmp.put(resFeld, new Vektor2i(i, j));
+						diagramm.getResFeldArray()[i][j] = null;
 					}
 				}
 			}
+		}
+
+		Iterator<Entry<ResFeld, Vektor2i>> it = resFeldMapTmp.entrySet().iterator();
+		while (it.hasNext()) {
+			HashMap.Entry<ResFeld, Vektor2i> entry = it.next();
+			Vektor2i vektor = entry.getValue();
+			diagramm.getResFeldArray()[vektor.getyKoordinate() + vorzeichen][vektor.getxKoordinate()] = entry.getKey();
 		}
 	}
 
@@ -197,18 +249,22 @@ public class ControllerCanvas {
 		@Override
 		public void handle(ActionEvent e) {
 			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(resCanvas);
-
-			for (ResFeld[] resFeld : diagramm.getResFeldArray()) {
-				for (ResFeld res : resFeld) {
-					if (res != null) {
-						if (res.getResEinheit().getTeilpaket().getArbeitspaket() == rect.getResEinheit().getTeilpaket()
-								.getArbeitspaket()) {
-							View.getInstance().getPane().getChildren().remove(res);
+			Algorithmus.ausgeben(koordinatenSystem);
+			// alte ResFelder des Arbeitspakets aus der View löschen
+			for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
+				for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
+					ResFeld resFeld = diagramm.getResFeldArray()[i][j];
+					if (resFeld != null) {
+						if (resFeld.getResEinheit().getTeilpaket().getArbeitspaket() == rect.getResEinheit()
+								.getTeilpaket().getArbeitspaket()) {
+							View.getInstance().getPane().getChildren().remove(resFeld);
+							diagramm.getResFeldArray()[i][j] = null;
 						}
 					}
 				}
 			}
 
+			// neue ResFelder oben links zeichnen
 			for (int i = 0; i < koordinatenSystem.length; i++) {
 				for (int j = 0; j < koordinatenSystem[i].length; j++) {
 					if (koordinatenSystem[i][j] != null) {
@@ -342,7 +398,8 @@ public class ControllerCanvas {
 				for (ResFeld[] resAr : diagramm.getResFeldArray()) {
 					for (ResFeld teilpaket : resAr) {
 						if (teilpaket != null) {
-							if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
+							if (teilpaketClicked.getArbeitspaket() == teilpaket.getResEinheit().getTeilpaket()
+									.getArbeitspaket()) {
 								teilpaket.setFill(colorPicker.getValue());
 							}
 						}
