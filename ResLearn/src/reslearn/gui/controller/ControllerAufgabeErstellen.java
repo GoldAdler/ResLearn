@@ -25,7 +25,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -126,7 +125,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		setupSpalteAnzMitarbeiter();
 		setupSpalteAufwand();
 		setTableEditable();
-		setupScrollPane();
+		tabelle.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 		radioButtonKapazitaet.setToggleGroup(rbGruppe);
 		radioButtonKapazitaet.setSelected(true);
@@ -229,6 +228,9 @@ public class ControllerAufgabeErstellen extends Controller {
 
 		return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
 				new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4, 1, 2, 2));
+		
+//		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
+//				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -337,11 +339,6 @@ public class ControllerAufgabeErstellen extends Controller {
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setAufwand(value);
 			tabelle.refresh();
 		});
-	}
-
-	private void setupScrollPane() {
-		ScrollPane scrollPaneTabelle = new ScrollPane();
-		scrollPaneTabelle.setContent(tabelle);
 	}
 
 	private void setTableEditable() {

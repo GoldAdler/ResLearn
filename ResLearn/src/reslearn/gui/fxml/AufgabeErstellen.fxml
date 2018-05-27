@@ -40,25 +40,17 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <ScrollPane hbarPolicy="NEVER" layoutX="100.0" layoutY="125.0" prefHeight="200.0" prefWidth="700.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="0.0">
-               <children>
-                  <TableView fx:id="tabelle" editable="true" prefHeight="200.0" prefWidth="700.0">
-                    <columns>
-                      <TableColumn fx:id="spalteID" prefWidth="97.0" sortable="false" text="Arbeitspaket ID" />
-                      <TableColumn fx:id="spalteFaz" prefWidth="96.0" sortable="false" text="FAZ" />
-                        <TableColumn fx:id="spalteSaz" prefWidth="96.0" sortable="false" text="SAZ" />
-                        <TableColumn fx:id="spalteFez" prefWidth="96.0" sortable="false" text="FEZ" />
-                        <TableColumn fx:id="spalteSez" prefWidth="96.0" sortable="false" text="SEZ" />
-                        <TableColumn fx:id="spalteAnzMitarbeiter" prefWidth="115.0" sortable="false" text="Anz. Mitarbeiter" />
-                        <TableColumn fx:id="spalteAufwand" prefWidth="89.0" sortable="false" text="Aufwand" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-        </content>
-      </ScrollPane>
+      <TableView fx:id="tabelle" editable="true" layoutX="100.0" layoutY="125.0" prefHeight="200.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="spalteID" prefWidth="100.0" sortable="false" text="Arbeitspaket ID" />
+          <TableColumn fx:id="spalteFaz" prefWidth="100.0" sortable="false" text="FAZ" />
+            <TableColumn fx:id="spalteSaz" prefWidth="100.0" sortable="false" text="SAZ" />
+            <TableColumn fx:id="spalteFez" prefWidth="100.0" sortable="false" text="FEZ" />
+            <TableColumn fx:id="spalteSez" prefWidth="100.0" sortable="false" text="SEZ" />
+            <TableColumn fx:id="spalteAnzMitarbeiter" prefWidth="100.0" sortable="false" text="Anz. Mitarbeiter" />
+            <TableColumn fx:id="spalteAufwand" prefWidth="98.0" sortable="false" text="Aufwand" />
+        </columns>
+      </TableView>
       <Pane layoutX="100.0" layoutY="375.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: white;">
          <children>
             <Label alignment="CENTER" layoutX="213.0" layoutY="10.0" text="Auswahl Optimierungsverfahren">
