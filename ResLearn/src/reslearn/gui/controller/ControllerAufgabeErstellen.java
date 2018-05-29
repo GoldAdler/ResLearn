@@ -105,9 +105,10 @@ public class ControllerAufgabeErstellen extends Controller {
 	Label labelErgebnis;
 
 	TextField dateiname;
-	String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
+	String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
+			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
 
-	public static Arbeitspaket[] pakete;
+	public Arbeitspaket[] pakete;
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
@@ -135,7 +136,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
-//		pakete = getArbeitspaketArray(retrieveData());
+		// pakete = getArbeitspaketArray(retrieveData());
 		apArray(tabelle.getItems());
 		System.out.println(pakete.length);
 		if (paketeValidieren(pakete)) {
@@ -188,14 +189,16 @@ public class ControllerAufgabeErstellen extends Controller {
 		alleFenster.add("../fxml/AufgabeErstellen.fxml");
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			root = fxmlLoader.load();
 			newScene = new Scene(root);
+			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
+			controller.initialize(pakete);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
-			AufgabenNummer = 8;
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -224,43 +227,43 @@ public class ControllerAufgabeErstellen extends Controller {
 			tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
 		}
 	}
-	
-//	private Arbeitspaket[] apArray(ObservableList<ArbeitspaketTableData> pakete) {
-//		Arbeitspaket[] ap = new Arbeitspaket[pakete.size()];
-//		
-//		for (int i = 0; i < pakete.size(); i++) {
-//			ap[i] = new Arbeitspaket();
-//			ap[i].setId(pakete.get(i).getId());
-//			ap[i].setFaz(pakete.get(i).getFaz());
-//			ap[i].setSaz(pakete.get(i).getSaz());
-//			ap[i].setFez(pakete.get(i).getFez());
-//			ap[i].setSez(pakete.get(i).getSez());
-//			ap[i].setMitarbeiteranzahl(pakete.get(i).getMitarbeiteranzahl());
-//			ap[i].setAufwand(pakete.get(i).getAufwand());
-//		}
-//		return ap;
-//	}
+
+	// private Arbeitspaket[] apArray(ObservableList<ArbeitspaketTableData> pakete)
+	// {
+	// Arbeitspaket[] ap = new Arbeitspaket[pakete.size()];
+	//
+	// for (int i = 0; i < pakete.size(); i++) {
+	// ap[i] = new Arbeitspaket();
+	// ap[i].setId(pakete.get(i).getId());
+	// ap[i].setFaz(pakete.get(i).getFaz());
+	// ap[i].setSaz(pakete.get(i).getSaz());
+	// ap[i].setFez(pakete.get(i).getFez());
+	// ap[i].setSez(pakete.get(i).getSez());
+	// ap[i].setMitarbeiteranzahl(pakete.get(i).getMitarbeiteranzahl());
+	// ap[i].setAufwand(pakete.get(i).getAufwand());
+	// }
+	// return ap;
+	// }
 	private void apArray(ObservableList<ArbeitspaketTableData> paketList) {
 		pakete = new Arbeitspaket[paketList.size()];
-		
+
 		for (int i = 0; i < paketList.size(); i++) {
-			pakete[i] = new Arbeitspaket();
-			pakete[i].setId(paketList.get(i).getId());
-			pakete[i].setFaz(paketList.get(i).getFaz());
-			pakete[i].setSaz(paketList.get(i).getSaz());
-			pakete[i].setFez(paketList.get(i).getFez());
-			pakete[i].setSez(paketList.get(i).getSez());
-			pakete[i].setMitarbeiteranzahl(paketList.get(i).getMitarbeiteranzahl());
-			pakete[i].setAufwand(paketList.get(i).getAufwand());
+			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez();
+
+			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getSaz(),
+					paketList.get(i).getFez(), paketList.get(i).getSez(), paketList.get(i).getMitarbeiteranzahl(),
+					paketList.get(i).getAufwand(), vorgangsdauer);
 		}
 	}
 
 	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-//		return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
-//				new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4, 1, 2, 2));
-		
+		// return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new
+		// Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
+		// new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4,
+		// 1, 2, 2));
+
 		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
 				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
@@ -426,11 +429,11 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
-		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
+		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt, maKorrekt;
 		String[] id = new String[arbeitspaket.length];
-		int faz, saz, fez, sez;
+		int faz, saz, fez, sez, ma;
 
-		idKorrekt = fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = paketKorrekt = false;
+		idKorrekt = fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = maKorrekt = paketKorrekt = false;
 
 		MAIN_LOOP: for (int i = 0; i < arbeitspaket.length; i++) {
 			id[i] = arbeitspaket[i].getId();
@@ -438,6 +441,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			saz = arbeitspaket[i].getSaz();
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
+			ma = arbeitspaket[i].getMitarbeiteranzahl();
 
 			// ID prüfen (einzigartig?)
 			for (int j = i - 1; j >= 0; j--) {
@@ -491,8 +495,18 @@ public class ControllerAufgabeErstellen extends Controller {
 				break;
 			}
 
+			// Mitarbeiterzahl prüfen
+			if (ma > 0) {
+				maKorrekt = true;
+			} else {
+				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss größer 0 sein!";
+				paketKorrekt = false;
+				break;
+			}
+
 			// Alle Bedingungen prüfen
-			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt) {
+			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt && maKorrekt) {
 				ergebnisValidierung = "Validierung erfolgreich";
 				paketKorrekt = true;
 			}

@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import reslearn.gui.DisplayCanvas;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
@@ -29,7 +30,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 			+ File.separator + "gui" + File.separator + "uebungen");;
 	public File[] fileArray = f.listFiles();
 	public Button dateiname;
-	public static String datei;
+	public String datei;
 
 	public void initialize() {
 
@@ -77,11 +78,15 @@ public class ControllerUebungAuswaehlen extends Controller {
 	public void weiter(ActionEvent event) {
 		Scene newScene;
 		Parent root;
+		AufgabeLadenImport ali = new AufgabeLadenImport();
 		try {
-			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			root = fxmlLoader.load();
+			newScene = new Scene(root);
+			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
 			dateiname = (Button) event.getSource();
 			datei = dateiname.getId();
-			newScene = new Scene(root);
+			controller.initialize(ali.aufgabeLaden(f + File.separator + datei));
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
 			stage.setMaximized(true);

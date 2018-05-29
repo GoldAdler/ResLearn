@@ -31,7 +31,8 @@ public class ControllerAufgabeLaden extends Controller {
 
 	public Arbeitspaket[] paketeArray;
 	private String name;
-	private String dateipfad = "C:\\Users\\Eric Botor\\git\\ResLearn\\";
+	private String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
+			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
 
 	@FXML
 	public void dateiauswaehlen() {
@@ -42,7 +43,7 @@ public class ControllerAufgabeLaden extends Controller {
 		fileChooser.getExtensionFilters().add(extFilter);
 		File file = fileChooser.showOpenDialog(dateiauswaehlen.getScene().getWindow());
 		name = file.getName();
-		labellDateiname.setText("Wollen Sie die " + name + " Aufgabe laden?");
+		labellDateiname.setText("Wollen Sie die " + name.substring(0, name.length() - 4) + " Aufgabe laden?");
 		labellDateiname.setVisible(true);
 		laden.setDisable(false);
 	}
@@ -98,14 +99,16 @@ public class ControllerAufgabeLaden extends Controller {
 		Scene newScene;
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			root = fxmlLoader.load();
 			newScene = new Scene(root);
+			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
+			controller.initialize(paketeArray);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
 			stage.setMaximized(true);
 			stage.setScene(newScene);
 			stage.show();
-			AufgabenNummer = 7;
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
