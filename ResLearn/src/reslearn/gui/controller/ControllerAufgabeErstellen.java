@@ -135,13 +135,15 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
-		pakete = getArbeitspaketArray(retrieveData());
-		// if (paketeValidieren(pakete)) {
-		labelErgebnis.setText("Validierung erfolgreich");
-		speichern(pakete, event);
-		// } else {
-		// labelErgebnis.setText(ergebnisValidierung);
-		// }
+//		pakete = getArbeitspaketArray(retrieveData());
+		apArray(tabelle.getItems());
+		System.out.println(pakete.length);
+		if (paketeValidieren(pakete)) {
+			labelErgebnis.setText(ergebnisValidierung);
+			speichern(pakete, event);
+		} else {
+			labelErgebnis.setText(ergebnisValidierung);
+		}
 	}
 
 	@FXML
@@ -218,19 +220,49 @@ public class ControllerAufgabeErstellen extends Controller {
 			anzPakete++;
 			textFieldAnzPakete.setText(Integer.toString(anzPakete));
 
-			// neue Zeile hinzufÃ¼gen
+			// neue Zeile hinzufügen
 			tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
 		}
 	}
+	
+//	private Arbeitspaket[] apArray(ObservableList<ArbeitspaketTableData> pakete) {
+//		Arbeitspaket[] ap = new Arbeitspaket[pakete.size()];
+//		
+//		for (int i = 0; i < pakete.size(); i++) {
+//			ap[i] = new Arbeitspaket();
+//			ap[i].setId(pakete.get(i).getId());
+//			ap[i].setFaz(pakete.get(i).getFaz());
+//			ap[i].setSaz(pakete.get(i).getSaz());
+//			ap[i].setFez(pakete.get(i).getFez());
+//			ap[i].setSez(pakete.get(i).getSez());
+//			ap[i].setMitarbeiteranzahl(pakete.get(i).getMitarbeiteranzahl());
+//			ap[i].setAufwand(pakete.get(i).getAufwand());
+//		}
+//		return ap;
+//	}
+	private void apArray(ObservableList<ArbeitspaketTableData> paketList) {
+		pakete = new Arbeitspaket[paketList.size()];
+		
+		for (int i = 0; i < paketList.size(); i++) {
+			pakete[i] = new Arbeitspaket();
+			pakete[i].setId(paketList.get(i).getId());
+			pakete[i].setFaz(paketList.get(i).getFaz());
+			pakete[i].setSaz(paketList.get(i).getSaz());
+			pakete[i].setFez(paketList.get(i).getFez());
+			pakete[i].setSez(paketList.get(i).getSez());
+			pakete[i].setMitarbeiteranzahl(paketList.get(i).getMitarbeiteranzahl());
+			pakete[i].setAufwand(paketList.get(i).getAufwand());
+		}
+	}
 
-	// Tabelle mit Default-Werten befÃ¼llen
+	// Tabelle mit Default-Werten befüllen
 	private List<Arbeitspaket> retrieveData() {
 
-		return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
-				new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4, 1, 2, 2));
+//		return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
+//				new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4, 1, 2, 2));
 		
-//		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-//				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -393,7 +425,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		panePersonen.setVisible(false);
 	}
 
-	public boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
+	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt;
 		String[] id = new String[arbeitspaket.length];
 		int faz, saz, fez, sez;
@@ -407,7 +439,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 
-			// ID prÃ¼fen (einzigartig?)
+			// ID prüfen (einzigartig?)
 			for (int j = i - 1; j >= 0; j--) {
 				if (id[i] != id[j]) {
 					idKorrekt = true;
@@ -419,48 +451,49 @@ public class ControllerAufgabeErstellen extends Controller {
 				}
 			}
 
-			// FAZ prÃ¼fen
+			// FAZ prüfen
 			if (faz >= 1) {
 				fazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FAZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
+				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens 1 sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SAZ prÃ¼fen
+			// SAZ prüfen
 			if (saz >= faz) {
 				sazKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SAZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
+				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens gleich gro wie der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// FEZ prÃ¼fen
+			// FEZ prüfen
 			if (fez > faz) {
 				fezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert FEZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss grÃ¶ÃŸer als der Wert FAZ sein";
+				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss größer als der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// SEZ prÃ¼fen
+			// SEZ prüfen
 			if (sez >= fez) {
 				sezKorrekt = true;
 			} else {
-				ergebnisValidierung = "Der Wert SEZ fÃ¼r das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich groÃŸ wie der Wert FEZ sein";
+				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " muss mindestens gleich groß wie der Wert FEZ sein";
 				paketKorrekt = false;
 				break;
 			}
 
-			// Alle Bedingungen prÃ¼fen
+			// Alle Bedingungen prüfen
 			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt) {
+				ergebnisValidierung = "Validierung erfolgreich";
 				paketKorrekt = true;
 			}
 		}
@@ -494,7 +527,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			} else {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("Warnung");
-				alert.setContentText("Der Dateiname existiert bereits. Datei Ã¼berschreiben");
+				alert.setContentText("Der Dateiname existiert bereits. Datei überschreiben");
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					weiter(event);
