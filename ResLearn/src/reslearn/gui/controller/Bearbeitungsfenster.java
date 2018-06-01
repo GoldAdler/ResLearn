@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -38,24 +40,41 @@ public class Bearbeitungsfenster extends Pane {
 
 		arbeitspaket = new Label(
 				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
+		arbeitspaket.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
-		teilen = new Button("Teile Arbeitspaket");
+		hilfetext.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 
+		teilen = new Button("Teile Arbeitspaket");
+		teilen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		resFeldListe = new LinkedList<ResFeld>();
 
 		sliderX = new Slider();
+		sliderX.setStyle("-fx-font-size: " + DisplayCanvas.schriftGroesse);
+		sliderX.setMinSize(rect.getResEinheit().getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+				DisplayCanvas.resFeldBreite);
+		sliderX.setMaxSize(rect.getResEinheit().getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+				DisplayCanvas.resFeldBreite);
 		sliderX.setMin(0);
 		sliderX.setMax(rect.getResEinheit().getTeilpaket().getVorgangsdauer());
+		sliderX.setShowTickMarks(true);
 		sliderX.setShowTickLabels(true);
 		sliderX.setMajorTickUnit(1);
 		sliderX.setMinorTickCount(0);
 		sliderX.setSnapToTicks(true);
 
 		sliderY = new Slider();
-		sliderY.setMaxWidth(DisplayCanvas.canvasBreite / 6.5);
-		sliderY.setRotate(270);
+		sliderY.setStyle("-fx-font-size: " + DisplayCanvas.schriftGroesse);
+
+		// sliderY.setRotate(270);
+		sliderY.setOrientation(Orientation.VERTICAL);
+		sliderY.setMinSize(DisplayCanvas.resFeldBreite,
+				rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldBreite);
+		sliderY.setMaxSize(DisplayCanvas.resFeldBreite,
+				rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldBreite);
+
 		sliderY.setMin(0);
 		sliderY.setMax(rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl());
+		sliderY.setShowTickMarks(true);
 		sliderY.setShowTickLabels(true);
 		sliderY.setMajorTickUnit(1);
 		sliderY.setMinorTickCount(0);
@@ -65,15 +84,16 @@ public class Bearbeitungsfenster extends Pane {
 		arbeitspaket.setLayoutY(DisplayCanvas.canvasLaenge / 102.8);
 		hilfetext.setLayoutX(DisplayCanvas.canvasBreite / 51.6);
 		hilfetext.setLayoutY(DisplayCanvas.canvasLaenge / 17.1);
-		sliderY.setLayoutX(DisplayCanvas.canvasBreite / 4.27);
-		sliderY.setLayoutY(DisplayCanvas.canvasLaenge / 5.1);
-		sliderX.setLayoutX(DisplayCanvas.canvasBreite / 12.8);
-		sliderX.setLayoutY(DisplayCanvas.canvasLaenge / 3);
-		teilen.setLayoutX(DisplayCanvas.canvasBreite / 51.3);
-		teilen.setLayoutY(DisplayCanvas.canvasLaenge / 2.4);
+		sliderX.setLayoutX(DisplayCanvas.resFeldBreite);
+		sliderX.setLayoutY(hilfetext.getLayoutY()
+				+ (rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl() + 2) * DisplayCanvas.resFeldBreite);
+		sliderY.setLayoutX((rect.getResEinheit().getTeilpaket().getVorgangsdauer() + 2) * DisplayCanvas.resFeldBreite);
+		sliderY.setLayoutY(hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite);
+		teilen.setLayoutX(DisplayCanvas.resFeldBreite);
+		teilen.setLayoutY(sliderX.getLayoutY() + DisplayCanvas.resFeldBreite * 2);
 
 		this.getChildren().addAll(arbeitspaket, hilfetext, teilen, sliderX, sliderY);
-		scene = new Scene(this, DisplayCanvas.canvasLaenge / 1.5, DisplayCanvas.canvasBreite / 3);
+		scene = new Scene(this, DisplayCanvas.canvasLaenge / 2, teilen.getLayoutY() + 2 * DisplayCanvas.resFeldBreite);
 		bearbeitungsmodus = new Stage();
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
@@ -90,7 +110,8 @@ public class Bearbeitungsfenster extends Pane {
 		 */
 		for (int i = 0; i < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); i++) {
 			for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
-				ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65, j * DisplayCanvas.resFeldLaenge + 65,
+				ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
+						j * DisplayCanvas.resFeldLaenge + (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
 						rect.getResEinheit());
 				dummy.setFill(rect.getFill());
 				// dummy.setStroke(Color.GRAY);
@@ -119,8 +140,11 @@ public class Bearbeitungsfenster extends Pane {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); j++) {
 							if (counter < neuerWert.intValue()
 									* rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
-								ResFeld dummy = new ResFeld(j * DisplayCanvas.resFeldBreite + 65,
-										i * DisplayCanvas.resFeldLaenge + 65 - DisplayCanvas.resFeldLaenge,
+								ResFeld dummy = new ResFeld(
+										j * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
+										i * DisplayCanvas.resFeldLaenge
+												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
+												- DisplayCanvas.resFeldLaenge,
 										rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
@@ -161,8 +185,10 @@ public class Bearbeitungsfenster extends Pane {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); j++) {
 							if (counter < neuerWert.intValue()
 									* rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl()) {
-								ResFeld dummy = new ResFeld(i * DisplayCanvas.resFeldBreite + 65,
-										j * DisplayCanvas.resFeldLaenge + 65,
+								ResFeld dummy = new ResFeld(
+										i * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
+										j * DisplayCanvas.resFeldLaenge
+												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
 										rect.getResEinheit().getTeilpaket().getResEinheitListe()
 												.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								dummy.setStroke(Color.GREY);
