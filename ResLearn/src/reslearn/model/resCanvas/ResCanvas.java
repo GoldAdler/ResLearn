@@ -3,6 +3,7 @@ package reslearn.model.resCanvas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
@@ -20,6 +21,7 @@ public class ResCanvas {
 	private ArrayList<ResEinheit[][]> historieKoordinatenSystem;
 	public static final int koorHoehe = 28;
 	public static final int koorBreite = 43;
+	private ResCanvas optimalerPfad;
 
 	public ResCanvas() {
 		arbeitspaketListe = new ArrayList<Arbeitspaket>();
@@ -499,10 +501,17 @@ public class ResCanvas {
 		// TODO: HIER WEITERMACHEN LOGIK BEVOR TERMINALGO
 		// finden der zwischenschritte damit GUI testen kann
 
-		this.neueHistorie();
+		// Algorithmus.ausgebenHistorie(koordinatenSystem);
+		// if (!historieKoordinatenSystem.isEmpty()) {
+		// Algorithmus.ausgebenHistorie(historieKoordinatenSystem.get(historieKoordinatenSystem.size()
+		// - 1));
+		// }
 
-		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
-		
+		if (this.historieKoordinatenSystem.isEmpty()) {
+			this.neueHistorie();
+			Algorithmus.ausgebenHistorie(koordinatenSystem);
+		} else if (pruefeHistorienAenderung(this.historienArbeitspaketListe)) {
+			this.neueHistorie();
 			Algorithmus.ausgebenHistorie(koordinatenSystem);
 		}
 
@@ -517,19 +526,21 @@ public class ResCanvas {
 	 * @param aktuelleArbeitspaketListe
 	 * @return
 	 */
-	private boolean pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe,
-			ArrayList<Arbeitspaket> aktuelleArbeitspaketListe) {
+	private boolean pruefeHistorienAenderung(ArrayList<Arbeitspaket> historienArbeitspaketListe) {
 
-		for (int i = 0; i < historienArbeitspaketListe.size(); i++) {
-			Arbeitspaket apHistorie = historienArbeitspaketListe.get(i);
-			Arbeitspaket apAktuell = aktuelleArbeitspaketListe.get(i);
+		for (Arbeitspaket apHistorie : historienArbeitspaketListe) {
+
+			Arbeitspaket apAktuell = this.findeAPnachID(apHistorie.getId());
 
 			ArrayList<Teilpaket> tpListeHistorie = apHistorie.getTeilpaketListe();
 			ArrayList<Teilpaket> tpListeAktuell = apAktuell.getTeilpaketListe();
 
-			if (tpListeHistorie.size() != tpListeAktuell.size()) {
-				return false;
-			}
+			// Collections.sort(tpListeHistorie, new ComperatorTeilpaket());
+			// Collections.sort(tpListeAktuell, new ComperatorTeilpaket());
+
+			// if (tpListeHistorie.size() != tpListeAktuell.size()) {
+			// return false;
+			// }
 
 			for (int a = 0; a < tpListeHistorie.size(); a++) {
 
@@ -544,7 +555,7 @@ public class ResCanvas {
 					int yPosAktuell = resListeAktuell.get(b).getPosition().getyKoordinate();
 
 					if (xPosHistorie != xPosAktuell || yPosHistorie != yPosAktuell) {
-						return false;
+						return true;
 					}
 
 				}
@@ -552,7 +563,7 @@ public class ResCanvas {
 			}
 
 		}
-		return true;
+		return false;
 
 	}
 
@@ -645,6 +656,7 @@ public class ResCanvas {
 		kopieResCanvas.setKoordinatenSystem(this.copyKoordinatenSystem(kopieResCanvas.getArbeitspaketListe()));
 		kopieResCanvas.setHistorieKoordinatenSystem(historieKoordinatenSystem);
 		kopieResCanvas.setHistorienArbeitspaketListe(historienArbeitspaketListe);
+		kopieResCanvas.setOptimalerPfad(optimalerPfad);
 
 		return kopieResCanvas;
 	}
@@ -700,6 +712,7 @@ public class ResCanvas {
 		this.setHistorieKoordinatenSystem(resCanvas.getHistorieKoordinatenSystem());
 		this.setKoordinatenSystem(resCanvas.getKoordinatenSystem());
 		this.setHistorienArbeitspaketListe(resCanvas.getHistorienArbeitspaketListe());
+		this.setOptimalerPfad(resCanvas.getOptimalerPfad());
 	}
 
 	/**
@@ -717,6 +730,38 @@ public class ResCanvas {
 			}
 		}
 		return result;
+	}
+
+	public ResCanvas getOptimalerPfad() {
+		return optimalerPfad;
+	}
+
+	public void setOptimalerPfad(ResCanvas optimalerPfad) {
+		this.optimalerPfad = optimalerPfad;
+	}
+
+	public void aktuallisiereHistorieErgebnis() {
+
+		Stack<ResCanvas> optimalerPfadListe = new Stack<ResCanvas>();
+
+		if (optimalerPfad != null) {
+
+			optimalerPfadListe.add(optimalerPfad);
+
+			ResCanvas op = optimalerPfad.getOptimalerPfad();
+
+			while (op != null) {
+				optimalerPfadListe.add(op);
+				op = op.getOptimalerPfad();
+			}
+		}
+
+		while (!optimalerPfadListe.isEmpty()) {
+			optimalerPfadListe.pop().aktuallisiereHistorie();
+		}
+
+		this.aktuallisiereHistorie();
+
 	}
 
 }

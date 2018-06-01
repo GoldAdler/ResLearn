@@ -18,10 +18,10 @@ public class Main {
 		// erstelleTestDaten1(resCanvas);
 
 		// PTMA_U09
-		erstelleTestDaten2(resCanvas);
+		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		// erstelleTestDaten2_5(resCanvas);
+		erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_54(resCanvas);
 		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
@@ -29,6 +29,7 @@ public class Main {
 		// erstelleTestDaten2_6(resCanvas);
 		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
+		// erstelleTestDaten2F(resCanvas);
 
 		// Kinder-Uni
 		// erstelleAufgabeKinderuni(resCanvas);
@@ -117,14 +118,39 @@ public class Main {
 		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 5, 25);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
-		
 
 		resCanvas.hinzufuegen(apB);
 		resCanvas.hinzufuegen(apD);
 		resCanvas.hinzufuegen(apA);
 		resCanvas.hinzufuegen(apE);
 		resCanvas.hinzufuegen(apC);
-		// resCanvas.hinzufuegen(apZ);
+
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------ENDE--------------------------------
+		// ---------------------------------------------------------------------
+	}
+
+	private static void erstelleTestDaten2F(ResCanvas resCanvas) {
+		// ---------------------------------------------------------------------
+		// -----------------------------TestDaten-------------------------------
+		// -------------------------------Anfang--------------------------------
+
+		/*
+		 * PTMA_U09_L Test
+		 */
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 8, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 5, 25);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		Arbeitspaket apF = new Arbeitspaket("F", 23, 24, 24, 25, 2, 2, 4);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apF);
 
 		// -----------------------------TestDaten-------------------------------
 		// -------------------------------ENDE--------------------------------
