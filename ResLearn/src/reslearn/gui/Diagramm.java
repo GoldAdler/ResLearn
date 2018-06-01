@@ -83,7 +83,7 @@ public class Diagramm {
 
 	// Farbige Pakete
 	public ResFeld[][] zeichneTeilpakete(ResEinheit[][] koordinatenSystem) {
-		resFeldArray = new ResFeld[DisplayCanvas.resFeldZeile][DisplayCanvas.resFeldSpalte];
+		resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {
 				if (koordinatenSystem[i][j] != null) {
