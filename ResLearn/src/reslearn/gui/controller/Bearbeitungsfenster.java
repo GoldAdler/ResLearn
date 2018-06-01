@@ -75,7 +75,6 @@ public class Bearbeitungsfenster extends Pane {
 		this.getChildren().addAll(arbeitspaket, hilfetext, teilen, sliderX, sliderY);
 		scene = new Scene(this, DisplayCanvas.canvasLaenge / 1.5, DisplayCanvas.canvasBreite / 3);
 		bearbeitungsmodus = new Stage();
-		System.out.println(DisplayCanvas.canvasBreite);
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
 		bearbeitungsmodus.initStyle(StageStyle.UTILITY);
