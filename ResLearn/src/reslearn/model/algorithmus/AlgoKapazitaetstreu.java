@@ -780,7 +780,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			simulation.herunterfallenAlleTeilpakete();
 
 			int abstand = x - xStart;
-			copyZuVerschiebenAP.neuSetzen(abstand, simulation);
+			copyZuVerschiebenAP.neuSetzenKapa(abstand, simulation);
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 

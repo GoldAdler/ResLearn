@@ -354,6 +354,8 @@ public class ResCanvas {
 		ResEinheit unterhalb;
 		ResEinheit oberhalb;
 
+		Algorithmus.ausgeben(koordinatenSystem);
+
 		for (ResEinheit res : altesTeilpaketResEinheiten) {
 
 			position = res.getPosition();
@@ -594,7 +596,10 @@ public class ResCanvas {
 		for (Arbeitspaket ap : neueArbeitspaketListe) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				for (ResEinheit re : tp.getResEinheitListe()) {
-					neuesKoordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition().getxKoordinate()] = re;
+					if (re.getPosition() != null) {
+						neuesKoordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition()
+								.getxKoordinate()] = re;
+					}
 				}
 			}
 		}
@@ -617,7 +622,7 @@ public class ResCanvas {
 		return historieKoordinatenSystem;
 	}
 
-	private void setHistorieKoordinatenSystem(ArrayList<ResEinheit[][]> historieKoordinatenSystem) {
+	public void setHistorieKoordinatenSystem(ArrayList<ResEinheit[][]> historieKoordinatenSystem) {
 		this.historieKoordinatenSystem = historieKoordinatenSystem;
 	}
 
@@ -635,7 +640,7 @@ public class ResCanvas {
 	//
 	// }
 
-	private ArrayList<Arbeitspaket> getHistorienArbeitspaketListe() {
+	public ArrayList<Arbeitspaket> getHistorienArbeitspaketListe() {
 		return historienArbeitspaketListe;
 	}
 
@@ -762,6 +767,22 @@ public class ResCanvas {
 
 		this.aktuallisiereHistorie();
 
+	}
+
+	public int berechneMaxY() {
+		int yMax = Integer.MAX_VALUE;
+
+		for (Arbeitspaket ap : this.arbeitspaketListe) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				for (ResEinheit res : tp.getResEinheitListe()) {
+					if (res.getPosition().getyKoordinate() < yMax) {
+						yMax = res.getPosition().getyKoordinate();
+					}
+				}
+
+			}
+		}
+		return yMax;
 	}
 
 }

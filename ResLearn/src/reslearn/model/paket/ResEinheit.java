@@ -75,8 +75,15 @@ public class ResEinheit extends Paket {
 	}
 
 	public ResEinheit copy() {
+
 		ResEinheit tmp = new ResEinheit();
-		tmp.setPosition(new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate()));
+
+		if (this.position == null) {
+			tmp.setPosition(null);
+		} else {
+			tmp.setPosition(new Vektor2i(this.position.getyKoordinate(), this.position.getxKoordinate()));
+		}
+
 		return tmp;
 	}
 

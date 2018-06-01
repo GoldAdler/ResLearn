@@ -99,7 +99,7 @@ public class Arbeitspaket extends Paket {
 
 				}
 
-				tp.getArbeitspaket().neuSetzen(abstand, resCanvas);
+				tp.getArbeitspaket().neuSetzenKapa(abstand, resCanvas);
 				break;
 			}
 			xEnde = xStart + tp.getVorgangsdauer() - 1;
@@ -132,7 +132,7 @@ public class Arbeitspaket extends Paket {
 		return false;
 	}
 
-	public void neuSetzen(int abstand, ResCanvas resCanvas) {
+	public void neuSetzenKapa(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
 
@@ -163,6 +163,30 @@ public class Arbeitspaket extends Paket {
 		Algorithmus.ausgeben(koordinatenSystem);
 
 		resCanvas.herunterfallen(vereint);
+
+	}
+
+	public void neuSetzenTermin(int start, ResCanvas resCanvas) {
+
+		ArrayList<ResEinheit> resEinheitenListe = this.getTeilpaketListe().get(0).getResEinheitListe();
+		Iterator<ResEinheit> it = resEinheitenListe.iterator();
+
+		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		for (int y = this.mitarbeiteranzahl - 1; y >= 0; y--) {
+			for (int x = start; x < start + this.vorgangsdauer; x++) {
+				if (koordinatenSystem[y][x] == null) {
+					if (it.hasNext()) {
+						koordinatenSystem[y][x] = it.next();
+						koordinatenSystem[y][x].setPosition(new Vektor2i(y, x));
+					}
+				}
+			}
+		}
+
+		Algorithmus.ausgeben(koordinatenSystem);
+
+		resCanvas.herunterfallen(this.getTeilpaketListe().get(0));
 
 	}
 

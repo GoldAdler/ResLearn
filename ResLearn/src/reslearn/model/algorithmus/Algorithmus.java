@@ -12,7 +12,7 @@ public abstract class Algorithmus {
 	public static int zaehlerTrotzdem = 0;
 
 	public abstract ResCanvas algoDurchfuehren(ResCanvas resCanvas);
-	
+
 	public static void ausgebenHistorie(ResEinheit[][] koordinatenSystem) {
 
 		if (historie) {
@@ -36,7 +36,6 @@ public abstract class Algorithmus {
 		}
 
 	}
-
 
 	/*
 	 * Methode gibt den aktuellen Zustand des koordinatenSystems (ResEinheit[][]) in
