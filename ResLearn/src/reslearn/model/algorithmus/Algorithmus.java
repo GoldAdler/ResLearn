@@ -6,11 +6,37 @@ import reslearn.model.resCanvas.ResCanvas;
 public abstract class Algorithmus {
 
 	static final boolean testModus = false;
-	static final boolean trotzdem = true;
+	static final boolean trotzdem = false;
+	static final boolean historie = true;
 	public static int zaehlerTest = 0;
 	public static int zaehlerTrotzdem = 0;
 
 	public abstract ResCanvas algoDurchfuehren(ResCanvas resCanvas);
+	
+	public static void ausgebenHistorie(ResEinheit[][] koordinatenSystem) {
+
+		if (historie) {
+			System.out.println("zaehlerTest: " + ++zaehlerTest);
+			for (ResEinheit[] a : koordinatenSystem) {
+				for (ResEinheit b : a) {
+					if (b == null) {
+						System.out.print(".");
+					} else {
+						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+
+		// TODO löschen
+		if (zaehlerTest == 128) {
+			System.out.println("Pause");
+		}
+
+	}
+
 
 	/*
 	 * Methode gibt den aktuellen Zustand des koordinatenSystems (ResEinheit[][]) in

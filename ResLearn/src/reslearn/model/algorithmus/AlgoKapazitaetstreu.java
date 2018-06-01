@@ -66,6 +66,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		resCanvas.herunterfallenAlleTeilpakete();
 
+		resCanvas.aktuallisiereHistorie();
 		kapazitaetsOptimierung(resCanvas, koordinatenSystem);
 
 		zeitValidierung(resCanvas);
@@ -131,6 +132,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		resCanvas.swap(ergebnis);
 
+		resCanvas.aktuallisiereHistorie();
+		
 		System.out.println("Ergebnis");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 		Algorithmus.ausgebenTrotzdem(resCanvas.getKoordinatenSystem());
@@ -1069,13 +1072,16 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			sucheUntenRechts(koordinatenSystem, rechtsVonUnterhalbStack, unterhalbStack, position);
 
 			verschieben(resCanvas, koordinatenSystem, unterhalbStack, rechtsVonUnterhalbStack, teilpaket);
-
+			
+			resCanvas.aktuallisiereHistorie();
+			
 			resCanvas.herunterfallen(teilpaket);
 
+			resCanvas.aktuallisiereHistorie();
 			ausgeben(koordinatenSystem);
 
 			resCanvas.aufschliessenTeilpaket();
-
+			resCanvas.aktuallisiereHistorie();
 			ausgeben(koordinatenSystem);
 		}
 	}
@@ -1128,7 +1134,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			// liegen
 			// verschoben werden.
 			// Danach müssen TpA und TpB nebeneinander gelegt und wieder vereint werden.
-
+			xMove = teilpaket.getVorgangsdauer();
 			verschiebenUndZusammenfuehren(resCanvas, koordinatenSystem, unterhalbStack, rechtsVonunterhalbStack,
 					teilpaket, zusammenzufuerhen, xMove);
 
@@ -1151,7 +1157,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 				ausgeben(koordinatenSystem);
 			}
-
+			resCanvas.aktuallisiereHistorie();
 			resCanvas.herunterfallen(teilpaket);
 		}
 	}
@@ -1213,7 +1219,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					// ccc ||||ddd
 					// dddccc |cccccc
 					//
-
+					resCanvas.aktuallisiereHistorie();
 					resCanvas.herunterfallenAlleTeilpakete();
 
 					teilpaket.zusammenfuehren(tp);

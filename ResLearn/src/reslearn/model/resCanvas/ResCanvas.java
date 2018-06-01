@@ -502,7 +502,8 @@ public class ResCanvas {
 		this.neueHistorie();
 
 		if (pruefeHistorienAenderung(this.historienArbeitspaketListe, this.arbeitspaketListe)) {
-			Algorithmus.ausgeben(koordinatenSystem);
+		
+			Algorithmus.ausgebenHistorie(koordinatenSystem);
 		}
 
 	}

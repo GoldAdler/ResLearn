@@ -117,6 +117,7 @@ public class Main {
 		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 14, 21, 8, 2, 16);
 		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 5, 25);
 		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		
 
 		resCanvas.hinzufuegen(apB);
 		resCanvas.hinzufuegen(apD);
