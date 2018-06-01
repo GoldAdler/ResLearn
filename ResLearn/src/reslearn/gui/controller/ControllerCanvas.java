@@ -160,31 +160,19 @@ public class ControllerCanvas {
 	}
 
 	private void bewegeX(int vorzeichen) {
-		// for (ResFeld[] resAr : diagramm.getResFeldArray()) {
-		// for (ResFeld teilpaket : resAr) {
-		// if (teilpaket != null) {
-		// if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
-		// teilpaket.setTranslateX(newTranslateX);
-		// }
-		// }
-		// }
-		// }
-
 		HashMap<ResFeld, Vektor2i> resFeldMapTmp = new HashMap<ResFeld, Vektor2i>();
-		for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
-			for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
-				ResFeld resFeld = diagramm.getResFeldArray()[i][j];
+		for (int y = 0; y < diagramm.getResFeldArray().length; y++) {
+			for (int x = 0; x < diagramm.getResFeldArray()[y].length; x++) {
+				ResFeld resFeld = diagramm.getResFeldArray()[y][x];
 				if (resFeld != null) {
-
 					if (teilpaketClicked == resFeld.getResEinheit().getTeilpaket()) {
 						resFeld.setTranslateX(newTranslateX);
-						resFeldMapTmp.put(resFeld, new Vektor2i(i, j));
-						diagramm.getResFeldArray()[i][j] = null;
+						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
+						diagramm.getResFeldArray()[y][x] = null;
 					}
 				}
 			}
 		}
-
 		Iterator<Entry<ResFeld, Vektor2i>> it = resFeldMapTmp.entrySet().iterator();
 		while (it.hasNext()) {
 			HashMap.Entry<ResFeld, Vektor2i> entry = it.next();
@@ -194,30 +182,20 @@ public class ControllerCanvas {
 	}
 
 	private void bewegeY(int vorzeichen) {
-		// for (ResFeld[] resAr : diagramm.getResFeldArray()) {
-		// for (ResFeld teilpaket : resAr) {
-		// if (teilpaket != null) {
-		// if (teilpaketClicked == teilpaket.getResEinheit().getTeilpaket()) {
-		// teilpaket.setTranslateY(newTranslateY);
-		// }
-		// }
-		// }
-		// }
 		HashMap<ResFeld, Vektor2i> resFeldMapTmp = new HashMap<ResFeld, Vektor2i>();
-		for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
-			for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
-				ResFeld resFeld = diagramm.getResFeldArray()[i][j];
+		for (int y = 0; y < diagramm.getResFeldArray().length; y++) {
+			for (int x = 0; x < diagramm.getResFeldArray()[y].length; x++) {
+				ResFeld resFeld = diagramm.getResFeldArray()[y][x];
 				if (resFeld != null) {
 
 					if (teilpaketClicked == resFeld.getResEinheit().getTeilpaket()) {
 						resFeld.setTranslateY(newTranslateY);
-						resFeldMapTmp.put(resFeld, new Vektor2i(i, j));
-						diagramm.getResFeldArray()[i][j] = null;
+						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
+						diagramm.getResFeldArray()[y][x] = null;
 					}
 				}
 			}
 		}
-
 		Iterator<Entry<ResFeld, Vektor2i>> it = resFeldMapTmp.entrySet().iterator();
 		while (it.hasNext()) {
 			HashMap.Entry<ResFeld, Vektor2i> entry = it.next();
