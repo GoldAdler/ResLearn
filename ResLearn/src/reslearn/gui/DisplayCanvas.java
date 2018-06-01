@@ -70,4 +70,11 @@ public final class DisplayCanvas {
 	public static final int buttonXStart = abstandButtonX;
 	public static final int buttonYStart = hoeheUeberschrift * 2;
 
+	public static final int legendeHoehe = (int) (faktor * 43);
+	public static final int legendeKreisRadius = (int) (faktor * 15);
+	public static final int legendeKreisStartpunktX = (int) (faktor * 20);
+	public static final int legendeKreisStartpunktY = (int) (faktor * 22);
+
+	public static final int legendeAbstand = (int) (faktor * 85);
+
 }

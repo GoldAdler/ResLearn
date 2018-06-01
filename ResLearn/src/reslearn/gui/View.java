@@ -93,6 +93,7 @@ public class View extends Application {
 				}
 			}
 		}
+		controllerCanvas.erstelleLegende(arbeitspaketeMitFarbe);
 
 		menu = new ContextMenu();
 		ap = new MenuItem("Teile Arbeitspaket");
@@ -116,7 +117,7 @@ public class View extends Application {
 		}
 
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
-				controllerCanvas.getTabelleArbeitspakete());
+				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());

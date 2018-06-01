@@ -3,6 +3,7 @@ package reslearn.gui.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -12,13 +13,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import reslearn.gui.Diagramm;
@@ -269,6 +273,42 @@ public class ControllerCanvas {
 	};
 
 	/////////////////////////////////////////////////////////////////////////
+	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete  //
+	///////////////////////////////////////////////////////////////////////
+	private Pane legende = new Pane();
+
+	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
+		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
+		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
+		legende.setPrefWidth(DisplayCanvas.canvasBreite);
+		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
+		legende.setStyle("-fx-background-radius: 30;");
+		legende.setStyle("-fx-background-color: #c0c0c0;");
+		Label label = null;
+		Circle circle = null;
+
+		for(Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
+
+
+			if(label == null) {
+				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
+				circle.setFill(entry.getValue());
+			} else {
+				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
+				circle.setFill(entry.getValue());
+			}
+
+			label = new Label(entry.getKey().getId());
+			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
+			label.setLayoutY(8);
+
+			legende.getChildren().addAll(circle, label);
+
+
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
 	///////////////////////////////////////////////////////////////////////
 
@@ -326,7 +366,7 @@ public class ControllerCanvas {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -334,7 +374,7 @@ public class ControllerCanvas {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -457,5 +497,9 @@ public class ControllerCanvas {
 
 	public TableView<Pair<String, Object>> getTable() {
 		return table;
+	}
+
+	public Pane getLegende() {
+		return legende;
 	}
 }
