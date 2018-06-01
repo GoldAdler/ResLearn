@@ -24,7 +24,7 @@ import reslearn.model.paket.ResEinheit;
 public class Bearbeitungsfenster extends Pane {
 	private Stage bearbeitungsmodus;
 	private Scene scene;
-	LinkedList<ResFeld> resFeldListe;
+	private LinkedList<ResFeld> resFeldListe;
 	private boolean vertikal;
 
 	private Label arbeitspaket;
@@ -33,7 +33,6 @@ public class Bearbeitungsfenster extends Pane {
 
 	private Slider sliderX;
 	private Slider sliderY;
-	View view = new View();
 
 	public Bearbeitungsfenster(ResFeld rect) {
 
@@ -53,7 +52,7 @@ public class Bearbeitungsfenster extends Pane {
 		sliderX.setSnapToTicks(true);
 
 		sliderY = new Slider();
-		sliderY.setMaxWidth(120);
+		sliderY.setMaxWidth(DisplayCanvas.canvasBreite / 6.5);
 		sliderY.setRotate(270);
 		sliderY.setMin(0);
 		sliderY.setMax(rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl());
@@ -62,28 +61,29 @@ public class Bearbeitungsfenster extends Pane {
 		sliderY.setMinorTickCount(0);
 		sliderY.setSnapToTicks(true);
 
-		arbeitspaket.setLayoutX(15);
-		arbeitspaket.setLayoutY(5);
-		hilfetext.setLayoutX(15);
-		hilfetext.setLayoutY(30);
-		sliderY.setLayoutX(180);
-		sliderY.setLayoutY(100);
-		sliderX.setLayoutX(60);
-		sliderX.setLayoutY(170);
-		teilen.setLayoutX(15);
-		teilen.setLayoutY(210);
+		arbeitspaket.setLayoutX(DisplayCanvas.canvasBreite / 51.3);
+		arbeitspaket.setLayoutY(DisplayCanvas.canvasLaenge / 102.8);
+		hilfetext.setLayoutX(DisplayCanvas.canvasBreite / 51.6);
+		hilfetext.setLayoutY(DisplayCanvas.canvasLaenge / 17.1);
+		sliderY.setLayoutX(DisplayCanvas.canvasBreite / 4.27);
+		sliderY.setLayoutY(DisplayCanvas.canvasLaenge / 5.1);
+		sliderX.setLayoutX(DisplayCanvas.canvasBreite / 12.8);
+		sliderX.setLayoutY(DisplayCanvas.canvasLaenge / 3);
+		teilen.setLayoutX(DisplayCanvas.canvasBreite / 51.3);
+		teilen.setLayoutY(DisplayCanvas.canvasLaenge / 2.4);
 
 		this.getChildren().addAll(arbeitspaket, hilfetext, teilen, sliderX, sliderY);
-		scene = new Scene(this, 300, 250);
+		scene = new Scene(this, DisplayCanvas.canvasLaenge / 1.5, DisplayCanvas.canvasBreite / 3);
 		bearbeitungsmodus = new Stage();
+		System.out.println(DisplayCanvas.canvasBreite);
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
 		bearbeitungsmodus.initStyle(StageStyle.UTILITY);
 		bearbeitungsmodus.initOwner(View.getInstance().getStage());
 		bearbeitungsmodus.setTitle("Arbeitspaket bearbeiten");
 		bearbeitungsmodus.setScene(scene);
-		bearbeitungsmodus.setX(View.getInstance().getStage().getWidth() / 2);
-		bearbeitungsmodus.setY(View.getInstance().getStage().getHeight() / 2);
+		bearbeitungsmodus.setX(DisplayCanvas.canvasBreite / 2);
+		bearbeitungsmodus.setY(DisplayCanvas.canvasLaenge / 2);
 		bearbeitungsmodus.show();
 
 		/*
