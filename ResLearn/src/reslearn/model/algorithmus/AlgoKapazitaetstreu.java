@@ -132,8 +132,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		resCanvas.swap(ergebnis);
 
-		resCanvas.aktuallisiereHistorie();
-		
+		resCanvas.aktuallisiereHistorieErgebnis();
+
 		System.out.println("Ergebnis");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 		Algorithmus.ausgebenTrotzdem(resCanvas.getKoordinatenSystem());
@@ -424,6 +424,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		if (simLoesungenResCanvas.isEmpty()) {
 			moeglicheLoesungenResCanvas.add(bevorSimulationStartResCanvs);
+			bevorSimulationStartResCanvs.setOptimalerPfad(resCanvas);
 		} else {
 
 			// TODO Lösche identische Lösungen aus der Liste simLoesungenResCanvas heraus,
@@ -433,6 +434,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				moeglicheLoesungenResCanvas.add(simResCanvas);
 				Algorithmus.ausgeben(simResCanvas.getKoordinatenSystem());
 				Algorithmus.ausgebenTrotzdem(simResCanvas.getKoordinatenSystem());
+				simResCanvas.setOptimalerPfad(bevorSimulationStartResCanvs);
 			}
 
 			int nummer = 0;
@@ -1072,9 +1074,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			sucheUntenRechts(koordinatenSystem, rechtsVonUnterhalbStack, unterhalbStack, position);
 
 			verschieben(resCanvas, koordinatenSystem, unterhalbStack, rechtsVonUnterhalbStack, teilpaket);
-			
+
 			resCanvas.aktuallisiereHistorie();
-			
+
 			resCanvas.herunterfallen(teilpaket);
 
 			resCanvas.aktuallisiereHistorie();
