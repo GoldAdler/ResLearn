@@ -387,14 +387,24 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			bevorSimulationStartResCanvs.setOptimalerPfad(resCanvas);
 		} else {
 
-			// TODO Lösche identische Lösungen aus der Liste simLoesungenResCanvas heraus,
-			// das für diese nicht auch noch mal millionfach simuliert wird
-
 			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
-				moeglicheLoesungenResCanvas.add(simResCanvas);
-				Algorithmus.ausgeben(simResCanvas.getKoordinatenSystem());
-				Algorithmus.ausgebenTrotzdem(simResCanvas.getKoordinatenSystem());
-				simResCanvas.setOptimalerPfad(bevorSimulationStartResCanvs);
+				boolean gleichheit = false;
+				for (ResCanvas rC : moeglicheLoesungenResCanvas) {
+
+					gleichheit = rC.pruefeGleichheit(simResCanvas);
+
+					if (gleichheit) {
+						Algorithmus.ausgebenKurzerTest(rC.getKoordinatenSystem());
+						Algorithmus.ausgebenKurzerTest(simResCanvas.getKoordinatenSystem());
+						break;
+					}
+				}
+				if (gleichheit == false) {
+					moeglicheLoesungenResCanvas.add(simResCanvas);
+					Algorithmus.ausgeben(simResCanvas.getKoordinatenSystem());
+					Algorithmus.ausgebenTrotzdem(simResCanvas.getKoordinatenSystem());
+					simResCanvas.setOptimalerPfad(bevorSimulationStartResCanvs);
+				}
 			}
 
 			int nummer = 0;

@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.model.algorithmus.AlgoTermintreu;
+import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -51,8 +51,8 @@ public class Main {
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus AlgoKapazitaetstreu
-		// algorithmus = AlgoKapazitaetstreu.getInstance();
-		algorithmus = AlgoTermintreu.getInstance();
+		algorithmus = AlgoKapazitaetstreu.getInstance();
+		// algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 

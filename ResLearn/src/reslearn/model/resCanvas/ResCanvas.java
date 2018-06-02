@@ -785,4 +785,46 @@ public class ResCanvas {
 		return yMax;
 	}
 
+	/**
+	 * Überprüft ob die beiden übergebenen ResCanvas identisch sind.
+	 *
+	 * @param ausgang
+	 * @param zuUeberpruefen
+	 * @return
+	 */
+	public boolean pruefeGleichheit(ResCanvas zuUeberpruefen) {
+
+		ArrayList<Arbeitspaket> ausgangApListe = this.arbeitspaketListe;
+
+		for (Arbeitspaket apAusgang : ausgangApListe) {
+			Arbeitspaket apAktuell = zuUeberpruefen.findeAPnachID(apAusgang.getId());
+
+			ArrayList<Teilpaket> tpListeAusgang = apAusgang.getTeilpaketListe();
+			ArrayList<Teilpaket> tpListePruefen = apAktuell.getTeilpaketListe();
+
+			for (int a = 0; a < tpListeAusgang.size(); a++) {
+
+				ArrayList<ResEinheit> resListeAusgang = tpListeAusgang.get(a).getResEinheitListe();
+				ArrayList<ResEinheit> resListePruefen = tpListePruefen.get(a).getResEinheitListe();
+
+				for (int b = 0; b < resListeAusgang.size(); b++) {
+					int xAusgang = resListeAusgang.get(b).getPosition().getxKoordinate();
+					int yAusgang = resListeAusgang.get(b).getPosition().getyKoordinate();
+
+					int xPruefen = resListePruefen.get(b).getPosition().getxKoordinate();
+					int yPruefen = resListePruefen.get(b).getPosition().getyKoordinate();
+
+					if (xAusgang != xPruefen || yAusgang != yPruefen) {
+						return false;
+					}
+
+				}
+
+			}
+
+		}
+		return true;
+
+	}
+
 }
