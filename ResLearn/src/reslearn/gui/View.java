@@ -98,6 +98,7 @@ public class View extends Application {
 		menu = new ContextMenu();
 		ap = new MenuItem("Teile Arbeitspaket");
 		reset = new MenuItem("Zurücksetzen");
+		menu.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		menu.getItems().addAll(ap, reset);
 

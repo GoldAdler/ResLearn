@@ -38,8 +38,11 @@ public class Diagramm {
 		gc.setLineWidth(1);
 		gc.setStroke(Color.BLACK);
 
+		int counterYAchse = 0;
+		int counterXAchse = 0;
+
 		for (double i = DisplayCanvas.gesamtAbstandX; i < canvas.getWidth(); i += 5 * DisplayCanvas.resFeldBreite) {
-			int counterYAchse = 0;
+
 			if (i != DisplayCanvas.gesamtAbstandX) {
 				gc.strokeLine(i, canvas.getHeight() - DisplayCanvas.resFeldBreite / 1.5, i,
 						canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY);
@@ -50,7 +53,6 @@ public class Diagramm {
 
 		for (double i = canvas.getHeight() - DisplayCanvas.resFeldLaenge
 				- DisplayCanvas.spaltY; i > DisplayCanvas.gesamtAbstandY; i -= 5 * DisplayCanvas.resFeldBreite) {
-			int counterXAchse = 0;
 			if (i != canvas.getHeight() - DisplayCanvas.resFeldLaenge - DisplayCanvas.spaltY) {
 				gc.strokeLine(DisplayCanvas.resFeldBreite - DisplayCanvas.resFeldBreite / 4, i,
 						DisplayCanvas.gesamtAbstandX, i);
