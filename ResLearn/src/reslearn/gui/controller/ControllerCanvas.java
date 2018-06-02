@@ -6,10 +6,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ColorPicker;
@@ -23,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import reslearn.gui.Diagramm;
@@ -273,9 +276,10 @@ public class ControllerCanvas {
 	};
 
 	/////////////////////////////////////////////////////////////////////////
-	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete  //
+	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
 	///////////////////////////////////////////////////////////////////////
 	private Pane legende = new Pane();
+	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
 		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
@@ -286,24 +290,25 @@ public class ControllerCanvas {
 		legende.setStyle("-fx-background-color: #c0c0c0;");
 		Label label = null;
 		Circle circle = null;
-
-		for(Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
-
-
-			if(label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.setFill(entry.getValue());
+		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
+			colorObservableMap.put(entry.getKey(), entry.getValue());
+			if (label == null) {
+				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
+						DisplayCanvas.legendeKreisRadius);
+				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+				// circle.setFill(entry.getValue());
 			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.setFill(entry.getValue());
+				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
+						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
+				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+				// circle.setFill(entry.getValue());
 			}
 
 			label = new Label(entry.getKey().getId());
+			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.setLayoutY(8);
-
+			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
 			legende.getChildren().addAll(circle, label);
-
 
 		}
 	}
@@ -366,7 +371,7 @@ public class ControllerCanvas {
 	}
 
 	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -374,7 +379,7 @@ public class ControllerCanvas {
 	}
 
 	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -419,6 +424,7 @@ public class ControllerCanvas {
 							if (teilpaketClicked.getArbeitspaket() == teilpaket.getResEinheit().getTeilpaket()
 									.getArbeitspaket()) {
 								teilpaket.setFill(colorPicker.getValue());
+								colorObservableMap.replace(teilpaketClicked.getArbeitspaket(), colorPicker.getValue());
 							}
 						}
 					}
