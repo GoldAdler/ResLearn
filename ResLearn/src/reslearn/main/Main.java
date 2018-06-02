@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -38,9 +38,6 @@ public class Main {
 		// erstellePruefungsAufgabe(resCanvas);
 		// erstellePruefungsAufgabeMitE(resCanvas);
 		// erstellePruefungsAufgabeMitEBlosKleiner(resCanvas);
-		// TODO: Klutke fragen
-		// Müssen überprüft werden ob die Pakete unterhalb der Obergrenze verschoben
-		// werden können
 
 		// ----------------------------------------------------------
 		// Algos
@@ -50,20 +47,20 @@ public class Main {
 		// durchführen des Algorithmus ErsteSchritt
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
-		// durchführen des Algorithmus AlgoKapazitaetstreu
-		algorithmus = AlgoKapazitaetstreu.getInstance();
-		// algorithmus = AlgoTermintreu.getInstance();
+		// durchführen des Algorithmus
+		// algorithmus = AlgoKapazitaetstreu.getInstance();
+		algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
 
-		System.out.println("----------------------------------------------------------");
-		System.out.println("----------------------------------------------------------");
-		System.out.println("--------------Endergebnis---------------------------");
+		// System.out.println("----------------------------------------------------------");
+		// System.out.println("----------------------------------------------------------");
+		// System.out.println("--------------Endergebnis---------------------------");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 
-		System.out.println("----------------------------------------------------------");
-		System.out.println("----------------------------------------------------------");
-		System.out.println("--------------Historien-Ausgabe---------------------------");
+		// System.out.println("----------------------------------------------------------");
+		// System.out.println("----------------------------------------------------------");
+		// System.out.println("--------------Historien-Ausgabe---------------------------");
 		for (ResEinheit[][] koor : resCanvas.getHistorieKoordinatenSystem()) {
 			Algorithmus.ausgeben(koor);
 		}

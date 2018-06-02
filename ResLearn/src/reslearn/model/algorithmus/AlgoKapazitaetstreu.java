@@ -42,8 +42,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	// sich nicht, da wenn maxBegrenzung zu hoch ist, passiert in
 	// #kapazitaetsOptimierung eigentlich nichts
 
-	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int simZaehler = 0;
+	// Zum Testen benutzen
+	// private static int simZaehler = 0;
 
 	private AlgoKapazitaetstreu() {
 	}
@@ -114,13 +114,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void zeitValidierung(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
 
-		System.out.println("Simulation start");
+		// System.out.println("Simulation start");
 
 		simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null);
 
-		System.out.println("HALT STOPP");
-		for (ResCanvas lul : moeglicheLoesungenResCanvas) {
-			Algorithmus.ausgeben(lul.getKoordinatenSystem());
+		for (ResCanvas rC : moeglicheLoesungenResCanvas) {
+			Algorithmus.ausgeben(rC.getKoordinatenSystem());
 		}
 
 		ResCanvas ergebnis = bewerteLoesungen(moeglicheLoesungenResCanvas);
@@ -134,7 +133,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		resCanvas.aktuallisiereHistorieErgebnis();
 
-		System.out.println("Ergebnis");
+		// System.out.println("Ergebnis");
 		Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 		Algorithmus.ausgebenTrotzdem(resCanvas.getKoordinatenSystem());
 
@@ -173,9 +172,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		} else {
 			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung, grenze);
 
-			System.out.println("optimal");
-			for (ResCanvas lul : optimalListe) {
-				Algorithmus.ausgeben(lul.getKoordinatenSystem());
+			// System.out.println("optimal");
+			for (ResCanvas op : optimalListe) {
+				Algorithmus.ausgeben(op.getKoordinatenSystem());
 			}
 
 		}
@@ -224,9 +223,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			moeglicheLoesungenResCanvas.remove(canvas);
 		}
 
-		System.out.println("bewerte");
-		for (ResCanvas lul : keineZeitueberschreitung) {
-			Algorithmus.ausgeben(lul.getKoordinatenSystem());
+		// System.out.println("bewerte");
+		for (ResCanvas kZ : keineZeitueberschreitung) {
+			Algorithmus.ausgeben(kZ.getKoordinatenSystem());
 		}
 	}
 
@@ -368,11 +367,11 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			VerschiebeRichtung verschieben = letztesTeilpaket.ueberpruefeZeitenEnum();
 			if (verschieben != VerschiebeRichtung.FAZ) {
 				apID = arbeitspaketListe.get(i).getId();
-				System.out.println("simZaehler = " + ++simZaehler);
-				if (simZaehler == 3) {
-					System.out.println("Da ist die Kacke am dampfen!!!");
-				}
-				System.out.println("Beginn Sim für AP: " + arbeitspaketListe.get(i).getId());
+				// System.out.println("simZaehler = " + ++simZaehler);
+				// if (simZaehler == 3) {
+				// System.out.println("Stopp!");
+				// }
+				// System.out.println("Beginn Sim für AP: " + arbeitspaketListe.get(i).getId());
 				simulationStarten(resCanvas, arbeitspaketListe.get(i), verschieben, simLoesungenResCanvas);
 				break;
 			}
@@ -407,137 +406,18 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				}
 			}
 
-			int nummer = 0;
+			// int nummer = 0;
 			for (ResCanvas simResCanvas : simLoesungenResCanvas) {
-				++nummer;
-				System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer + " von "
-						+ simLoesungenResCanvas.size());
-
-				// TODO Löschen
-				if (apID == "Z") {
-					System.out.println("jo");
-				}
+				// ++nummer;
+				// System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer
+				// + " von "
+				// + simLoesungenResCanvas.size());
 
 				simulationDurchfuehren(simResCanvas, moeglicheLoesungenResCanvas, apID);
 
 			}
 		}
 
-	}
-
-	/**
-	 * Überprüfe ob Arbeitspaket nach links (Richtung FAZ) verschoben werden kann.
-	 * Wenn ja werden ResEinheiten vom Ende des Arbeitspaketes genommen und nach
-	 * vorne gesetzt.
-	 *
-	 * @param resCanvas
-	 * @param ap
-	 * @param tpListe
-	 * @param letztesTeilpaket
-	 */
-	private void zeitOptimieren(ResCanvas resCanvas, Arbeitspaket ap, ArrayList<Teilpaket> tpListe,
-			Teilpaket letztesTeilpaket) {
-
-		Teilpaket erstesTeilpaket = tpListe.get(0);
-		ResEinheit ersteResEinheit = erstesTeilpaket.getResEinheitListe().get(0);
-		boolean gesetzt = false;
-		int xPos = ersteResEinheit.getPosition().getxKoordinate();
-
-		ArrayList<ResEinheit> zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
-		ArrayList<ResEinheit> gesetzteResEinheiten;
-		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
-		for (int x = xPos - 1; x >= ap.getFaz(); xPos--) {
-
-			gesetzt = false;
-
-			Collections.sort(letztesTeilpaket.getResEinheitListe(), new ComperatorVektor2iX());
-
-			gesetzteResEinheiten = new ArrayList<ResEinheit>();
-
-			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
-
-			for (int y = ResCanvas.koorHoehe - 1; y >= grenze; y--) {
-
-				if (koordinatenSystem[y][x] == null) {
-					int indexLetzteRes = zuSetzendeResEinheiten.size() - 1;
-					for (int i = y; i > grenze; i--) {
-						if (gesetzteResEinheiten.size() == zuSetzendeResEinheiten.size()) {
-
-							/*
-							 * ############## WICHTIG !!!!! ##################### Dieser Code Block ist
-							 * nahezu identisch mit dem Block, der weiter unten ebenfalls mit WICHTIG
-							 * markiert wurde. Der einzige unterschied besteht darin, dass im oberen Block,
-							 * also diesem, das Teilpaket letztesTeilpaket aus dem Arbeitspaket entfernt
-							 * wird.
-							 *
-							 * Wenn an diesem Block etwas verändert wird, muss ebenso der untere Block mit
-							 * der gleichen Veränderungen versehen werden!!!!!
-							 *
-							 * Erklärung: hieraus lässt sich leider keien Methode extrahieren. Dem Finder
-							 * einer besseren Lösung bieten wir einen Download-Gutschein für ein Glässle
-							 * Bärlauch Pesto. Der Finder meldet sich bitte bei willburger@hotmail.de.####
-							 * Der Lukas schwimmt in dem Zeug.
-							 *
-							 */
-							// #################### ANFANG BLOCK #######################
-							Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
-							Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
-							letztesTeilpaket.trenneTeilpaketHorizontal(gesetzteResEinheiten);
-
-							ap.entferneTeilpaket(letztesTeilpaket);
-
-							Collections.sort(tpListe, new ComperatorTeilpaket());
-							letztesTeilpaket = tpListe.get(tpListe.size() - 1);
-							zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
-							Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iX());
-							gesetzteResEinheiten = new ArrayList<ResEinheit>();
-
-							// ################### ENDE BLOCK #######################
-
-							indexLetzteRes = zuSetzendeResEinheiten.size() - 1;
-						}
-						ResEinheit zuSetzen = zuSetzendeResEinheiten.get(indexLetzteRes--);
-						koordinatenSystem[zuSetzen.getPosition().getyKoordinate()][zuSetzen.getPosition()
-								.getxKoordinate()] = null;
-						koordinatenSystem[i][x] = zuSetzen;
-						zuSetzen.setPosition(new Vektor2i(i, x));
-						gesetzteResEinheiten.add(zuSetzen);
-
-						ausgeben(resCanvas.getKoordinatenSystem());
-
-						gesetzt = true;
-
-					}
-
-					/*
-					 * ############## WICHTIG !!!!! ############################ Dieser Code Block
-					 * ist nahezu identisch mit dem Block, der weiter oben ebenfalls mit WICHTIG
-					 * markiert wurde. Der einzige unterschied besteht darin, dass im oberen Block
-					 * das Teilpaket letztesTeilpaket aus dem Arbeitspaket entfernt wird.
-					 *
-					 * Wenn an diesem Block etwas verändert wird, muss ebenso der obere Block mit
-					 * der gleichen Veränderungen versehen werden!!!!!
-					 *
-					 */
-					// #################### ANFANG BLOCK #######################
-					Collections.sort(gesetzteResEinheiten, new ComperatorVektor2iY());
-					Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
-					letztesTeilpaket.trenneTeilpaketVertikal(gesetzteResEinheiten);
-					Collections.sort(tpListe, new ComperatorTeilpaket());
-					letztesTeilpaket = tpListe.get(tpListe.size() - 1);
-					zuSetzendeResEinheiten = letztesTeilpaket.getResEinheitListe();
-					Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iX());
-					gesetzteResEinheiten = new ArrayList<ResEinheit>();
-
-					// ################### ENDE BLOCK #######################
-
-					break;
-				}
-			}
-			if (!gesetzt) {
-				break;
-			}
-		}
 	}
 
 	/**
@@ -754,7 +634,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 
-			System.out.println("Lösung gefunden bearbeiten");
+			// System.out.println("Lösung gefunden bearbeiten");
 
 			if (!ueberpruefeObergrenzeUeberschritten(simulation)) {
 
@@ -762,7 +642,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				simulation.aufschliessenArbeitspaket();
 				simLoesungenResCanvas.add(simulation);
 
-				System.out.println("Lösung gefunden fertig");
+				// System.out.println("Lösung gefunden fertig");
 
 			} else if (ueberpruefeObergrenzeUeberschritten(simulation) && vorgangsdauerVeraenderbar) {
 
@@ -819,7 +699,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			}
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
-			System.out.println("Lösung gefunden variable Vorgangsdauer");
+			// System.out.println("Lösung gefunden variable Vorgangsdauer");
 
 		}
 	}
@@ -1185,12 +1065,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 					ausgeben(koordinatenSystem);
 
-					// TODO: nice to have
-					// swappen der Teilpakete vor dem Herunterfallen,
-					// damit schönere Aufteilung in der Gui zu sehen ist
-					// ccc ||||ddd
-					// dddccc |cccccc
-					//
 					resCanvas.aktuallisiereHistorie();
 					resCanvas.herunterfallenAlleTeilpakete();
 

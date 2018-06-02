@@ -37,7 +37,6 @@ public class Arbeitspaket extends Paket {
 
 	}
 
-	// TODO: Validierung der Vorgangsdauer
 	public Arbeitspaket(String id, int faz, int fez, int saz, int sez, int vorgangsdauer, int mitarbeiteranzahl,
 			int aufwand) {
 		super(vorgangsdauer, mitarbeiteranzahl, aufwand);
