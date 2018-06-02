@@ -67,10 +67,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		resCanvas.herunterfallenAlleTeilpakete();
 
 		resCanvas.aktuallisiereHistorie();
-		kapazitaetsOptimierung(resCanvas, koordinatenSystem);
 
-		zeitValidierung(resCanvas);
+		int maxHoehe = resCanvas.berechneMinY();
 
+		if (maxHoehe <= (ResCanvas.koorHoehe - maxBegrenzung)) {
+			kapazitaetsOptimierung(resCanvas, koordinatenSystem);
+
+			zeitValidierung(resCanvas);
+		}
 		return resCanvas;
 	}
 

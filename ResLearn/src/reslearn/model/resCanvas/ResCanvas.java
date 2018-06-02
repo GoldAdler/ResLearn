@@ -746,13 +746,29 @@ public class ResCanvas {
 
 	}
 
-	public int berechneMaxY() {
+	public int berechneMinY() {
 		int yMax = Integer.MAX_VALUE;
 
 		for (Arbeitspaket ap : this.arbeitspaketListe) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				for (ResEinheit res : tp.getResEinheitListe()) {
 					if (res.getPosition().getyKoordinate() < yMax) {
+						yMax = res.getPosition().getyKoordinate();
+					}
+				}
+
+			}
+		}
+		return yMax;
+	}
+
+	public int berechneMaxY() {
+		int yMax = 0;
+
+		for (Arbeitspaket ap : this.arbeitspaketListe) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				for (ResEinheit res : tp.getResEinheitListe()) {
+					if (res.getPosition().getyKoordinate() > yMax) {
 						yMax = res.getPosition().getyKoordinate();
 					}
 				}
