@@ -644,7 +644,7 @@ public class ResCanvas {
 		return historienArbeitspaketListe;
 	}
 
-	private void setHistorienArbeitspaketListe(ArrayList<Arbeitspaket> historienArbeitspaketListe) {
+	public void setHistorienArbeitspaketListe(ArrayList<Arbeitspaket> historienArbeitspaketListe) {
 		this.historienArbeitspaketListe = historienArbeitspaketListe;
 	}
 

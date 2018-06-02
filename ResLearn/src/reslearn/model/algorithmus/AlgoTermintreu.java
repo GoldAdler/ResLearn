@@ -26,6 +26,7 @@ public class AlgoTermintreu extends Algorithmus {
 		ersteSchritt.aktuallisiereHistorie();
 
 		resCanvas.setHistorieKoordinatenSystem(ersteSchritt.getHistorieKoordinatenSystem());
+		resCanvas.setHistorienArbeitspaketListe(ersteSchritt.getHistorienArbeitspaketListe());
 
 		AlgoErsteSchritt.sortiereAP(resCanvas);
 
@@ -58,9 +59,15 @@ public class AlgoTermintreu extends Algorithmus {
 		ArrayList<ResCanvas> optimalListe = this.rankingWeicheKriterien(flacheLoesungen, yMin);
 
 		for (ResCanvas lul : optimalListe) {
-			Algorithmus.ausgebenHistorie(lul.getKoordinatenSystem());
+			Algorithmus.ausgebenKurzerTest(lul.getKoordinatenSystem());
 		}
-		return null;
+
+		// gebe erstes ResCanvas in der optimalListe zurück. Je früher es in der Liste
+		// liegt, desto früher sind die Zeitpunkte der Arbeitspakete.
+		ResCanvas result = optimalListe.get(0);
+		result.aktuallisiereHistorie();
+
+		return result;
 	}
 
 	private void loescheLoesungenMitLuecken(ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
@@ -126,7 +133,9 @@ public class AlgoTermintreu extends Algorithmus {
 		for (ResCanvas sim : simLoesungenResCanvas) {
 
 			if (apID == letzteApID) {
+
 				moeglicheLoesungenResCanvas.add(sim);
+
 			} else {
 
 				++nummer;
@@ -156,45 +165,4 @@ public class AlgoTermintreu extends Algorithmus {
 
 	}
 
-	/**
-	 * Die möglichen Lösungen werden Anhand des weichen Abgleiches bewertet. Siehe
-	 * Skript.
-	 *
-	 * @param keineZeitueberschreitung
-	 * @return
-	 */
-	private ArrayList<ResCanvas> rankingWeicheKriterien(ArrayList<ResCanvas> keineZeitueberschreitung, int grenze) {
-		int min = Integer.MAX_VALUE;
-
-		ArrayList<ResCanvas> durchlaufenListe = keineZeitueberschreitung;
-		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
-		ResEinheit[][] koordinatenSystem = null;
-		for (int y = grenze; y < ResCanvas.koorHoehe; y++) {
-
-			for (ResCanvas canvas : durchlaufenListe) {
-				koordinatenSystem = canvas.getKoordinatenSystem();
-				int counter = 0;
-
-				for (int x = 0; x < ResCanvas.koorBreite; x++) {
-					if (koordinatenSystem[y][x] != null) {
-						counter++;
-					}
-				}
-
-				if (counter < min) {
-					optimalListe.clear();
-					optimalListe.add(canvas);
-					min = counter;
-				} else if (counter == min) {
-					optimalListe.add(canvas);
-				}
-			}
-			durchlaufenListe.clear();
-			for (ResCanvas rescanvas : optimalListe) {
-				durchlaufenListe.add(rescanvas);
-			}
-
-		}
-		return optimalListe;
-	}
 }

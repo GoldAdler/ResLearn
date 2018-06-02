@@ -1,5 +1,7 @@
 package reslearn.model.algorithmus;
 
+import java.util.ArrayList;
+
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
@@ -8,10 +10,35 @@ public abstract class Algorithmus {
 	static final boolean testModus = false;
 	static final boolean trotzdem = false;
 	static final boolean historie = true;
+	static final boolean test = false;
 	public static int zaehlerTest = 0;
 	public static int zaehlerTrotzdem = 0;
 
 	public abstract ResCanvas algoDurchfuehren(ResCanvas resCanvas);
+
+	public static void ausgebenKurzerTest(ResEinheit[][] koordinatenSystem) {
+
+		if (test) {
+			System.out.println("zaehlerTest: " + ++zaehlerTest);
+			for (ResEinheit[] a : koordinatenSystem) {
+				for (ResEinheit b : a) {
+					if (b == null) {
+						System.out.print(".");
+					} else {
+						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+
+		// TODO löschen
+		if (zaehlerTest == 128) {
+			System.out.println("Pause");
+		}
+
+	}
 
 	public static void ausgebenHistorie(ResEinheit[][] koordinatenSystem) {
 
@@ -89,6 +116,57 @@ public abstract class Algorithmus {
 			}
 			System.out.println();
 		}
+	}
+
+	/**
+	 * Die möglichen Lösungen werden Anhand des weichen Abgleiches bewertet. Siehe
+	 * Skript.
+	 *
+	 * @param keineZeitueberschreitung
+	 * @param grenze
+	 * @return
+	 */
+	protected ArrayList<ResCanvas> rankingWeicheKriterien(ArrayList<ResCanvas> keineZeitueberschreitung, int grenze) {
+		int min = Integer.MAX_VALUE;
+
+		ArrayList<ResCanvas> durchlaufenListe = keineZeitueberschreitung;
+		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
+		ResEinheit[][] koordinatenSystem = null;
+		for (int y = grenze; y < ResCanvas.koorHoehe; y++) {
+
+			for (ResCanvas canvas : durchlaufenListe) {
+				koordinatenSystem = canvas.getKoordinatenSystem();
+				int counter = 0;
+
+				for (int x = 0; x < ResCanvas.koorBreite; x++) {
+					if (koordinatenSystem[y][x] != null) {
+						counter++;
+					}
+				}
+
+				if (counter < min) {
+					optimalListe.clear();
+					optimalListe.add(canvas);
+					min = counter;
+				} else if (counter == min) {
+					boolean gefunden = false;
+					for (ResCanvas resCanvas : optimalListe) {
+						if (resCanvas == canvas) {
+							gefunden = true;
+						}
+					}
+					if (gefunden == false) {
+						optimalListe.add(canvas);
+					}
+				}
+			}
+			durchlaufenListe.clear();
+			for (ResCanvas rescanvas : optimalListe) {
+				durchlaufenListe.add(rescanvas);
+			}
+
+		}
+		return optimalListe;
 	}
 
 }

@@ -165,11 +165,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ArrayList<ResCanvas> optimalListe = null;
 
+		int grenze = ResCanvas.koorHoehe - maxBegrenzung;
+
 		if (keineZeitueberschreitung.isEmpty()) {
 			moeglicheLoesungenResCanvas = geringsteVerstoesse(moeglicheLoesungenResCanvas);
-			optimalListe = rankingWeicheKriterien(moeglicheLoesungenResCanvas);
+			optimalListe = rankingWeicheKriterien(moeglicheLoesungenResCanvas, grenze);
 		} else {
-			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung);
+			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung, grenze);
 
 			System.out.println("optimal");
 			for (ResCanvas lul : optimalListe) {
@@ -258,48 +260,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		}
 		return ergebnis;
-	}
-
-	/**
-	 * Die möglichen Lösungen werden Anhand des weichen Abgleiches bewertet. Siehe
-	 * Skript.
-	 *
-	 * @param keineZeitueberschreitung
-	 * @return
-	 */
-	private ArrayList<ResCanvas> rankingWeicheKriterien(ArrayList<ResCanvas> keineZeitueberschreitung) {
-		int min = Integer.MAX_VALUE;
-
-		ArrayList<ResCanvas> durchlaufenListe = keineZeitueberschreitung;
-		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
-		ResEinheit[][] koordinatenSystem = null;
-		for (int y = (ResCanvas.koorHoehe - maxBegrenzung); y < ResCanvas.koorHoehe; y++) {
-
-			for (ResCanvas canvas : durchlaufenListe) {
-				koordinatenSystem = canvas.getKoordinatenSystem();
-				int counter = 0;
-
-				for (int x = 0; x < ResCanvas.koorBreite; x++) {
-					if (koordinatenSystem[y][x] != null) {
-						counter++;
-					}
-				}
-
-				if (counter < min) {
-					optimalListe.clear();
-					optimalListe.add(canvas);
-					min = counter;
-				} else if (counter == min) {
-					optimalListe.add(canvas);
-				}
-			}
-			durchlaufenListe.clear();
-			for (ResCanvas rescanvas : optimalListe) {
-				durchlaufenListe.add(rescanvas);
-			}
-
-		}
-		return optimalListe;
 	}
 
 	public ArrayList<ResCanvas> geringsteVerstoesse(ArrayList<ResCanvas> Zeitueberschreitung) {
