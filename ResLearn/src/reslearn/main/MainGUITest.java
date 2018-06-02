@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.gui.View;
+import reslearn.gui.ViewUebungsmodus;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -19,7 +19,7 @@ public class MainGUITest {
 
 		ausgeben(koordinatenSystem);
 
-		View.main(args);
+		ViewUebungsmodus.main(args);
 
 	}
 

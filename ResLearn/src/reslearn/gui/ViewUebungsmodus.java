@@ -15,15 +15,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import reslearn.gui.controller.ControllerCanvas;
+import reslearn.gui.controller.ControllerCanvasUebungsmodus;
 import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
-public class View extends Application {
-	private static View view;
+public class ViewUebungsmodus extends Application {
+	private static ViewUebungsmodus view;
 	private Stage stage;
 	private ContextMenu menu;
 	private MenuItem ap;
@@ -31,9 +31,9 @@ public class View extends Application {
 
 	private Pane pane;
 
-	public static View getInstance() {
+	public static ViewUebungsmodus getInstance() {
 		if (view == null) {
-			view = new View();
+			view = new ViewUebungsmodus();
 		}
 		return view;
 	}
@@ -76,7 +76,7 @@ public class View extends Application {
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
-		ControllerCanvas controllerCanvas = new ControllerCanvas(resCanvas, diagramm);
+		ControllerCanvasUebungsmodus controllerCanvas = new ControllerCanvasUebungsmodus(resCanvas, diagramm);
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 

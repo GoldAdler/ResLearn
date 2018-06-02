@@ -31,7 +31,7 @@ import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
-import reslearn.gui.View;
+import reslearn.gui.ViewUebungsmodus;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -39,7 +39,7 @@ import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
 
-public class ControllerCanvas {
+public class ControllerCanvasUebungsmodus {
 
 	private double zeigerX, zeigerY;
 	private double translateX, translateY;
@@ -50,7 +50,7 @@ public class ControllerCanvas {
 	private ResFeld rect;
 	private ColorPicker colorPicker;
 
-	public ControllerCanvas(ResCanvas resCanvas, Diagramm diagramm) {
+	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
 		erstelleTabelle();
@@ -61,8 +61,8 @@ public class ControllerCanvas {
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		View.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
-		View.getInstance().getReset().setOnAction(OnMenuItemResetEventHandler);
+		ViewUebungsmodus.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
+		ViewUebungsmodus.getInstance().getReset().setOnAction(OnMenuItemResetEventHandler);
 	}
 
 	// Event Handler Maus klicken
@@ -215,7 +215,7 @@ public class ControllerCanvas {
 	private EventHandler<ContextMenuEvent> OnMouseSecondaryEventHandler = new EventHandler<ContextMenuEvent>() {
 		@Override
 		public void handle(ContextMenuEvent e) {
-			View.getInstance().getMenu().show(rect, e.getSceneX(), e.getSceneY());
+			ViewUebungsmodus.getInstance().getMenu().show(rect, e.getSceneX(), e.getSceneY());
 		}
 	};
 
@@ -242,7 +242,7 @@ public class ControllerCanvas {
 					if (resFeld != null) {
 						if (resFeld.getResEinheit().getTeilpaket().getArbeitspaket() == rect.getResEinheit()
 								.getTeilpaket().getArbeitspaket()) {
-							View.getInstance().getPane().getChildren().remove(resFeld);
+							ViewUebungsmodus.getInstance().getPane().getChildren().remove(resFeld);
 							diagramm.getResFeldArray()[i][j] = null;
 						}
 					}
@@ -261,7 +261,7 @@ public class ControllerCanvas {
 
 							resFeld.setFill(rect.getFill());
 
-							View.getInstance().getPane().getChildren().add(resFeld);
+							ViewUebungsmodus.getInstance().getPane().getChildren().add(resFeld);
 							makeDraggable(resFeld);
 
 							diagramm.getResFeldArray()[i][j] = resFeld;
@@ -281,6 +281,11 @@ public class ControllerCanvas {
 	private Pane legende = new Pane();
 	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
+	// ResEinheiten -> ObservableMap ResEinheit, Vektor2i
+	// ArrayList<blabala> = asfasf;
+	// arrayList.get(0)[i][j] == arrayList.get(1)[i][j]
+	// arrayList.get(1)[i][j] -> ResEinheit
+	// ResEinheit -> update Observableblababla
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
 		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
 		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);

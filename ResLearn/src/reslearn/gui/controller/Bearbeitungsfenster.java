@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
-import reslearn.gui.View;
+import reslearn.gui.ViewUebungsmodus;
 import reslearn.model.paket.ResEinheit;
 
 public class Bearbeitungsfenster extends Pane {
@@ -98,7 +98,7 @@ public class Bearbeitungsfenster extends Pane {
 
 		bearbeitungsmodus.initModality(Modality.WINDOW_MODAL);
 		bearbeitungsmodus.initStyle(StageStyle.UTILITY);
-		bearbeitungsmodus.initOwner(View.getInstance().getStage());
+		bearbeitungsmodus.initOwner(ViewUebungsmodus.getInstance().getStage());
 		bearbeitungsmodus.setTitle("Arbeitspaket bearbeiten");
 		bearbeitungsmodus.setScene(scene);
 		bearbeitungsmodus.setX(DisplayCanvas.canvasBreite / 2);

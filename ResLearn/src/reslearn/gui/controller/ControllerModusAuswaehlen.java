@@ -10,7 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import reslearn.gui.View;
+import reslearn.gui.ViewLoesungsmodus;
+import reslearn.gui.ViewUebungsmodus;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerModusAuswaehlen extends Controller {
@@ -38,14 +39,17 @@ public class ControllerModusAuswaehlen extends Controller {
 	public void weiter(ActionEvent event) throws Exception {
 		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
 		if (event.getSource() == ersterSchritt) {
-			View.getInstance().initializeCanvasView(ap);
-			((Node) (event.getSource())).getScene().getWindow().hide();
+
 		} else if (event.getSource() == uebungsmodus) {
+			ViewUebungsmodus.getInstance().initializeCanvasView(ap);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 			// View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" +
 			// cua.datei));
 			// View.getInstance().start(new Stage());
 			// ((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == loesungsmodus) {
+			ViewLoesungsmodus.getInstance().initializeCanvasView(ap);
+			((Node) (event.getSource())).getScene().getWindow().hide();
 			// View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" +
 			// cua.datei));
 			// View.getInstance().start(new Stage());
