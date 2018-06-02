@@ -177,8 +177,6 @@ public class AlgoErsteSchritt extends Algorithmus {
 					}
 				}
 
-				// TODO: Eventuell rekursiv lösen
-
 				while (!stackTeilpaket.isEmpty()) {
 					stackTeilpaket.pop().bewegeY(resCanvas, yMove);
 				}
@@ -187,9 +185,6 @@ public class AlgoErsteSchritt extends Algorithmus {
 
 				break;
 			}
-			// TODO Algo verbessern
-			// Die Überprüfung ob über einem Teilpaket B noch andere Reseinheiten liegen ist
-			// noch nicht ausgereift
 		}
 
 	}

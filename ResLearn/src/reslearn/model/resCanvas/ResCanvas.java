@@ -500,15 +500,6 @@ public class ResCanvas {
 	 */
 	public void aktuallisiereHistorie() {
 
-		// TODO: HIER WEITERMACHEN LOGIK BEVOR TERMINALGO
-		// finden der zwischenschritte damit GUI testen kann
-
-		// Algorithmus.ausgebenHistorie(koordinatenSystem);
-		// if (!historieKoordinatenSystem.isEmpty()) {
-		// Algorithmus.ausgebenHistorie(historieKoordinatenSystem.get(historieKoordinatenSystem.size()
-		// - 1));
-		// }
-
 		if (this.historieKoordinatenSystem.isEmpty()) {
 			this.neueHistorie();
 			Algorithmus.ausgebenHistorie(koordinatenSystem);
@@ -625,20 +616,6 @@ public class ResCanvas {
 	public void setHistorieKoordinatenSystem(ArrayList<ResEinheit[][]> historieKoordinatenSystem) {
 		this.historieKoordinatenSystem = historieKoordinatenSystem;
 	}
-
-	// TODO vermutlich löschen
-	// /**
-	// * Erstellt eine Kopie des aktuellen KoordinatenSystems.
-	// *
-	// * @return
-	// */
-	// public ResEinheit[][] kloneKoordinatenSystem() {
-	//
-	// ArrayList<Arbeitspaket> neueArbeitspaketListe = this.copyArbeitspaketliste();
-	//
-	// return copyKoordinatenSystem(neueArbeitspaketListe);
-	//
-	// }
 
 	public ArrayList<Arbeitspaket> getHistorienArbeitspaketListe() {
 		return historienArbeitspaketListe;

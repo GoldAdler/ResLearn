@@ -126,10 +126,10 @@ public class AlgoTermintreu extends Algorithmus {
 		Arbeitspaket startAP = arbeitspaketListe.get(startAPint);
 		String apID = startAP.getId();
 
-		System.out.println("Beginn Sim für AP: " + apID);
+		// System.out.println("Beginn Sim für AP: " + apID);
 		this.simuliere(resCanvas, startAP, simLoesungenResCanvas);
 
-		int nummer = 0;
+		// int nummer = 0;
 		for (ResCanvas sim : simLoesungenResCanvas) {
 
 			if (apID == letzteApID) {
@@ -138,9 +138,10 @@ public class AlgoTermintreu extends Algorithmus {
 
 			} else {
 
-				++nummer;
-				System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer + " von "
-						+ simLoesungenResCanvas.size());
+				// ++nummer;
+				// System.out.println("Beginn Sim für Lösungen von AP : " + apID + " " + nummer
+				// + " von "
+				// + simLoesungenResCanvas.size());
 
 				this.simulationDurchfuehren(sim, moeglicheLoesungenResCanvas, apID, letzteApID);
 			}

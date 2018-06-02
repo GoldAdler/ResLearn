@@ -9,7 +9,7 @@ public abstract class Algorithmus {
 
 	static final boolean testModus = false;
 	static final boolean trotzdem = false;
-	static final boolean historie = true;
+	static final boolean historie = false;
 	static final boolean test = false;
 	public static int zaehlerTest = 0;
 	public static int zaehlerTrotzdem = 0;
@@ -33,11 +33,6 @@ public abstract class Algorithmus {
 			System.out.println();
 		}
 
-		// TODO löschen
-		if (zaehlerTest == 128) {
-			System.out.println("Pause");
-		}
-
 	}
 
 	public static void ausgebenHistorie(ResEinheit[][] koordinatenSystem) {
@@ -55,11 +50,6 @@ public abstract class Algorithmus {
 				System.out.println();
 			}
 			System.out.println();
-		}
-
-		// TODO löschen
-		if (zaehlerTest == 128) {
-			System.out.println("Pause");
 		}
 
 	}
@@ -87,11 +77,6 @@ public abstract class Algorithmus {
 				System.out.println();
 			}
 			System.out.println();
-		}
-
-		// TODO löschen
-		if (zaehlerTest == 128) {
-			System.out.println("Pause");
 		}
 
 	}
