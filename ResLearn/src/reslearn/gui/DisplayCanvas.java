@@ -39,10 +39,14 @@ public final class DisplayCanvas {
 	public static final int gesamtAbstandY = abstandY + spaltY;
 
 	public static final int tabelleBreite = canvasStartpunktX - 2 * resFeldBreite;
-	public static final int tabelleLaenge = canvasLaenge;
+	public static final int tabelleLaenge = canvasLaenge/2;
 
 	public static final int tabelleLayoutX = resFeldBreite;
 	public static final int tabelleLayoutY = canvasStartpunktY;
+	
+	public static final int buttonLoesungsmodusLayoutX = resFeldBreite;
+	public static final int buttonLoesungsmodusLayoutY = tabelleLayoutY + tabelleLaenge + resFeldBreite;
+	public static final int buttonLoesungsmodusBreite = (tabelleBreite-resFeldBreite) / 2;
 
 	public static final int tabelleArbeitspaketBreite = paneBreite + spaltX;
 	public static final int tabelleArbeitspaketLaenge = canvasStartpunktY - 2 * resFeldLaenge;

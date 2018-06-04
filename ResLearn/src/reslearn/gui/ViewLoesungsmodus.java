@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import reslearn.gui.controller.ControllerCanvasLoesungsmodus;
 import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
@@ -74,9 +75,13 @@ public class ViewLoesungsmodus extends Application {
 
 		ArrayList<ResEinheit[][]> historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
 				.getHistorieKoordinatenSystem();
+		// ArrayList<ResEinheit[][]> historieListe =
+		// AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
+		// .getHistorieKoordinatenSystem();
+
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
-		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(historieListe, resCanvas,
+		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe, resCanvas,
 				diagramm);
 		ResFeld[][] teilpakete = controllerCanvas.initializePositionObservableMap();
 
@@ -119,7 +124,9 @@ public class ViewLoesungsmodus extends Application {
 		}
 
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
-				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende());
+				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
+				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
+				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());

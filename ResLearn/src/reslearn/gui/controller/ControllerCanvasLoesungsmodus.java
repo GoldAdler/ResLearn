@@ -5,18 +5,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -28,6 +33,8 @@ import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
+import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -40,26 +47,37 @@ public class ControllerCanvasLoesungsmodus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
+	Arbeitspaket[] arbeitspakete;
 	private ArrayList<ResEinheit[][]> historieListe;
 	private int historieNummer = 0;
+	private ResEinheit[][] koordinatenSystemUrspruenglich;
 	private ObservableMap<ResEinheit, Double> positionXObservableMap = FXCollections.observableHashMap();
 	private ObservableMap<ResEinheit, Double> positionYObservableMap = FXCollections.observableHashMap();
 
-	public ControllerCanvasLoesungsmodus(ArrayList<ResEinheit[][]> historieListe, ResCanvas resCanvas,
+	public ControllerCanvasLoesungsmodus(Arbeitspaket[] arbeitspakete, ArrayList<ResEinheit[][]> historieListe, ResCanvas resCanvas,
 			Diagramm diagramm) {
+		this.arbeitspakete = arbeitspakete;
 		this.historieListe = historieListe;
+		this.koordinatenSystemUrspruenglich = historieListe.get(0);
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
-		erstelleTabelle();
+		erstelleTabelleLinks();
 		erstelleTabelleArbeitspakete();
-		// Erstellung Map etc. hier aufrufen
-		initializePositionObservableMap();
+		erstelleButtons();
 	}
 
+	/**
+	 * Initialisiert die ResFelder mit den ursprünglichen Werten. Zudem werden die
+	 * Positionen der ResFelder in den ObservableMaps gespeichert und an die
+	 * ResFelder gebunden.
+	 * 
+	 * @return
+	 */
 	public ResFeld[][] initializePositionObservableMap() {
-		ResEinheit[][] koordinatenSystem = historieListe.get(historieNummer);
 		ResFeld[][] resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
-		for (ResEinheit[] zeile : koordinatenSystem) {
+
+		// Befüllen der ObservableMaps
+		for (ResEinheit[] zeile : koordinatenSystemUrspruenglich) {
 			for (ResEinheit resEinheit : zeile) {
 				if (resEinheit != null) {
 					positionXObservableMap.put(resEinheit,
@@ -70,36 +88,24 @@ public class ControllerCanvasLoesungsmodus {
 			}
 		}
 
-		for (int i = 0; i < koordinatenSystem.length; i++) {
-			for (int j = 0; j < koordinatenSystem[i].length; j++) {
-				if (koordinatenSystem[i][j] != null) {
+		// Zuweisung der Bindings
+		for (int i = 0; i < koordinatenSystemUrspruenglich.length; i++) {
+			for (int j = 0; j < koordinatenSystemUrspruenglich[i].length; j++) {
+				if (koordinatenSystemUrspruenglich[i][j] != null) {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
-							koordinatenSystem[i][j]);
+							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
 							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
 							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
-					System.out.println(
-							"X: " + Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()).get());
-					System.out.println(
-							"Y: " + Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()).get());
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
 		}
 		return resFeldArray;
-
 	}
 
 	public void makeDraggable(ResFeld feld) {
-		// System.out.println("X: " + Bindings.valueAt(positionXObservableMap,
-		// feld.getResEinheit()).get());
-		// feld.layoutXProperty().bind(Bindings.valueAt(positionXObservableMap,
-		// feld.getResEinheit()));
-		// feld.layoutYProperty().bind(Bindings.valueAt(positionYObservableMap,
-		// feld.getResEinheit()));
-		// System.out.println("Y: " + Bindings.valueAt(positionYObservableMap,
-		// feld.getResEinheit()).get());
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 	}
 
@@ -107,23 +113,131 @@ public class ControllerCanvasLoesungsmodus {
 	private EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
-
 			rect = (ResFeld) e.getSource();
 			teilpaketClicked = rect.getResEinheit().getTeilpaket();
 
 			befuelleTabelle();
 			markiereArbeitspaketInTabelle(teilpaketClicked.getArbeitspaket());
-			// rect.setFill(Color.TRANSPARENT);
-			positionXObservableMap.replace(rect.getResEinheit(), 50.0);
-			positionYObservableMap.replace(rect.getResEinheit(), 50.0);
-			// System.out.println("X: " + Bindings.valueAt(positionXObservableMap,
-			// rect.getResEinheit()).get());
-			// System.out.println("Y: " + Bindings.valueAt(positionYObservableMap,
-			// rect.getResEinheit()).get());
-			// System.out.println(rect.getY());
-			// rect.
 		}
 	};
+
+	private EventHandler<MouseEvent> OnButtonZurueckPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			schrittVor.setDisable(false);
+			historieNummer--;
+			if (historieNummer == 0) {
+				schrittZurueck.setDisable(true);
+			}
+			extrahiereArbeitspakete(historieNummer);
+		}
+	};
+
+	private EventHandler<MouseEvent> OnButtonVorPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			schrittZurueck.setDisable(false);
+			historieNummer++;
+			if (historieNummer + 1 == historieListe.size()) {
+				schrittVor.setDisable(true);
+			}
+			extrahiereArbeitspakete(historieNummer);
+		}
+	};
+	
+	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			schrittZurueck.setDisable(true);
+			historieNummer = 0;
+			
+			ResCanvas resCanvas = new ResCanvas();
+
+			for (Arbeitspaket arbeitspaket : arbeitspakete) {
+				resCanvas.hinzufuegen(arbeitspaket);
+			}
+			historieListe.clear();
+			historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
+					.getHistorieKoordinatenSystem();
+			koordinatenSystemUrspruenglich = historieListe.get(0);
+		}
+	};
+	
+	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			schrittZurueck.setDisable(true);
+			historieNummer = 0;
+			
+			ResCanvas resCanvas = new ResCanvas();
+
+			for (Arbeitspaket arbeitspaket : arbeitspakete) {
+				resCanvas.hinzufuegen(arbeitspaket);
+			}
+			historieListe.clear();
+			historieListe = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
+					.getHistorieKoordinatenSystem();
+			koordinatenSystemUrspruenglich = historieListe.get(0);
+		}
+	};
+
+	/**
+	 * Extrahiert die einzelnen Arbeitspakete aus dem neuen Koordinatensystem anhand
+	 * der Historiennummer und ersetzt alle zugehörigen ResEinheiten-Position
+	 * mithilfe von {@link #ersetzeResEinheiten(String, ArrayList)}.
+	 * 
+	 * @param historieNummer
+	 */
+	private void extrahiereArbeitspakete(int historieNummer) {
+		ResEinheit[][] koordinatenSystemNeu = historieListe.get(historieNummer);
+		ArrayList<Arbeitspaket> arbeitspaketeAbgearbeitet = new ArrayList<Arbeitspaket>();
+
+		for (int y = 0; y < koordinatenSystemNeu.length; y++) {
+			for (int x = 0; x < koordinatenSystemNeu[0].length; x++) {
+				if (koordinatenSystemNeu[y][x] != null) {
+					Arbeitspaket arbeitspaketAktuell = koordinatenSystemNeu[y][x].getTeilpaket().getArbeitspaket();
+					if (!arbeitspaketeAbgearbeitet.contains(arbeitspaketAktuell)) {
+						arbeitspaketeAbgearbeitet.add(arbeitspaketAktuell);
+						String arbeitspaketId = arbeitspaketAktuell.getId();
+
+						ArrayList<ResEinheit> abzuarbeitendeResEinheiten = new ArrayList<ResEinheit>();
+						arbeitspaketAktuell.getTeilpaketListe().forEach(teilpaket -> teilpaket.getResEinheitListe()
+								.forEach(resEinheit -> abzuarbeitendeResEinheiten.add(resEinheit)));
+
+						ersetzeResEinheiten(arbeitspaketId, abzuarbeitendeResEinheiten);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Überschreibt die Positionen aller ResFelder.
+	 * 
+	 * @param arbeitspaketId
+	 * @param abzuarbeitendeResEinheiten
+	 */
+	private void ersetzeResEinheiten(String arbeitspaketId, ArrayList<ResEinheit> abzuarbeitendeResEinheiten) {
+		int index = 0;
+		for (ResEinheit[] zeile : koordinatenSystemUrspruenglich) {
+			for (ResEinheit resEinheit : zeile) {
+				if (resEinheit != null) {
+					if (resEinheit.getTeilpaket().getArbeitspaket().getId() == arbeitspaketId) {
+						if (index == abzuarbeitendeResEinheiten.size()) {
+							return;
+						}
+						positionXObservableMap.replace(resEinheit,
+								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
+										* DisplayCanvas.resFeldBreite);
+						positionYObservableMap.replace(resEinheit,
+								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
+										* DisplayCanvas.resFeldLaenge);
+						index++;
+					}
+				}
+			}
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
@@ -180,7 +294,6 @@ public class ControllerCanvasLoesungsmodus {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
 				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
-				pair("Farbe", rect.getFill()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
 				pair("SAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSaz()),
@@ -193,11 +306,12 @@ public class ControllerCanvasLoesungsmodus {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void erstelleTabelle() {
+	private void erstelleTabelleLinks() {
 
 		table.setEditable(true);
 		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
 		table.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		table.setPrefHeight(DisplayCanvas.tabelleLaenge);
 		table.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		TableColumn<Pair<String, Object>, String> name = new TableColumn<>("Name");
@@ -267,6 +381,48 @@ public class ControllerCanvasLoesungsmodus {
 				setGraphic(null);
 			}
 		}
+	}
+
+	private Button schrittZurueck = new Button();
+	private Button schrittVor = new Button();
+	private RadioButton termintreuModus = new RadioButton();
+	private RadioButton kapazitaetstreuModus = new RadioButton();
+	private final ToggleGroup modusToggleGroup = new ToggleGroup();
+
+	private void erstelleButtons() {
+		schrittZurueck.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
+		schrittZurueck.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
+		schrittZurueck.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		schrittZurueck.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		schrittZurueck.setText("Schritt zurück");
+		schrittZurueck.setOnMouseClicked(OnButtonZurueckPressedEventHandler);
+		schrittZurueck.setDisable(true);
+
+		schrittVor.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		schrittVor.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
+		schrittVor.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		schrittVor.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		schrittVor.setText("Schritt vor");
+		schrittVor.setOnMouseClicked(OnButtonZurueckPressedEventHandler);
+		schrittVor.setOnMouseClicked(OnButtonVorPressedEventHandler);
+
+		termintreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
+		termintreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		termintreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		termintreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		termintreuModus.setText("Termintreu");
+		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
+		termintreuModus.setToggleGroup(modusToggleGroup);
+
+		kapazitaetstreuModus
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		kapazitaetstreuModus.setText("Kapazitätstreu");
+		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
+		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+
 	}
 
 	private void wechsleFarbe() {
@@ -363,5 +519,21 @@ public class ControllerCanvasLoesungsmodus {
 
 	public Pane getLegende() {
 		return legende;
+	}
+
+	public Button getButtonSchrittZurueck() {
+		return schrittZurueck;
+	}
+
+	public Button getButtonSchrittVor() {
+		return schrittVor;
+	}
+
+	public RadioButton getButtonTermintreuModus() {
+		return termintreuModus;
+	}
+
+	public RadioButton getButtonKapazitaetstreuModus() {
+		return kapazitaetstreuModus;
 	}
 }
