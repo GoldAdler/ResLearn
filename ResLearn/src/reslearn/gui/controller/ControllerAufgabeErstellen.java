@@ -86,7 +86,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	Pane panePersonen = new Pane();
 
-	// maximale Personen Parallel (kapazitÃ¤tstreu)
+	// maximale Personen Parallel (kapazitätstreu)
 	@FXML
 	Button buttonMaxPersonenMinus = new Button();
 	@FXML
@@ -136,9 +136,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		paneErgebnis.setVisible(true);
-		// pakete = getArbeitspaketArray(retrieveData());
-		apArray(tabelle.getItems());
-		System.out.println(pakete.length);
+		getArbeitspaketArray(tabelle.getItems());
 		if (paketeValidieren(pakete)) {
 			labelErgebnis.setText(ergebnisValidierung);
 			speichern(pakete, event);
@@ -207,8 +205,8 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	@FXML
 	private void handleButtonAnzPaketeMinusAction(ActionEvent event) {
-		// Anzahl der Pakete soll nicht unter 1 sein
-		if (anzPakete > 1) {
+		// Anzahl der Pakete soll nicht unter 2 sein
+		if (anzPakete > 2) {
 			anzPakete--;
 			textFieldAnzPakete.setText(Integer.toString(anzPakete));
 
@@ -219,40 +217,28 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	@FXML
 	private void handleButtonAnzPaketePlusAction(ActionEvent event) {
-		if (anzPakete < 30) {
+		if (anzPakete < 26) {
 			anzPakete++;
 			textFieldAnzPakete.setText(Integer.toString(anzPakete));
 
 			// neue Zeile hinzufügen
-			tabelle.getItems().add(new ArbeitspaketTableData(Integer.toString(anzPakete), 0, 0, 0, 0, 0, 0, 0));
+			tabelle.getItems().add(new ArbeitspaketTableData(setIdBuchstabe(anzPakete), 0, 0, 0, 0, 0, 0, 0));
 		}
 	}
+	private String setIdBuchstabe(int i) {
+		String buchstaben[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+		return buchstaben[i-1];
+	}
 
-	// private Arbeitspaket[] apArray(ObservableList<ArbeitspaketTableData> pakete)
-	// {
-	// Arbeitspaket[] ap = new Arbeitspaket[pakete.size()];
-	//
-	// for (int i = 0; i < pakete.size(); i++) {
-	// ap[i] = new Arbeitspaket();
-	// ap[i].setId(pakete.get(i).getId());
-	// ap[i].setFaz(pakete.get(i).getFaz());
-	// ap[i].setSaz(pakete.get(i).getSaz());
-	// ap[i].setFez(pakete.get(i).getFez());
-	// ap[i].setSez(pakete.get(i).getSez());
-	// ap[i].setMitarbeiteranzahl(pakete.get(i).getMitarbeiteranzahl());
-	// ap[i].setAufwand(pakete.get(i).getAufwand());
-	// }
-	// return ap;
-	// }
-	private void apArray(ObservableList<ArbeitspaketTableData> paketList) {
+	private void getArbeitspaketArray(ObservableList<ArbeitspaketTableData> paketList) {
 		pakete = new Arbeitspaket[paketList.size()];
 
 		for (int i = 0; i < paketList.size(); i++) {
 			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez();
 
-			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getSaz(),
-					paketList.get(i).getFez(), paketList.get(i).getSez(), paketList.get(i).getMitarbeiteranzahl(),
-					paketList.get(i).getAufwand(), vorgangsdauer);
+			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
+					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer, paketList.get(i).getMitarbeiteranzahl(),
+					paketList.get(i).getAufwand());
 		}
 	}
 
@@ -264,8 +250,8 @@ public class ControllerAufgabeErstellen extends Controller {
 		// new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4,
 		// 1, 2, 2));
 
-		return Arrays.asList(new Arbeitspaket("1", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("2", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("3", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("4", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(new Arbeitspaket("A", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("B", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("C", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("D", 0, 0, 0, 0, 0, 0, 0));
 	}
 
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -276,14 +262,14 @@ public class ControllerAufgabeErstellen extends Controller {
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
 		// sets the cell factory to use EditCell which will handle key presses
 		// and firing commit events
-		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
-		// updates the salary field on the PersonTableData object to the
-		// committed value
-		spalteID.setOnEditCommit(event -> {
-			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
-			tabelle.refresh();
-		});
+//		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
+//		// updates the salary field on the PersonTableData object to the
+//		// committed value
+//		spalteID.setOnEditCommit(event -> {
+//			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
+//			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
+//			tabelle.refresh();
+//		});
 	}
 
 	private void setupSpalteFaz() {
@@ -429,31 +415,17 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
-		boolean idKorrekt, fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt, maKorrekt;
-		String[] id = new String[arbeitspaket.length];
+		boolean fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt, maKorrekt;
 		int faz, saz, fez, sez, ma;
 
-		idKorrekt = fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = maKorrekt = paketKorrekt = false;
+		fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = maKorrekt = paketKorrekt = false;
 
-		MAIN_LOOP: for (int i = 0; i < arbeitspaket.length; i++) {
-			id[i] = arbeitspaket[i].getId();
+		for (int i = 0; i < arbeitspaket.length; i++) {
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
-
-			// ID prüfen (einzigartig?)
-			for (int j = i - 1; j >= 0; j--) {
-				if (id[i] != id[j]) {
-					idKorrekt = true;
-				} else {
-					paketKorrekt = false;
-					ergebnisValidierung = "Die Arbeitspaket-ID '" + arbeitspaket[i].getId()
-							+ "' darf nur ein mal verwendet werden";
-					break MAIN_LOOP;
-				}
-			}
 
 			// FAZ prüfen
 			if (faz >= 1) {
@@ -470,7 +442,7 @@ public class ControllerAufgabeErstellen extends Controller {
 				sazKorrekt = true;
 			} else {
 				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich gro wie der Wert FAZ sein";
+						+ " muss mindestens gleich groß wie der Wert FAZ sein";
 				paketKorrekt = false;
 				break;
 			}
@@ -506,7 +478,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			}
 
 			// Alle Bedingungen prüfen
-			if (idKorrekt && fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt && maKorrekt) {
+			if (fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt && maKorrekt) {
 				ergebnisValidierung = "Validierung erfolgreich";
 				paketKorrekt = true;
 			}

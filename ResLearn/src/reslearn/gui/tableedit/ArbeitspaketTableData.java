@@ -25,7 +25,7 @@ public class ArbeitspaketTableData extends Paket {
 		this.aufwand = new SimpleIntegerProperty(arbeitspaket.getAufwand());
 	}
 
-	public ArbeitspaketTableData(final String id, final int faz, final int saz, final int fez, final int sez,
+	public ArbeitspaketTableData(final String id, final int faz, final int fez, final int saz, final int sez,
 			final int vorgangsdauer, final int aufwand, final int mitarbeiteranzahl) {
 		super.vorgangsdauer = vorgangsdauer;
 		this.id = new SimpleStringProperty(id);
