@@ -1069,10 +1069,14 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 					ausgeben(koordinatenSystem);
 
-					resCanvas.aktuallisiereHistorie();
+					Collections.sort(tp.getArbeitspaket().getTeilpaketListe(), new ComperatorTeilpaket());
+
 					resCanvas.herunterfallenAlleTeilpakete();
 
+					Collections.sort(tp.getArbeitspaket().getTeilpaketListe(), new ComperatorTeilpaket());
+
 					teilpaket.zusammenfuehren(tp);
+					resCanvas.aktuallisiereHistorie();
 
 					ausgeben(koordinatenSystem);
 				}

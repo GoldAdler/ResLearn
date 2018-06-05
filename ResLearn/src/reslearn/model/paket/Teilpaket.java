@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.ListIterator;
 
 import reslearn.model.resCanvas.ResCanvas;
+import reslearn.model.utils.ComperatorTeilpaket;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
@@ -135,6 +136,8 @@ public class Teilpaket extends Paket {
 			if (this.resEinheitListe.isEmpty()) {
 				this.arbeitspaket.entferneTeilpaket(this);
 			}
+
+			Collections.sort(this.getArbeitspaket().getTeilpaketListe(), new ComperatorTeilpaket());
 
 		}
 
