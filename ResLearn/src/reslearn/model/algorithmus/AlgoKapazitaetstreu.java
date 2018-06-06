@@ -265,6 +265,15 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		return ergebnis;
 	}
 
+	/**
+	 * Bewertet die übergebenen ResCanvases.
+	 *
+	 * Je weniger Zeitverstöße desto besser wird das ResCanvas bewertet. Die
+	 * bestbewertesten ResCanvas werden zurückgegeben.
+	 *
+	 * @param Zeitueberschreitung
+	 * @return
+	 */
 	public ArrayList<ResCanvas> geringsteVerstoesse(ArrayList<ResCanvas> Zeitueberschreitung) {
 		int min = Integer.MAX_VALUE;
 
@@ -356,18 +365,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		}
 
 		for (int i = startAP; i < arbeitspaketListe.size(); i++) {
-			// for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 
 			arbeitspaketListe.get(i).zusammenfuegen();
 			resCanvas.aufschliessenTeilpaket();
 
 			ArrayList<Teilpaket> tpListe = arbeitspaketListe.get(i).getTeilpaketListe();
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
-			// TODO: HIER WEITERMACHEN LOGIK warum letztesTeilpaket überprüfen nach Faz?
-			// Möglicherweise muss erstes
-			// Teilpaket überprüft werden nicht das letzte. Wenn nach dem ersten
-			// SchrittModus pakete herunterfallen, läuft er trotzdem in die schleife, da das
-			// letzte tp nicht mehr in faz. Aber arbeitspaket liegt in faz
 			VerschiebeRichtung verschieben = letztesTeilpaket.ueberpruefeZeitenEnum();
 			if (verschieben != VerschiebeRichtung.FAZ) {
 				apID = arbeitspaketListe.get(i).getId();
@@ -555,7 +558,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				arbeitspaket.bewegeX(vorbereitungSimulation, ap.getVorgangsdauer());
 			}
 
-			vorbereitungSimulation.herunterfallenAlleTeilpaketeAußerEines(zuVerschiebenAp);
+			vorbereitungSimulation.herunterfallenAlleArbeitspaketeAußerEines(zuVerschiebenAp);
 			simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp,
 					simLoesungenResCanvas);
 
@@ -1223,6 +1226,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		return neuesTeilpaket;
 	}
 
+	/**
+	 * Überprüft ob überhalb der Obergrenze ResCanvases liegen. Gibt true zurück,
+	 * falls dies der Fall ist.
+	 * 
+	 * @param resCanvas
+	 * @return
+	 */
 	private boolean ueberpruefeObergrenzeUeberschritten(ResCanvas resCanvas) {
 		boolean ueberschritten = false;
 

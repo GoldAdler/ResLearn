@@ -31,6 +31,7 @@ public class Arbeitspaket extends Paket {
 	 * Spaetester Endzeitpunkt
 	 */
 	private int sez;
+
 	private ArrayList<Teilpaket> teilpaketListe;
 
 	public Arbeitspaket() {
@@ -49,6 +50,11 @@ public class Arbeitspaket extends Paket {
 		teilpaketListe.add(new Teilpaket(this));
 	}
 
+	/**
+	 * Fügt Teilpakete eines Arbeitspaketes die nebeneinander liegen, zu einem
+	 * Teilpaket zusammen.
+	 *
+	 */
 	public void zusammenfuegen() {
 
 		if (teilpaketListe.size() > 1) {
@@ -131,6 +137,21 @@ public class Arbeitspaket extends Paket {
 		return false;
 	}
 
+	/**
+	 * Die Methode nimmt einen int abstand entgegen um den das Arbeitspaket
+	 * verschoben werden muss. Dabei wird dieses aus dem Koordinatensystem gelöscht
+	 * und um den übergebenen versetzt eingesetzt. Dieses Einsetzten geschieht aber
+	 * am obersten Rand des Koordiantensystems. Anschließend wird das Paket mit
+	 * #herunterfallen an seine neue finalle Position gesenkt.
+	 *
+	 * Beim Löschvorgang des Arbeitspaketes werden auch die unterschiedlichen
+	 * Teilpaketet, aus dem das Arbeitspaket besteht, wieder zu einem Teilpaket
+	 * zusammengeführt. Sollte beim Herunterfallen es von Nöten sein neue Teilpakete
+	 * anzulegen, wird dies in der Methode #herunterfallen durchgeführt.
+	 *
+	 * @param abstand
+	 * @param resCanvas
+	 */
 	public void neuSetzenKapa(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
@@ -165,6 +186,15 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	/**
+	 * Der Methode wird der int start übergeben. Dieser int bestimmt die
+	 * Start-X-Position in der das Arbeitspaket eingestzt wird. Dieses Einsetzten
+	 * geschieht aber am obersten Rand des Koordiantensystems. Anschließend wird das
+	 * Paket mit #herunterfallen an seine neue finalle Position gesenkt.
+	 *
+	 * @param start
+	 * @param resCanvas
+	 */
 	public void neuSetzenTermin(int start, ResCanvas resCanvas) {
 
 		ArrayList<ResEinheit> resEinheitenListe = this.getTeilpaketListe().get(0).getResEinheitListe();
@@ -189,7 +219,23 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	/**
+	 * @author Team-Gui:
+	 *
+	 *         Beim Betätigen des reset-Buttons werden alle vorhandenen Teilpakete
+	 *         des Arbeitspaktes gelöscht und ein neues Teilpaket mit den Daten des
+	 *         Arbeitspaktes (Mitarbeiteranzahl, Vorgangsdauer) angelegt. Das neue
+	 *         Teilpaket besteht dabei aus allen ResEinheiten der gelöschten
+	 *         Teilpakete.
+	 *
+	 *         Das neue Teilpaket, bzw. das Arbeitspaket, wird am oberen Rand des
+	 *         Koordinatensystems eingefügt.
+	 *
+	 * @param resCanvas
+	 * @return
+	 */
 	public ResEinheit[][] reset(ResCanvas resCanvas) {
+
 		ArrayList<ResEinheit> resListe = new ArrayList<>();
 
 		resCanvas.entferneArbeitspaket(this);
@@ -210,7 +256,6 @@ public class Arbeitspaket extends Paket {
 
 		vereint.setResEinheitListe(resListe);
 
-		// this.setPosition(new Vektor2i(0, 0));
 		vereint.setPosition(new Vektor2i(0, 0));
 
 		ArrayList<ResEinheit> resEinheitenListe = vereint.getResEinheitListe();
@@ -311,6 +356,14 @@ public class Arbeitspaket extends Paket {
 		this.id = id;
 	}
 
+	/**
+	 * Legt eine WIRKLICHE Kopie des Arbeitspaketes an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen Arbeitspaket unabhäniges Arbeitspaket, angleget.
+	 *
+	 * @return
+	 */
 	public Arbeitspaket copy() {
 
 		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.id, this.faz, this.fez, this.saz, this.sez,

@@ -74,6 +74,14 @@ public class ResEinheit extends Paket {
 		return FLAECHE;
 	}
 
+	/**
+	 * Legt eine WIRKLICHE Kopie der ResEinheit an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen ResEinheit unabhäniges ResEinheit, angleget.
+	 *
+	 * @return
+	 */
 	public ResEinheit copy() {
 
 		ResEinheit tmp = new ResEinheit();
