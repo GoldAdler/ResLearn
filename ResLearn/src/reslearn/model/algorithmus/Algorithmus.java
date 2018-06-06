@@ -54,13 +54,14 @@ public abstract class Algorithmus {
 
 	}
 
-	/*
+	/**
 	 * Methode gibt den aktuellen Zustand des koordinatenSystems (ResEinheit[][]) in
 	 * der Eclipse-Console aus. Diese Ausgabe ist als Unterstützung für Entwickler
 	 * gedacht. Im laufenden Betrieb sollte die Methode deaktivert werden. Dazu muss
 	 * in der Klasse Algorithmus, also die Klasse die #ausgeben bereitstellt, der
 	 * boolean testModus auf den Wert false gesetzt werden.
 	 *
+	 * @param koordinatenSystem
 	 */
 	public static void ausgeben(ResEinheit[][] koordinatenSystem) {
 
@@ -106,6 +107,8 @@ public abstract class Algorithmus {
 	/**
 	 * Die möglichen Lösungen werden Anhand des weichen Abgleiches bewertet. Siehe
 	 * Skript.
+	 *
+	 * Wird sowohl in AlgoKapa, als auch in AlgoTermin verwendet.
 	 *
 	 * @param keineZeitueberschreitung
 	 * @param grenze

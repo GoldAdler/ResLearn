@@ -71,15 +71,17 @@ public class AlgoErsteSchritt extends Algorithmus {
 	}
 
 	/**
-	 * Jedes Arbeitspaket in das KoordinatenSystem setzten
+	 * Jedes Arbeitspaket in das KoordinatenSystem setzten.
+	 *
+	 * @param arbeitspaketListe
+	 * @param koordinatenSystem
+	 * @param resCanvas
 	 */
 	private static void berechne(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
 			ResCanvas resCanvas) {
 
 		for (int i = 0; i < arbeitspaketListe.size(); i++) {
-			// if (i != 0) {
-			//
-			// }
+
 			Arbeitspaket arbeitspaket = arbeitspaketListe.get(i);
 			ArrayList<Teilpaket> teilpaketListe = arbeitspaketListe.get(i).getTeilpaketListe();
 			int size = 0;
@@ -106,6 +108,11 @@ public class AlgoErsteSchritt extends Algorithmus {
 	/**
 	 * Ermittelt den Startpunkt des Teilpaketes im 2-D-Array der Klasse ResCanvas
 	 * (koordinatenSystem)
+	 *
+	 * @param koordinatenSystem
+	 * @param x_Start
+	 * @param y_Start
+	 * @return
 	 */
 	private static int findeStartpunkt(ResEinheit[][] koordinatenSystem, int x_Start, int y_Start) {
 		boolean gefunden = false;
@@ -124,7 +131,13 @@ public class AlgoErsteSchritt extends Algorithmus {
 
 	/**
 	 * Befüllt anhand des gefunden Startpunktes (#findeStartpunkt) das 2-D-Array
-	 * koordinatenSystem mit den Reseinheiten eines Teilpaketes
+	 * koordinatenSystem mit den Reseinheiten eines Teilpaketes.
+	 *
+	 * @param koordinatenSystem
+	 * @param arbeitspaket
+	 * @param teilpaket
+	 * @param x_Start
+	 * @param y_Start
 	 */
 	private static void befuelleKoordinatenSystem(ResEinheit[][] koordinatenSystem, Arbeitspaket arbeitspaket,
 			Teilpaket teilpaket, int x_Start, int y_Start) {
