@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import reslearn.gui.ResFeld;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.validierung.Feedback.MsgType;
 
 // TODO: Validierung mit der GUI testen!!!
 public class Validierung {
-	private ResEinheit[][] koordinatenSystem;
+	private ResFeld[][] koordinatenSystem;
 	private ArrayList<Feedback> feedbackListe;
 	private ArrayList<Arbeitspaket> arbeitspaketeGeprueft;
 	private ArrayList<Arbeitspaket> arbeitspaketListeVorgangsunterbrechung;
@@ -23,7 +24,7 @@ public class Validierung {
 	 *
 	 * @param koordinatenSystem
 	 */
-	public Validierung(ResEinheit[][] koordinatenSystem) {
+	public Validierung(ResFeld[][] koordinatenSystem) {
 		this.koordinatenSystem = koordinatenSystem;
 		feedbackListe = new ArrayList<Feedback>();
 	}
@@ -42,10 +43,10 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeFEZ(resEinheit);
+		for (ResFeld[] zeile : koordinatenSystem) {
+			for (ResFeld resEinheit : zeile) {
+				pruefeFAZ(resEinheit.getResEinheit());
+				pruefeFEZ(resEinheit.getResEinheit());
 			}
 		}
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
@@ -54,8 +55,9 @@ public class Validierung {
 			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (!arbeitspaketeGeprueft.contains(koordinatenSystem[y][x].getTeilpaket().getArbeitspaket())) {
-					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x]);
+				if (!arbeitspaketeGeprueft
+						.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
+					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
 				}
 			}
 		}
@@ -80,7 +82,7 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
+		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
 			// damit naechste Zeile richtig ueberprueft werden kann.
@@ -89,10 +91,10 @@ public class Validierung {
 			iterator = 0;
 			pruefeVorgangsunterbrechung(zeile);
 
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeGrenzeKapazitaetUeberschritten(resEinheit, grenzeMitarbeiterParallel);
-				pruefeVorgangsdauerUeberschritten(resEinheit);
+			for (ResFeld resEinheit : zeile) {
+				pruefeFAZ(resEinheit.getResEinheit());
+				pruefeGrenzeKapazitaetUeberschritten(resEinheit.getResEinheit(), grenzeMitarbeiterParallel);
+				pruefeVorgangsdauerUeberschritten(resEinheit.getResEinheit());
 			}
 		}
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
@@ -101,8 +103,9 @@ public class Validierung {
 			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (!arbeitspaketeGeprueft.contains(koordinatenSystem[y][x].getTeilpaket().getArbeitspaket())) {
-					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x]);
+				if (!arbeitspaketeGeprueft
+						.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
+					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
 				}
 			}
 		}
@@ -126,7 +129,7 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
+		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
 			// damit naechste Zeile richtig ueberprueft werden kann.
@@ -135,10 +138,10 @@ public class Validierung {
 			iterator = 0;
 			pruefeVorgangsunterbrechung(zeile);
 
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeSEZ(resEinheit);
-				pruefeVorgangsdauerUeberschritten(resEinheit);
+			for (ResFeld resEinheit : zeile) {
+				pruefeFAZ(resEinheit.getResEinheit());
+				pruefeSEZ(resEinheit.getResEinheit());
+				pruefeVorgangsdauerUeberschritten(resEinheit.getResEinheit());
 			}
 		}
 		if (feedbackListe.isEmpty()) {
@@ -258,9 +261,9 @@ public class Validierung {
 	 *
 	 * @param zeile
 	 */
-	private void pruefeVorgangsunterbrechung(ResEinheit[] zeile) {
+	private void pruefeVorgangsunterbrechung(ResFeld[] zeile) {
 		int zeilenLaenge = zeile.length - 1;
-		Arbeitspaket aktuellesArbeitspaket = zeile[iterator].getTeilpaket().getArbeitspaket();
+		Arbeitspaket aktuellesArbeitspaket = zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket();
 
 		if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
 			if (iterator != zeilenLaenge) {
@@ -272,14 +275,15 @@ public class Validierung {
 
 		boolean unterbrochen = false;
 		for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
-			if (aktuellesArbeitspaket != zeile[iterator].getTeilpaket().getArbeitspaket()) {
+			if (aktuellesArbeitspaket != zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()) {
 				unterbrochen = true;
 			}
-			if (aktuellesArbeitspaket == zeile[iterator].getTeilpaket().getArbeitspaket() && unterbrochen) {
-				String message = "Vorgang am Punkt (" + zeile[i].getPosition().getxKoordinate() + ", "
-						+ (koordinatenSystem.length - 1 - zeile[i].getPosition().getyKoordinate()) + ") unterbrochen!\n"
-						+ "Der Vorgang eines Paketes darf nicht unterbrochen werden.";
-				feedbackListe.add(new Feedback(message, MsgType.ERROR, zeile[iterator]));
+			if (aktuellesArbeitspaket == zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()
+					&& unterbrochen) {
+				String message = "Vorgang am Punkt (" + zeile[i].getResEinheit().getPosition().getxKoordinate() + ", "
+						+ (koordinatenSystem.length - 1 - zeile[i].getResEinheit().getPosition().getyKoordinate())
+						+ ") unterbrochen!\n" + "Der Vorgang eines Paketes darf nicht unterbrochen werden.";
+				feedbackListe.add(new Feedback(message, MsgType.ERROR, zeile[iterator].getResEinheit()));
 			}
 		}
 
@@ -288,6 +292,10 @@ public class Validierung {
 			iterator++;
 			pruefeVorgangsunterbrechung(zeile);
 		}
+	}
+
+	public ArrayList<Feedback> getFeedbackListe() {
+		return feedbackListe;
 	}
 
 	/**
@@ -308,12 +316,12 @@ public class Validierung {
 
 		for (int y = yPos; y >= 0; y--) {
 
-			ResEinheit oben = koordinatenSystem[y][xPos];
+			ResEinheit oben = koordinatenSystem[y][xPos].getResEinheit();
 			if (arbeitspaket == oben.getTeilpaket().getArbeitspaket()) {
 				mitarbeiterParallelCount++;
 			}
 
-			if (koordinatenSystem[y][xPos] == null) {
+			if (koordinatenSystem[y][xPos].getResEinheit() == null) {
 				break;
 			}
 		}

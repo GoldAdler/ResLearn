@@ -14,11 +14,14 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +41,7 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
+import reslearn.model.validierung.Validierung;
 
 public class ControllerCanvasUebungsmodus {
 
@@ -49,12 +53,19 @@ public class ControllerCanvasUebungsmodus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
+	private ArrayList<ResEinheit[][]> historieListe;
+	private int historieNummer = 0;
+	private ResEinheit[][] koordinatenSystemUrspruenglich;
+	Arbeitspaket[] arbeitspakete;
+	int maxGrenze = 5;
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
+		erstelleValidierenButton();
+		erstelleButtons();
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -271,6 +282,57 @@ public class ControllerCanvasUebungsmodus {
 			}
 
 			Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
+
+		}
+	};
+
+	/////////////////////////////////////////////////////////////////////////
+	// Erstellung des Valiedieren Button //
+	///////////////////////////////////////////////////////////////////////
+	private Button validierenButton;
+	private Label fehlerMeldung;
+
+	public void erstelleValidierenButton() {
+		validierenButton = new Button("Validieren");
+		validierenButton.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
+				+ DisplayCanvas.gesamtAbstandY + DisplayCanvas.legendeHoehe * 1.5);
+		validierenButton.setOnAction(ValidierenAction);
+		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
+	}
+
+	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			Validierung vali = new Validierung(diagramm.getResFeldArray());
+			String ausgabe = null;
+			if (termintreuModus.isSelected()) {
+				System.out.println("termintreu ist ausgewählt");
+				// vali.AlgoTermintreu();
+				// for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+				// ausgabe += vali.getFeedbackListe().get(i).toString();
+				// }
+
+				fehlerMeldung = new Label("Hallo");
+				fehlerMeldung.setTextFill(Color.RED);
+				fehlerMeldung.setLayoutX(0);
+				fehlerMeldung.setLayoutY(0);
+				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+			} else {
+				System.out.println("kapazitätstreu ist ausgewählt");
+				vali.AlgoKapazitaetstreu(maxGrenze);
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+
+				fehlerMeldung = new Label(ausgabe);
+				fehlerMeldung.setTextFill(Color.RED);
+				fehlerMeldung.setLayoutX(0);
+				fehlerMeldung.setLayoutY(0);
+				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+			}
 
 		}
 	};
@@ -502,6 +564,63 @@ public class ControllerCanvasUebungsmodus {
 		tabelleArbeitspakete.scrollTo(ap);
 	}
 
+	private RadioButton termintreuModus = new RadioButton();
+	private RadioButton kapazitaetstreuModus = new RadioButton();
+	private final ToggleGroup modusToggleGroup = new ToggleGroup();
+
+	private void erstelleButtons() {
+		termintreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
+		termintreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		termintreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		termintreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		termintreuModus.setText("Termintreu");
+		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
+		termintreuModus.setToggleGroup(modusToggleGroup);
+
+		kapazitaetstreuModus
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		kapazitaetstreuModus.setText("Kapazitätstreu");
+		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
+		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+
+	}
+
+	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			// historieNummer = 0;
+			//
+			// ResCanvas resCanvas = new ResCanvas();
+			//
+			// for (Arbeitspaket arbeitspaket : arbeitspakete) {
+			// resCanvas.hinzufuegen(arbeitspaket);
+			// }
+			// historieListe.clear();
+			// historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
+			// .getHistorieKoordinatenSystem();
+			// koordinatenSystemUrspruenglich = historieListe.get(0);
+		}
+	};
+
+	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			//
+			// ResCanvas resCanvas = new ResCanvas();
+			//
+			// for (Arbeitspaket arbeitspaket : arbeitspakete) {
+			// resCanvas.hinzufuegen(arbeitspaket);
+			// }
+			// historieListe.clear();
+			// historieListe =
+			// AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
+			// koordinatenSystemUrspruenglich = historieListe.get(0);
+		}
+	};
+
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
 	}
@@ -513,4 +632,21 @@ public class ControllerCanvasUebungsmodus {
 	public Pane getLegende() {
 		return legende;
 	}
+
+	public Button getValidierenButton() {
+		return validierenButton;
+	}
+
+	public ToggleGroup getModusToggleGroup() {
+		return modusToggleGroup;
+	}
+
+	public RadioButton getButtonTermintreuModus() {
+		return termintreuModus;
+	}
+
+	public RadioButton getButtonKapazitaetstreuModus() {
+		return kapazitaetstreuModus;
+	}
+
 }
