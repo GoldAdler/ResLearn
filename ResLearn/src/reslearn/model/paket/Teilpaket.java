@@ -12,8 +12,10 @@ import reslearn.model.utils.Vektor2i;
 public class Teilpaket extends Paket {
 
 	/**
+	 * Nur verwendet in AlgoKapa.
+	 *
 	 * Gibt an in welche Richtung ein Teilpaket und das zugehörige Arbeitspaket
-	 * verschoben werden muss. FAZ steht dabei für kann an der selben stelle
+	 * verschoben werden muss. FAZ gibt an, dass das Teilpaket an der selben Stelle
 	 * bleiben, da es bereits am optimalsten Zeitpunkt liegt.
 	 *
 	 */
@@ -84,8 +86,8 @@ public class Teilpaket extends Paket {
 	}
 
 	/**
-	 * Damit diese Methode funktionieren kann, muss die zu übergebende ArrayList mit
-	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert worden sein.
+	 * Damit diese Methode funktionieren kann, wird die zu übergebende ArrayList
+	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert.
 	 *
 	 * @param neueResEinheitListe
 	 * @return
@@ -114,8 +116,8 @@ public class Teilpaket extends Paket {
 	}
 
 	/**
-	 * Damit diese Methode funktionieren kann, muss die zu übergebende ArrayList mit
-	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert worden sein.
+	 * Damit diese Methode funktionieren kann, wird die zu übergebende ArrayList
+	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert.
 	 *
 	 * @param neueResEinheitListe
 	 * @return
@@ -305,6 +307,11 @@ public class Teilpaket extends Paket {
 		return verschieben;
 	}
 
+	/**
+	 * Überprüft die Lage des Teilpaktes bezüglich der Zeiten des Arbeitspaktes.
+	 *
+	 * @return
+	 */
 	public VerschiebeRichtung ueberpruefeZeitenEnum() {
 		VerschiebeRichtung verschieben = null;
 
@@ -337,6 +344,14 @@ public class Teilpaket extends Paket {
 		this.resEinheitListe = resEinheitListe;
 	}
 
+	/**
+	 * Legt eine WIRKLICHE Kopie des Teilpaketes an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen Teilpaket unabhäniges Teilpaket, angleget.
+	 *
+	 * @return
+	 */
 	public Teilpaket copy(Arbeitspaket copyArbeitspaket) {
 
 		ArrayList<ResEinheit> neueResEinheitListe = new ArrayList<ResEinheit>();

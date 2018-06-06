@@ -64,9 +64,8 @@ public class ControllerTutorialFragen extends Controller {
 	@FXML
 	public void zurueck(ActionEvent event) throws Exception {
 		if (counter <= 0) {
-			TutorialVideo tut = new TutorialVideo();
 			try {
-				tut.start(TutorialVideo.classStage);
+				TutorialVideo.getInstance().start(new Stage());
 				((Node) (event.getSource())).getScene().getWindow().hide();
 			} catch (Exception e) {
 				e.printStackTrace();

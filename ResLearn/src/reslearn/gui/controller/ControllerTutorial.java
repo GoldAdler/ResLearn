@@ -15,24 +15,9 @@ public class ControllerTutorial extends Controller {
 
 	@FXML
 	private Button zurueck;
-	@FXML
-	private Button quizStarten;
-	@FXML
-	private Button home;
 
 	@FXML
-	public void quizStarten(ActionEvent event) throws Exception {
-		Scene newScene;
-		alleFenster.add("../fxml/Tutorial.fxml");
-		Parent root = FXMLLoader.load(getClass().getResource("../fxml/TutorialFragen.fxml"));
-		newScene = new Scene(root);
-		Stage stage = new Stage();
-		stage.setTitle("ResLearn");
-		stage.setMaximized(true);
-		stage.setScene(newScene);
-		stage.show();
-		((Node) (event.getSource())).getScene().getWindow().hide();
-	}
+	private Button home;
 
 	@FXML
 	public void home(ActionEvent event) throws Exception {

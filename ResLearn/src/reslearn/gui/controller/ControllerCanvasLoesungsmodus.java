@@ -148,7 +148,9 @@ public class ControllerCanvasLoesungsmodus {
 	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
+			System.out.println("BLUBB");
 			schrittZurueck.setDisable(true);
+			schrittVor.setDisable(false);
 			historieNummer = 0;
 			
 			ResCanvas resCanvas = new ResCanvas();
@@ -156,10 +158,16 @@ public class ControllerCanvasLoesungsmodus {
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
 				resCanvas.hinzufuegen(arbeitspaket);
 			}
+			//koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die "alten" Referenzen benötigt
 			historieListe.clear();
-			historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
+			historieListe.add(koordinatenSystemUrspruenglich);
+			
+			ArrayList<ResEinheit[][]> historieListeNeu = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
 					.getHistorieKoordinatenSystem();
-			koordinatenSystemUrspruenglich = historieListe.get(0);
+			for(int i = 1; i < historieListeNeu.size(); i++) {
+				historieListe.add(historieListeNeu.get(i));
+			}
+			extrahiereArbeitspakete(0);		
 		}
 	};
 	
@@ -167,17 +175,25 @@ public class ControllerCanvasLoesungsmodus {
 		@Override
 		public void handle(MouseEvent e) {
 			schrittZurueck.setDisable(true);
+			schrittVor.setDisable(false);
 			historieNummer = 0;
 			
 			ResCanvas resCanvas = new ResCanvas();
-
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
 				resCanvas.hinzufuegen(arbeitspaket);
 			}
+			//koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die "alten" Referenzen benötigt
 			historieListe.clear();
-			historieListe = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
+			historieListe.add(koordinatenSystemUrspruenglich);
+			
+			ArrayList<ResEinheit[][]> historieListeNeu = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
 					.getHistorieKoordinatenSystem();
-			koordinatenSystemUrspruenglich = historieListe.get(0);
+			for(int i = 1; i < historieListeNeu.size(); i++) {
+				historieListe.add(historieListeNeu.get(i));
+			}
+			extrahiereArbeitspakete(0);
+			
+			
 		}
 	};
 
@@ -413,6 +429,7 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setText("Termintreu");
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
+		
 
 		kapazitaetstreuModus
 				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
@@ -422,6 +439,7 @@ public class ControllerCanvasLoesungsmodus {
 		kapazitaetstreuModus.setText("Kapazitätstreu");
 		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
 		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+		kapazitaetstreuModus.setSelected(true);
 
 	}
 

@@ -227,6 +227,17 @@ public class ControllerCanvasUebungsmodus {
 		@Override
 		public void handle(ContextMenuEvent e) {
 			ViewUebungsmodus.getInstance().getMenu().show(rect, e.getSceneX(), e.getSceneY());
+
+			for (int y = 0; y < rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); y++) {
+				for (int x = 0; x < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); x++) {
+					if (diagramm.getResFeldArray()[y][x] != null) {
+						ViewUebungsmodus.getInstance().getReset().setDisable(true);
+						return;
+					} else {
+						ViewUebungsmodus.getInstance().getReset().setDisable(false);
+					}
+				}
+			}
 		}
 	};
 

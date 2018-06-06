@@ -22,7 +22,7 @@ public class ControllerHauptmenue extends Controller {
 	@FXML
 	private Button tutorial;
 	@FXML
-	private Button einstellungen;
+	private Button quiz;
 
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
@@ -50,11 +50,10 @@ public class ControllerHauptmenue extends Controller {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == tutorial) {
-			TutorialVideo tut = new TutorialVideo();
-			tut.start(TutorialVideo.classStage);
+			TutorialVideo.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
-		} else if (event.getSource() == einstellungen) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Einstellungen.fxml"));
+		} else if (event.getSource() == quiz) {
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Quiz.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
