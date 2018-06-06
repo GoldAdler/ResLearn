@@ -1,12 +1,14 @@
 package reslearn.model.validierung;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import reslearn.gui.ResFeld;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.paket.Teilpaket;
 import reslearn.model.validierung.Feedback.MsgType;
 
 // TODO: Validierung mit der GUI testen!!!
@@ -16,7 +18,7 @@ public class Validierung {
 	private ArrayList<Arbeitspaket> arbeitspaketeGeprueft;
 	private ArrayList<Arbeitspaket> arbeitspaketListeVorgangsunterbrechung;
 	private Map<Arbeitspaket, Integer> arbeitspaketAktuelleVorgangsdauer;
-	private int iterator;
+	ArrayList<Arbeitspaket> alleArbeitspakete = new ArrayList<Arbeitspaket>();
 
 	/**
 	 * In dieser Klasse werden die Lösungen, die der User in der GUI erstellt,
@@ -44,9 +46,11 @@ public class Validierung {
 		// wird)
 
 		for (ResFeld[] zeile : koordinatenSystem) {
-			for (ResFeld resEinheit : zeile) {
-				pruefeFAZ(resEinheit.getResEinheit());
-				pruefeFEZ(resEinheit.getResEinheit());
+			for (ResFeld resFeld : zeile) {
+				if (resFeld != null) {
+					pruefeFAZ(resFeld.getResEinheit());
+					pruefeFEZ(resFeld.getResEinheit());
+				}
 			}
 		}
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
@@ -55,9 +59,11 @@ public class Validierung {
 			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (!arbeitspaketeGeprueft
-						.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
-					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+				if (koordinatenSystem[y][x] != null) {
+					if (!arbeitspaketeGeprueft
+							.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
+						pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+					}
 				}
 			}
 		}
@@ -88,17 +94,18 @@ public class Validierung {
 			// damit naechste Zeile richtig ueberprueft werden kann.
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
 			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
-			iterator = 0;
-			// pruefeVorgangsunterbrechung(zeile);
 
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
 					pruefeFAZ(resFeld.getResEinheit());
 					pruefeGrenzeKapazitaetUeberschritten(resFeld.getResEinheit(), grenzeMitarbeiterParallel);
 					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
 				}
 			}
 		}
+		pruefeVorgangsunterbrechung2();
+
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
 			// arbeitspaketeGeprueft muss nach jeder Spalte neu initialisiert werden,
 			// damit naechste Spalte richtig ueberprueft werden kann
@@ -139,15 +146,17 @@ public class Validierung {
 			// damit naechste Zeile richtig ueberprueft werden kann.
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
 			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
-			iterator = 0;
-			pruefeVorgangsunterbrechung(zeile);
 
-			for (ResFeld resEinheit : zeile) {
-				pruefeFAZ(resEinheit.getResEinheit());
-				pruefeSEZ(resEinheit.getResEinheit());
-				pruefeVorgangsdauerUeberschritten(resEinheit.getResEinheit());
+			for (ResFeld resFeld : zeile) {
+				if (resFeld != null) {
+					pruefeFAZ(resFeld.getResEinheit());
+					pruefeSEZ(resFeld.getResEinheit());
+					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
+				}
 			}
 		}
+		pruefeVorgangsunterbrechung2();
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
@@ -265,38 +274,104 @@ public class Validierung {
 	 *
 	 * @param zeile
 	 */
-	private void pruefeVorgangsunterbrechung(ResFeld[] zeile) {
-		int zeilenLaenge = zeile.length - 1;
-		System.out.println(zeile[iterator]);
-		Arbeitspaket aktuellesArbeitspaket = zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket();
 
-		if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
-			if (iterator != zeilenLaenge) {
-				iterator++;
-				pruefeVorgangsunterbrechung(zeile);
-			}
-			return;
-		}
-
-		boolean unterbrochen = false;
-		for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
-			if (aktuellesArbeitspaket != zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()) {
-				unterbrochen = true;
-			}
-			if (aktuellesArbeitspaket == zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()
-					&& unterbrochen) {
-				String message = "Vorgang am Punkt (" + zeile[i].getResEinheit().getPosition().getxKoordinate() + ", "
-						+ (koordinatenSystem.length - 1 - zeile[i].getResEinheit().getPosition().getyKoordinate())
-						+ ") unterbrochen!\n" + "Der Vorgang eines Paketes darf nicht unterbrochen werden.";
-				feedbackListe.add(new Feedback(message, MsgType.ERROR, zeile[iterator].getResEinheit()));
+	@SuppressWarnings("null")
+	private void pruefeVorgangsunterbrechung(ResEinheit resEinheit) {
+		// XKoordinaten von allen Teilpaketen holen
+		// in aufsteigende Reihenfolge bringen
+		// wenns durchzählen scheitert --> Vorgangsunterbrechung
+		if (resEinheit.getTeilpaket().getArbeitspaket() != null) {
+			if (!alleArbeitspakete.contains(resEinheit.getTeilpaket().getArbeitspaket())) {
+				alleArbeitspakete.add(resEinheit.getTeilpaket().getArbeitspaket());
 			}
 		}
 
-		arbeitspaketListeVorgangsunterbrechung.add(aktuellesArbeitspaket);
-		if (iterator != zeilenLaenge) {
-			iterator++;
-			pruefeVorgangsunterbrechung(zeile);
+	}
+
+	// int zeilenLaenge = zeile.length - 1;
+	// if (zeile[iterator] != null) {
+	// Arbeitspaket aktuellesArbeitspaket =
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket();
+	//
+	// if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
+	// if (iterator != zeilenLaenge) {
+	// iterator++;
+	// pruefeVorgangsunterbrechung(zeile);
+	// }
+	// return;
+	// }
+	//
+	// boolean unterbrochen = false;
+	// for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
+	// if (aktuellesArbeitspaket !=
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()) {
+	// unterbrochen = true;
+	// }
+	// if (aktuellesArbeitspaket ==
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()
+	// && unterbrochen) {
+	// String message = "Vorgang am Punkt (" +
+	// zeile[i].getResEinheit().getPosition().getxKoordinate()
+	// + ", "
+	// + (koordinatenSystem.length - 1 -
+	// zeile[i].getResEinheit().getPosition().getyKoordinate())
+	// + ") unterbrochen!\n" + "Der Vorgang eines Paketes darf nicht unterbrochen
+	// werden.";
+	// feedbackListe.add(new Feedback(message, MsgType.ERROR,
+	// zeile[iterator].getResEinheit()));
+	// }
+	// }
+	//
+	// arbeitspaketListeVorgangsunterbrechung.add(aktuellesArbeitspaket);
+	// if (iterator != zeilenLaenge) {
+	// iterator++;
+	// pruefeVorgangsunterbrechung(zeile);
+	// }
+	// }
+	// }
+
+	public void pruefeVorgangsunterbrechung2() {
+		ArrayList<Integer> werte = new ArrayList<Integer>();
+		ArrayList<ResEinheit> test = new ArrayList<ResEinheit>();
+		ArrayList<Teilpaket> alleTeilpakete = new ArrayList<Teilpaket>();
+		int j;
+		for (int i = 0; i < alleArbeitspakete.size(); i++) {
+			for (int l = 0; l < alleArbeitspakete.get(i).getTeilpaketListe().size(); l++) {
+
+				alleTeilpakete.add(alleArbeitspakete.get(i).getTeilpaketListe().get(l));
+			}
+
+			for (int g = 0; g < alleTeilpakete.size(); g++) {
+				for (int h = 0; h < alleTeilpakete.get(g).getResEinheitListe().size(); h++) {
+					test.add(alleTeilpakete.get(g).getResEinheitListe().get(h));
+				}
+			}
+			// for (ResEinheit t : test) {
+			// System.out.println(t);
+			// System.out.println("Hallo");
+			// }
+
+			for (j = 0; j < test.size(); j++) {
+				if (!werte.contains(test.get(j).getPosition().getxKoordinate())) {
+					werte.add(test.get(j).getPosition().getxKoordinate());
+				}
+			}
+			Collections.sort(werte);
+
+			int k = werte.get(0);
+			for (int counter = 0; counter <= werte.size() - 1; counter++) {
+
+				if (k != werte.get(counter)) {
+					String message = "Vorgang ab der Spalte" + werte.get(counter) + "unterbrochen. /n";
+					// TODO
+					// Feedbackliste muss eine ResEinheit hinzugefügt werden
+					// in der j ForSchleifen ein ResEinheitenArray befüllen
+					feedbackListe.add(new Feedback(message, MsgType.ERROR));
+				}
+				k++;
+			}
 		}
+
 	}
 
 	public ArrayList<Feedback> getFeedbackListe() {

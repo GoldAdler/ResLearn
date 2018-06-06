@@ -21,6 +21,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
@@ -41,7 +42,6 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
-import reslearn.model.validierung.Feedback.MsgType;
 import reslearn.model.validierung.Validierung;
 
 public class ControllerCanvasUebungsmodus {
@@ -299,7 +299,7 @@ public class ControllerCanvasUebungsmodus {
 	// Erstellung des Valiedieren Button //
 	///////////////////////////////////////////////////////////////////////
 	private Button validierenButton;
-	private Label fehlerMeldung;
+	private TextArea fehlerMeldung;
 
 	public void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
@@ -313,23 +313,28 @@ public class ControllerCanvasUebungsmodus {
 
 	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
 
-		@SuppressWarnings("unlikely-arg-type")
 		@Override
 		public void handle(ActionEvent event) {
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
 			if (termintreuModus.isSelected()) {
-				// vali.AlgoTermintreu();
-				// for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-				// ausgabe += vali.getFeedbackListe().get(i).toString();
-				// }
-
-				fehlerMeldung = new Label(ausgabe);
+				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
+				vali.AlgoTermintreu();
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung = new TextArea(ausgabe);
 				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				fehlerMeldung.setTextFill(Color.RED);
+				fehlerMeldung.setEditable(false);
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
 				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0);
-				fehlerMeldung.setMaxWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
 				fehlerMeldung.setWrapText(true);
 				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			} else {
@@ -338,19 +343,18 @@ public class ControllerCanvasUebungsmodus {
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
 				}
-				System.out.println(ausgabe);
-				fehlerMeldung = new Label(ausgabe);
+				fehlerMeldung = new TextArea(ausgabe);
 				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				if (vali.getFeedbackListe().contains(MsgType.INFO)) {
-					fehlerMeldung.setTextFill(Color.GREEN);
+				fehlerMeldung.setEditable(false);
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
 				} else {
-					fehlerMeldung.setTextFill(Color.RED);
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
 				}
 				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.spaltY);
-				fehlerMeldung.setMaxWidth(DisplayCanvas.breiteFehlermeldung);
-				fehlerMeldung.setMaxHeight(DisplayCanvas.canvasLaenge + DisplayCanvas.abstandY + DisplayCanvas.spaltY);
-
+				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
 				fehlerMeldung.setWrapText(true);
 				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			}
