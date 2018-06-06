@@ -41,6 +41,7 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
+import reslearn.model.validierung.Feedback.MsgType;
 import reslearn.model.validierung.Validierung;
 
 public class ControllerCanvasUebungsmodus {
@@ -53,9 +54,6 @@ public class ControllerCanvasUebungsmodus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
-	private ArrayList<ResEinheit[][]> historieListe;
-	private int historieNummer = 0;
-	private ResEinheit[][] koordinatenSystemUrspruenglich;
 	Arbeitspaket[] arbeitspakete;
 	int maxGrenze = 5;
 
@@ -307,41 +305,53 @@ public class ControllerCanvasUebungsmodus {
 		validierenButton = new Button("Validieren");
 		validierenButton.setLayoutX(
 				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
-				+ DisplayCanvas.gesamtAbstandY + DisplayCanvas.legendeHoehe * 1.5);
+		validierenButton.setLayoutY(
+				DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandY);
 		validierenButton.setOnAction(ValidierenAction);
 		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
 	}
 
 	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
 
+		@SuppressWarnings("unlikely-arg-type")
 		@Override
 		public void handle(ActionEvent event) {
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
-			String ausgabe = null;
+			String ausgabe = "";
 			if (termintreuModus.isSelected()) {
-				System.out.println("termintreu ist ausgewählt");
 				// vali.AlgoTermintreu();
 				// for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 				// ausgabe += vali.getFeedbackListe().get(i).toString();
 				// }
 
-				fehlerMeldung = new Label("Hallo");
+				fehlerMeldung = new Label(ausgabe);
+				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 				fehlerMeldung.setTextFill(Color.RED);
-				fehlerMeldung.setLayoutX(0);
+				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
 				fehlerMeldung.setLayoutY(0);
+				fehlerMeldung.setMaxWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setWrapText(true);
 				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			} else {
-				System.out.println("kapazitätstreu ist ausgewählt");
+				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
 				vali.AlgoKapazitaetstreu(maxGrenze);
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
 				}
-
+				System.out.println(ausgabe);
 				fehlerMeldung = new Label(ausgabe);
-				fehlerMeldung.setTextFill(Color.RED);
-				fehlerMeldung.setLayoutX(0);
-				fehlerMeldung.setLayoutY(0);
+				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+				if (vali.getFeedbackListe().contains(MsgType.INFO)) {
+					fehlerMeldung.setTextFill(Color.GREEN);
+				} else {
+					fehlerMeldung.setTextFill(Color.RED);
+				}
+				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
+				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.spaltY);
+				fehlerMeldung.setMaxWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setMaxHeight(DisplayCanvas.canvasLaenge + DisplayCanvas.abstandY + DisplayCanvas.spaltY);
+
+				fehlerMeldung.setWrapText(true);
 				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			}
 
@@ -421,6 +431,7 @@ public class ControllerCanvasUebungsmodus {
 		table.setEditable(true);
 		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
 		table.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		table.setPrefHeight(DisplayCanvas.tabelleLaenge);
 		table.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		TableColumn<Pair<String, Object>, String> name = new TableColumn<>("Name");
@@ -585,7 +596,6 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		termintreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		termintreuModus.setText("Termintreu");
-		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
@@ -594,43 +604,10 @@ public class ControllerCanvasUebungsmodus {
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		kapazitaetstreuModus.setText("Kapazitätstreu");
-		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
 		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+		kapazitaetstreuModus.setSelected(true);
 
 	}
-
-	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
-		@Override
-		public void handle(MouseEvent e) {
-			// historieNummer = 0;
-			//
-			// ResCanvas resCanvas = new ResCanvas();
-			//
-			// for (Arbeitspaket arbeitspaket : arbeitspakete) {
-			// resCanvas.hinzufuegen(arbeitspaket);
-			// }
-			// historieListe.clear();
-			// historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
-			// .getHistorieKoordinatenSystem();
-			// koordinatenSystemUrspruenglich = historieListe.get(0);
-		}
-	};
-
-	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
-		@Override
-		public void handle(MouseEvent e) {
-			//
-			// ResCanvas resCanvas = new ResCanvas();
-			//
-			// for (Arbeitspaket arbeitspaket : arbeitspakete) {
-			// resCanvas.hinzufuegen(arbeitspaket);
-			// }
-			// historieListe.clear();
-			// historieListe =
-			// AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
-			// koordinatenSystemUrspruenglich = historieListe.get(0);
-		}
-	};
 
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
