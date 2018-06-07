@@ -11,12 +11,10 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.validierung.Feedback.MsgType;
 
-// TODO: Validierung mit der GUI testen!!!
 public class Validierung {
 	private ResFeld[][] koordinatenSystem;
 	private ArrayList<Feedback> feedbackListe;
 	private ArrayList<Arbeitspaket> arbeitspaketeGeprueft;
-	private ArrayList<Arbeitspaket> arbeitspaketListeVorgangsunterbrechung;
 	private Map<Arbeitspaket, Integer> arbeitspaketAktuelleVorgangsdauer;
 	ArrayList<Arbeitspaket> alleArbeitspakete = new ArrayList<Arbeitspaket>();
 
@@ -41,10 +39,6 @@ public class Validierung {
 	 *         Fehler stehen.
 	 */
 	public ArrayList<Feedback> AlgoErsterSchritt() {
-		// TODO: Herunterfallen-Methode aufrufen! (Geht aber nur, wenn hier im
-		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
-		// wird)
-
 		for (ResFeld[] zeile : koordinatenSystem) {
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
@@ -84,27 +78,20 @@ public class Validierung {
 	 *         Fehler stehen.
 	 */
 	public ArrayList<Feedback> AlgoKapazitaetstreu(int grenzeMitarbeiterParallel) {
-		// TODO: Herunterfallen-Methode aufrufen! (Geht aber nur, wenn hier im
-		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
-		// wird)
-
 		for (ResFeld[] zeile : koordinatenSystem) {
-			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
-			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
-			// damit naechste Zeile richtig ueberprueft werden kann.
+
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
-			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
 
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
 					pruefeFAZ(resFeld.getResEinheit());
 					pruefeGrenzeKapazitaetUeberschritten(resFeld.getResEinheit(), grenzeMitarbeiterParallel);
 					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
-					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechungTeil1(resFeld.getResEinheit());
 				}
 			}
 		}
-		pruefeVorgangsunterbrechung2();
+		pruefeVorgangsunterbrechungTeil2();
 
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
 			// arbeitspaketeGeprueft muss nach jeder Spalte neu initialisiert werden,
@@ -136,27 +123,22 @@ public class Validierung {
 	 *         Fehler stehen.
 	 */
 	public ArrayList<Feedback> AlgoTermintreu() {
-		// TODO: Herunterfallen-Methode aufrufen! (Geht aber nur, wenn hier im
-		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
-		// wird)
-
 		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
 			// damit naechste Zeile richtig ueberprueft werden kann.
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
-			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
 
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
 					pruefeFAZ(resFeld.getResEinheit());
 					pruefeSEZ(resFeld.getResEinheit());
 					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
-					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechungTeil1(resFeld.getResEinheit());
 				}
 			}
 		}
-		pruefeVorgangsunterbrechung2();
+		pruefeVorgangsunterbrechungTeil2();
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
@@ -266,17 +248,14 @@ public class Validierung {
 	}
 
 	/**
-	 * Hier wird für die übergebene Zeile des Koordinatensystems rekursiv überprüft,
-	 * ob bei den darin enthaltenen ResEinheiten eine Vorgangsunterbrechung
-	 * innerhalb eines Arbeitspaketes auftritt. Sollte dies der Fall sein, so wird
-	 * ein Feedback mit einer Fehlerbeschreibung und der betroffenenen ResEinheit an
-	 * die GUI zurückgegeben.
+	 * Hier wird für jede ResEinheit das dazugehöroge Arbeitspaket gesucht und wenn
+	 * das Arbeitspaket noch nicht vorhanden ist, der alleArbeitspakete Arraylist
+	 * hinzugefügt.
 	 *
-	 * @param zeile
+	 * @param resEinheit
 	 */
 
-	@SuppressWarnings("null")
-	private void pruefeVorgangsunterbrechung(ResEinheit resEinheit) {
+	private void pruefeVorgangsunterbrechungTeil1(ResEinheit resEinheit) {
 		// XKoordinaten von allen Teilpaketen holen
 		// in aufsteigende Reihenfolge bringen
 		// wenns durchzählen scheitert --> Vorgangsunterbrechung
@@ -288,90 +267,47 @@ public class Validierung {
 
 	}
 
-	// int zeilenLaenge = zeile.length - 1;
-	// if (zeile[iterator] != null) {
-	// Arbeitspaket aktuellesArbeitspaket =
-	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket();
-	//
-	// if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
-	// if (iterator != zeilenLaenge) {
-	// iterator++;
-	// pruefeVorgangsunterbrechung(zeile);
-	// }
-	// return;
-	// }
-	//
-	// boolean unterbrochen = false;
-	// for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
-	// if (aktuellesArbeitspaket !=
-	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()) {
-	// unterbrochen = true;
-	// }
-	// if (aktuellesArbeitspaket ==
-	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()
-	// && unterbrochen) {
-	// String message = "Vorgang am Punkt (" +
-	// zeile[i].getResEinheit().getPosition().getxKoordinate()
-	// + ", "
-	// + (koordinatenSystem.length - 1 -
-	// zeile[i].getResEinheit().getPosition().getyKoordinate())
-	// + ") unterbrochen!\n" + "Der Vorgang eines Paketes darf nicht unterbrochen
-	// werden.";
-	// feedbackListe.add(new Feedback(message, MsgType.ERROR,
-	// zeile[iterator].getResEinheit()));
-	// }
-	// }
-	//
-	// arbeitspaketListeVorgangsunterbrechung.add(aktuellesArbeitspaket);
-	// if (iterator != zeilenLaenge) {
-	// iterator++;
-	// pruefeVorgangsunterbrechung(zeile);
-	// }
-	// }
-	// }
-
-	public void pruefeVorgangsunterbrechung2() {
-		ArrayList<Integer> werte = new ArrayList<Integer>();
-		ArrayList<ResEinheit> test = new ArrayList<ResEinheit>();
+	/**
+	 * Hier wird für jedes Arbeitspaket alle ResEinheiten des Arbeitspaketes
+	 * durchlaufen und dann in aufsteigender Reihenfolge sortiert und dann wird auf
+	 * eine Lücke in der Reihenfolge überprüft und beim Auftreten einer Lücke eine
+	 * Fehlermeldung zurückgegeben.
+	 */
+	public void pruefeVorgangsunterbrechungTeil2() {
+		ArrayList<Integer> alleXKoordinatenOhneDuplikate = new ArrayList<Integer>();
+		ArrayList<ResEinheit> alleResEinheiten = new ArrayList<ResEinheit>();
 		ArrayList<Teilpaket> alleTeilpakete = new ArrayList<Teilpaket>();
-		int j;
 		for (int i = 0; i < alleArbeitspakete.size(); i++) {
 			for (int l = 0; l < alleArbeitspakete.get(i).getTeilpaketListe().size(); l++) {
-
 				alleTeilpakete.add(alleArbeitspakete.get(i).getTeilpaketListe().get(l));
 			}
 
 			for (int g = 0; g < alleTeilpakete.size(); g++) {
 				for (int h = 0; h < alleTeilpakete.get(g).getResEinheitListe().size(); h++) {
-					test.add(alleTeilpakete.get(g).getResEinheitListe().get(h));
+					alleResEinheiten.add(alleTeilpakete.get(g).getResEinheitListe().get(h));
 				}
 			}
-			// for (ResEinheit t : test) {
-			// System.out.println(t);
-			// System.out.println("Hallo");
-			// }
-
-			for (j = 0; j < test.size(); j++) {
-				if (!werte.contains(test.get(j).getPosition().getxKoordinate())) {
-					werte.add(test.get(j).getPosition().getxKoordinate());
+			for (int j = 0; j < alleResEinheiten.size(); j++) {
+				if (!alleXKoordinatenOhneDuplikate.contains(alleResEinheiten.get(j).getPosition().getxKoordinate())) {
+					alleXKoordinatenOhneDuplikate.add(alleResEinheiten.get(j).getPosition().getxKoordinate());
 				}
 			}
-			Collections.sort(werte);
+			Collections.sort(alleXKoordinatenOhneDuplikate);
 
-			int k = werte.get(0);
-			for (int counter = 0; counter <= werte.size() - 1; counter++) {
-
-				if (k != werte.get(counter)) {
-					String message = "Vorgang ab der Spalte" + werte.get(counter) + "unterbrochen. /n";
-					// TODO
-					// Feedbackliste muss eine ResEinheit hinzugefügt werden
-					// in der j ForSchleifen ein ResEinheitenArray befüllen
-					feedbackListe.add(new Feedback(message, MsgType.ERROR));
+			int k = alleXKoordinatenOhneDuplikate.get(0);
+			for (int counter = 0; counter <= alleXKoordinatenOhneDuplikate.size() - 1; counter++) {
+				if (k != alleXKoordinatenOhneDuplikate.get(counter)) {
+					String message = "Vorgang ab der Spalte " + alleXKoordinatenOhneDuplikate.get(counter)
+							+ " unterbrochen.\n";
+					feedbackListe.add(new Feedback(message, MsgType.ERROR, alleResEinheiten.get(0)));
+					break;
 				}
 				k++;
 			}
+			alleXKoordinatenOhneDuplikate.clear();
+			alleResEinheiten.clear();
+			alleTeilpakete.clear();
 		}
-
 	}
 
 	public ArrayList<Feedback> getFeedbackListe() {
@@ -385,7 +321,6 @@ public class Validierung {
 	 * betroffenenen ResEinheit an die GUI zurückgegeben.
 	 *
 	 * @param resEinheit
-	 * @param grenzeMitarbeiterParallel
 	 */
 	private void pruefeMitarbeiterParallelArbeitspaket(ResEinheit resEinheit) {
 		Arbeitspaket arbeitspaket = resEinheit.getTeilpaket().getArbeitspaket();
