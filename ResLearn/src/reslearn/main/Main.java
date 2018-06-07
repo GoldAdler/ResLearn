@@ -48,7 +48,7 @@ public class Main {
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus
-		algorithmus = AlgoKapazitaetstreu.getInstance();
+		algorithmus = AlgoKapazitaetstreu.getInstance(5);
 		// algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
