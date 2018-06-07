@@ -32,10 +32,10 @@ import reslearn.model.utils.Vektor2i;
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
-	private boolean vorgangsdauerVeraenderbar = true;
+	private boolean vorgangsdauerVeraenderbar = false;
 
 	// TODO: Vorläufige Integer. Wieder löschen!!!!
-	private static int maxBegrenzung = 5;
+	private int maxBegrenzung;
 	// TODO maxBegrenzung ist zu hoch fall
 	// z.B maxBegrenzung = 10;
 	// warum werden die Pakete angefasst, obwohl sie in FAZ liegen? Verändert dürfte
@@ -48,9 +48,10 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	private AlgoKapazitaetstreu() {
 	}
 
-	public static AlgoKapazitaetstreu getInstance() {
+	public static AlgoKapazitaetstreu getInstance(int grenze) {
 		if (algoKapazitaetstreu == null) {
 			algoKapazitaetstreu = new AlgoKapazitaetstreu();
+			algoKapazitaetstreu.setMaxBegrenzung(grenze);
 		}
 		return algoKapazitaetstreu;
 	}
@@ -1229,7 +1230,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	/**
 	 * Überprüft ob überhalb der Obergrenze ResCanvases liegen. Gibt true zurück,
 	 * falls dies der Fall ist.
-	 * 
+	 *
 	 * @param resCanvas
 	 * @return
 	 */
@@ -1250,6 +1251,22 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		}
 
 		return ueberschritten;
+	}
+
+	public int getMaxBegrenzung() {
+		return maxBegrenzung;
+	}
+
+	public void setMaxBegrenzung(int maxBegrenzung) {
+		this.maxBegrenzung = maxBegrenzung;
+	}
+
+	public boolean isVorgangsdauerVeraenderbar() {
+		return vorgangsdauerVeraenderbar;
+	}
+
+	public void setVorgangsdauerVeraenderbar(boolean vorgangsdauerVeraenderbar) {
+		this.vorgangsdauerVeraenderbar = vorgangsdauerVeraenderbar;
 	}
 
 }
