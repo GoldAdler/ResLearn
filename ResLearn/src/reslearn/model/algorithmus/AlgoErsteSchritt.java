@@ -1,7 +1,6 @@
 package reslearn.model.algorithmus;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -9,7 +8,6 @@ import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
-import reslearn.model.utils.ComperatorFaz;
 import reslearn.model.utils.Vektor2i;
 
 /* Erklärung des Algorithmus AlgoErsteSchritt
@@ -53,21 +51,11 @@ public class AlgoErsteSchritt extends Algorithmus {
 	@Override
 	public ResCanvas algoDurchfuehren(ResCanvas resCanvas) {
 
-		ArrayList<Arbeitspaket> arbeitspaketListe = sortiereAP(resCanvas);
+		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.sortiereAP();
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 		berechne(arbeitspaketListe, koordinatenSystem, resCanvas);
 
 		return resCanvas;
-	}
-
-	/**
-	 * Sortieren der Arbeitspakete von
-	 * ResCanvas->AktuellerZustand->ArbeitspaketListe
-	 */
-	public static ArrayList<Arbeitspaket> sortiereAP(ResCanvas resCanvas) {
-		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
-		Collections.sort(arbeitspaketListe, new ComperatorFaz());
-		return arbeitspaketListe;
 	}
 
 	/**
@@ -77,7 +65,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 * @param koordinatenSystem
 	 * @param resCanvas
 	 */
-	private static void berechne(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
+	private void berechne(ArrayList<Arbeitspaket> arbeitspaketListe, ResEinheit[][] koordinatenSystem,
 			ResCanvas resCanvas) {
 
 		for (int i = 0; i < arbeitspaketListe.size(); i++) {
@@ -114,7 +102,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 * @param y_Start
 	 * @return
 	 */
-	private static int findeStartpunkt(ResEinheit[][] koordinatenSystem, int x_Start, int y_Start) {
+	private int findeStartpunkt(ResEinheit[][] koordinatenSystem, int x_Start, int y_Start) {
 		boolean gefunden = false;
 		for (int posY = y_Start; posY >= 0; posY--) {
 			if (koordinatenSystem[posY][x_Start] == null) {
@@ -139,7 +127,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 * @param x_Start
 	 * @param y_Start
 	 */
-	private static void befuelleKoordinatenSystem(ResEinheit[][] koordinatenSystem, Arbeitspaket arbeitspaket,
+	private void befuelleKoordinatenSystem(ResEinheit[][] koordinatenSystem, Arbeitspaket arbeitspaket,
 			Teilpaket teilpaket, int x_Start, int y_Start) {
 
 		var resEinheitenListe = teilpaket.getResEinheitListe();
@@ -168,7 +156,7 @@ public class AlgoErsteSchritt extends Algorithmus {
 	 * @param xStart
 	 * @param yStart
 	 */
-	private static void ueberpruefeObereFelder(ResEinheit[][] koordinatenSystem, ResCanvas resCanvas,
+	private void ueberpruefeObereFelder(ResEinheit[][] koordinatenSystem, ResCanvas resCanvas,
 			Arbeitspaket arbeitspaket, int xStart, int yStart) {
 		for (int y = yStart; y > yStart - arbeitspaket.getMitarbeiteranzahl(); y--) {
 			if (koordinatenSystem[y][xStart] != null) {

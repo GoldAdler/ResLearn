@@ -92,7 +92,7 @@ public class AlgoTermintreu extends Algorithmus {
 		resCanvas.setHistorieKoordinatenSystem(ersteSchritt.getHistorieKoordinatenSystem());
 		resCanvas.setHistorienArbeitspaketListe(ersteSchritt.getHistorienArbeitspaketListe());
 
-		AlgoErsteSchritt.sortiereAP(resCanvas);
+		resCanvas.sortiereAP();
 
 		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getId();
 		return letzteApID;
@@ -155,7 +155,7 @@ public class AlgoTermintreu extends Algorithmus {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
 
-		AlgoErsteSchritt.sortiereAP(resCanvas);
+		resCanvas.sortiereAP();
 
 		int startAPint = 0;
 		if (!(nichtMehrAnschauenApID == null)) {

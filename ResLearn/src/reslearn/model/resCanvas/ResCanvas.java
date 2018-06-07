@@ -9,6 +9,7 @@ import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
+import reslearn.model.utils.ComperatorFaz;
 import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
@@ -832,6 +833,16 @@ public class ResCanvas {
 		}
 		return true;
 
+	}
+
+	/**
+	 * Sortieren der Arbeitspakete von
+	 * ResCanvas->AktuellerZustand->ArbeitspaketListe
+	 */
+	public ArrayList<Arbeitspaket> sortiereAP() {
+		ArrayList<Arbeitspaket> arbeitspaketListe = getArbeitspaketListe();
+		Collections.sort(arbeitspaketListe, new ComperatorFaz());
+		return arbeitspaketListe;
 	}
 
 }

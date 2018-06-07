@@ -9,7 +9,7 @@ public abstract class Algorithmus {
 
 	static final boolean testModus = false;
 	static final boolean trotzdem = false;
-	static final boolean historie = true;
+	static final boolean historie = false;
 	static final boolean test = false;
 	public static int zaehlerTest = 0;
 	public static int zaehlerTrotzdem = 0;
