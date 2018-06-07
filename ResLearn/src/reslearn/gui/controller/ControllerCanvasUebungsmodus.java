@@ -49,6 +49,8 @@ public class ControllerCanvasUebungsmodus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
+	Arbeitspaket[] arbeitspakete;
+	int maxGrenze = 5;
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -240,13 +242,21 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-	// MenuItem Arbeitspaket zurücksetzen
 	EventHandler<ActionEvent> OnMenuItemResetEventHandler = new EventHandler<ActionEvent>() {
+		/**
+		 * Beim Klick auf den Menü-Punkt "Zurücksetzen" wird zunächst in der Logik die
+		 * Methode reset() am geklickten Arbeitspaket aufgerufen. In der GUI werden alle
+		 * ResFelder, die dem geklickten Arbeitspaket angehören aus dem Diagramm
+		 * gelöscht.
+		 *
+		 * Anhand des abgeänderten Koordinatensystems, das aus der Logik zurückkommt
+		 * (reset()) wird das zurückgesetzte Paket in der oberen linke Ecke neu
+		 * gezeichnet
+		 */
 		@Override
 		public void handle(ActionEvent e) {
 			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(resCanvas);
-			Algorithmus.ausgeben(koordinatenSystem);
-			// alte ResFelder des Arbeitspakets aus der View löschen
+
 			for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
 				for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {
 					ResFeld resFeld = diagramm.getResFeldArray()[i][j];
@@ -260,7 +270,6 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 
-			// neue ResFelder oben links zeichnen
 			for (int i = 0; i < koordinatenSystem.length; i++) {
 				for (int j = 0; j < koordinatenSystem[i].length; j++) {
 					if (koordinatenSystem[i][j] != null) {
@@ -280,8 +289,6 @@ public class ControllerCanvasUebungsmodus {
 					}
 				}
 			}
-
-			Algorithmus.ausgeben(resCanvas.getKoordinatenSystem());
 
 		}
 	};

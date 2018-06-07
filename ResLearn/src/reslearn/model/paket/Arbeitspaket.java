@@ -189,6 +189,21 @@ public class Arbeitspaket extends Paket {
 
 	}
 
+	/**
+	 * @author Team-Gui:
+	 *
+	 *         Beim Betätigen des reset-Buttons werden alle vorhandenen Teilpakete
+	 *         des Arbeitspaktes gelöscht und ein neues Teilpaket mit den Daten des
+	 *         Arbeitspaktes (Mitarbeiteranzahl, Vorgangsdauer) angelegt. Das neue
+	 *         Teilpaket besteht dabei aus allen ResEinheiten der gelöschten
+	 *         Teilpakete.
+	 *
+	 *         Das neue Teilpaket, bzw. das Arbeitspaket, wird am oberen Rand des
+	 *         Koordinatensystems eingefügt.
+	 *
+	 * @param resCanvas
+	 * @return
+	 */
 	public ResEinheit[][] reset(ResCanvas resCanvas) {
 		ArrayList<ResEinheit> resListe = new ArrayList<>();
 
@@ -210,7 +225,6 @@ public class Arbeitspaket extends Paket {
 
 		vereint.setResEinheitListe(resListe);
 
-		// this.setPosition(new Vektor2i(0, 0));
 		vereint.setPosition(new Vektor2i(0, 0));
 
 		ArrayList<ResEinheit> resEinheitenListe = vereint.getResEinheitListe();

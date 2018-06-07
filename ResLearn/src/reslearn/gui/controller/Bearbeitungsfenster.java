@@ -65,7 +65,6 @@ public class Bearbeitungsfenster extends Pane {
 		sliderY = new Slider();
 		sliderY.setStyle("-fx-font-size: " + DisplayCanvas.schriftGroesse);
 
-		// sliderY.setRotate(270);
 		sliderY.setOrientation(Orientation.VERTICAL);
 		sliderY.setMinSize(DisplayCanvas.resFeldBreite,
 				rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldBreite);
@@ -122,35 +121,38 @@ public class Bearbeitungsfenster extends Pane {
 
 		sliderY.valueProperty().addListener(new ChangeListener<Number>() {
 
+			/**
+			 * Bei ganzzahligem Wertwechsel des Sliders werden die jeweiligen
+			 * ResEinheiten/Felder des Teilpaketes markiert, die beim Bestätigen des
+			 * Teilen-Buttons abgetrennt werden würden. Der Wert des Sliders entspricht den
+			 * Zeilen die abgetrennt werden.
+			 */
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number neuerWert) {
 				if (neuerWert.doubleValue() % neuerWert.intValue() == 0 || neuerWert.intValue() == 0) {
-					// nur bei ganzzahligem Wertwechsel des Sliders soll das Paket aktualisiert
-					// werden
 
-					int counter = 0;
+					int markierteResFelder = 0;
 					for (ResFeld feld : resFeldListe) {
 						getChildren().remove(feld);
 					}
 					resFeldListe.clear();
 
-					// Wert des Sliders entspricht der Anzahl der Spalten die abgeschnitten werden
-					// sollen
 					for (int i = rect.getResEinheit().getTeilpaket().getMitarbeiteranzahl(); i > 0; i--) {
 						for (int j = 0; j < rect.getResEinheit().getTeilpaket().getVorgangsdauer(); j++) {
-							if (counter < neuerWert.intValue()
+							if (markierteResFelder < neuerWert.intValue()
 									* rect.getResEinheit().getTeilpaket().getVorgangsdauer()) {
 								ResFeld dummy = new ResFeld(
 										j * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
 										i * DisplayCanvas.resFeldLaenge
 												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
 												- DisplayCanvas.resFeldLaenge,
-										rect.getResEinheit().getTeilpaket().getResEinheitListe().get(counter));
+										rect.getResEinheit().getTeilpaket().getResEinheitListe()
+												.get(markierteResFelder));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);
 								getChildren().add(dummy);
-								counter++;
+								markierteResFelder++;
 							} else {
 								break;
 							}
@@ -161,6 +163,12 @@ public class Bearbeitungsfenster extends Pane {
 		});
 
 		sliderY.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+			/**
+			 * Um dem Nutzer zu verdeutlichen, welcher Slider "aktiv" ist bzw. ob
+			 * horizontal/vertikal abgetrennt wird, wird nur der zuletzt angeklickte Slider
+			 * mit Opacity (1) angezeigt. Der jeweils andere Slider ist ausgegraut.
+			 */
 			@Override
 			public void handle(MouseEvent e) {
 				sliderX.setOpacity(0.4);
@@ -204,8 +212,7 @@ public class Bearbeitungsfenster extends Pane {
 				}
 			}
 		});
-		// counter + j * rect.getTeilpaket().getVorgangsdauer() - (neuerWert.intValue()
-		// * j)
+
 		sliderX.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -215,6 +222,12 @@ public class Bearbeitungsfenster extends Pane {
 			}
 		});
 
+		/**
+		 * Beim Klicken auf den Teilen-Button werden die markierten ResEinheiten/Felder
+		 * abgetrennt und einem neuen Teilpaket hinzugefügt. Danach schließt sich das
+		 * Bearbeitungsfenster und beide Teilpakete können unabhängig voneinander bewegt
+		 * werden.
+		 */
 		teilen.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
