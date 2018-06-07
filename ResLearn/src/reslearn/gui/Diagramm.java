@@ -1,11 +1,16 @@
 package reslearn.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.resCanvas.ResCanvas;
 
 public class Diagramm {
 
@@ -85,6 +90,41 @@ public class Diagramm {
 
 	// Farbige Pakete
 	public ResFeld[][] zeichneTeilpakete(ResEinheit[][] koordinatenSystem) {
+		resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
+		for (int i = 0; i < koordinatenSystem.length; i++) {
+			for (int j = 0; j < koordinatenSystem[i].length; j++) {
+				if (koordinatenSystem[i][j] != null) {
+					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
+							koordinatenSystem[i][j]);
+				}
+			}
+		}
+		return resFeldArray;
+	}
+
+	// Farbige Pakete oben links (für Erster Schritt Modus)
+	public ResFeld[][] zeichneTeilpaketeOben(ResEinheit[][] koordinatenSystem, ResCanvas resCanvas) {
+		ArrayList<Arbeitspaket> arbeitspaketList = new ArrayList<>();
+		Arbeitspaket tmpAP;
+		int xCounter = 0;
+
+		for (ResEinheit[] resAr : koordinatenSystem) {
+			for (ResEinheit res : resAr) {
+				if (res != null) {
+					tmpAP = res.getTeilpaket().getArbeitspaket();
+					if (!arbeitspaketList.contains(tmpAP)) {
+						arbeitspaketList.add(tmpAP);
+					}
+				}
+			}
+		}
+
+		Collections.shuffle(arbeitspaketList);
+		for (Arbeitspaket ap : arbeitspaketList) {
+			ap.reset(xCounter, resCanvas);
+			xCounter += ap.getVorgangsdauer();
+		}
+
 		resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
 			for (int j = 0; j < koordinatenSystem[i].length; j++) {

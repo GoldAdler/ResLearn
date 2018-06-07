@@ -262,7 +262,8 @@ public class ControllerCanvasUebungsmodus {
 		 */
 		@Override
 		public void handle(ActionEvent e) {
-			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(resCanvas);
+			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(0,
+					resCanvas);
 
 			for (int i = 0; i < diagramm.getResFeldArray().length; i++) {
 				for (int j = 0; j < diagramm.getResFeldArray()[i].length; j++) {

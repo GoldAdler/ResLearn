@@ -234,7 +234,7 @@ public class Arbeitspaket extends Paket {
 	 * @param resCanvas
 	 * @return
 	 */
-	public ResEinheit[][] reset(ResCanvas resCanvas) {
+	public ResEinheit[][] reset(int startX, ResCanvas resCanvas) {
 
 		ArrayList<ResEinheit> resListe = new ArrayList<>();
 
@@ -256,7 +256,7 @@ public class Arbeitspaket extends Paket {
 
 		vereint.setResEinheitListe(resListe);
 
-		vereint.setPosition(new Vektor2i(0, 0));
+		// vereint.setPosition(new Vektor2i(0, 0));
 
 		ArrayList<ResEinheit> resEinheitenListe = vereint.getResEinheitListe();
 		Iterator<ResEinheit> it = resEinheitenListe.iterator();
@@ -264,7 +264,7 @@ public class Arbeitspaket extends Paket {
 		ResEinheit[][] koordinatenSystem = resCanvas.getKoordinatenSystem();
 
 		for (int y = this.mitarbeiteranzahl - 1; y >= 0; y--) {
-			for (int x = 0; x < this.vorgangsdauer; x++) {
+			for (int x = startX; x < startX + this.vorgangsdauer; x++) {
 				if (koordinatenSystem[y][x] == null) {
 					if (it.hasNext()) {
 						koordinatenSystem[y][x] = it.next();
