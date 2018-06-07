@@ -7,6 +7,7 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class AlgoTermintreu extends Algorithmus {
+
 	private static AlgoTermintreu algoTermintreu;
 
 	private AlgoTermintreu() {
@@ -21,21 +22,25 @@ public class AlgoTermintreu extends Algorithmus {
 
 	@Override
 	public ResCanvas algoDurchfuehren(ResCanvas resCanvas) {
-		ResCanvas ersteSchritt = resCanvas.copyResCanvas();
-		AlgoErsteSchritt.getInstance().algoDurchfuehren(ersteSchritt);
-		ersteSchritt.aktuallisiereHistorie();
 
-		resCanvas.setHistorieKoordinatenSystem(ersteSchritt.getHistorieKoordinatenSystem());
-		resCanvas.setHistorienArbeitspaketListe(ersteSchritt.getHistorienArbeitspaketListe());
-
-		AlgoErsteSchritt.sortiereAP(resCanvas);
-
-		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getId();
+		String letzteApID = simulationVorbereiten(resCanvas);
 
 		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<>();
 
 		this.simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null, letzteApID);
 
+		ResCanvas result = bewerteLoesungen(moeglicheLoesungenResCanvas);
+
+		return result;
+	}
+
+	/**
+	 * Bewertet die Lösungen anhand der Kriterien des Algotermintreu.
+	 *
+	 * @param moeglicheLoesungenResCanvas
+	 * @return
+	 */
+	private ResCanvas bewerteLoesungen(ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
 		ArrayList<ResCanvas> reduzierteMoeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
 		loescheLoesungenMitLuecken(moeglicheLoesungenResCanvas, reduzierteMoeglicheLoesungenResCanvas);
@@ -66,10 +71,42 @@ public class AlgoTermintreu extends Algorithmus {
 		// liegt, desto früher sind die Zeitpunkte der Arbeitspakete.
 		ResCanvas result = optimalListe.get(0);
 		result.aktuallisiereHistorie();
-
 		return result;
 	}
 
+	/**
+	 * Führt den AlgoErsteSchritt durch und aktuallierst dabei die Historie
+	 * entsprechend.
+	 *
+	 * Der zurückgegeben String gibt die ID des Arbeitspaktes zurück, welches als
+	 * letztes im Koordinantesystem liegt. Letztes im Sinne von spätliegenstes.
+	 *
+	 * @param resCanvas
+	 * @return
+	 */
+	private String simulationVorbereiten(ResCanvas resCanvas) {
+		ResCanvas ersteSchritt = resCanvas.copyResCanvas();
+		AlgoErsteSchritt.getInstance().algoDurchfuehren(ersteSchritt);
+		ersteSchritt.aktuallisiereHistorie();
+
+		resCanvas.setHistorieKoordinatenSystem(ersteSchritt.getHistorieKoordinatenSystem());
+		resCanvas.setHistorienArbeitspaketListe(ersteSchritt.getHistorienArbeitspaketListe());
+
+		resCanvas.sortiereAP();
+
+		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getId();
+		return letzteApID;
+	}
+
+	/**
+	 *
+	 * Bewertet die übergebenen Lösungen. Sind in diesen Lücken zwischen den
+	 * Arbeitspaketen vorhanden, werden diese Lösungen nicht mehr von der Methode
+	 * zurückgegeben.
+	 *
+	 * @param moeglicheLoesungenResCanvas
+	 * @param reduzierteMoeglicheLoesungenResCanvas
+	 */
 	private void loescheLoesungenMitLuecken(ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
 			ArrayList<ResCanvas> reduzierteMoeglicheLoesungenResCanvas) {
 		for (ResCanvas canvas : moeglicheLoesungenResCanvas) {
@@ -103,6 +140,14 @@ public class AlgoTermintreu extends Algorithmus {
 		}
 	}
 
+	/**
+	 * Führt die simulation durch.
+	 *
+	 * @param resCanvas
+	 * @param moeglicheLoesungenResCanvas
+	 * @param nichtMehrAnschauenApID
+	 * @param letzteApID
+	 */
 	private void simulationDurchfuehren(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
 			String nichtMehrAnschauenApID, String letzteApID) {
 
@@ -110,7 +155,7 @@ public class AlgoTermintreu extends Algorithmus {
 
 		ArrayList<Arbeitspaket> arbeitspaketListe = resCanvas.getArbeitspaketListe();
 
-		AlgoErsteSchritt.sortiereAP(resCanvas);
+		resCanvas.sortiereAP();
 
 		int startAPint = 0;
 		if (!(nichtMehrAnschauenApID == null)) {
@@ -149,6 +194,12 @@ public class AlgoTermintreu extends Algorithmus {
 
 	}
 
+	/**
+	 *
+	 * @param resCanvas
+	 * @param zuVerschiebenAp
+	 * @param simLoesungenResCanvas
+	 */
 	private void simuliere(ResCanvas resCanvas, Arbeitspaket zuVerschiebenAp,
 			ArrayList<ResCanvas> simLoesungenResCanvas) {
 

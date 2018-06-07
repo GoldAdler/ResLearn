@@ -21,7 +21,7 @@ public class Feedback {
 
 	/**
 	 * Hier könnte Ihr Feedback stehen.
-	 * 
+	 *
 	 * @param message
 	 * @param type
 	 * @param resEinheit
@@ -34,7 +34,7 @@ public class Feedback {
 
 	/**
 	 * Hier könnte Ihr Feedback stehen.
-	 * 
+	 *
 	 * @param message
 	 * @param type
 	 */
@@ -60,13 +60,12 @@ public class Feedback {
 
 	private String errorToString() {
 		String overview = "Fehler bei Arbeitspaket " + resEinheit.getTeilpaket().getArbeitspaket().getId() + "!";
-		String msg = overview + "\n" + message;
+		String msg = overview + "\n" + message + "\n" + "\n";
 		return msg;
 	}
 
 	private String infoToString() {
-		String overview = "Information: ";
-		String msg = overview + "\n" + message;
+		String msg = message;
 		return msg;
 	}
 

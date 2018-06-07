@@ -9,6 +9,7 @@ import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
+import reslearn.model.utils.ComperatorFaz;
 import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
@@ -29,6 +30,13 @@ public class ResCanvas {
 		historieKoordinatenSystem = new ArrayList<ResEinheit[][]>();
 	}
 
+	/**
+	 * Löscht die ResEinheit aus der aktuellen Position im Koordinatensystem heraus.
+	 * Anschließend wird die ResEinheit in der neuen Position eingefügt.
+	 *
+	 * @param resEinheit
+	 * @param altePosition
+	 */
 	public void updatePosition(ResEinheit resEinheit, Vektor2i altePosition) {
 		this.koordinatenSystem[altePosition.getyKoordinate()][altePosition.getxKoordinate()] = null;
 		Vektor2i position = resEinheit.getPosition();
@@ -64,8 +72,8 @@ public class ResCanvas {
 	}
 
 	/**
-	 * entfernen des Arbeitspaket aus dem Koordinatensystem! Arbeitspaket ist nicht
-	 * gelöscht, sondern weiß immer noch die Position
+	 * Entfernen des Arbeitspaket aus dem Koordinatensystem! Arbeitspaket ist nicht
+	 * gelöscht, sondern weiß immer noch die Position.
 	 *
 	 * @param arbeitspaket
 	 */
@@ -76,8 +84,8 @@ public class ResCanvas {
 	}
 
 	/**
-	 * entfernen des Teilpakets aus dem Koordinatensystem! Teilpaket ist nicht
-	 * gelöscht, sondern weiß immer noch die Position
+	 * Entfernen des Teilpakets aus dem Koordinatensystem! Teilpaket ist nicht
+	 * gelöscht, sondern weiß immer noch die Position.
 	 *
 	 * @param teilpaket
 	 */
@@ -106,10 +114,12 @@ public class ResCanvas {
 	}
 
 	/**
-	 * Jedes Teilpaket, außer eines, dass im Canvas heruntergesenkt werden kann,
-	 * wird heruntergelassen.
+	 * Jedes Arbeitspaket, mit der Außname des übergebenen, das im Canvas
+	 * heruntergesenkt werden kann, wird heruntergelassen.
+	 *
+	 * @param nichtHerunterfallen
 	 */
-	public void herunterfallenAlleTeilpaketeAußerEines(Arbeitspaket nichtHerunterfallen) {
+	public void herunterfallenAlleArbeitspaketeAußerEines(Arbeitspaket nichtHerunterfallen) {
 		for (Arbeitspaket arbeitspaket : this.getArbeitspaketListe()) {
 
 			if (arbeitspaket != nichtHerunterfallen) {
@@ -125,7 +135,7 @@ public class ResCanvas {
 	}
 
 	/**
-	 * Das übergebene Teilpaket wird soweit nach unten gesenkt, wie möglich. Bei
+	 * Das übergebene Teilpaket wird soweit nach unten gesenkt wie möglich. Bei
 	 * Kollision wird das Paket in mehrere Teilpaket aufgetrennt. Die neu
 	 * entstandenen Teilpakete werden wieder herabgesenkt.
 	 *
@@ -528,13 +538,6 @@ public class ResCanvas {
 			ArrayList<Teilpaket> tpListeHistorie = apHistorie.getTeilpaketListe();
 			ArrayList<Teilpaket> tpListeAktuell = apAktuell.getTeilpaketListe();
 
-			// Collections.sort(tpListeHistorie, new ComperatorTeilpaket());
-			// Collections.sort(tpListeAktuell, new ComperatorTeilpaket());
-
-			// if (tpListeHistorie.size() != tpListeAktuell.size()) {
-			// return false;
-			// }
-
 			for (int a = 0; a < tpListeHistorie.size(); a++) {
 
 				ArrayList<ResEinheit> resListeHistorie = tpListeHistorie.get(a).getResEinheitListe();
@@ -626,7 +629,10 @@ public class ResCanvas {
 	}
 
 	/**
-	 * Erstellt eine Kopie des ResCanvas
+	 * Legt eine WIRKLICHE Kopie des ResCanvas an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen ResCanvas unabhäniges ResCanvas, angleget.
 	 *
 	 * @return
 	 */
@@ -644,8 +650,13 @@ public class ResCanvas {
 	}
 
 	/**
-	 * Erstellt eine Kopie des ResCanvas. Das übergebene Arbeitspaket wird dabei
-	 * nicht in die neue Kopie des Koordinatensystems übernommen.
+	 * Legt eine WIRKLICHE Kopie des ResCanvas an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen ResCanvas unabhäniges ResCanvas, angleget.
+	 *
+	 * Das übergebene Arbeitspaket wird dabei nicht in die neue Kopie des
+	 * Koordinatensystems übernommen.
 	 *
 	 * @param nichtKopierenOrginal
 	 * @return
@@ -722,6 +733,10 @@ public class ResCanvas {
 		this.optimalerPfad = optimalerPfad;
 	}
 
+	/**
+	 * Fügt das ResCanvas der Historie hinzu, wenn es nicht bereits hinzugefügt
+	 * worden ist.
+	 */
 	public void aktuallisiereHistorieErgebnis() {
 
 		Stack<ResCanvas> optimalerPfadListe = new Stack<ResCanvas>();
@@ -818,6 +833,16 @@ public class ResCanvas {
 		}
 		return true;
 
+	}
+
+	/**
+	 * Sortieren der Arbeitspakete von
+	 * ResCanvas->AktuellerZustand->ArbeitspaketListe
+	 */
+	public ArrayList<Arbeitspaket> sortiereAP() {
+		ArrayList<Arbeitspaket> arbeitspaketListe = getArbeitspaketListe();
+		Collections.sort(arbeitspaketListe, new ComperatorFaz());
+		return arbeitspaketListe;
 	}
 
 }

@@ -14,11 +14,15 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +42,7 @@ import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
+import reslearn.model.validierung.Validierung;
 
 public class ControllerCanvasUebungsmodus {
 
@@ -57,6 +62,8 @@ public class ControllerCanvasUebungsmodus {
 		this.diagramm = diagramm;
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
+		erstelleValidierenButton();
+		erstelleButtons();
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -294,6 +301,73 @@ public class ControllerCanvasUebungsmodus {
 	};
 
 	/////////////////////////////////////////////////////////////////////////
+	// Erstellung des Valiedieren Button //
+	///////////////////////////////////////////////////////////////////////
+	private Button validierenButton;
+	private TextArea fehlerMeldung;
+
+	public void erstelleValidierenButton() {
+		validierenButton = new Button("Validieren");
+		validierenButton.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(
+				DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandY);
+		validierenButton.setOnAction(ValidierenAction);
+		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
+	}
+
+	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			Validierung vali = new Validierung(diagramm.getResFeldArray());
+			String ausgabe = "";
+			if (termintreuModus.isSelected()) {
+				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
+				vali.AlgoTermintreu();
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung = new TextArea(ausgabe);
+				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+				fehlerMeldung.setEditable(false);
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
+				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
+				fehlerMeldung.setWrapText(true);
+				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+			} else {
+				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
+				vali.AlgoKapazitaetstreu(maxGrenze);
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung = new TextArea(ausgabe);
+				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+				fehlerMeldung.setEditable(false);
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
+				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+				fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
+				fehlerMeldung.setWrapText(true);
+				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+			}
+
+		}
+	};
+
+	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
 	///////////////////////////////////////////////////////////////////////
 	private Pane legende = new Pane();
@@ -366,6 +440,7 @@ public class ControllerCanvasUebungsmodus {
 		table.setEditable(true);
 		table.setLayoutX(DisplayCanvas.tabelleLayoutX);
 		table.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		table.setPrefHeight(DisplayCanvas.tabelleLaenge);
 		table.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
 		TableColumn<Pair<String, Object>, String> name = new TableColumn<>("Name");
@@ -520,6 +595,29 @@ public class ControllerCanvasUebungsmodus {
 		tabelleArbeitspakete.scrollTo(ap);
 	}
 
+	private RadioButton termintreuModus = new RadioButton();
+	private RadioButton kapazitaetstreuModus = new RadioButton();
+	private final ToggleGroup modusToggleGroup = new ToggleGroup();
+
+	private void erstelleButtons() {
+		termintreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
+		termintreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		termintreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		termintreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		termintreuModus.setText("Termintreu");
+		termintreuModus.setToggleGroup(modusToggleGroup);
+
+		kapazitaetstreuModus
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		kapazitaetstreuModus.setText("Kapazitätstreu");
+		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+		kapazitaetstreuModus.setSelected(true);
+
+	}
+
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
 	}
@@ -531,4 +629,21 @@ public class ControllerCanvasUebungsmodus {
 	public Pane getLegende() {
 		return legende;
 	}
+
+	public Button getValidierenButton() {
+		return validierenButton;
+	}
+
+	public ToggleGroup getModusToggleGroup() {
+		return modusToggleGroup;
+	}
+
+	public RadioButton getButtonTermintreuModus() {
+		return termintreuModus;
+	}
+
+	public RadioButton getButtonKapazitaetstreuModus() {
+		return kapazitaetstreuModus;
+	}
+
 }

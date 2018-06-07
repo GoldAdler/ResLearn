@@ -118,7 +118,9 @@ public class ViewUebungsmodus extends Application {
 		}
 
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
-				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende());
+				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
+				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
+				controllerCanvas.getButtonTermintreuModus());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());

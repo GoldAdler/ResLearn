@@ -1,21 +1,24 @@
 package reslearn.model.validierung;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import reslearn.gui.ResFeld;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
+import reslearn.model.paket.Teilpaket;
 import reslearn.model.validierung.Feedback.MsgType;
 
 // TODO: Validierung mit der GUI testen!!!
 public class Validierung {
-	private ResEinheit[][] koordinatenSystem;
+	private ResFeld[][] koordinatenSystem;
 	private ArrayList<Feedback> feedbackListe;
 	private ArrayList<Arbeitspaket> arbeitspaketeGeprueft;
 	private ArrayList<Arbeitspaket> arbeitspaketListeVorgangsunterbrechung;
 	private Map<Arbeitspaket, Integer> arbeitspaketAktuelleVorgangsdauer;
-	private int iterator;
+	ArrayList<Arbeitspaket> alleArbeitspakete = new ArrayList<Arbeitspaket>();
 
 	/**
 	 * In dieser Klasse werden die Lösungen, die der User in der GUI erstellt,
@@ -23,7 +26,7 @@ public class Validierung {
 	 *
 	 * @param koordinatenSystem
 	 */
-	public Validierung(ResEinheit[][] koordinatenSystem) {
+	public Validierung(ResFeld[][] koordinatenSystem) {
 		this.koordinatenSystem = koordinatenSystem;
 		feedbackListe = new ArrayList<Feedback>();
 	}
@@ -42,10 +45,12 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeFEZ(resEinheit);
+		for (ResFeld[] zeile : koordinatenSystem) {
+			for (ResFeld resFeld : zeile) {
+				if (resFeld != null) {
+					pruefeFAZ(resFeld.getResEinheit());
+					pruefeFEZ(resFeld.getResEinheit());
+				}
 			}
 		}
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
@@ -54,8 +59,11 @@ public class Validierung {
 			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (!arbeitspaketeGeprueft.contains(koordinatenSystem[y][x].getTeilpaket().getArbeitspaket())) {
-					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x]);
+				if (koordinatenSystem[y][x] != null) {
+					if (!arbeitspaketeGeprueft
+							.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
+						pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+					}
 				}
 			}
 		}
@@ -80,29 +88,35 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
+		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
 			// damit naechste Zeile richtig ueberprueft werden kann.
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
 			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
-			iterator = 0;
-			pruefeVorgangsunterbrechung(zeile);
 
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeGrenzeKapazitaetUeberschritten(resEinheit, grenzeMitarbeiterParallel);
-				pruefeVorgangsdauerUeberschritten(resEinheit);
+			for (ResFeld resFeld : zeile) {
+				if (resFeld != null) {
+					pruefeFAZ(resFeld.getResEinheit());
+					pruefeGrenzeKapazitaetUeberschritten(resFeld.getResEinheit(), grenzeMitarbeiterParallel);
+					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
+				}
 			}
 		}
+		pruefeVorgangsunterbrechung2();
+
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
 			// arbeitspaketeGeprueft muss nach jeder Spalte neu initialisiert werden,
 			// damit naechste Spalte richtig ueberprueft werden kann
 			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (!arbeitspaketeGeprueft.contains(koordinatenSystem[y][x].getTeilpaket().getArbeitspaket())) {
-					pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x]);
+				if (koordinatenSystem[y][x] != null) {
+					if (!arbeitspaketeGeprueft
+							.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
+						pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+					}
 				}
 			}
 		}
@@ -126,21 +140,23 @@ public class Validierung {
 		// Konstruktor statt dem Koordinatensystem die Instanz des ResCanvas uebergeben
 		// wird)
 
-		for (ResEinheit[] zeile : koordinatenSystem) {
+		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
 			// damit naechste Zeile richtig ueberprueft werden kann.
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
 			arbeitspaketListeVorgangsunterbrechung = new ArrayList<Arbeitspaket>();
-			iterator = 0;
-			pruefeVorgangsunterbrechung(zeile);
 
-			for (ResEinheit resEinheit : zeile) {
-				pruefeFAZ(resEinheit);
-				pruefeSEZ(resEinheit);
-				pruefeVorgangsdauerUeberschritten(resEinheit);
+			for (ResFeld resFeld : zeile) {
+				if (resFeld != null) {
+					pruefeFAZ(resFeld.getResEinheit());
+					pruefeSEZ(resFeld.getResEinheit());
+					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					pruefeVorgangsunterbrechung(resFeld.getResEinheit());
+				}
 			}
 		}
+		pruefeVorgangsunterbrechung2();
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
@@ -258,36 +274,108 @@ public class Validierung {
 	 *
 	 * @param zeile
 	 */
-	private void pruefeVorgangsunterbrechung(ResEinheit[] zeile) {
-		int zeilenLaenge = zeile.length - 1;
-		Arbeitspaket aktuellesArbeitspaket = zeile[iterator].getTeilpaket().getArbeitspaket();
 
-		if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
-			if (iterator != zeilenLaenge) {
-				iterator++;
-				pruefeVorgangsunterbrechung(zeile);
-			}
-			return;
-		}
-
-		boolean unterbrochen = false;
-		for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
-			if (aktuellesArbeitspaket != zeile[iterator].getTeilpaket().getArbeitspaket()) {
-				unterbrochen = true;
-			}
-			if (aktuellesArbeitspaket == zeile[iterator].getTeilpaket().getArbeitspaket() && unterbrochen) {
-				String message = "Vorgang am Punkt (" + zeile[i].getPosition().getxKoordinate() + ", "
-						+ (koordinatenSystem.length - 1 - zeile[i].getPosition().getyKoordinate()) + ") unterbrochen!\n"
-						+ "Der Vorgang eines Paketes darf nicht unterbrochen werden.";
-				feedbackListe.add(new Feedback(message, MsgType.ERROR, zeile[iterator]));
+	@SuppressWarnings("null")
+	private void pruefeVorgangsunterbrechung(ResEinheit resEinheit) {
+		// XKoordinaten von allen Teilpaketen holen
+		// in aufsteigende Reihenfolge bringen
+		// wenns durchzählen scheitert --> Vorgangsunterbrechung
+		if (resEinheit.getTeilpaket().getArbeitspaket() != null) {
+			if (!alleArbeitspakete.contains(resEinheit.getTeilpaket().getArbeitspaket())) {
+				alleArbeitspakete.add(resEinheit.getTeilpaket().getArbeitspaket());
 			}
 		}
 
-		arbeitspaketListeVorgangsunterbrechung.add(aktuellesArbeitspaket);
-		if (iterator != zeilenLaenge) {
-			iterator++;
-			pruefeVorgangsunterbrechung(zeile);
+	}
+
+	// int zeilenLaenge = zeile.length - 1;
+	// if (zeile[iterator] != null) {
+	// Arbeitspaket aktuellesArbeitspaket =
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket();
+	//
+	// if (arbeitspaketListeVorgangsunterbrechung.contains(aktuellesArbeitspaket)) {
+	// if (iterator != zeilenLaenge) {
+	// iterator++;
+	// pruefeVorgangsunterbrechung(zeile);
+	// }
+	// return;
+	// }
+	//
+	// boolean unterbrochen = false;
+	// for (int i = iterator + 1; i < koordinatenSystem.length - 1; i++) {
+	// if (aktuellesArbeitspaket !=
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()) {
+	// unterbrochen = true;
+	// }
+	// if (aktuellesArbeitspaket ==
+	// zeile[iterator].getResEinheit().getTeilpaket().getArbeitspaket()
+	// && unterbrochen) {
+	// String message = "Vorgang am Punkt (" +
+	// zeile[i].getResEinheit().getPosition().getxKoordinate()
+	// + ", "
+	// + (koordinatenSystem.length - 1 -
+	// zeile[i].getResEinheit().getPosition().getyKoordinate())
+	// + ") unterbrochen!\n" + "Der Vorgang eines Paketes darf nicht unterbrochen
+	// werden.";
+	// feedbackListe.add(new Feedback(message, MsgType.ERROR,
+	// zeile[iterator].getResEinheit()));
+	// }
+	// }
+	//
+	// arbeitspaketListeVorgangsunterbrechung.add(aktuellesArbeitspaket);
+	// if (iterator != zeilenLaenge) {
+	// iterator++;
+	// pruefeVorgangsunterbrechung(zeile);
+	// }
+	// }
+	// }
+
+	public void pruefeVorgangsunterbrechung2() {
+		ArrayList<Integer> werte = new ArrayList<Integer>();
+		ArrayList<ResEinheit> test = new ArrayList<ResEinheit>();
+		ArrayList<Teilpaket> alleTeilpakete = new ArrayList<Teilpaket>();
+		int j;
+		for (int i = 0; i < alleArbeitspakete.size(); i++) {
+			for (int l = 0; l < alleArbeitspakete.get(i).getTeilpaketListe().size(); l++) {
+
+				alleTeilpakete.add(alleArbeitspakete.get(i).getTeilpaketListe().get(l));
+			}
+
+			for (int g = 0; g < alleTeilpakete.size(); g++) {
+				for (int h = 0; h < alleTeilpakete.get(g).getResEinheitListe().size(); h++) {
+					test.add(alleTeilpakete.get(g).getResEinheitListe().get(h));
+				}
+			}
+			// for (ResEinheit t : test) {
+			// System.out.println(t);
+			// System.out.println("Hallo");
+			// }
+
+			for (j = 0; j < test.size(); j++) {
+				if (!werte.contains(test.get(j).getPosition().getxKoordinate())) {
+					werte.add(test.get(j).getPosition().getxKoordinate());
+				}
+			}
+			Collections.sort(werte);
+
+			int k = werte.get(0);
+			for (int counter = 0; counter <= werte.size() - 1; counter++) {
+
+				if (k != werte.get(counter)) {
+					String message = "Vorgang ab der Spalte" + werte.get(counter) + "unterbrochen. /n";
+					// TODO
+					// Feedbackliste muss eine ResEinheit hinzugefügt werden
+					// in der j ForSchleifen ein ResEinheitenArray befüllen
+					feedbackListe.add(new Feedback(message, MsgType.ERROR));
+				}
+				k++;
+			}
 		}
+
+	}
+
+	public ArrayList<Feedback> getFeedbackListe() {
+		return feedbackListe;
 	}
 
 	/**
@@ -304,25 +392,27 @@ public class Validierung {
 		int xPos = resEinheit.getPosition().getxKoordinate();
 		int yPos = resEinheit.getPosition().getyKoordinate();
 		int mitarbeiterParallelArbeitspaket = arbeitspaket.getMitarbeiteranzahl();
-		int mitarbeiterParallelCount = 1;
+		int mitarbeiterParallelCount = 0;
 
 		for (int y = yPos; y >= 0; y--) {
 
-			ResEinheit oben = koordinatenSystem[y][xPos];
-			if (arbeitspaket == oben.getTeilpaket().getArbeitspaket()) {
-				mitarbeiterParallelCount++;
-			}
-
 			if (koordinatenSystem[y][xPos] == null) {
 				break;
-			}
-		}
+			} else {
 
-		if (mitarbeiterParallelCount > mitarbeiterParallelArbeitspaket) {
-			String message = "Zahl der maximal parallel arbeitenden Mitarbeiter am Punkt (" + xPos + ", "
-					+ (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
-					+ "Die maximal erlaubte Mitarbeiterzahl beträgt " + mitarbeiterParallelArbeitspaket + ".";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+				ResEinheit oben = koordinatenSystem[y][xPos].getResEinheit();
+				if (arbeitspaket == oben.getTeilpaket().getArbeitspaket()) {
+					mitarbeiterParallelCount++;
+				}
+
+			}
+
+			if (mitarbeiterParallelCount > mitarbeiterParallelArbeitspaket) {
+				String message = "Zahl der maximal parallel arbeitenden Mitarbeiter am Punkt (" + xPos + ", "
+						+ (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
+						+ "Die maximal erlaubte Mitarbeiterzahl beträgt " + mitarbeiterParallelArbeitspaket + ".";
+				feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			}
 		}
 	}
 }
