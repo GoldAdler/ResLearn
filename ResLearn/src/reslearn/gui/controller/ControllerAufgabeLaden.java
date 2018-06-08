@@ -104,6 +104,7 @@ public class ControllerAufgabeLaden extends Controller {
 			newScene = new Scene(root);
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
 			controller.initialize(paketeArray);
+			ControllerUebungsmodus.letztesArbeitspaket = paketeArray;
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
 			stage.setMaximized(true);

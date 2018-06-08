@@ -35,7 +35,6 @@ public class ControllerModusAuswaehlen extends Controller {
 
 	}
 
-	@SuppressWarnings("static-access")
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
 		alleFenster.add("../fxml/ModusAuswaehlen.fxml");

@@ -16,10 +16,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.controller.ControllerCanvasLoesungsmodus;
 import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
-import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.resCanvas.ResCanvas;
@@ -72,8 +72,9 @@ public class ViewLoesungsmodus extends Application {
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
-
-		ArrayList<ResEinheit[][]> historieListe = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
+		System.out.println(AufgabeLadenImport.maxPersonenParallel);
+		ArrayList<ResEinheit[][]> historieListe = AlgoKapazitaetstreu
+				.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvas)
 				.getHistorieKoordinatenSystem();
 		// ArrayList<ResEinheit[][]> historieListe =
 		// AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
@@ -81,8 +82,8 @@ public class ViewLoesungsmodus extends Application {
 
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
-		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe, resCanvas,
-				diagramm);
+		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe,
+				resCanvas, diagramm);
 		ResFeld[][] teilpakete = controllerCanvas.initializePositionObservableMap();
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();

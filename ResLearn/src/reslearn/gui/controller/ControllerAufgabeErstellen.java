@@ -34,6 +34,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.ImportExport.CsvWriter;
 import reslearn.gui.tableedit.ArbeitspaketTableData;
 import reslearn.gui.tableedit.EditCell;
@@ -192,6 +193,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			newScene = new Scene(root);
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
 			controller.initialize(pakete);
+			ControllerUebungsmodus.letztesArbeitspaket = pakete;
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
 			stage.setMaximized(true);
@@ -225,9 +227,11 @@ public class ControllerAufgabeErstellen extends Controller {
 			tabelle.getItems().add(new ArbeitspaketTableData(setIdBuchstabe(anzPakete), 0, 0, 0, 0, 0, 0, 0));
 		}
 	}
+
 	private String setIdBuchstabe(int i) {
-		String buchstaben[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-		return buchstaben[i-1];
+		String buchstaben[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+				"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+		return buchstaben[i - 1];
 	}
 
 	private void getArbeitspaketArray(ObservableList<ArbeitspaketTableData> paketList) {
@@ -237,8 +241,8 @@ public class ControllerAufgabeErstellen extends Controller {
 			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez();
 
 			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
-					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer, paketList.get(i).getMitarbeiteranzahl(),
-					paketList.get(i).getAufwand());
+					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
+					paketList.get(i).getMitarbeiteranzahl(), paketList.get(i).getAufwand());
 		}
 	}
 
@@ -262,14 +266,15 @@ public class ControllerAufgabeErstellen extends Controller {
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
 		// sets the cell factory to use EditCell which will handle key presses
 		// and firing commit events
-//		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
-//		// updates the salary field on the PersonTableData object to the
-//		// committed value
-//		spalteID.setOnEditCommit(event -> {
-//			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-//			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
-//			tabelle.refresh();
-//		});
+		// spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
+		// // updates the salary field on the PersonTableData object to the
+		// // committed value
+		// spalteID.setOnEditCommit(event -> {
+		// final String value = event.getNewValue() != null ? event.getNewValue() :
+		// event.getOldValue();
+		// event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
+		// tabelle.refresh();
+		// });
 	}
 
 	private void setupSpalteFaz() {
@@ -491,7 +496,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// TODO Mit anderen dateipfaden gibt es ein Berechtigungsproblem
 		String outputFile = dateipfad + dateiname.getText() + ".csv";
 		boolean alreadyExists = new File(outputFile).exists();
-		String spalten[] = new String[8];
+		String spalten[] = new String[9];
 
 		spalten[0] = "Id";
 		spalten[1] = "FAZ";
@@ -501,6 +506,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		spalten[5] = "Vorgangsdauer";
 		spalten[6] = "Mitarbeiteranzahl";
 		spalten[7] = "Aufwand";
+		spalten[8] = "MaxPersonenParallel";
 
 		try {
 			// use FileWriter constructor that specifies open for appending
@@ -522,9 +528,7 @@ public class ControllerAufgabeErstellen extends Controller {
 					return;
 				}
 			}
-			// else assume that the file already has the correct header line
 
-			// write out a few records
 			for (Arbeitspaket ap : arbeitspakete) {
 				int vorgangsdauer = ap.getSez() - ap.getFez();
 				csvOutput.write(ap.getId().toString());
@@ -535,6 +539,7 @@ public class ControllerAufgabeErstellen extends Controller {
 				csvOutput.write(String.valueOf(vorgangsdauer));
 				csvOutput.write(String.valueOf(ap.getMitarbeiteranzahl()));
 				csvOutput.write(String.valueOf(ap.getAufwand()));
+				csvOutput.write(String.valueOf(anzMaxPersonen));
 				csvOutput.endRecord();
 			}
 
@@ -585,6 +590,8 @@ public class ControllerAufgabeErstellen extends Controller {
 			export(arbeitspakete, event);
 		} else if (result.get() == weiterButton) {
 			weiter(event);
+			AufgabeLadenImport.maxPersonenParallel = anzMaxPersonen;
+			System.out.println(AufgabeLadenImport.maxPersonenParallel);
 		} else {
 			dialog.close();
 		}

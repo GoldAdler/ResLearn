@@ -36,6 +36,7 @@ import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -54,8 +55,6 @@ public class ControllerCanvasUebungsmodus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
-	Arbeitspaket[] arbeitspakete;
-	int maxGrenze = 5;
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -314,6 +313,7 @@ public class ControllerCanvasUebungsmodus {
 		validierenButton.setLayoutY(
 				DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandY);
 		validierenButton.setOnAction(ValidierenAction);
+		validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
 	}
 
@@ -345,7 +345,7 @@ public class ControllerCanvasUebungsmodus {
 				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			} else {
 				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-				vali.AlgoKapazitaetstreu(maxGrenze);
+				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
 				}

@@ -14,8 +14,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungsmodus extends Controller {
+
+	public static Arbeitspaket[] letztesArbeitspaket;
 
 	@FXML
 	private Button zurueck;
@@ -58,8 +61,11 @@ public class ControllerUebungsmodus extends Controller {
 		if (result.get() == ButtonType.OK) {
 			Parent root;
 			try {
-				root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(vorherigesFenster(alleFenster)));
+				root = fxmlLoader.load();
 				newScene = new Scene(root);
+				ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
+				controller.initialize(letztesArbeitspaket);
 				Stage stage = new Stage();
 				stage.setTitle("ResLearn");
 				stage.setMaximized(true);

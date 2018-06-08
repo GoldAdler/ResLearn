@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +31,7 @@ import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
@@ -54,8 +53,8 @@ public class ControllerCanvasLoesungsmodus {
 	private ObservableMap<ResEinheit, Double> positionXObservableMap = FXCollections.observableHashMap();
 	private ObservableMap<ResEinheit, Double> positionYObservableMap = FXCollections.observableHashMap();
 
-	public ControllerCanvasLoesungsmodus(Arbeitspaket[] arbeitspakete, ArrayList<ResEinheit[][]> historieListe, ResCanvas resCanvas,
-			Diagramm diagramm) {
+	public ControllerCanvasLoesungsmodus(Arbeitspaket[] arbeitspakete, ArrayList<ResEinheit[][]> historieListe,
+			ResCanvas resCanvas, Diagramm diagramm) {
 		this.arbeitspakete = arbeitspakete;
 		this.historieListe = historieListe;
 		this.koordinatenSystemUrspruenglich = historieListe.get(0);
@@ -70,7 +69,7 @@ public class ControllerCanvasLoesungsmodus {
 	 * Initialisiert die ResFelder mit den ursprünglichen Werten. Zudem werden die
 	 * Positionen der ResFelder in den ObservableMaps gespeichert und an die
 	 * ResFelder gebunden.
-	 * 
+	 *
 	 * @return
 	 */
 	public ResFeld[][] initializePositionObservableMap() {
@@ -144,7 +143,7 @@ public class ControllerCanvasLoesungsmodus {
 			extrahiereArbeitspakete(historieNummer);
 		}
 	};
-	
+
 	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
@@ -152,48 +151,50 @@ public class ControllerCanvasLoesungsmodus {
 			schrittZurueck.setDisable(true);
 			schrittVor.setDisable(false);
 			historieNummer = 0;
-			
+
 			ResCanvas resCanvas = new ResCanvas();
 
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
 				resCanvas.hinzufuegen(arbeitspaket);
 			}
-			//koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die "alten" Referenzen benötigt
+			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
+			// "alten" Referenzen benötigt
 			historieListe.clear();
 			historieListe.add(koordinatenSystemUrspruenglich);
-			
-			ArrayList<ResEinheit[][]> historieListeNeu = AlgoKapazitaetstreu.getInstance().algoDurchfuehren(resCanvas)
+
+			ArrayList<ResEinheit[][]> historieListeNeu = AlgoKapazitaetstreu
+					.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvas)
 					.getHistorieKoordinatenSystem();
-			for(int i = 1; i < historieListeNeu.size(); i++) {
+			for (int i = 1; i < historieListeNeu.size(); i++) {
 				historieListe.add(historieListeNeu.get(i));
 			}
-			extrahiereArbeitspakete(0);		
+			extrahiereArbeitspakete(0);
 		}
 	};
-	
+
 	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
 			schrittZurueck.setDisable(true);
 			schrittVor.setDisable(false);
 			historieNummer = 0;
-			
+
 			ResCanvas resCanvas = new ResCanvas();
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
 				resCanvas.hinzufuegen(arbeitspaket);
 			}
-			//koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die "alten" Referenzen benötigt
+			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
+			// "alten" Referenzen benötigt
 			historieListe.clear();
 			historieListe.add(koordinatenSystemUrspruenglich);
-			
+
 			ArrayList<ResEinheit[][]> historieListeNeu = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
 					.getHistorieKoordinatenSystem();
-			for(int i = 1; i < historieListeNeu.size(); i++) {
+			for (int i = 1; i < historieListeNeu.size(); i++) {
 				historieListe.add(historieListeNeu.get(i));
 			}
 			extrahiereArbeitspakete(0);
-			
-			
+
 		}
 	};
 
@@ -201,7 +202,7 @@ public class ControllerCanvasLoesungsmodus {
 	 * Extrahiert die einzelnen Arbeitspakete aus dem neuen Koordinatensystem anhand
 	 * der Historiennummer und ersetzt alle zugehörigen ResEinheiten-Position
 	 * mithilfe von {@link #ersetzeResEinheiten(String, ArrayList)}.
-	 * 
+	 *
 	 * @param historieNummer
 	 */
 	private void extrahiereArbeitspakete(int historieNummer) {
@@ -229,7 +230,7 @@ public class ControllerCanvasLoesungsmodus {
 
 	/**
 	 * Überschreibt die Positionen aller ResFelder.
-	 * 
+	 *
 	 * @param arbeitspaketId
 	 * @param abzuarbeitendeResEinheiten
 	 */
@@ -429,7 +430,6 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setText("Termintreu");
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
-		
 
 		kapazitaetstreuModus
 				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);

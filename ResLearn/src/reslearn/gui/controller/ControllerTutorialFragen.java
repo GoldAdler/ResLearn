@@ -14,7 +14,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import reslearn.gui.fxml.TutorialVideo;
 
 public class ControllerTutorialFragen extends Controller {
 
@@ -64,8 +63,16 @@ public class ControllerTutorialFragen extends Controller {
 	@FXML
 	public void zurueck(ActionEvent event) throws Exception {
 		if (counter <= 0) {
+			Scene newScene;
+			Parent root;
 			try {
-				TutorialVideo.getInstance().start(new Stage());
+				root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+				newScene = new Scene(root);
+				Stage stage = new Stage();
+				stage.setTitle("ResLearn");
+				stage.setMaximized(true);
+				stage.setScene(newScene);
+				stage.show();
 				((Node) (event.getSource())).getScene().getWindow().hide();
 			} catch (Exception e) {
 				e.printStackTrace();

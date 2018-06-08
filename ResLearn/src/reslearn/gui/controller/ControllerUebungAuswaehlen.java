@@ -1,9 +1,8 @@
 package reslearn.gui.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,27 +13,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerUebungAuswaehlen extends Controller {
-
-	private List<Button> buttonlist = new ArrayList<>();
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
-	final VBox vb = new VBox();
 	File f = new File(".." + File.separator + "Reslearn" + File.separator + "bin" + File.separator + "reslearn"
 			+ File.separator + "gui" + File.separator + "uebungen");;
-	public File[] fileArray = f.listFiles();
+	public File[] fileArray = f.listFiles(new FilenameFilter() {
+		@Override
+		public boolean accept(File f, String name) {
+			return name.toLowerCase().endsWith(".csv");
+		}
+	});
 	public Button dateiname;
 	public String datei;
-
-	public void initialize() {
-
-	}
 
 	public Pane erstellePane() {
 
@@ -74,7 +70,6 @@ public class ControllerUebungAuswaehlen extends Controller {
 		}
 	};
 
-	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
 		Parent root;
@@ -86,6 +81,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
 			dateiname = (Button) event.getSource();
 			datei = dateiname.getId();
+			ControllerUebungsmodus.letztesArbeitspaket = ali.aufgabeLaden(f + File.separator + datei);
 			controller.initialize(ali.aufgabeLaden(f + File.separator + datei));
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");

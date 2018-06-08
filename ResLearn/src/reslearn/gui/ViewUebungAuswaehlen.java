@@ -67,8 +67,4 @@ public class ViewUebungAuswaehlen extends Application {
 		launch(args);
 	}
 
-	// public Pane getPane() {
-	// return pane;
-	// }
-
 }
