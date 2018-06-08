@@ -99,12 +99,6 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	Button buttonValidieren;
 
-	// Ergebnis Validierung anzeigen
-	@FXML
-	Pane paneErgebnis;
-	@FXML
-	Label labelErgebnis;
-
 	TextField dateiname;
 	String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
 			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
@@ -136,13 +130,11 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
-		paneErgebnis.setVisible(true);
 		getArbeitspaketArray(tabelle.getItems());
 		if (paketeValidieren(pakete)) {
-			labelErgebnis.setText(ergebnisValidierung);
 			speichern(pakete, event);
 		} else {
-			labelErgebnis.setText(ergebnisValidierung);
+			validierungFehlgeschlagen();
 		}
 	}
 
@@ -264,17 +256,6 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	private void setupSpalteID() {
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
-		// spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
-		// // updates the salary field on the PersonTableData object to the
-		// // committed value
-		// spalteID.setOnEditCommit(event -> {
-		// final String value = event.getNewValue() != null ? event.getNewValue() :
-		// event.getOldValue();
-		// event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
-		// tabelle.refresh();
-		// });
 	}
 
 	private void setupSpalteFaz() {
@@ -420,10 +401,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
-		boolean fazKorrekt, sazKorrekt, fezKorrekt, sezKorrekt, paketKorrekt, maKorrekt;
 		int faz, saz, fez, sez, ma;
-
-		fazKorrekt = sazKorrekt = fezKorrekt = sezKorrekt = maKorrekt = paketKorrekt = false;
 
 		for (int i = 0; i < arbeitspaket.length; i++) {
 			faz = arbeitspaket[i].getFaz();
@@ -433,63 +411,73 @@ public class ControllerAufgabeErstellen extends Controller {
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
 
 			// FAZ prüfen
-			if (faz >= 1) {
-				fazKorrekt = true;
-			} else {
+			if (faz < 1) {
 				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens 1 sein";
-				paketKorrekt = false;
-				break;
+				tabelle.getSelectionModel().clearAndSelect(i, spalteFaz);
+				return false;
 			}
 
 			// SAZ prüfen
-			if (saz >= faz) {
-				sazKorrekt = true;
-			} else {
+			if (saz < faz) {
 				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens gleich groß wie der Wert FAZ sein";
-				paketKorrekt = false;
-				break;
+				tabelle.getSelectionModel().clearAndSelect(i, spalteSaz);
+				return false;
 			}
 
 			// FEZ prüfen
-			if (fez > faz) {
-				fezKorrekt = true;
-			} else {
+			if (fez < faz) {
 				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss größer als der Wert FAZ sein";
-				paketKorrekt = false;
-				break;
+						+ " muss mindestens gleich groß wie der Wert FAZ sein";
+				tabelle.getSelectionModel().clearAndSelect(i, spalteFez);
+				return false;
 			}
 
 			// SEZ prüfen
-			if (sez >= fez) {
-				sezKorrekt = true;
-			} else {
+			if (sez < fez) {
 				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss mindestens gleich groß wie der Wert FEZ sein";
-				paketKorrekt = false;
-				break;
+				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
+				return false;
+			}
+			
+			// Differenz zwischen FEZ-FAZ und SEZ-SAZ gleich groß?
+			if ((fez - faz) != (sez - saz)) {
+				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " müssen gleich groß sein!";
+				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
+				return false;
 			}
 
 			// Mitarbeiterzahl prüfen
-			if (ma > 0) {
-				maKorrekt = true;
-			} else {
+			if (ma < 1) {
 				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " muss größer 0 sein!";
-				paketKorrekt = false;
-				break;
+				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+				return false;
+			}
+			
+			// Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des Arbeitspakets nicht größer als die Obergrenze sein
+			if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
+				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
+						+ " darf nicht größer als die angegebene Kapazitätsgrenze sein!";
+				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+				return false;
 			}
 
-			// Alle Bedingungen prüfen
-			if (fazKorrekt && sazKorrekt && fezKorrekt && sezKorrekt && maKorrekt) {
-				ergebnisValidierung = "Validierung erfolgreich";
-				paketKorrekt = true;
-			}
 		}
+		ergebnisValidierung = "Validierung erfolgreich!";
+		return true;
+	}
 
-		return paketKorrekt;
+	private void validierungFehlgeschlagen() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Ergebnis der Validierung");
+		alert.setHeaderText("Die Validierung ist fehlgeschlagen! Bitte korrigieren Sie den Fehler.");
+		alert.setContentText(ergebnisValidierung);
+
+		alert.showAndWait();
 	}
 
 	public void export(Arbeitspaket[] arbeitspakete, ActionEvent event) {

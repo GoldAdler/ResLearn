@@ -80,11 +80,6 @@
             </Pane>
          </children>
       </Pane>
-      <Pane fx:id="paneErgebnis" layoutX="185.0" layoutY="529.0" prefHeight="59.0" prefWidth="456.0" visible="false">
-         <children>
-            <Label fx:id="labelErgebnis" layoutX="53.0" layoutY="21.0" text="Ergebnis der Validierung" />
-         </children>
-      </Pane>
       <Button fx:id="buttonValidieren" alignment="CENTER" graphicTextGap="5.0" layoutX="731.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleButtonValidierenAction" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" />
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="48.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
          <image>
