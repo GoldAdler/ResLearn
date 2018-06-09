@@ -12,9 +12,15 @@ import reslearn.model.utils.Vektor2i;
 public class Arbeitspaket extends Paket {
 
 	/**
-	 * Benennung des Arbeitspakets
+	 * Benennung des Arbeitspakets (intern)
 	 */
 	private String id;
+
+	/**
+	 * Bennenung des Arbeitspaktes (extern, vom User)
+	 */
+	private String arbeitspaketName;
+
 	/**
 	 * Fruehester Anfangszeitpunkt
 	 */
@@ -308,6 +314,31 @@ public class Arbeitspaket extends Paket {
 		getTeilpaketListe().remove(teilpaket);
 	}
 
+	/**
+	 * Legt eine WIRKLICHE Kopie des Arbeitspaketes an.
+	 *
+	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
+	 * ursprünglichen Arbeitspaket unabhäniges Arbeitspaket, angleget.
+	 *
+	 * @return
+	 */
+	public Arbeitspaket copy() {
+
+		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.id, this.faz, this.fez, this.saz, this.sez,
+				this.vorgangsdauer, this.mitarbeiteranzahl, this.aufwand);
+
+		ArrayList<Teilpaket> neueTeilpaketListe = new ArrayList<Teilpaket>();
+
+		for (Teilpaket tp : this.teilpaketListe) {
+			neueTeilpaketListe.add(tp.copy(copyArbeitsPaket));
+		}
+
+		copyArbeitsPaket.setTeilpaketListe(neueTeilpaketListe);
+
+		return copyArbeitsPaket;
+
+	}
+
 	public int getFaz() {
 		return faz;
 	}
@@ -356,29 +387,12 @@ public class Arbeitspaket extends Paket {
 		this.id = id;
 	}
 
-	/**
-	 * Legt eine WIRKLICHE Kopie des Arbeitspaketes an.
-	 *
-	 * D.h. es wird nicht einfach die Referenz kopiert. Sondern ein neues, vom
-	 * ursprünglichen Arbeitspaket unabhäniges Arbeitspaket, angleget.
-	 *
-	 * @return
-	 */
-	public Arbeitspaket copy() {
+	public String getArbeitspaketName() {
+		return arbeitspaketName;
+	}
 
-		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.id, this.faz, this.fez, this.saz, this.sez,
-				this.vorgangsdauer, this.mitarbeiteranzahl, this.aufwand);
-
-		ArrayList<Teilpaket> neueTeilpaketListe = new ArrayList<Teilpaket>();
-
-		for (Teilpaket tp : this.teilpaketListe) {
-			neueTeilpaketListe.add(tp.copy(copyArbeitsPaket));
-		}
-
-		copyArbeitsPaket.setTeilpaketListe(neueTeilpaketListe);
-
-		return copyArbeitsPaket;
-
+	public void setArbeitspaketName(String arbeitspaketName) {
+		this.arbeitspaketName = arbeitspaketName;
 	}
 
 }
