@@ -120,7 +120,13 @@ public class ViewUebungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
-				controllerCanvas.getButtonTermintreuModus());
+				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getButtonMaxPersonenPlus(),
+				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getTextFieldMaxPersonen(),
+				controllerCanvas.getMaxPersonen());
+
+		for (int i = 0; i < 26; i++) {
+			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
+		}
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
