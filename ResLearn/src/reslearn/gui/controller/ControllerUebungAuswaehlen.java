@@ -32,6 +32,13 @@ public class ControllerUebungAuswaehlen extends Controller {
 	public Button dateiname;
 	public String datei;
 
+	/**
+	 * In dieser Methode werden je nachdem, wie viele Aufgaben in dem vorgegebenen
+	 * Ordner vorhanden sind, dementsprechend viele Buttons dynamisch generiert und
+	 * auf der Pane positioniert.
+	 * 
+	 * @return
+	 */
 	public Pane erstellePane() {
 
 		pane = new Pane();

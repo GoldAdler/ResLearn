@@ -10,6 +10,15 @@ public class AufgabeLadenImport {
 
 	public static int maxPersonenParallel;
 
+	/**
+	 * Hier wird ein neuer CSVReader angelegt, der mithilfe des uebergebenen
+	 * Dateipfades, die Daten aus dem CSV-Domument ausliest. Hierfuer wird das
+	 * Dokument Zeile fuer Zeile durchgegangen und die Arbeitspakete angelegt. Am
+	 * Ende wird ein Arbeitspaketearray zurueckgegeben.
+	 *
+	 * @param dateipfad
+	 * @return
+	 */
 	public Arbeitspaket[] aufgabeLaden(String dateipfad) {
 		Arbeitspaket[] paketeArray = null;
 		try {
@@ -52,6 +61,13 @@ public class AufgabeLadenImport {
 		return paketeArray;
 	}
 
+	/**
+	 * In dieser Methode wird eine Arbeitspaketliste in ein Arbeitspaketarray
+	 * umgewandelt.
+	 * 
+	 * @param pakete
+	 * @return
+	 */
 	public Arbeitspaket[] getArbeitspaketArray(ArrayList<Arbeitspaket> pakete) {
 		Arbeitspaket arbeitspakete[] = new Arbeitspaket[pakete.size()];
 		int i = 0;

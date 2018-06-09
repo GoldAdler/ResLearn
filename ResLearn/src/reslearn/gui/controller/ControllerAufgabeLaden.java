@@ -34,6 +34,11 @@ public class ControllerAufgabeLaden extends Controller {
 	private String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
 			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
 
+	/**
+	 * Diese Methode oeffnet einen FileChooser, mit dem eine selbsterstellte Aufgabe
+	 * ausgewaehlt und geladen werden kann. Der Pfad ist an dieser Stelle schon
+	 * eingetragen.
+	 */
 	@FXML
 	public void dateiauswaehlen() {
 		FileChooser fileChooser = new FileChooser();

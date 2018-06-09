@@ -100,6 +100,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	Button buttonValidieren;
 
 	TextField dateiname;
+	// Pfad, unter dem die angelegte Aufgabe gespeichert wird
 	String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
 			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
 
@@ -128,6 +129,11 @@ public class ControllerAufgabeErstellen extends Controller {
 		radioButtonTermin.setToggleGroup(rbGruppe);
 	}
 
+	/**
+	 * Ueberprueft die Eingaben des Useres, ob diese korrekt sind.
+	 *
+	 * @param event
+	 */
 	@FXML
 	private void handleButtonValidierenAction(ActionEvent event) {
 		getArbeitspaketArray(tabelle.getItems());
@@ -441,11 +447,11 @@ public class ControllerAufgabeErstellen extends Controller {
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
 			}
-			
+
 			// Differenz zwischen FEZ-FAZ und SEZ-SAZ gleich groß?
 			if ((fez - faz) != (sez - saz)) {
-				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " müssen gleich groß sein!";
+				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket "
+						+ arbeitspaket[i].getId() + " müssen gleich groß sein!";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
 			}
@@ -457,8 +463,9 @@ public class ControllerAufgabeErstellen extends Controller {
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
 				return false;
 			}
-			
-			// Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des Arbeitspakets nicht größer als die Obergrenze sein
+
+			// Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des
+			// Arbeitspakets nicht größer als die Obergrenze sein
 			if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
 				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
 						+ " darf nicht größer als die angegebene Kapazitätsgrenze sein!";
