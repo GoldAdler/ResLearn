@@ -488,7 +488,6 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	public void export(Arbeitspaket[] arbeitspakete, ActionEvent event) {
-		// TODO Mit anderen dateipfaden gibt es ein Berechtigungsproblem
 		String outputFile = dateipfad + dateiname.getText() + ".csv";
 		boolean alreadyExists = new File(outputFile).exists();
 		String spalten[] = new String[9];
@@ -586,7 +585,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		} else if (result.get() == weiterButton) {
 			weiter(event);
 			AufgabeLadenImport.maxPersonenParallel = anzMaxPersonen;
-			System.out.println(AufgabeLadenImport.maxPersonenParallel);
 		} else {
 			dialog.close();
 		}
