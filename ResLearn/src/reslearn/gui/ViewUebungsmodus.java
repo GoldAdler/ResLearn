@@ -122,7 +122,7 @@ public class ViewUebungsmodus extends Application {
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
 				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getButtonMaxPersonenPlus(),
 				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getTextFieldMaxPersonen(),
-				controllerCanvas.getMaxPersonen());
+				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege());
 
 		for (int i = 0; i < 26; i++) {
 			group.getChildren().add(controllerCanvas.getKapaGrenze(i));

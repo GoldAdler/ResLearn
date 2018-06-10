@@ -66,6 +66,7 @@ public class ControllerCanvasUebungsmodus {
 	private Label maxPersonen;
 	private ArrayList<Arbeitspaket> arbeitspaketeArrayList;
 	private Line[] alleLinien = new Line[26];
+	private Label korrekturvorschlaege;
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -77,6 +78,17 @@ public class ControllerCanvasUebungsmodus {
 		erstelleGrenzLinie();
 		leereFehlermeldungErstellen();
 		kapaGrenzeEingeben();
+		erstelleKorrekturvorschlaege();
+	}
+
+	public void erstelleKorrekturvorschlaege() {
+		korrekturvorschlaege = new Label("Korrekturvorschläge");
+		korrekturvorschlaege.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutY(DisplayCanvas.canvasStartpunktY - DisplayCanvas.resFeldBreite * 2);
+		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		korrekturvorschlaege.setAlignment(Pos.CENTER);
+		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
 	}
 
 	public void kapaGrenzeEingeben() {
@@ -824,6 +836,10 @@ public class ControllerCanvasUebungsmodus {
 
 	public Label getMaxPersonen() {
 		return maxPersonen;
+	}
+
+	public Label getKorrekturvorschlaege() {
+		return korrekturvorschlaege;
 	}
 
 }
