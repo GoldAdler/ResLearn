@@ -20,7 +20,7 @@ public class ResCanvas {
 	private ArrayList<Arbeitspaket> historienArbeitspaketListe;
 	private ResEinheit[][] koordinatenSystem;
 	private ArrayList<ResEinheit[][]> historieKoordinatenSystem;
-	public static final int koorHoehe = 28;
+	public static final int koorHoehe = 25;
 	public static final int koorBreite = 43;
 	private ResCanvas optimalerPfad;
 
@@ -592,7 +592,7 @@ public class ResCanvas {
 				for (ResEinheit re : tp.getResEinheitListe()) {
 					if (re.getPosition() != null) {
 						neuesKoordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition()
-								.getxKoordinate()] = re;
+						                                                          .getxKoordinate()] = re;
 					}
 				}
 			}

@@ -85,10 +85,11 @@ public class ControllerCanvasUebungsmodus {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
 		korrekturvorschlaege.setLayoutX(
 				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		korrekturvorschlaege.setLayoutY(DisplayCanvas.canvasStartpunktY - DisplayCanvas.resFeldBreite * 2);
+		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
 		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		korrekturvorschlaege.setAlignment(Pos.CENTER);
 		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
+		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
 	}
 
 	public void kapaGrenzeEingeben() {
@@ -179,7 +180,7 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
 		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+		fehlerMeldung.setLayoutY(0  - DisplayCanvas.abstandY);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
 		ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
@@ -431,10 +432,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -443,7 +444,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 
 		}
 	}
@@ -527,7 +528,7 @@ public class ControllerCanvasUebungsmodus {
 	// ResEinheit -> update Observableblababla
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
 		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
+		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge);
 		legende.setPrefWidth(DisplayCanvas.canvasBreite);
 		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
 		legende.setStyle("-fx-background-radius: 30;");
@@ -616,7 +617,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -624,7 +625,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -756,7 +757,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));

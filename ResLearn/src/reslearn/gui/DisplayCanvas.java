@@ -27,7 +27,7 @@ public final class DisplayCanvas {
 	public static final int canvasLaenge = 2 * resFeldLaenge + paneLaenge + spaltY;
 
 	public static final int canvasStartpunktX = ((int) bounds.getWidth() - canvasBreite) / 2;
-	public static final int canvasStartpunktY = ((int) bounds.getHeight() - canvasLaenge) / 2;
+	public static final int canvasStartpunktY = ((int) bounds.getHeight() - canvasLaenge) / 2 + (5 * resFeldBreite);
 
 	public static final int paneLayoutX = canvasStartpunktX + resFeldBreite + spaltX;
 	public static final int paneLayoutY = canvasStartpunktY + resFeldLaenge;
@@ -39,22 +39,22 @@ public final class DisplayCanvas {
 	public static final int gesamtAbstandY = abstandY + spaltY;
 
 	public static final int tabelleBreite = canvasStartpunktX - 2 * resFeldBreite;
-	public static final int tabelleLaenge = canvasLaenge / 2;
+	public static final int tabelleLaenge = 15 * resFeldBreite;
 
 	public static final int tabelleLayoutX = resFeldBreite;
-	public static final int tabelleLayoutY = canvasStartpunktY;
+	public static final int tabelleLayoutY = 4 * resFeldBreite;
 
 	public static final int buttonLoesungsmodusLayoutX = resFeldBreite;
 	public static final int buttonLoesungsmodusLayoutY = tabelleLayoutY + tabelleLaenge + resFeldBreite;
 	public static final int buttonLoesungsmodusBreite = (tabelleBreite - resFeldBreite) / 2;
 
-	public static final int tabelleArbeitspaketBreite = paneBreite + spaltX;
-	public static final int tabelleArbeitspaketLaenge = canvasStartpunktY - 2 * resFeldLaenge;
+	public static final int tabelleArbeitspaketBreite = canvasBreite + spaltX;
+	public static final int tabelleArbeitspaketLaenge = (int) bounds.getHeight() -  canvasLaenge - 8 * resFeldBreite;
 
-	public static final int tabelleArbeitspaketLayoutX = paneLayoutX;
+	public static final int tabelleArbeitspaketLayoutX = canvasStartpunktX;
 
 	// Tabelle überhalb des Canvas (am Rand bündig)
-	public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY - tabelleArbeitspaketLaenge;
+	public static final int tabelleArbeitspaketLayoutY = 4 * resFeldBreite;
 
 	// Tabelle unterhalb des Canvas (ein Feld Abstand)
 	// public static final int tabelleArbeitspaketLayoutY = canvasStartpunktY +
