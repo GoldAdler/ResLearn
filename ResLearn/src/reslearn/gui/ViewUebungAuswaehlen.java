@@ -30,7 +30,7 @@ public class ViewUebungAuswaehlen extends Application {
 	public void start(Stage stage) throws Exception {
 		// Lade FXML
 
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/UebungAuswaehlen.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/UebungAuswaehlen.fxml"));
 
 		Group group = new Group();
 		ControllerUebungAuswaehlen cua = new ControllerUebungAuswaehlen();

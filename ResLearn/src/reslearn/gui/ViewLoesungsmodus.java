@@ -49,7 +49,7 @@ public class ViewLoesungsmodus extends Application {
 
 		stage = new Stage();
 		// Lade FXML
-		Parent root = FXMLLoader.load(getClass().getResource("./fxml/Uebungsmodus.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
 		Scene hauptszene = new Scene(root);
 
 		ResCanvas resCanvas = new ResCanvas();

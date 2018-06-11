@@ -183,10 +183,10 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
-		alleFenster.add("../fxml/AufgabeErstellen.fxml");
+		alleFenster.add("fxml/AufgabeErstellen.fxml");
 		Parent root;
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reslearn/gui/fxml/ModusAuswaehlen.fxml"));
 			root = fxmlLoader.load();
 			newScene = new Scene(root);
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();

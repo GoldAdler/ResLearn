@@ -10,7 +10,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import reslearn.gui.controller.VideoPlayer;
 
-public class TutorialVideo extends Application{
+public class TutorialVideo extends Application {
 
 	private static TutorialVideo view;
 
@@ -23,7 +23,7 @@ public class TutorialVideo extends Application{
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		//Lade FXML-Dokument
+		// Lade FXML-Dokument
 		Parent root = FXMLLoader.load(getClass().getResource("Tutorial.fxml"));
 
 		Pane pane = new Pane();
@@ -32,12 +32,13 @@ public class TutorialVideo extends Application{
 		pane.setLayoutX(200);
 		pane.setLayoutY(85);
 
-		MediaPlayer player = new MediaPlayer(new Media(getClass().getResource("../images/test.mp4").toExternalForm()));
+		MediaPlayer player = new MediaPlayer(
+				new Media(getClass().getResource("/reslearn/gui/images/test.mp4").toExternalForm()));
 		VideoPlayer video = new VideoPlayer(player);
 
 		pane.getChildren().add(video);
 
-		//Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Videoplayer
+		// Erstelle 2 Szenen: Hauptszene = FXML, Unterszene = Java-Videoplayer
 		Scene hauptszene = new Scene(root);
 		Scene unterszene = new Scene(pane);
 

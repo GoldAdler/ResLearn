@@ -15,7 +15,7 @@ public class Startprogramm extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("./fxml/Hauptmenue.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Hauptmenue.fxml"));
 
 		Scene scene = new Scene(root);
 

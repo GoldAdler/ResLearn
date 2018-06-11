@@ -27,12 +27,12 @@ public class ControllerHauptmenue extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
 		Scene newScene;
-		alleFenster.add("../fxml/Hauptmenue.fxml");
+		alleFenster.add("/reslearn/gui/fxml/Hauptmenue.fxml");
 		if (event.getSource() == uebungAuswaehlen) {
 			ViewUebungAuswaehlen.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == aufgabeErstellen) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeErstellen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/AufgabeErstellen.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -41,7 +41,7 @@ public class ControllerHauptmenue extends Controller {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == aufgabeLaden) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/AufgabeLaden.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/AufgabeLaden.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -53,7 +53,7 @@ public class ControllerHauptmenue extends Controller {
 			TutorialVideo.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == quiz) {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Quiz.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Quiz.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");
@@ -62,7 +62,7 @@ public class ControllerHauptmenue extends Controller {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Hauptmenue.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Hauptmenue.fxml"));
 			newScene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setTitle("ResLearn");

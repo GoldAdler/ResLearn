@@ -22,7 +22,7 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
-public class VideoPlayer extends BorderPane{
+public class VideoPlayer extends BorderPane {
 
 	private MediaPlayer mp;
 	private MediaView mediaView;
@@ -36,7 +36,7 @@ public class VideoPlayer extends BorderPane{
 	private HBox mediaBar;
 
 	public VideoPlayer(final MediaPlayer mp) {
-		//Video Player von Oracle, mit kleinen Verbesserungen
+		// Video Player von Oracle, mit kleinen Verbesserungen
 		this.mp = mp;
 		setStyle("-fx-background-color: #bfc2c7;");
 		mediaView = new MediaView(mp);
@@ -50,9 +50,12 @@ public class VideoPlayer extends BorderPane{
 		BorderPane.setAlignment(mediaBar, Pos.CENTER);
 
 		Button playButton = new Button();
-		ImageView playIcon = new ImageView(new Image(getClass().getResource("../images/play.png").toExternalForm(), 20, 30, true, true));
-		ImageView pauseIcon = new ImageView(new Image(getClass().getResource("../images/pause.png").toExternalForm(), 20, 30, true, true));
-		ImageView repeatIcon = new ImageView(new Image(getClass().getResource("../images/repeat.png").toExternalForm(), 20, 30, true, true));
+		ImageView playIcon = new ImageView(new Image(
+				getClass().getResource("/reslearn/gui/images/play.png").toExternalForm(), 20, 30, true, true));
+		ImageView pauseIcon = new ImageView(new Image(
+				getClass().getResource("/reslearn/gui/images/pause.png").toExternalForm(), 20, 30, true, true));
+		ImageView repeatIcon = new ImageView(new Image(
+				getClass().getResource("/reslearn/gui/images/repeat.png").toExternalForm(), 20, 30, true, true));
 
 		playButton.setGraphic(playIcon);
 

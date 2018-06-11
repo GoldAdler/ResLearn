@@ -79,7 +79,7 @@
 }
 
 .buttonEinstellungen {
-	-fx-background-image: url("../images/quiz.jpg");
+	-fx-background-image: url("../images/quiz.png");
 	-fx-background-repeat: no-repeat;
 	-fx-background-position: 50% 0%;
 	-fx-background-radius: 10 10 10 10;

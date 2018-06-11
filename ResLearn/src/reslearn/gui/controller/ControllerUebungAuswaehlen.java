@@ -36,7 +36,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 	 * In dieser Methode werden je nachdem, wie viele Aufgaben in dem vorgegebenen
 	 * Ordner vorhanden sind, dementsprechend viele Buttons dynamisch generiert und
 	 * auf der Pane positioniert.
-	 * 
+	 *
 	 * @return
 	 */
 	public Pane erstellePane() {
@@ -82,7 +82,7 @@ public class ControllerUebungAuswaehlen extends Controller {
 		Parent root;
 		AufgabeLadenImport ali = new AufgabeLadenImport();
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reslearn/gui/fxml/ModusAuswaehlen.fxml"));
 			root = fxmlLoader.load();
 			newScene = new Scene(root);
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();

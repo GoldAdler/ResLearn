@@ -104,7 +104,7 @@ public class ControllerAufgabeLaden extends Controller {
 		Scene newScene;
 		Parent root;
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ModusAuswaehlen.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reslearn/gui/fxml/ModusAuswaehlen.fxml"));
 			root = fxmlLoader.load();
 			newScene = new Scene(root);
 			ControllerModusAuswaehlen controller = fxmlLoader.<ControllerModusAuswaehlen>getController();
