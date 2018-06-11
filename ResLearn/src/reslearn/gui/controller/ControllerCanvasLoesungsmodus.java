@@ -152,11 +152,17 @@ public class ControllerCanvasLoesungsmodus {
 			schrittVor.setDisable(false);
 			historieNummer = 0;
 
-			ResCanvas resCanvas = new ResCanvas();
+			ResCanvas resCanvasNeu = new ResCanvas();
+
+			ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
 
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
-				resCanvas.hinzufuegen(arbeitspaket);
+				copyArbeitspaket.add(arbeitspaket.copy());
 			}
+
+			copyArbeitspaket.forEach(ap -> resCanvasNeu.hinzufuegen(ap));
+
+			resCanvas = resCanvasNeu;
 			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
 			// "alten" Referenzen benötigt
 			historieListe.clear();
@@ -168,6 +174,7 @@ public class ControllerCanvasLoesungsmodus {
 			for (int i = 1; i < historieListeNeu.size(); i++) {
 				historieListe.add(historieListeNeu.get(i));
 			}
+			koordinatenSystemUrspruenglich = historieListe.get(0);
 			extrahiereArbeitspakete(0);
 		}
 	};
@@ -179,10 +186,17 @@ public class ControllerCanvasLoesungsmodus {
 			schrittVor.setDisable(false);
 			historieNummer = 0;
 
-			ResCanvas resCanvas = new ResCanvas();
+			ResCanvas resCanvasNeu = new ResCanvas();
+
+			ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
+
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
-				resCanvas.hinzufuegen(arbeitspaket);
+				copyArbeitspaket.add(arbeitspaket.copy());
 			}
+
+			copyArbeitspaket.forEach(ap -> resCanvasNeu.hinzufuegen(ap));
+
+			resCanvas = resCanvasNeu;
 			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
 			// "alten" Referenzen benötigt
 			historieListe.clear();
@@ -193,6 +207,7 @@ public class ControllerCanvasLoesungsmodus {
 			for (int i = 1; i < historieListeNeu.size(); i++) {
 				historieListe.add(historieListeNeu.get(i));
 			}
+			koordinatenSystemUrspruenglich = historieListe.get(0);
 			extrahiereArbeitspakete(0);
 
 		}

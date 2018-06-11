@@ -54,10 +54,13 @@ public class ViewLoesungsmodus extends Application {
 
 		ResCanvas resCanvas = new ResCanvas();
 
+		ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
+
 		for (Arbeitspaket arbeitspaket : arbeitspakete) {
-			System.out.println("Arbeitspaket-ID:" + arbeitspaket.getId());
-			resCanvas.hinzufuegen(arbeitspaket);
+			copyArbeitspaket.add(arbeitspaket.copy());
 		}
+
+		copyArbeitspaket.forEach(ap -> resCanvas.hinzufuegen(ap));
 
 		Canvas canvas = new Canvas(DisplayCanvas.canvasBreite, DisplayCanvas.canvasLaenge);
 		canvas.setLayoutX(DisplayCanvas.canvasStartpunktX);
