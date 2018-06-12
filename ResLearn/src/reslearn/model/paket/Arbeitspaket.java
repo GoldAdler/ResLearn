@@ -12,14 +12,14 @@ import reslearn.model.utils.Vektor2i;
 public class Arbeitspaket extends Paket {
 
 	/**
-	 * Benennung des Arbeitspakets (intern)
+	 * Benennung des Arbeitspakets (externn, vom User)
 	 */
 	private String id;
 
 	/**
-	 * Bennenung des Arbeitspaktes (extern, vom User)
+	 * Bennenung des Arbeitspaktes (für interne Berechnungen durchlaufend von A bis Z)
 	 */
-	private String arbeitspaketName;
+	private String idIntern;
 
 	/**
 	 * Fruehester Anfangszeitpunkt
@@ -388,11 +388,11 @@ public class Arbeitspaket extends Paket {
 	}
 
 	public String getArbeitspaketName() {
-		return arbeitspaketName;
+		return idIntern;
 	}
 
-	public void setArbeitspaketName(String arbeitspaketName) {
-		this.arbeitspaketName = arbeitspaketName;
+	public void setArbeitspaketName(String idIntern) {
+		this.idIntern = idIntern;
 	}
 
 }

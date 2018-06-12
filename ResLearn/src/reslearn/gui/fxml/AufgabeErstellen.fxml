@@ -25,62 +25,6 @@
             <Image url="@../images/pfeil.png" />
          </image>
       </ImageView>
-      <Label layoutX="100.0" layoutY="75.0" text="Anzahl Pakete">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
-      <TextField fx:id="textFieldAnzPakete" alignment="CENTER" editable="false" layoutX="433.0" layoutY="80.0" prefHeight="25.0" prefWidth="35.0" text="4" />
-      <Button fx:id="buttonAnzPaketePlus" layoutX="468.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketePlusAction" text="+">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="buttonAnzPaketeMinus" layoutX="410.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketeMinusAction" prefHeight="25.0" prefWidth="23.0" text="-">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <TableView fx:id="tabelle" editable="true" layoutX="100.0" layoutY="125.0" prefHeight="200.0" prefWidth="700.0">
-        <columns>
-          <TableColumn fx:id="spalteID" prefWidth="100.0" sortable="false" text="Arbeitspaket ID" />
-          <TableColumn fx:id="spalteFaz" prefWidth="100.0" sortable="false" text="FAZ" />
-            <TableColumn fx:id="spalteSaz" prefWidth="100.0" sortable="false" text="SAZ" />
-            <TableColumn fx:id="spalteFez" prefWidth="100.0" sortable="false" text="FEZ" />
-            <TableColumn fx:id="spalteSez" prefWidth="100.0" sortable="false" text="SEZ" />
-            <TableColumn fx:id="spalteAnzMitarbeiter" prefWidth="100.0" sortable="false" text="Anz. Mitarbeiter" />
-            <TableColumn fx:id="spalteAufwand" prefWidth="98.0" sortable="false" text="Aufwand" />
-        </columns>
-      </TableView>
-      <Pane layoutX="100.0" layoutY="375.0" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: white;">
-         <children>
-            <Label alignment="CENTER" layoutX="213.0" layoutY="10.0" text="Auswahl Optimierungsverfahren">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font></Label>
-            <RadioButton fx:id="radioButtonKapazitaet" layoutX="75.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleRadioButtonKapazitaetAction" text="Kapazitätstreue Optimierung" />
-            <RadioButton fx:id="radioButtonTermin" layoutX="400.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleRadioButtonTerminAction" text="Termintreue Optimierung" />
-            <Pane fx:id="panePersonen" layoutX="75.0" layoutY="89.0" prefHeight="47.0" prefWidth="262.0">
-               <children>
-                  <Label layoutX="14.0" layoutY="15.0" text="Max. Personen Parallel">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
-                  <Button fx:id="buttonMaxPersonenMinus" layoutX="165.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonMaxPersonenMinusAction" prefHeight="25.0" prefWidth="23.0" text="-">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="buttonMaxPersonenPlus" layoutX="223.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleButtonMaxPersonenPlusAction" text="+">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <TextField fx:id="textFieldMaxPersonen" alignment="CENTER" editable="false" layoutX="188.0" layoutY="10.0" prefHeight="25.0" prefWidth="35.0" text="4" />
-               </children>
-            </Pane>
-         </children>
-      </Pane>
-      <Button fx:id="buttonValidieren" alignment="CENTER" graphicTextGap="5.0" layoutX="731.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleButtonValidierenAction" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" />
       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="48.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/home.png" />
@@ -88,6 +32,59 @@
       </ImageView>
       <Button fx:id="zurueck" layoutX="4.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="41.0" />
       <Button fx:id="home" layoutX="48.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="41.0" />
+      <StackPane id="mainPane" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity">
+         <children>
+            <BorderPane StackPane.alignment="CENTER">
+               <center>
+                  <TableView fx:id="tabelle" editable="true" prefHeight="200.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn fx:id="spalteID" prefWidth="100.0" sortable="false" text="Arbeitspaket ID" />
+                      <TableColumn fx:id="spalteFaz" prefWidth="100.0" sortable="false" text="FAZ" />
+                        <TableColumn fx:id="spalteSaz" prefWidth="100.0" sortable="false" text="SAZ" />
+                        <TableColumn fx:id="spalteFez" prefWidth="100.0" sortable="false" text="FEZ" />
+                        <TableColumn fx:id="spalteSez" prefWidth="100.0" sortable="false" text="SEZ" />
+                        <TableColumn fx:id="spalteAnzMitarbeiter" prefWidth="100.0" sortable="false" text="Anz. Mitarbeiter" />
+                        <TableColumn fx:id="spalteAufwand" prefWidth="98.0" sortable="false" text="Aufwand" />
+                    </columns>
+                     <BorderPane.margin>
+                        <Insets bottom="25.0" />
+                     </BorderPane.margin>
+                  </TableView>
+               </center>
+               <top>
+                  <Pane BorderPane.alignment="CENTER_RIGHT">
+                     <children>
+                        <Label layoutY="8.0" text="Anzahl Pakete">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="textFieldAnzPakete" alignment="CENTER" editable="false" layoutX="264.0" layoutY="13.0" prefHeight="25.0" prefWidth="35.0" text="4" />
+                        <Button fx:id="buttonAnzPaketePlus" layoutX="299.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketePlusAction" text="+">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="buttonAnzPaketeMinus" layoutX="241.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleButtonAnzPaketeMinusAction" prefHeight="25.0" prefWidth="23.0" text="-">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </top>
+               <bottom>
+                  <Button fx:id="buttonValidieren" alignment="CENTER" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleButtonValidierenAction" styleClass="buttonBlau" stylesheets="@Stylesheet.css" text="Validieren" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT" />
+               </bottom>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </BorderPane>
+         </children>
+      </StackPane>
    </children>
    <opaqueInsets>
       <Insets />
