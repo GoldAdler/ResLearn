@@ -109,11 +109,11 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
-//		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
+		// anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
 		setupLayout();
 		setupTabelle();
-		
+
 		radioButtonKapazitaet.setToggleGroup(rbGruppe);
 		radioButtonKapazitaet.setSelected(true);
 		radioButtonTermin.setToggleGroup(rbGruppe);
@@ -173,7 +173,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
-		alleFenster.add("fxml/AufgabeErstellen.fxml");
+		alleFenster.add("/reslearn/gui/fxml/AufgabeErstellen.fxml");
 		Parent root;
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reslearn/gui/fxml/ModusAuswaehlen.fxml"));
@@ -226,7 +226,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		pakete = new Arbeitspaket[paketList.size()];
 
 		for (int i = 0; i < paketList.size(); i++) {
-			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() +1;
+			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() + 1;
 
 			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
 					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
@@ -380,19 +380,19 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 		return arbeitspakete;
 	}
-	
+
 	private void setupLayout() {
 		double fensterBreite = DisplayCanvas.faktor * 1920;
 		double tabelleBreite = fensterBreite / 2;
-		double layoutX = ( fensterBreite - tabelleBreite) / 2;
-		
+		double layoutX = (fensterBreite - tabelleBreite) / 2;
+
 		// Breite der Tabelle setzen
 		tabelle.setPrefWidth(tabelleBreite);
-		
+
 		// Position der Tabelle setzen (Tabelle -> BorderPane -> StackPane)
 		tabelle.parentProperty().get().parentProperty().get().setLayoutX(layoutX);
 	}
-	
+
 	private void setupTabelle() {
 		// den Spalten die richtigen Attribute zuteilen und bearbeitbar machen
 		setupSpalteID();
@@ -403,11 +403,11 @@ public class ControllerAufgabeErstellen extends Controller {
 		setupSpalteAnzMitarbeiter();
 		setupSpalteAufwand();
 		setTableEditable();
-		
+
 		// Tabelle mit Default-Daten füllen
 		tabelle.setItems(data);
 		populate(retrieveData());
-		
+
 		// Schriftgröße
 		tabelle.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
@@ -443,11 +443,11 @@ public class ControllerAufgabeErstellen extends Controller {
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		int faz, saz, fez, sez, ma, groessteMA;
 		groessteMA = 0;
-//		String[] id = new String[arbeitspaket.length];
+		// String[] id = new String[arbeitspaket.length];
 		String id;
 
 		for (int i = 0; i < arbeitspaket.length; i++) {
-//			id[i] = arbeitspaket[i].getId();
+			// id[i] = arbeitspaket[i].getId();
 			id = arbeitspaket[i].getId();
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
@@ -462,25 +462,24 @@ public class ControllerAufgabeErstellen extends Controller {
 				tabelle.getSelectionModel().clearAndSelect(i, spalteID);
 				return false;
 			}
-			
+
 			// ID darf nur einmal vorkommen
-//			for (int j = i; j > 0; j--) {
-//				if (id[i].equals(id[j - 1])) {
-//					ergebnisValidierung = "Die ID " + arbeitspaket[i].getId()
-//							+ " darf nur einmal vergeben werden.";
-//					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
-//					return false;
-//				}
-//			}
+			// for (int j = i; j > 0; j--) {
+			// if (id[i].equals(id[j - 1])) {
+			// ergebnisValidierung = "Die ID " + arbeitspaket[i].getId()
+			// + " darf nur einmal vergeben werden.";
+			// tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+			// return false;
+			// }
+			// }
 			for (int j = i; j > 0; j--) {
-				if (id.equals(arbeitspaket[j-1].getId())) {
-					ergebnisValidierung = "Die ID " + arbeitspaket[i].getId()
-							+ " darf nur einmal vergeben werden.";
+				if (id.equals(arbeitspaket[j - 1].getId())) {
+					ergebnisValidierung = "Die ID " + arbeitspaket[i].getId() + " darf nur einmal vergeben werden.";
 					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
 					return false;
 				}
 			}
-			
+
 			// FAZ prüfen
 			if (faz < 1) {
 				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getId()
@@ -528,15 +527,17 @@ public class ControllerAufgabeErstellen extends Controller {
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
 				return false;
 			}
-			
-//			// Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des Arbeitspakets nicht größer als die Obergrenze sein
-//			if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
-//				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
-//						+ " darf nicht größer als die angegebene Kapazitätsgrenze sein.";
-//				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
-//				return false;
-//			}
-			
+
+			// // Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des
+			// Arbeitspakets nicht größer als die Obergrenze sein
+			// if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
+			// ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " +
+			// arbeitspaket[i].getId()
+			// + " darf nicht größer als die angegebene Kapazitätsgrenze sein.";
+			// tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+			// return false;
+			// }
+
 			// Größte Anzahl an Mitarbieter ermitteln
 			if (ma > groessteMA) {
 				groessteMA = ma;

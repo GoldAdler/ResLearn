@@ -100,7 +100,7 @@ public class ControllerAufgabeLaden extends Controller {
 	}
 
 	public void weiter(ActionEvent event) {
-		alleFenster.add("../fxml/AufgabeLaden.fxml");
+		alleFenster.add("/reslearn/gui/fxml/AufgabeLaden.fxml");
 		Scene newScene;
 		Parent root;
 		try {
