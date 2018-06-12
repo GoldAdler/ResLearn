@@ -119,7 +119,7 @@ public class ViewErsterSchrittModus extends Application {
 
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
-				controllerCanvas.getValidierenButton());
+				controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());

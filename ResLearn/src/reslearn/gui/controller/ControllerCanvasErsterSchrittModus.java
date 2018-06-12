@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -53,6 +54,9 @@ public class ControllerCanvasErsterSchrittModus {
 	private ColorPicker colorPicker;
 	Arbeitspaket[] arbeitspakete;
 	int maxGrenze = 5;
+	private Label korrekturvorschlaege;
+	private TextArea fehlerMeldung;
+	private Button validierenButton;
 
 	public ControllerCanvasErsterSchrittModus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -61,6 +65,8 @@ public class ControllerCanvasErsterSchrittModus {
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
 		erstelleButtons();
+		erstelleKorrekturvorschlaege();
+		leereFehlermeldungErstellen();
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -213,15 +219,12 @@ public class ControllerCanvasErsterSchrittModus {
 	/////////////////////////////////////////////////////////////////////////
 	// Erstellung des Valiedieren Button //
 	///////////////////////////////////////////////////////////////////////
-	private Button validierenButton;
-	private TextArea fehlerMeldung;
-
 	public void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
 		validierenButton.setLayoutX(
 				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(
-				DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandY);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
+				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
 		validierenButton.setOnAction(ValidierenAction);
 		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(validierenButton);
 	}
@@ -247,13 +250,38 @@ public class ControllerCanvasErsterSchrittModus {
 				fehlerMeldung.setStyle("-fx-text-fill: red;");
 			}
 			fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-			fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY);
+			fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
+					+ korrekturvorschlaege.getPrefHeight());
 			fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-			fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
+			fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
 			fehlerMeldung.setWrapText(true);
 			ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
 		}
 	};
+
+	public void leereFehlermeldungErstellen() {
+		fehlerMeldung = new TextArea("");
+		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		fehlerMeldung.setEditable(false);
+		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
+		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
+				+ korrekturvorschlaege.getPrefHeight());
+		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
+		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
+	}
+
+	public void erstelleKorrekturvorschlaege() {
+		korrekturvorschlaege = new Label("Korrekturvorschläge");
+		korrekturvorschlaege.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
+		korrekturvorschlaege.setAlignment(Pos.CENTER);
+		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
+		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
+	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
@@ -532,5 +560,9 @@ public class ControllerCanvasErsterSchrittModus {
 
 	public RadioButton getButtonKapazitaetstreuModus() {
 		return kapazitaetstreuModus;
+	}
+
+	public Label getKorrekturvorschlaege() {
+		return korrekturvorschlaege;
 	}
 }

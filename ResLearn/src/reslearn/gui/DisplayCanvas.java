@@ -49,7 +49,7 @@ public final class DisplayCanvas {
 	public static final int buttonLoesungsmodusBreite = (tabelleBreite - resFeldBreite) / 2;
 
 	public static final int tabelleArbeitspaketBreite = canvasBreite + spaltX;
-	public static final int tabelleArbeitspaketLaenge = (int) bounds.getHeight() -  canvasLaenge - 8 * resFeldBreite;
+	public static final int tabelleArbeitspaketLaenge = (int) bounds.getHeight() - canvasLaenge - 8 * resFeldBreite;
 
 	public static final int tabelleArbeitspaketLayoutX = canvasStartpunktX;
 
@@ -83,5 +83,7 @@ public final class DisplayCanvas {
 
 	public static final int breiteFehlermeldung = (int) (bounds.getWidth() - canvasBreite - canvasStartpunktX
 			- abstandX * 2);
+	public static final int hoeheFehlermeldung = (int) (canvasLaenge + tabelleArbeitspaketLaenge - resFeldBreite * 1.5
+			- DisplayCanvas.abstandX - DisplayCanvas.spaltX * 2);
 
 }
