@@ -1,6 +1,7 @@
 package reslearn.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -77,7 +78,7 @@ public class ViewUebungsmodus extends Application {
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
 		ControllerCanvasUebungsmodus controllerCanvas = new ControllerCanvasUebungsmodus(resCanvas, diagramm);
-
+		ArrayList<Rectangle> rahmenListe = controllerCanvas.erstelleRahmen();
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 
 		int farbenNummer = 0;
@@ -116,7 +117,9 @@ public class ViewUebungsmodus extends Application {
 				}
 			}
 		}
-
+		for(Rectangle rahmen : rahmenListe) {
+			pane.getChildren().add(rahmen);
+		}
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),

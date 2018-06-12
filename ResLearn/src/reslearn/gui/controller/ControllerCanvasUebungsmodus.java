@@ -32,6 +32,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -67,10 +68,13 @@ public class ControllerCanvasUebungsmodus {
 	private ArrayList<Arbeitspaket> arbeitspaketeArrayList;
 	private Line[] alleLinien = new Line[26];
 	private Label korrekturvorschlaege;
+	private Rectangle rectangle;
+	ArrayList<Rectangle> rahmenArray = new ArrayList<>();
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
+		erstelleRahmen();
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
@@ -183,7 +187,7 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung.setLayoutY(0  - DisplayCanvas.abstandY);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
-		ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+		//ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -509,7 +513,7 @@ public class ControllerCanvasUebungsmodus {
 				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 				fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
 				fehlerMeldung.setWrapText(true);
-				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+				//ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			}
 
 		}
@@ -791,6 +795,27 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
+	public ArrayList<Rectangle> erstelleRahmen() {
+		for(Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for(Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe().get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl()-1));
+				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
+						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
+						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStroke(Color.BLACK);
+				rectangle.setStrokeWidth(0.5);
+				rectangle.setMouseTransparent(true);
+
+				System.out.println(rectangle);
+				rahmenArray.add(rectangle);
+
+			}
+		}
+		return rahmenArray;
+	}
+
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
 	}
@@ -841,6 +866,10 @@ public class ControllerCanvasUebungsmodus {
 
 	public Label getKorrekturvorschlaege() {
 		return korrekturvorschlaege;
+	}
+
+	public TextArea getFehlermeldung() {
+		return fehlerMeldung;
 	}
 
 }
