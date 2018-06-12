@@ -34,6 +34,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.ImportExport.CsvWriter;
 import reslearn.gui.tableedit.ArbeitspaketTableData;
@@ -108,21 +109,10 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	public void initialize() {
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
-		anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
+		// anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
-		tabelle.setItems(data);
-		populate(retrieveData());
-
-		// den Spalten die richtigen Attribute zuteilen und bearbeitbar machen
-		setupSpalteID();
-		setupSpalteFaz();
-		setupSpalteSaz();
-		setupSpalteFez();
-		setupSpalteSez();
-		setupSpalteAnzMitarbeiter();
-		setupSpalteAufwand();
-		setTableEditable();
-		tabelle.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		setupLayout();
+		setupTabelle();
 
 		radioButtonKapazitaet.setToggleGroup(rbGruppe);
 		radioButtonKapazitaet.setSelected(true);
@@ -183,7 +173,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
-		alleFenster.add("fxml/AufgabeErstellen.fxml");
+		alleFenster.add("/reslearn/gui/fxml/AufgabeErstellen.fxml");
 		Parent root;
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reslearn/gui/fxml/ModusAuswaehlen.fxml"));
@@ -236,7 +226,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		pakete = new Arbeitspaket[paketList.size()];
 
 		for (int i = 0; i < paketList.size(); i++) {
-			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez();
+			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() + 1;
 
 			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
 					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
@@ -262,6 +252,16 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	private void setupSpalteID() {
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
+		// sets the cell factory to use EditCell which will handle key presses
+		// and firing commit events
+		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
+		// updates the salary field on the PersonTableData object to the
+		// committed value
+		spalteID.setOnEditCommit(event -> {
+			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
+			tabelle.refresh();
+		});
 	}
 
 	private void setupSpalteFaz() {
@@ -381,6 +381,40 @@ public class ControllerAufgabeErstellen extends Controller {
 		return arbeitspakete;
 	}
 
+	private void setupLayout() {
+		double fensterBreite = DisplayCanvas.faktor * 1920;
+		double tabelleBreite = fensterBreite / 2;
+		double layoutX = (fensterBreite - tabelleBreite) / 2;
+
+		// Breite der Tabelle setzen
+		tabelle.setPrefWidth(tabelleBreite);
+
+		// Position der Tabelle setzen (Tabelle -> BorderPane -> StackPane)
+		tabelle.parentProperty().get().parentProperty().get().setLayoutX(layoutX);
+	}
+
+	private void setupTabelle() {
+		// den Spalten die richtigen Attribute zuteilen und bearbeitbar machen
+		setupSpalteID();
+		setupSpalteFaz();
+		setupSpalteSaz();
+		setupSpalteFez();
+		setupSpalteSez();
+		setupSpalteAnzMitarbeiter();
+		setupSpalteAufwand();
+		setTableEditable();
+
+		// Tabelle mit Default-Daten füllen
+		tabelle.setItems(data);
+		populate(retrieveData());
+
+		// Schriftgröße
+		tabelle.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
+
+		// Spalten-Breite automatisch anpassen
+		tabelle.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+	}
+
 	@FXML
 	private void handleButtonMaxPersonenMinusAction(ActionEvent event) {
 		if (anzMaxPersonen > 1) {
@@ -407,19 +441,49 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
-		int faz, saz, fez, sez, ma;
+		int faz, saz, fez, sez, ma, groessteMA;
+		groessteMA = 0;
+		// String[] id = new String[arbeitspaket.length];
+		String id;
 
 		for (int i = 0; i < arbeitspaket.length; i++) {
+			// id[i] = arbeitspaket[i].getId();
+			id = arbeitspaket[i].getId();
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
 
+			// ID nicht größer als 3 Zeichen
+			if (id.length() > 3) {
+				ergebnisValidierung = "Die ID des Arbeitspakets " + arbeitspaket[i].getId()
+						+ " darf nicht mehr als 3 Zeichen enthalten.";
+				tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+				return false;
+			}
+
+			// ID darf nur einmal vorkommen
+			// for (int j = i; j > 0; j--) {
+			// if (id[i].equals(id[j - 1])) {
+			// ergebnisValidierung = "Die ID " + arbeitspaket[i].getId()
+			// + " darf nur einmal vergeben werden.";
+			// tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+			// return false;
+			// }
+			// }
+			for (int j = i; j > 0; j--) {
+				if (id.equals(arbeitspaket[j - 1].getId())) {
+					ergebnisValidierung = "Die ID " + arbeitspaket[i].getId() + " darf nur einmal vergeben werden.";
+					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+					return false;
+				}
+			}
+
 			// FAZ prüfen
 			if (faz < 1) {
 				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens 1 sein";
+						+ " muss mindestens 1 sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFaz);
 				return false;
 			}
@@ -427,7 +491,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			// SAZ prüfen
 			if (saz < faz) {
 				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich groß wie der Wert FAZ sein";
+						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSaz);
 				return false;
 			}
@@ -435,7 +499,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			// FEZ prüfen
 			if (fez < faz) {
 				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich groß wie der Wert FAZ sein";
+						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFez);
 				return false;
 			}
@@ -443,7 +507,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			// SEZ prüfen
 			if (sez < fez) {
 				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss mindestens gleich groß wie der Wert FEZ sein";
+						+ " muss mindestens gleich groß wie der Wert FEZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
 			}
@@ -451,7 +515,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			// Differenz zwischen FEZ-FAZ und SEZ-SAZ gleich groß?
 			if ((fez - faz) != (sez - saz)) {
 				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket "
-						+ arbeitspaket[i].getId() + " müssen gleich groß sein!";
+						+ arbeitspaket[i].getId() + " müssen gleich groß sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
 			}
@@ -459,21 +523,28 @@ public class ControllerAufgabeErstellen extends Controller {
 			// Mitarbeiterzahl prüfen
 			if (ma < 1) {
 				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " muss größer 0 sein!";
+						+ " muss größer 0 sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
 				return false;
 			}
 
-			// Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des
+			// // Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des
 			// Arbeitspakets nicht größer als die Obergrenze sein
-			if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
-				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getId()
-						+ " darf nicht größer als die angegebene Kapazitätsgrenze sein!";
-				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
-				return false;
+			// if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
+			// ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " +
+			// arbeitspaket[i].getId()
+			// + " darf nicht größer als die angegebene Kapazitätsgrenze sein.";
+			// tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+			// return false;
+			// }
+
+			// Größte Anzahl an Mitarbieter ermitteln
+			if (ma > groessteMA) {
+				groessteMA = ma;
 			}
 
 		}
+		anzMaxPersonen = groessteMA + 2;
 		ergebnisValidierung = "Validierung erfolgreich!";
 		return true;
 	}
@@ -524,7 +595,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			}
 
 			for (Arbeitspaket ap : arbeitspakete) {
-				int vorgangsdauer = ap.getSez() - ap.getFez();
+				int vorgangsdauer = ap.getSez() - ap.getFez() + 1;
 				csvOutput.write(ap.getId().toString());
 				csvOutput.write(String.valueOf(ap.getFaz()));
 				csvOutput.write(String.valueOf(ap.getFez()));

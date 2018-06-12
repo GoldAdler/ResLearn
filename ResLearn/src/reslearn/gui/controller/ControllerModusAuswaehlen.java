@@ -37,7 +37,7 @@ public class ControllerModusAuswaehlen extends Controller {
 
 	@FXML
 	public void weiter(ActionEvent event) throws Exception {
-		alleFenster.add("../fxml/ModusAuswaehlen.fxml");
+		alleFenster.add("/reslearn/gui/fxml/ModusAuswaehlen.fxml");
 		if (event.getSource() == ersterSchritt) {
 			ViewErsterSchrittModus.getInstance().initializeCanvasView(ap);
 			((Node) (event.getSource())).getScene().getWindow().hide();

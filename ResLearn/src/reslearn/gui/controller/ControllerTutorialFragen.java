@@ -111,7 +111,7 @@ public class ControllerTutorialFragen extends Controller {
 		} else if (counter == 5) {
 			Scene newScene;
 			Parent root;
-			alleFenster.add("../fxml/TutorialFragen.fxml");
+			alleFenster.add("/reslearn/gui/fxml/TutorialFragen.fxml");
 			try {
 				root = FXMLLoader.load(getClass().getResource(hauptmenue()));
 				newScene = new Scene(root);

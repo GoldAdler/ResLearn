@@ -21,7 +21,7 @@ public class Controller {
 	}
 
 	public String hauptmenue() {
-		return "../fxml/Hauptmenue.fxml";
+		return "/reslearn/gui/fxml/Hauptmenue.fxml";
 	}
 
 }
