@@ -188,13 +188,11 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
 				+ korrekturvorschlaege.getPrefHeight());
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-<<<<<<< HEAD
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
-		//ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
-=======
+
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
 		ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
->>>>>>> branch 'master' of https://github.com/GoldAdler/ResLearn.git
+
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -443,10 +441,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -455,7 +453,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 
 		}
 	}
@@ -630,7 +628,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -638,7 +636,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -770,7 +768,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
