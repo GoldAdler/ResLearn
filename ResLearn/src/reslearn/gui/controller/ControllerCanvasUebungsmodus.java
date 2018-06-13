@@ -441,10 +441,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -453,7 +453,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 
 		}
 	}
@@ -520,7 +520,7 @@ public class ControllerCanvasUebungsmodus {
 				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 				fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
 				fehlerMeldung.setWrapText(true);
-				//ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
+				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 			}
 
 		}
@@ -628,7 +628,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -636,7 +636,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -768,7 +768,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -803,9 +803,10 @@ public class ControllerCanvasUebungsmodus {
 	};
 
 	public ArrayList<Rectangle> erstelleRahmen() {
-		for(Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
-			for(Teilpaket tp : ap.getTeilpaketListe()) {
-				ResEinheit reseinheit = tp.getResEinheitListe().get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl()-1));
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
 				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
 						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
 						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
