@@ -94,7 +94,7 @@ public class AlgoTermintreu extends Algorithmus {
 
 		resCanvas.sortiereAP();
 
-		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getId();
+		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getIdIntern();
 		return letzteApID;
 	}
 
@@ -160,7 +160,7 @@ public class AlgoTermintreu extends Algorithmus {
 		int startAPint = 0;
 		if (!(nichtMehrAnschauenApID == null)) {
 			for (Arbeitspaket simAp : arbeitspaketListe) {
-				if (simAp.getId() == nichtMehrAnschauenApID) {
+				if (simAp.getIdIntern() == nichtMehrAnschauenApID) {
 					startAPint++;
 					break;
 				}
@@ -169,7 +169,7 @@ public class AlgoTermintreu extends Algorithmus {
 		}
 
 		Arbeitspaket startAP = arbeitspaketListe.get(startAPint);
-		String apID = startAP.getId();
+		String apID = startAP.getIdIntern();
 
 		// System.out.println("Beginn Sim für AP: " + apID);
 		this.simuliere(resCanvas, startAP, simLoesungenResCanvas);
@@ -210,7 +210,7 @@ public class AlgoTermintreu extends Algorithmus {
 
 			simulation = resCanvas.copyResCanvas(zuVerschiebenAp);
 
-			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getId());
+			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getIdIntern());
 			copyZuVerschiebenAP.neuSetzenTermin(x, simulation);
 			simLoesungenResCanvas.add(simulation);
 		}

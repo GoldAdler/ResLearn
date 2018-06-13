@@ -230,7 +230,7 @@ public class ControllerCanvasLoesungsmodus {
 					Arbeitspaket arbeitspaketAktuell = koordinatenSystemNeu[y][x].getTeilpaket().getArbeitspaket();
 					if (!arbeitspaketeAbgearbeitet.contains(arbeitspaketAktuell)) {
 						arbeitspaketeAbgearbeitet.add(arbeitspaketAktuell);
-						String arbeitspaketId = arbeitspaketAktuell.getId();
+						String arbeitspaketId = arbeitspaketAktuell.getIdIntern();
 
 						ArrayList<ResEinheit> abzuarbeitendeResEinheiten = new ArrayList<ResEinheit>();
 						arbeitspaketAktuell.getTeilpaketListe().forEach(teilpaket -> teilpaket.getResEinheitListe()
@@ -254,7 +254,7 @@ public class ControllerCanvasLoesungsmodus {
 		for (ResEinheit[] zeile : koordinatenSystemUrspruenglich) {
 			for (ResEinheit resEinheit : zeile) {
 				if (resEinheit != null) {
-					if (resEinheit.getTeilpaket().getArbeitspaket().getId() == arbeitspaketId) {
+					if (resEinheit.getTeilpaket().getArbeitspaket().getIdIntern() == arbeitspaketId) {
 						if (index == abzuarbeitendeResEinheiten.size()) {
 							return;
 						}
@@ -305,7 +305,7 @@ public class ControllerCanvasLoesungsmodus {
 				// circle.setFill(entry.getValue());
 			}
 
-			label = new Label(entry.getKey().getId());
+			label = new Label(entry.getKey().getIdIntern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
@@ -325,7 +325,7 @@ public class ControllerCanvasLoesungsmodus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
 				pair("SAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSaz()),
@@ -537,7 +537,7 @@ public class ControllerCanvasLoesungsmodus {
 
 	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
-		System.out.println("Arbeitspaket angeklickt: " + ap.getId());
+		System.out.println("Arbeitspaket angeklickt: " + ap.getIdIntern());
 		tabelleArbeitspakete.getSelectionModel().select(ap);
 		tabelleArbeitspakete.scrollTo(ap);
 	}

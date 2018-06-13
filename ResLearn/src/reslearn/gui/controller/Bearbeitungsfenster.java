@@ -39,7 +39,7 @@ public class Bearbeitungsfenster extends Pane {
 	public Bearbeitungsfenster(ResFeld rect) {
 
 		arbeitspaket = new Label(
-				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
+				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
 		arbeitspaket.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 		hilfetext.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));

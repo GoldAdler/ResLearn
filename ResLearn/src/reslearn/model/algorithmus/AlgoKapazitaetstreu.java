@@ -357,7 +357,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		int startAP = 0;
 		if (!(nichtMehrAnschauenApID == null)) {
 			for (Arbeitspaket simAp : arbeitspaketListe) {
-				if (simAp.getId() == nichtMehrAnschauenApID) {
+				if (simAp.getIdIntern() == nichtMehrAnschauenApID) {
 					startAP++;
 					break;
 				}
@@ -374,7 +374,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
 			VerschiebeRichtung verschieben = letztesTeilpaket.ueberpruefeZeitenEnum();
 			if (verschieben != VerschiebeRichtung.FAZ) {
-				apID = arbeitspaketListe.get(i).getId();
+				apID = arbeitspaketListe.get(i).getIdIntern();
 				// System.out.println("simZaehler = " + ++simZaehler);
 				// if (simZaehler == 3) {
 				// System.out.println("Stopp!");
@@ -450,7 +450,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		vorbereitungSimulation = resCanvas.copyResCanvas();
 
 		for (Arbeitspaket simAp : vorbereitungSimulation.getArbeitspaketListe()) {
-			if (simAp.getId() == ap.getId()) {
+			if (simAp.getIdIntern() == ap.getIdIntern()) {
 				zuVerschiebenAp = simAp;
 				break;
 			}
@@ -628,7 +628,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			simulation = vorbereitungSimulation.copyResCanvas(zuVerschiebenAp);
 
-			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getId());
+			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getIdIntern());
 
 			int xStart = copyZuVerschiebenAP.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
 					.getxKoordinate();

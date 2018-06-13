@@ -16,7 +16,7 @@ public class ArbeitspaketTableData extends Paket {
 	private SimpleIntegerProperty aufwand;
 
 	public ArbeitspaketTableData(Arbeitspaket arbeitspaket) {
-		this.id = new SimpleStringProperty(arbeitspaket.getId());
+		this.id = new SimpleStringProperty(arbeitspaket.getIdIntern());
 		this.faz = new SimpleIntegerProperty(arbeitspaket.getFaz());
 		this.saz = new SimpleIntegerProperty(arbeitspaket.getSaz());
 		this.fez = new SimpleIntegerProperty(arbeitspaket.getFez());

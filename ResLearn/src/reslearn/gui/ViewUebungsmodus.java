@@ -54,7 +54,7 @@ public class ViewUebungsmodus extends Application {
 		ResCanvas resCanvas = new ResCanvas();
 
 		for (Arbeitspaket arbeitspaket : arbeitspakete) {
-			System.out.println("Arbeitspaket-ID:" + arbeitspaket.getId());
+			System.out.println("Arbeitspaket-ID:" + arbeitspaket.getIdIntern());
 			resCanvas.hinzufuegen(arbeitspaket);
 		}
 

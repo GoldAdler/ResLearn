@@ -560,7 +560,7 @@ public class ControllerCanvasUebungsmodus {
 				// circle.setFill(entry.getValue());
 			}
 
-			label = new Label(entry.getKey().getId());
+			label = new Label(entry.getKey().getIdIntern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
@@ -580,7 +580,7 @@ public class ControllerCanvasUebungsmodus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern()),
 				pair("Farbe", rect.getFill()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),

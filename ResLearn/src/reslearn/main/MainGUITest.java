@@ -68,7 +68,7 @@ public class MainGUITest {
 				if (b == null) {
 					System.out.print(".");
 				} else {
-					System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+					System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 				}
 			}
 			System.out.println();
