@@ -317,7 +317,7 @@ public class ControllerCanvasErsterSchrittModus {
 				// circle.setFill(entry.getValue());
 			}
 
-			label = new Label(entry.getKey().getIdIntern());
+			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
@@ -337,7 +337,7 @@ public class ControllerCanvasErsterSchrittModus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("Farbe", rect.getFill()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
@@ -467,7 +467,7 @@ public class ControllerCanvasErsterSchrittModus {
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
 		apId.setMinWidth(breite / 7);
-		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("idExtern"));
 		apId.setSortType(TableColumn.SortType.ASCENDING);
 
 		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
