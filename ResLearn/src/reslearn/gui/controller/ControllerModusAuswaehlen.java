@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import reslearn.gui.ViewErsterSchrittModus;
 import reslearn.gui.ViewLoesungsmodus;
+import reslearn.gui.ViewUebungAuswaehlen;
 import reslearn.gui.ViewUebungsmodus;
 import reslearn.model.paket.Arbeitspaket;
 
@@ -44,17 +45,9 @@ public class ControllerModusAuswaehlen extends Controller {
 		} else if (event.getSource() == uebungsmodus) {
 			ViewUebungsmodus.getInstance().initializeCanvasView(ap);
 			((Node) (event.getSource())).getScene().getWindow().hide();
-			// View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" +
-			// cua.datei));
-			// View.getInstance().start(new Stage());
-			// ((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == loesungsmodus) {
 			ViewLoesungsmodus.getInstance().initializeCanvasView(ap);
 			((Node) (event.getSource())).getScene().getWindow().hide();
-			// View.getInstance().initializeCanvasView(ali.aufgabeLaden(cua.f + "\\" +
-			// cua.datei));
-			// View.getInstance().start(new Stage());
-			// ((Node) (event.getSource())).getScene().getWindow().hide();
 		}
 	}
 
@@ -80,17 +73,23 @@ public class ControllerModusAuswaehlen extends Controller {
 	public void zurueck(ActionEvent event) throws Exception {
 		Scene newScene;
 		Parent root;
-		try {
-			root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+		if (alleFenster.get(alleFenster.size() - 1) == "/reslearn/gui/fxml/UebungAuswaehlen.fxml") {
+			vorherigesFenster(alleFenster);
+			ViewUebungAuswaehlen.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} else {
+			try {
+				root = FXMLLoader.load(getClass().getResource(vorherigesFenster(alleFenster)));
+				newScene = new Scene(root);
+				Stage stage = new Stage();
+				stage.setTitle("ResLearn");
+				stage.setMaximized(true);
+				stage.setScene(newScene);
+				stage.show();
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
