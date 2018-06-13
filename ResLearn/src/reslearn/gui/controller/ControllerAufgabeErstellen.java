@@ -102,8 +102,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	TextField dateiname;
 	// Pfad, unter dem die angelegte Aufgabe gespeichert wird
-	String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
-			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
+	String dateipfad = "./eigeneAufgaben/";
 
 	public Arbeitspaket[] pakete;
 
@@ -229,8 +228,8 @@ public class ControllerAufgabeErstellen extends Controller {
 			String idExtern = paketList.get(i).getIdExtern();
 			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() + 1;
 
-			pakete[i] = new Arbeitspaket(paketList.get(i).getIdIntern(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
-					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
+			pakete[i] = new Arbeitspaket(paketList.get(i).getIdIntern(), paketList.get(i).getFaz(),
+					paketList.get(i).getFez(), paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
 					paketList.get(i).getMitarbeiteranzahl(), paketList.get(i).getAufwand());
 			pakete[i].setIdExtern(idExtern);
 		}
@@ -456,7 +455,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
-			
+
 			// ID nicht größer als 3 Zeichen
 			if (id.length() > 3) {
 				ergebnisValidierung = "Die ID des Arbeitspakets " + arbeitspaket[i].getIdExtern()
@@ -476,7 +475,8 @@ public class ControllerAufgabeErstellen extends Controller {
 			// }
 			for (int j = i; j > 0; j--) {
 				if (id.equals(arbeitspaket[j - 1].getIdExtern())) {
-					ergebnisValidierung = "Die ID " + arbeitspaket[i].getIdExtern() + " darf nur einmal vergeben werden.";
+					ergebnisValidierung = "Die ID " + arbeitspaket[i].getIdExtern()
+							+ " darf nur einmal vergeben werden.";
 					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
 					return false;
 				}

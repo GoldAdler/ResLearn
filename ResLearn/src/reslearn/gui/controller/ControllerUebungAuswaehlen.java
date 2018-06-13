@@ -21,10 +21,7 @@ import reslearn.model.paket.Arbeitspaket;
 public class ControllerUebungAuswaehlen extends Controller {
 	public Arbeitspaket[] paketeArray;
 	private Pane pane;
-	// TODO Dieser Pfad verursacht den Fehler in der Jar Datei (genauso beim
-	// Speichern und Laden)
-	File f = new File(".." + File.separator + "Reslearn" + File.separator + "bin" + File.separator + "reslearn"
-			+ File.separator + "gui" + File.separator + "uebungen");;
+	File f = new File("./uebungen");
 	public File[] fileArray = f.listFiles(new FilenameFilter() {
 		@Override
 		public boolean accept(File f, String name) {
