@@ -99,9 +99,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketLR());
 		ausgeben(resCanvas.getKoordinatenSystem());
 
-		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
-
-		zeitValidierung(resCanvas, moeglicheLoesungenResCanvas);
+		zeitOptimierung(resCanvas);
 
 	}
 
@@ -115,11 +113,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * Endergebnis verwendet.
 	 *
 	 * @param resCanvas
-	 * @param moeglicheLoesungenResCanvas
 	 */
-	private void zeitValidierung(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
+	private void zeitOptimierung(ResCanvas resCanvas) {
 
 		// System.out.println("Simulation start");
+
+		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
 		simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null);
 

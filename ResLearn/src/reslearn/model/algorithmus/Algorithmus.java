@@ -7,7 +7,7 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public abstract class Algorithmus {
 
-	static final boolean testModus = false;
+	static final boolean testModus = true;
 	static final boolean trotzdem = false;
 	static final boolean historie = false;
 	static final boolean test = false;
