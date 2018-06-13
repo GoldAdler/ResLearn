@@ -7,7 +7,8 @@ import reslearn.model.paket.Paket;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class ArbeitspaketTableData extends Paket {
-	private SimpleStringProperty id;
+	private SimpleStringProperty idIntern;
+	private SimpleStringProperty idExtern;
 	private SimpleIntegerProperty faz;
 	private SimpleIntegerProperty saz;
 	private SimpleIntegerProperty fez;
@@ -16,7 +17,8 @@ public class ArbeitspaketTableData extends Paket {
 	private SimpleIntegerProperty aufwand;
 
 	public ArbeitspaketTableData(Arbeitspaket arbeitspaket) {
-		this.id = new SimpleStringProperty(arbeitspaket.getIdIntern());
+		this.idIntern = new SimpleStringProperty(arbeitspaket.getIdIntern());
+		this.idExtern = new SimpleStringProperty(arbeitspaket.getIdExtern());
 		this.faz = new SimpleIntegerProperty(arbeitspaket.getFaz());
 		this.saz = new SimpleIntegerProperty(arbeitspaket.getSaz());
 		this.fez = new SimpleIntegerProperty(arbeitspaket.getFez());
@@ -28,7 +30,8 @@ public class ArbeitspaketTableData extends Paket {
 	public ArbeitspaketTableData(final String id, final int faz, final int fez, final int saz, final int sez,
 			final int vorgangsdauer, final int aufwand, final int mitarbeiteranzahl) {
 		super.vorgangsdauer = vorgangsdauer;
-		this.id = new SimpleStringProperty(id);
+		this.idIntern = new SimpleStringProperty(id);
+		this.idExtern = new SimpleStringProperty(id);
 		this.faz = new SimpleIntegerProperty(faz);
 		this.saz = new SimpleIntegerProperty(saz);
 		this.fez = new SimpleIntegerProperty(fez);
@@ -37,12 +40,20 @@ public class ArbeitspaketTableData extends Paket {
 		this.aufwand = new SimpleIntegerProperty(aufwand);
 	}
 
-	public String getId() {
-		return id.get();
+	public String getIdIntern() {
+		return idIntern.get();
 	}
 
-	public void setId(final String id) {
-		this.id.set(id);
+	public void setIdIntern(final String idIntern) {
+		this.idIntern.set(idIntern);
+	}
+	
+	public String getIdExtern() {
+		return idExtern.get();
+	}
+	
+	public void setIdExtern(final String idExtern) {
+		this.idExtern.set(idExtern);
 	}
 
 	public int getFaz() {

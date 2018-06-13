@@ -226,11 +226,13 @@ public class ControllerAufgabeErstellen extends Controller {
 		pakete = new Arbeitspaket[paketList.size()];
 
 		for (int i = 0; i < paketList.size(); i++) {
+			String idExtern = paketList.get(i).getIdExtern();
 			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() + 1;
 
-			pakete[i] = new Arbeitspaket(paketList.get(i).getId(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
+			pakete[i] = new Arbeitspaket(paketList.get(i).getIdIntern(), paketList.get(i).getFaz(), paketList.get(i).getFez(),
 					paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
 					paketList.get(i).getMitarbeiteranzahl(), paketList.get(i).getAufwand());
+			pakete[i].setIdExtern(idExtern);
 		}
 	}
 
@@ -251,7 +253,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	}
 
 	private void setupSpalteID() {
-		spalteID.setCellValueFactory(new PropertyValueFactory<>("id"));
+		spalteID.setCellValueFactory(new PropertyValueFactory<>("idExtern"));
 		// sets the cell factory to use EditCell which will handle key presses
 		// and firing commit events
 		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
@@ -259,7 +261,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		// committed value
 		spalteID.setOnEditCommit(event -> {
 			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
-			event.getTableView().getItems().get(event.getTablePosition().getRow()).setId(value);
+			event.getTableView().getItems().get(event.getTablePosition().getRow()).setIdExtern(value);
 			tabelle.refresh();
 		});
 	}
@@ -448,16 +450,16 @@ public class ControllerAufgabeErstellen extends Controller {
 
 		for (int i = 0; i < arbeitspaket.length; i++) {
 			// id[i] = arbeitspaket[i].getId();
-			id = arbeitspaket[i].getIdIntern();
+			id = arbeitspaket[i].getIdExtern();
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
-
+			
 			// ID nicht größer als 3 Zeichen
 			if (id.length() > 3) {
-				ergebnisValidierung = "Die ID des Arbeitspakets " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Die ID des Arbeitspakets " + arbeitspaket[i].getIdExtern()
 						+ " darf nicht mehr als 3 Zeichen enthalten.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteID);
 				return false;
@@ -473,8 +475,8 @@ public class ControllerAufgabeErstellen extends Controller {
 			// }
 			// }
 			for (int j = i; j > 0; j--) {
-				if (id.equals(arbeitspaket[j - 1].getIdIntern())) {
-					ergebnisValidierung = "Die ID " + arbeitspaket[i].getIdIntern() + " darf nur einmal vergeben werden.";
+				if (id.equals(arbeitspaket[j - 1].getIdExtern())) {
+					ergebnisValidierung = "Die ID " + arbeitspaket[i].getIdExtern() + " darf nur einmal vergeben werden.";
 					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
 					return false;
 				}
@@ -482,7 +484,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 			// FAZ prüfen
 			if (faz < 1) {
-				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens 1 sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFaz);
 				return false;
@@ -490,7 +492,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 			// SAZ prüfen
 			if (saz < faz) {
-				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSaz);
 				return false;
@@ -498,7 +500,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 			// FEZ prüfen
 			if (fez < faz) {
-				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFez);
 				return false;
@@ -506,7 +508,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 			// SEZ prüfen
 			if (sez < fez) {
-				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FEZ sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
@@ -515,14 +517,14 @@ public class ControllerAufgabeErstellen extends Controller {
 			// Differenz zwischen FEZ-FAZ und SEZ-SAZ gleich groß?
 			if ((fez - faz) != (sez - saz)) {
 				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket "
-						+ arbeitspaket[i].getIdIntern() + " müssen gleich groß sein.";
+						+ arbeitspaket[i].getIdExtern() + " müssen gleich groß sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
 				return false;
 			}
 
 			// Mitarbeiterzahl prüfen
 			if (ma < 1) {
-				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getIdIntern()
+				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss größer 0 sein.";
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
 				return false;

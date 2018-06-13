@@ -46,10 +46,11 @@ public class Arbeitspaket extends Paket {
 
 	}
 
-	public Arbeitspaket(String idIntern, int faz, int fez, int saz, int sez, int vorgangsdauer, int mitarbeiteranzahl,
+	public Arbeitspaket(String id, int faz, int fez, int saz, int sez, int vorgangsdauer, int mitarbeiteranzahl,
 			int aufwand) {
 		super(vorgangsdauer, mitarbeiteranzahl, aufwand);
-		this.idIntern = idIntern;
+		this.idIntern = id;
+		this.idExtern = id;
 		this.faz = faz;
 		this.saz = saz;
 		this.fez = fez;
@@ -407,7 +408,7 @@ public class Arbeitspaket extends Paket {
 	 *
 	 * @return
 	 */
-	public String getArbeitspaketName() {
+	public String getIdExtern() {
 		return idExtern;
 	}
 
@@ -417,8 +418,8 @@ public class Arbeitspaket extends Paket {
 	 *
 	 * @return
 	 */
-	public void setArbeitspaketName(String idIntern) {
-		this.idExtern = idIntern;
+	public void setIdExtern(String idExtern) {
+		this.idExtern = idExtern;
 	}
 
 }
