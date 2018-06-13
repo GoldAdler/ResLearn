@@ -1,6 +1,7 @@
 package reslearn.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -28,8 +29,8 @@ public class ViewErsterSchrittModus extends Application {
 	private ContextMenu menu;
 	private MenuItem ap;
 	private MenuItem reset;
-
 	private Pane pane;
+	private ControllerCanvasErsterSchrittModus controllerCanvas;
 
 	public static ViewErsterSchrittModus getInstance() {
 		if (view == null) {
@@ -76,7 +77,7 @@ public class ViewErsterSchrittModus extends Application {
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpaketeOben(koordinatenSystem, resCanvas);
-		ControllerCanvasErsterSchrittModus controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas,
+		controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas,
 				diagramm);
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
@@ -117,6 +118,8 @@ public class ViewErsterSchrittModus extends Application {
 			}
 		}
 
+		rahmenErstellen();
+
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege());
@@ -128,6 +131,18 @@ public class ViewErsterSchrittModus extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
+	}
+
+	public void rahmenErstellen() {
+		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+			pane.getChildren().add(rahmen);
+		}
+	}
+
+	public void rahmenLoeschen(ArrayList<Rectangle> rahmenListe) {
+		for(Rectangle rahmen : rahmenListe) {
+			pane.getChildren().remove(rahmen);
+		}
 	}
 
 	public static void main(String[] args) {

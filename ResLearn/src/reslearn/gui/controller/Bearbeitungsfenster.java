@@ -1,7 +1,6 @@
 package reslearn.gui.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,7 +25,7 @@ import reslearn.model.paket.ResEinheit;
 public class Bearbeitungsfenster extends Pane {
 	private Stage bearbeitungsmodus;
 	private Scene scene;
-	private LinkedList<ResFeld> resFeldListe;
+	private ArrayList<ResFeld> resFeldListe;
 	private boolean vertikal;
 
 	private Label arbeitspaket;
@@ -35,6 +34,7 @@ public class Bearbeitungsfenster extends Pane {
 
 	private Slider sliderX;
 	private Slider sliderY;
+
 
 	public Bearbeitungsfenster(ResFeld rect) {
 
@@ -46,7 +46,7 @@ public class Bearbeitungsfenster extends Pane {
 
 		teilen = new Button("Teile Arbeitspaket");
 		teilen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		resFeldListe = new LinkedList<ResFeld>();
+		resFeldListe = new ArrayList<ResFeld>();
 
 		sliderX = new Slider();
 		sliderX.setStyle("-fx-font-size: " + DisplayCanvas.schriftGroesse);
@@ -144,10 +144,10 @@ public class Bearbeitungsfenster extends Pane {
 								ResFeld dummy = new ResFeld(
 										j * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
 										i * DisplayCanvas.resFeldLaenge
-												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
-												- DisplayCanvas.resFeldLaenge,
+										+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
+										- DisplayCanvas.resFeldLaenge,
 										rect.getResEinheit().getTeilpaket().getResEinheitListe()
-												.get(markierteResFelder));
+										.get(markierteResFelder));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);
@@ -196,9 +196,9 @@ public class Bearbeitungsfenster extends Pane {
 								ResFeld dummy = new ResFeld(
 										i * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
 										j * DisplayCanvas.resFeldLaenge
-												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
+										+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
 										rect.getResEinheit().getTeilpaket().getResEinheitListe()
-												.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
+										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								dummy.setStroke(Color.GREY);
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);
@@ -243,6 +243,8 @@ public class Bearbeitungsfenster extends Pane {
 						rect.getResEinheit().getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
 					}
 				}
+				ViewUebungsmodus.getInstance().rahmenLoeschen();
+				ViewUebungsmodus.getInstance().rahmenErstellen();
 				bearbeitungsmodus.close();
 
 			}

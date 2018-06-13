@@ -30,6 +30,7 @@ public class ViewLoesungsmodus extends Application {
 	private ContextMenu menu;
 	private MenuItem ap;
 	private MenuItem reset;
+	private ControllerCanvasLoesungsmodus controllerCanvas;
 
 	private Pane pane;
 
@@ -85,7 +86,7 @@ public class ViewLoesungsmodus extends Application {
 
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
-		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe,
+		controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe,
 				resCanvas, diagramm);
 		ResFeld[][] teilpakete = controllerCanvas.initializePositionObservableMap();
 
@@ -127,6 +128,8 @@ public class ViewLoesungsmodus extends Application {
 			}
 		}
 
+		rahmenErstellen();
+
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
@@ -139,6 +142,18 @@ public class ViewLoesungsmodus extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
+	}
+
+	public void rahmenErstellen() {
+		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+			pane.getChildren().add(rahmen);
+		}
+	}
+	
+	public void rahmenLoeschen() {
+		for(Rectangle rahmen : controllerCanvas.getRahmenListe()) {
+			pane.getChildren().remove(rahmen);
+		}
 	}
 
 	public static void main(String[] args) {

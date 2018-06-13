@@ -69,7 +69,8 @@ public class ControllerCanvasUebungsmodus {
 	private Line[] alleLinien = new Line[26];
 	private Label korrekturvorschlaege;
 	private Rectangle rectangle;
-	ArrayList<Rectangle> rahmenArray = new ArrayList<>();
+	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
+	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -315,6 +316,9 @@ public class ControllerCanvasUebungsmodus {
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
 					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateX(newTranslateX);
+					}
 				}
 			}
 		}
@@ -337,6 +341,9 @@ public class ControllerCanvasUebungsmodus {
 						resFeld.setTranslateY(newTranslateY);
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
+					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateY(newTranslateY);
 					}
 				}
 			}
@@ -391,6 +398,9 @@ public class ControllerCanvasUebungsmodus {
 		 */
 		@Override
 		public void handle(ActionEvent e) {
+			//Rahmen löschen
+			ViewUebungsmodus.getInstance().rahmenLoeschen();
+
 			ResEinheit[][] koordinatenSystem = rect.getResEinheit().getTeilpaket().getArbeitspaket().reset(0,
 					resCanvas);
 
@@ -426,7 +436,7 @@ public class ControllerCanvasUebungsmodus {
 					}
 				}
 			}
-
+			ViewUebungsmodus.getInstance().rahmenErstellen();
 		}
 	};
 
@@ -441,10 +451,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -453,7 +463,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 
 		}
 	}
@@ -628,7 +638,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -636,7 +646,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -768,7 +778,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -803,6 +813,8 @@ public class ControllerCanvasUebungsmodus {
 	};
 
 	public ArrayList<Rectangle> erstelleRahmen() {
+		rahmenListe.clear();
+
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				ResEinheit reseinheit = tp.getResEinheitListe()
@@ -813,15 +825,21 @@ public class ControllerCanvasUebungsmodus {
 						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
 				rectangle.setFill(Color.TRANSPARENT);
 				rectangle.setStroke(Color.BLACK);
-				rectangle.setStrokeWidth(0.5);
+				rectangle.setStrokeWidth(1);
 				rectangle.setMouseTransparent(true);
 
-				System.out.println(rectangle);
-				rahmenArray.add(rectangle);
 
+				rahmenListe.add(rectangle);
+
+				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+					teilpaketRahmenZuordnung.replace(tp, rectangle);
+
+				} else {
+					teilpaketRahmenZuordnung.put(tp, rectangle);
+				}
 			}
 		}
-		return rahmenArray;
+		return rahmenListe;
 	}
 
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
@@ -880,4 +898,7 @@ public class ControllerCanvasUebungsmodus {
 		return fehlerMeldung;
 	}
 
+	public ArrayList<Rectangle> getRahmenListe() {
+		return rahmenListe;
+	}
 }
