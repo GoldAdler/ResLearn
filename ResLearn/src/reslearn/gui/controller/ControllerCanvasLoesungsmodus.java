@@ -314,7 +314,7 @@ public class ControllerCanvasLoesungsmodus {
 				// circle.setFill(entry.getValue());
 			}
 
-			label = new Label(entry.getKey().getIdIntern());
+			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
@@ -334,7 +334,7 @@ public class ControllerCanvasLoesungsmodus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
 				pair("SAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSaz()),
@@ -506,7 +506,7 @@ public class ControllerCanvasLoesungsmodus {
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
 		apId.setMinWidth(breite / 7);
-		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("idExtern"));
 		apId.setSortType(TableColumn.SortType.ASCENDING);
 
 		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
@@ -547,8 +547,23 @@ public class ControllerCanvasLoesungsmodus {
 	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
 		System.out.println("Arbeitspaket angeklickt: " + ap.getIdIntern());
-		tabelleArbeitspakete.getSelectionModel().select(ap);
-		tabelleArbeitspakete.scrollTo(ap);
+		
+		// Da hier mit Kopien von Arbeitspaketen gearbeitet wird, muss das ausgewählte Arbeitspaket durch die ID herausgefunden werden
+		// Die ID des ausgewählten AP wird herausgelesen
+		String id = ap.getIdIntern();
+		Arbeitspaket apAusgewaehlt = null;
+		
+		// Die in der Tabelle befindlichen APs werden überprüft, ob sie die gleiche ID haben
+		for (int i = 0; i < tabelleArbeitspakete.getItems().size(); i++) {
+			if (tabelleArbeitspakete.getItems().get(i).getIdIntern().equals(id)) {
+				apAusgewaehlt = tabelleArbeitspakete.getItems().get(i);
+				break;
+			}
+		}		
+		
+		// das Paket mit der gleichen ID wird in der Tabelle markiert
+		tabelleArbeitspakete.getSelectionModel().select(apAusgewaehlt);
+		tabelleArbeitspakete.scrollTo(apAusgewaehlt);
 	}
 
 	public ArrayList<Rectangle> erstelleRahmen() {
