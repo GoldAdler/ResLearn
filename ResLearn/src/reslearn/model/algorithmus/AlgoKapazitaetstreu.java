@@ -116,7 +116,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void zeitOptimierung(ResCanvas resCanvas) {
 
-		// System.out.println("Simulation start");
+//		System.out.println("Simulation start");
 
 		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
@@ -347,7 +347,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		Collections.sort(arbeitspaketListe, new ComperatorArbeitspaketLR());
 
 		int startAP = 0;
-		if (!(nichtMehrAnschauenApID == null)) {
+		if (nichtMehrAnschauenApID != null) {
 			for (Arbeitspaket simAp : arbeitspaketListe) {
 				if (simAp.getIdIntern() == nichtMehrAnschauenApID) {
 					startAP++;
@@ -556,7 +556,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					simLoesungenResCanvas);
 
 		} else if (verschieben == VerschiebeRichtung.LINKS) {
-			// Paket ist zu spät | SEZ verletzt
+			// Paket ist zu spät | FEZ verletzt
 
 			/*
 			 * Erklärung des folgenden Algorithmus
