@@ -29,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -37,6 +38,7 @@ import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
 import reslearn.gui.ViewErsterSchrittModus;
 import reslearn.model.paket.Arbeitspaket;
+import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
@@ -57,6 +59,9 @@ public class ControllerCanvasErsterSchrittModus {
 	private Label korrekturvorschlaege;
 	private TextArea fehlerMeldung;
 	private Button validierenButton;
+	private Rectangle rectangle;
+	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
+	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
 
 	public ControllerCanvasErsterSchrittModus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -182,6 +187,9 @@ public class ControllerCanvasErsterSchrittModus {
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
 					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateX(newTranslateX);
+					}
 				}
 			}
 		}
@@ -204,6 +212,9 @@ public class ControllerCanvasErsterSchrittModus {
 						resFeld.setTranslateY(newTranslateY);
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
+					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateY(newTranslateY);
 					}
 				}
 			}
@@ -317,7 +328,7 @@ public class ControllerCanvasErsterSchrittModus {
 				// circle.setFill(entry.getValue());
 			}
 
-			label = new Label(entry.getKey().getIdIntern());
+			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
@@ -337,7 +348,7 @@ public class ControllerCanvasErsterSchrittModus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("Farbe", rect.getFill()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
@@ -385,7 +396,7 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -393,7 +404,7 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -467,7 +478,7 @@ public class ControllerCanvasErsterSchrittModus {
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
 		apId.setMinWidth(breite / 7);
-		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("idExtern"));
 		apId.setSortType(TableColumn.SortType.ASCENDING);
 
 		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
@@ -524,7 +535,7 @@ public class ControllerCanvasErsterSchrittModus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -534,6 +545,35 @@ public class ControllerCanvasErsterSchrittModus {
 
 	}
 
+	public ArrayList<Rectangle> erstelleRahmen() {
+		rahmenListe.clear();
+
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
+				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
+						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
+						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStroke(Color.BLACK);
+				rectangle.setStrokeWidth(1);
+				rectangle.setMouseTransparent(true);
+
+
+				rahmenListe.add(rectangle);
+
+				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+					teilpaketRahmenZuordnung.replace(tp, rectangle);
+
+				} else {
+					teilpaketRahmenZuordnung.put(tp, rectangle);
+				}
+			}
+		}
+		return rahmenListe;
+	}
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
 	}

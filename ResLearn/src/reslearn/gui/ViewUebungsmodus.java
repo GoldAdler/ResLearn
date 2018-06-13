@@ -29,6 +29,7 @@ public class ViewUebungsmodus extends Application {
 	private ContextMenu menu;
 	private MenuItem ap;
 	private MenuItem reset;
+	private ControllerCanvasUebungsmodus controllerCanvas;
 
 	private Pane pane;
 
@@ -77,7 +78,7 @@ public class ViewUebungsmodus extends Application {
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
-		ControllerCanvasUebungsmodus controllerCanvas = new ControllerCanvasUebungsmodus(resCanvas, diagramm);
+		controllerCanvas = new ControllerCanvasUebungsmodus(resCanvas, diagramm);
 		ArrayList<Rectangle> rahmenListe = controllerCanvas.erstelleRahmen();
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 
@@ -117,9 +118,9 @@ public class ViewUebungsmodus extends Application {
 				}
 			}
 		}
-		for(Rectangle rahmen : rahmenListe) {
-			pane.getChildren().add(rahmen);
-		}
+
+		rahmenErstellen();
+
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
@@ -138,6 +139,18 @@ public class ViewUebungsmodus extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
+	}
+
+	public void rahmenErstellen() {
+		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+			pane.getChildren().add(rahmen);
+		}
+	}
+
+	public void rahmenLoeschen() {
+		for(Rectangle rahmen : controllerCanvas.getRahmenListe()) {
+			pane.getChildren().remove(rahmen);
+		}
 	}
 
 	public static void main(String[] args) {

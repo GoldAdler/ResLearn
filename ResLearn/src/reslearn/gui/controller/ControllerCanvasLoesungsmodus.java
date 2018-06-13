@@ -25,12 +25,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
+import reslearn.gui.ViewLoesungsmodus;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.AlgoTermintreu;
@@ -52,6 +54,9 @@ public class ControllerCanvasLoesungsmodus {
 	private ResEinheit[][] koordinatenSystemUrspruenglich;
 	private ObservableMap<ResEinheit, Double> positionXObservableMap = FXCollections.observableHashMap();
 	private ObservableMap<ResEinheit, Double> positionYObservableMap = FXCollections.observableHashMap();
+	private Rectangle rectangle;
+	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
+	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
 
 	public ControllerCanvasLoesungsmodus(Arbeitspaket[] arbeitspakete, ArrayList<ResEinheit[][]> historieListe,
 			ResCanvas resCanvas, Diagramm diagramm) {
@@ -94,9 +99,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -129,6 +134,8 @@ public class ControllerCanvasLoesungsmodus {
 				schrittZurueck.setDisable(true);
 			}
 			extrahiereArbeitspakete(historieNummer);
+			ViewLoesungsmodus.getInstance().rahmenLoeschen();
+			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
 	};
 
@@ -141,6 +148,8 @@ public class ControllerCanvasLoesungsmodus {
 				schrittVor.setDisable(true);
 			}
 			extrahiereArbeitspakete(historieNummer);
+			ViewLoesungsmodus.getInstance().rahmenLoeschen();
+			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
 	};
 
@@ -260,10 +269,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-										* DisplayCanvas.resFeldBreite);
+								* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-										* DisplayCanvas.resFeldLaenge);
+								* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -372,7 +381,7 @@ public class ControllerCanvasLoesungsmodus {
 	}
 
 	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -380,7 +389,7 @@ public class ControllerCanvasLoesungsmodus {
 	}
 
 	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -447,7 +456,7 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -542,6 +551,36 @@ public class ControllerCanvasLoesungsmodus {
 		tabelleArbeitspakete.scrollTo(ap);
 	}
 
+	public ArrayList<Rectangle> erstelleRahmen() {
+		rahmenListe.clear();
+
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
+				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
+						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
+						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStroke(Color.BLACK);
+				rectangle.setStrokeWidth(1);
+				rectangle.setMouseTransparent(true);
+
+
+				rahmenListe.add(rectangle);
+
+				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+					teilpaketRahmenZuordnung.replace(tp, rectangle);
+
+				} else {
+					teilpaketRahmenZuordnung.put(tp, rectangle);
+				}
+			}
+		}
+		return rahmenListe;
+	}
+
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
 		return tabelleArbeitspakete;
 	}
@@ -568,5 +607,9 @@ public class ControllerCanvasLoesungsmodus {
 
 	public RadioButton getButtonKapazitaetstreuModus() {
 		return kapazitaetstreuModus;
+	}
+
+	public ArrayList<Rectangle> getRahmenListe() {
+		return rahmenListe;
 	}
 }
