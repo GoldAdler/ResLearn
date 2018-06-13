@@ -338,13 +338,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ResCanvas bevorSimulationStartResCanvs = resCanvas.copyResCanvas();
 
-		// hier für z simulation aufrufen : man bekommt fünf ergebnisse / extra Liste
-		// ErgebnissevonZListe
-		// diese fünf ergebnisse den meoglichenLoesungen hinzufügen
-
-		// ErgebnissevonZListe: entnehmen lösungen und simuliere für jede davon
-		// simulationDurchfuehren foreach
-
 		ArrayList<ResCanvas> simLoesungenResCanvas = new ArrayList<ResCanvas>();
 
 		String apID = null;
