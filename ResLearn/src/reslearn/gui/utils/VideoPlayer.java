@@ -1,4 +1,4 @@
-package reslearn.gui.controller;
+package reslearn.gui.utils;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
