@@ -67,8 +67,8 @@ public class ControllerCanvasErsterSchrittModus {
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
-		leereFehlermeldungErstellen();
 		erstelleKorrekturvorschlaege();
+		leereFehlermeldungErstellen();
 		erstelleButtons();
 
 	}
@@ -219,6 +219,21 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	/**
+	 * Erzeugung der Korrekturvorschläge in der Fehlermeldung
+	 */
+	public void erstelleKorrekturvorschlaege() {
+		korrekturvorschlaege = new Label("Korrekturvorschläge");
+		korrekturvorschlaege.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
+		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
+		korrekturvorschlaege.setAlignment(Pos.CENTER);
+		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
+		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
+	}
+
+	/**
 	 * Erstellung des Validieren-Buttons
 	 */
 	public void erstelleValidierenButton() {
@@ -274,21 +289,6 @@ public class ControllerCanvasErsterSchrittModus {
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
 		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
-	}
-
-	/**
-	 * Erzeugung der Korrekturvorschläge in der Fehlermeldung
-	 */
-	public void erstelleKorrekturvorschlaege() {
-		korrekturvorschlaege = new Label("Korrekturvorschläge");
-		korrekturvorschlaege.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
-		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
-		korrekturvorschlaege.setAlignment(Pos.CENTER);
-		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
-		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
 	}
 
 
