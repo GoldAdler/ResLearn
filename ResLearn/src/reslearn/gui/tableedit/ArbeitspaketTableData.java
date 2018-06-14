@@ -47,11 +47,11 @@ public class ArbeitspaketTableData extends Paket {
 	public void setIdIntern(final String idIntern) {
 		this.idIntern.set(idIntern);
 	}
-	
+
 	public String getIdExtern() {
 		return idExtern.get();
 	}
-	
+
 	public void setIdExtern(final String idExtern) {
 		this.idExtern.set(idExtern);
 	}
@@ -124,8 +124,4 @@ public class ArbeitspaketTableData extends Paket {
 		// do nothing
 		return false;
 	}
-
-
-	
-
 }

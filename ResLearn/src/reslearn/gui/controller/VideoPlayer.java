@@ -35,8 +35,13 @@ public class VideoPlayer extends BorderPane {
 	private Slider volumeSlider;
 	private HBox mediaBar;
 
+	/**
+	 * VideoPlayer von Oracle  mit kleinen Veränderungen, wie z.B.
+	 * Buttons als Bilder anstatt Strings
+	 * @param mp
+	 */
 	public VideoPlayer(final MediaPlayer mp) {
-		// Video Player von Oracle, mit kleinen Verbesserungen
+		// Video Player von Oracle,
 		this.mp = mp;
 		setStyle("-fx-background-color: #bfc2c7;");
 		mediaView = new MediaView(mp);

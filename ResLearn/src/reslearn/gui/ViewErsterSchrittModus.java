@@ -133,12 +133,20 @@ public class ViewErsterSchrittModus extends Application {
 		stage.show();
 	}
 
+	/**
+	 * Fügt dem Koordinatensystem alle Rahmen hinzu, die vorher im ControllerCanvas
+	 * erstellt wurden
+	 */
 	public void rahmenErstellen() {
 		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
 			pane.getChildren().add(rahmen);
 		}
 	}
 
+	/**
+	 * Entfernt alle Rahmen im Koordinatensystem, die vorher dem Koordinatensystem
+	 * hinzugefügt wurden
+	 */
 	public void rahmenLoeschen(ArrayList<Rectangle> rahmenListe) {
 		for(Rectangle rahmen : rahmenListe) {
 			pane.getChildren().remove(rahmen);

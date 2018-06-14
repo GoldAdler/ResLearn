@@ -20,8 +20,13 @@ public class Diagramm {
 
 	}
 
+	/**
+	 * Zeichnet 4 Rahmen und 2 Koordinatenachsen, inklusive Beschriftung der Achsen
+	 * @param canvas
+	 * @return zeichneWeisseFelder()
+	 */
 	public Rectangle[][] zeichneCanvas(Canvas canvas) {
-		// Zeichne 4 x Rahmen & 2 x Koordinaten-Achsen
+
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		gc.setStroke(Color.GRAY);
@@ -74,7 +79,10 @@ public class Diagramm {
 		return zeichneWeisseFelder();
 	}
 
-	// Weiße Klötzchen
+	/**
+	 * Zeichnet die Weißen Klötzchen als Hintergrund.
+	 * @return rectangleArray
+	 */
 	private Rectangle[][] zeichneWeisseFelder() {
 		Rectangle[][] rectangleArray = new Rectangle[DisplayCanvas.resFeldZeile][DisplayCanvas.resFeldSpalte];
 		for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
@@ -88,7 +96,12 @@ public class Diagramm {
 		return rectangleArray;
 	}
 
-	// Farbige Pakete
+	/**
+	 * Entnimmt dem Koordinatensystem die Position jeder ResEinheit, um dann die
+	 * farbigen ResFelder an die entsprechende Position zu zeichnen.
+	 * @param koordinatenSystem
+	 * @return resFeldArray
+	 */
 	public ResFeld[][] zeichneTeilpakete(ResEinheit[][] koordinatenSystem) {
 		resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
 		for (int i = 0; i < koordinatenSystem.length; i++) {
@@ -102,7 +115,12 @@ public class Diagramm {
 		return resFeldArray;
 	}
 
-	// Farbige Pakete oben links (für Erster Schritt Modus)
+	/**
+	 * Zeichnet die farbigen Pakete oben links (für den Erster Schritt Modus)
+	 * @param koordinatenSystem
+	 * @param resCanvas
+	 * @return resFeldArray
+	 */
 	public ResFeld[][] zeichneTeilpaketeOben(ResEinheit[][] koordinatenSystem, ResCanvas resCanvas) {
 		ArrayList<Arbeitspaket> arbeitspaketList = new ArrayList<>();
 		Arbeitspaket tmpAP;

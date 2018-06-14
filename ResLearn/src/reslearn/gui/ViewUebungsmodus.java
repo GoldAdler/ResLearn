@@ -1,7 +1,6 @@
 package reslearn.gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -29,9 +28,8 @@ public class ViewUebungsmodus extends Application {
 	private ContextMenu menu;
 	private MenuItem ap;
 	private MenuItem reset;
-	private ControllerCanvasUebungsmodus controllerCanvas;
-
 	private Pane pane;
+	private ControllerCanvasUebungsmodus controllerCanvas;
 
 	public static ViewUebungsmodus getInstance() {
 		if (view == null) {
@@ -79,7 +77,6 @@ public class ViewUebungsmodus extends Application {
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
 		controllerCanvas = new ControllerCanvasUebungsmodus(resCanvas, diagramm);
-		ArrayList<Rectangle> rahmenListe = controllerCanvas.erstelleRahmen();
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 
 		int farbenNummer = 0;
@@ -141,12 +138,20 @@ public class ViewUebungsmodus extends Application {
 		stage.show();
 	}
 
+	/**
+	 * Fügt dem Koordinatensystem alle Rahmen hinzu, die vorher im ControllerCanvas
+	 * erstellt wurden
+	 */
 	public void rahmenErstellen() {
 		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
 			pane.getChildren().add(rahmen);
 		}
 	}
 
+	/**
+	 * Entfernt alle Rahmen im Koordinatensystem, die vorher dem Koordinatensystem
+	 * hinzugefügt wurden
+	 */
 	public void rahmenLoeschen() {
 		for(Rectangle rahmen : controllerCanvas.getRahmenListe()) {
 			pane.getChildren().remove(rahmen);
