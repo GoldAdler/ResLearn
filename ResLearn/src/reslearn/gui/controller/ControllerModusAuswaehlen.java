@@ -10,10 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import reslearn.gui.ViewErsterSchrittModus;
-import reslearn.gui.ViewLoesungsmodus;
-import reslearn.gui.ViewUebungAuswaehlen;
-import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.view.ViewErsterSchrittModus;
+import reslearn.gui.view.ViewLoesungsmodus;
+import reslearn.gui.view.ViewUebungAuswaehlen;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerModusAuswaehlen extends Controller {

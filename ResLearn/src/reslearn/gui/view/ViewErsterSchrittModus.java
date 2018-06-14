@@ -1,4 +1,4 @@
-package reslearn.gui;
+package reslearn.gui.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import reslearn.gui.controller.ControllerCanvasErsterSchrittModus;
+import reslearn.gui.rescanvas.Diagramm;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
 import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;

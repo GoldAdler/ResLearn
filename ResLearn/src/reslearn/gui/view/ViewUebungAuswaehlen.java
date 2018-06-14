@@ -1,4 +1,4 @@
-package reslearn.gui;
+package reslearn.gui.view;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -23,6 +23,7 @@ import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.controller.Controller;
 import reslearn.gui.controller.ControllerModusAuswaehlen;
 import reslearn.gui.controller.ControllerUebungsmodus;
+import reslearn.gui.rescanvas.DisplayCanvas;
 
 public class ViewUebungAuswaehlen extends Application {
 

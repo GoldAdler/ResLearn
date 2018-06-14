@@ -17,9 +17,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import reslearn.gui.DisplayCanvas;
-import reslearn.gui.ResFeld;
-import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.paket.ResEinheit;
 
 public class Bearbeitungsfenster extends Pane {

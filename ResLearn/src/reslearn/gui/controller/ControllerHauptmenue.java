@@ -8,8 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import reslearn.gui.ViewUebungAuswaehlen;
 import reslearn.gui.fxml.TutorialVideo;
+import reslearn.gui.view.ViewUebungAuswaehlen;
 
 public class ControllerHauptmenue extends Controller {
 

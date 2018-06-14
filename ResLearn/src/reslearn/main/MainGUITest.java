@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;

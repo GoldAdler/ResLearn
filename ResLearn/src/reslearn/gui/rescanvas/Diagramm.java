@@ -1,4 +1,4 @@
-package reslearn.gui;
+package reslearn.gui.rescanvas;
 
 import java.util.ArrayList;
 import java.util.Collections;
