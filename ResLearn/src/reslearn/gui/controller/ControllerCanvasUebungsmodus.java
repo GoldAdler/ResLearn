@@ -457,7 +457,6 @@ public class ControllerCanvasUebungsmodus {
 		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
 		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 4 * DisplayCanvas.resFeldLaenge);
 		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-		// legende.setPrefHeight(DisplayCanvas.legendeHoehe );
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
 
@@ -479,13 +478,13 @@ public class ControllerCanvasUebungsmodus {
 
 			if (xCounter == 2) {
 				xCounter = 0;
-				yCounter += 3;
+				yCounter += 2.7;
 			} else {
 				xCounter++;
 			}
 		}
 
-		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.5) * (yCounter / 3));
+		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.3) + (yCounter * 12));
 	}
 
 	private TableView<Pair<String, Object>> table = new TableView<>();
