@@ -49,7 +49,7 @@ public class ViewUebungsmodus extends Application {
 	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
 
 		stage = new Stage();
-		// Lade FXML
+
 		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
 		Scene hauptszene = new Scene(root);
 
@@ -66,16 +66,13 @@ public class ViewUebungsmodus extends Application {
 
 		Group group = new Group();
 
-		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
-		// der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
-				.getKoordinatenSystem();
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
@@ -126,7 +123,7 @@ public class ViewUebungsmodus extends Application {
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
 				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getButtonMaxPersonenPlus(),
 				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getTextFieldMaxPersonen(),
-				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege());
+				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege(), controllerCanvas.getFehlermeldung());
 
 		for (int i = 0; i < 26; i++) {
 			group.getChildren().add(controllerCanvas.getKapaGrenze(i));

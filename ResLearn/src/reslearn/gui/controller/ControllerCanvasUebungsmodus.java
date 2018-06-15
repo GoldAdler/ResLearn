@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -40,6 +38,8 @@ import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.rescanvas.Diagramm;
 import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.tableUtils.PairKeyFactory;
+import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
@@ -352,7 +352,6 @@ public class ControllerCanvasUebungsmodus {
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
 					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
-
 		}
 	}
 
@@ -366,8 +365,7 @@ public class ControllerCanvasUebungsmodus {
 		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
 				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
 		validierenButton.setOnAction(ValidierenAction);
-		validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
+		// validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 	}
 
 	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
@@ -376,50 +374,37 @@ public class ControllerCanvasUebungsmodus {
 		public void handle(ActionEvent event) {
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
-			if (termintreuModus.isSelected()) {
-				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-				vali.AlgoTermintreu();
-				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-					ausgabe += vali.getFeedbackListe().get(i).toString();
-				}
-				fehlerMeldung = new TextArea(ausgabe);
-				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				fehlerMeldung.setEditable(false);
-				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
-					fehlerMeldung.setStyle("-fx-text-fill: green;");
-				} else {
-					fehlerMeldung.setStyle("-fx-text-fill: red;");
-				}
-				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-						+ korrekturvorschlaege.getPrefHeight());
-				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-				fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-				fehlerMeldung.setWrapText(true);
-				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
-			} else {
-				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
-				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-					ausgabe += vali.getFeedbackListe().get(i).toString();
-				}
-				fehlerMeldung = new TextArea(ausgabe);
-				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				fehlerMeldung.setEditable(false);
-				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
-					fehlerMeldung.setStyle("-fx-text-fill: green;");
-				} else {
-					fehlerMeldung.setStyle("-fx-text-fill: red;");
-				}
-				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-						+ korrekturvorschlaege.getPrefHeight());
-				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-				fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-				fehlerMeldung.setWrapText(true);
-				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
-			}
 
+			if (termintreuModus.isSelected()) {
+
+				vali.AlgoTermintreu();
+
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung.setText(ausgabe);
+
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+
+			} else {
+
+				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
+
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung.setText(ausgabe);
+
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+			}
 		}
 	};
 
@@ -430,14 +415,12 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-				+ korrekturvorschlaege.getPrefHeight());
+		fehlerMeldung.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
-
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-		ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 	}
 
 	/**
@@ -550,24 +533,6 @@ public class ControllerCanvasUebungsmodus {
 
 	private Pair<String, Object> pair(String name, Object value) {
 		return new Pair<>(name, value);
-	}
-
-	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		@Override
-		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		}
-	}
-
-	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-			Object value = data.getValue().getValue();
-			return (value instanceof ObservableValue) ? (ObservableValue) value : new ReadOnlyObjectWrapper<>(value);
-		}
 	}
 
 	class PairValueCell extends TableCell<Pair<String, Object>, Object> {
