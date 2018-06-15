@@ -448,31 +448,44 @@ public class ControllerCanvasUebungsmodus {
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge);
-		legende.setPrefWidth(DisplayCanvas.canvasBreite);
-		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
-		legende.setStyle("-fx-background-radius: 30;");
-		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		Label label = null;
 		Circle circle = null;
+		int xCounter = 0;
+		int yCounter = 1;
+
+		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 4 * DisplayCanvas.resFeldLaenge);
+		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		// legende.setPrefHeight(DisplayCanvas.legendeHoehe );
+		legende.setStyle("-fx-background-radius: 30;");
+		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
-			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			}
+
+			circle = new Circle(
+					DisplayCanvas.breiteFehlermeldung / 7 + (DisplayCanvas.breiteFehlermeldung / 3) * xCounter,
+					DisplayCanvas.legendeHoehe / 4 + (DisplayCanvas.legendeHoehe / 2) * yCounter,
+					DisplayCanvas.legendeKreisRadius);
+			circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+
 			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
+			label.setLayoutY(circle.getCenterY() - DisplayCanvas.legendeKreisRadius / 2);
+
 			legende.getChildren().addAll(circle, label);
+
+			if (xCounter == 2) {
+				xCounter = 0;
+				yCounter += 3;
+			} else {
+				xCounter++;
+			}
 		}
+
+		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.5) * (yCounter / 3));
 	}
 
 	private TableView<Pair<String, Object>> table = new TableView<>();

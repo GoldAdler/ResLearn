@@ -162,8 +162,10 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	/**
-	 * Wenn ein angeklicktes ResFeld verschoben wird, müssen alle zugehörigen ResFelder mit dem gleichen
-	 * Teilpaket und Rahmen um das X-Offset mitverschoben werden
+	 * Wenn ein angeklicktes ResFeld verschoben wird, müssen alle zugehörigen
+	 * ResFelder mit dem gleichen Teilpaket und Rahmen um das X-Offset mitverschoben
+	 * werden
+	 *
 	 * @param vorzeichen
 	 */
 	private void bewegeX(int vorzeichen) {
@@ -222,7 +224,8 @@ public class ControllerCanvasErsterSchrittModus {
 	 */
 	public void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
-		korrekturvorschlaege.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
 		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
@@ -236,8 +239,10 @@ public class ControllerCanvasErsterSchrittModus {
 	 */
 	public void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
-		validierenButton.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandX - DisplayCanvas.spaltX);
+		validierenButton.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
+				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
 		validierenButton.setOnAction(ValidierenAction);
 	}
 
@@ -269,46 +274,60 @@ public class ControllerCanvasErsterSchrittModus {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
 	}
 
-
 	private Pane legende = new Pane();
 	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
 	/**
-	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden Farben
+	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden
+	 * Farben
+	 *
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
-		legende.setPrefWidth(DisplayCanvas.canvasBreite);
+
+		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
+		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		Label label = null;
 		Circle circle = null;
+		int xCounter = 0;
+		int yCounter = 1;
+
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
-			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			}
+
+			circle = new Circle(
+					DisplayCanvas.breiteFehlermeldung / 7 + (DisplayCanvas.breiteFehlermeldung / 3) * xCounter,
+					DisplayCanvas.legendeHoehe / 4 + (DisplayCanvas.legendeHoehe / 2) * yCounter,
+					DisplayCanvas.legendeKreisRadius);
+			circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+
 			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
+			label.setLayoutY(circle.getCenterY() - DisplayCanvas.legendeKreisRadius / 2);
+
 			legende.getChildren().addAll(circle, label);
+
+			if (xCounter == 2) {
+				xCounter = 0;
+				yCounter += 3;
+			} else {
+				xCounter++;
+			}
 		}
 	}
-
 
 	private TableView<Pair<String, Object>> table = new TableView<>();
 	private ObservableList<Pair<String, Object>> data;
@@ -397,8 +416,8 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	/**
-	 * Beim Klick auf den Farbbutton in der Informationstabelle wechselt das Arbeitspaket
-	 * seine Farbe
+	 * Beim Klick auf den Farbbutton in der Informationstabelle wechselt das
+	 * Arbeitspaket seine Farbe
 	 */
 	private void wechsleFarbe() {
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
@@ -418,7 +437,6 @@ public class ControllerCanvasErsterSchrittModus {
 			}
 		});
 	}
-
 
 	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
 	private ObservableList<Arbeitspaket> dataPakete;
@@ -479,6 +497,7 @@ public class ControllerCanvasErsterSchrittModus {
 
 	/**
 	 * Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	 *
 	 * @param ap
 	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
@@ -502,7 +521,7 @@ public class ControllerCanvasErsterSchrittModus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -513,8 +532,9 @@ public class ControllerCanvasErsterSchrittModus {
 	}
 
 	/**
-	 * Erzeugung aller Rahmen für jedes Teilpaket
-	 * Der Rahmen hat die Position des linken oberen ResEinheit im Teilpaket
+	 * Erzeugung aller Rahmen für jedes Teilpaket Der Rahmen hat die Position des
+	 * linken oberen ResEinheit im Teilpaket
+	 *
 	 * @return rahmenListe
 	 */
 	public ArrayList<Rectangle> erstelleRahmen() {
@@ -533,10 +553,9 @@ public class ControllerCanvasErsterSchrittModus {
 				rectangle.setStrokeWidth(1);
 				rectangle.setMouseTransparent(true);
 
-
 				rahmenListe.add(rectangle);
 
-				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+				if (teilpaketRahmenZuordnung.containsKey(tp)) {
 					teilpaketRahmenZuordnung.replace(tp, rectangle);
 
 				} else {

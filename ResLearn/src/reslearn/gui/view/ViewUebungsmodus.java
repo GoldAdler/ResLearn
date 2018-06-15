@@ -72,7 +72,8 @@ public class ViewUebungsmodus extends Application {
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
+				.getKoordinatenSystem();
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpakete(koordinatenSystem);
@@ -123,7 +124,8 @@ public class ViewUebungsmodus extends Application {
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
 				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getButtonMaxPersonenPlus(),
 				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getTextFieldMaxPersonen(),
-				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege(), controllerCanvas.getFehlermeldung());
+				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege(),
+				controllerCanvas.getFehlermeldung());
 
 		for (int i = 0; i < 26; i++) {
 			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
@@ -143,7 +145,7 @@ public class ViewUebungsmodus extends Application {
 	 * erstellt wurden
 	 */
 	public void rahmenErstellen() {
-		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+		for (Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
 			pane.getChildren().add(rahmen);
 		}
 	}
@@ -153,7 +155,7 @@ public class ViewUebungsmodus extends Application {
 	 * hinzugefügt wurden
 	 */
 	public void rahmenLoeschen() {
-		for(Rectangle rahmen : controllerCanvas.getRahmenListe()) {
+		for (Rectangle rahmen : controllerCanvas.getRahmenListe()) {
 			pane.getChildren().remove(rahmen);
 		}
 	}
