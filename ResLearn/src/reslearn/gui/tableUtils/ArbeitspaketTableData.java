@@ -1,4 +1,4 @@
-package reslearn.gui.tableedit;
+package reslearn.gui.tableUtils;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
