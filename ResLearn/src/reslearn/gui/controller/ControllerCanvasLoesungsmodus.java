@@ -99,9 +99,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -269,10 +269,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-								* DisplayCanvas.resFeldBreite);
+										* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-								* DisplayCanvas.resFeldLaenge);
+										* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -292,35 +292,41 @@ public class ControllerCanvasLoesungsmodus {
 	// arrayList.get(1)[i][j] -> ResEinheit
 	// ResEinheit -> update Observableblababla
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
-		legende.setPrefWidth(DisplayCanvas.canvasBreite);
-		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
-		legende.setStyle("-fx-background-radius: 30;");
-		legende.setStyle("-fx-background-color: #c0c0c0;");
 		Label label = null;
 		Circle circle = null;
+		int xCounter = 0;
+		int yCounter = 1;
+
+		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 4 * DisplayCanvas.resFeldLaenge);
+		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		legende.setStyle("-fx-background-radius: 30;");
+		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
-			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
-			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
-			}
+
+			circle = new Circle(
+					DisplayCanvas.breiteFehlermeldung / 7 + (DisplayCanvas.breiteFehlermeldung / 3) * xCounter,
+					DisplayCanvas.legendeHoehe / 4 + (DisplayCanvas.legendeHoehe / 2) * yCounter,
+					DisplayCanvas.legendeKreisRadius);
+			circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
 
 			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
+			label.setLayoutY(circle.getCenterY() - DisplayCanvas.legendeKreisRadius / 2);
+
 			legende.getChildren().addAll(circle, label);
 
+			if (xCounter == 2) {
+				xCounter = 0;
+				yCounter += 2.7;
+			} else {
+				xCounter++;
+			}
 		}
+		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.3) + (yCounter * 12));
 	}
 
 	/////////////////////////////////////////////////////////////////////////
@@ -381,7 +387,7 @@ public class ControllerCanvasLoesungsmodus {
 	}
 
 	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -389,7 +395,7 @@ public class ControllerCanvasLoesungsmodus {
 	}
 
 	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -456,7 +462,7 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -547,20 +553,22 @@ public class ControllerCanvasLoesungsmodus {
 	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
 		System.out.println("Arbeitspaket angeklickt: " + ap.getIdIntern());
-		
-		// Da hier mit Kopien von Arbeitspaketen gearbeitet wird, muss das ausgewählte Arbeitspaket durch die ID herausgefunden werden
+
+		// Da hier mit Kopien von Arbeitspaketen gearbeitet wird, muss das ausgewählte
+		// Arbeitspaket durch die ID herausgefunden werden
 		// Die ID des ausgewählten AP wird herausgelesen
 		String id = ap.getIdIntern();
 		Arbeitspaket apAusgewaehlt = null;
-		
-		// Die in der Tabelle befindlichen APs werden überprüft, ob sie die gleiche ID haben
+
+		// Die in der Tabelle befindlichen APs werden überprüft, ob sie die gleiche ID
+		// haben
 		for (int i = 0; i < tabelleArbeitspakete.getItems().size(); i++) {
 			if (tabelleArbeitspakete.getItems().get(i).getIdIntern().equals(id)) {
 				apAusgewaehlt = tabelleArbeitspakete.getItems().get(i);
 				break;
 			}
-		}		
-		
+		}
+
 		// das Paket mit der gleichen ID wird in der Tabelle markiert
 		tabelleArbeitspakete.getSelectionModel().select(apAusgewaehlt);
 		tabelleArbeitspakete.scrollTo(apAusgewaehlt);
@@ -582,10 +590,9 @@ public class ControllerCanvasLoesungsmodus {
 				rectangle.setStrokeWidth(1);
 				rectangle.setMouseTransparent(true);
 
-
 				rahmenListe.add(rectangle);
 
-				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+				if (teilpaketRahmenZuordnung.containsKey(tp)) {
 					teilpaketRahmenZuordnung.replace(tp, rectangle);
 
 				} else {
