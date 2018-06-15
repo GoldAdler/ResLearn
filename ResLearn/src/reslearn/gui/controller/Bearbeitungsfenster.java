@@ -35,7 +35,6 @@ public class Bearbeitungsfenster extends Pane {
 	private Slider sliderX;
 	private Slider sliderY;
 
-
 	public Bearbeitungsfenster(ResFeld rect) {
 
 		arbeitspaket = new Label(
@@ -144,10 +143,10 @@ public class Bearbeitungsfenster extends Pane {
 								ResFeld dummy = new ResFeld(
 										j * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
 										i * DisplayCanvas.resFeldLaenge
-										+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
-										- DisplayCanvas.resFeldLaenge,
+												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite)
+												- DisplayCanvas.resFeldLaenge,
 										rect.getResEinheit().getTeilpaket().getResEinheitListe()
-										.get(markierteResFelder));
+												.get(markierteResFelder));
 								dummy.setStroke(rect.getFill());
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);
@@ -196,9 +195,9 @@ public class Bearbeitungsfenster extends Pane {
 								ResFeld dummy = new ResFeld(
 										i * DisplayCanvas.resFeldBreite + DisplayCanvas.resFeldBreite,
 										j * DisplayCanvas.resFeldLaenge
-										+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
+												+ (hilfetext.getLayoutY() + DisplayCanvas.resFeldBreite),
 										rect.getResEinheit().getTeilpaket().getResEinheitListe()
-										.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
+												.get((j * rect.getResEinheit().getTeilpaket().getVorgangsdauer()) + i));
 								dummy.setStroke(Color.GREY);
 								dummy.getResEinheit().setTeilpaket(rect.getResEinheit().getTeilpaket());
 								resFeldListe.add(dummy);

@@ -75,7 +75,7 @@ public class ControllerCanvasUebungsmodus {
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
 		this.diagramm = diagramm;
-		//		erstelleRahmen();
+		// erstelleRahmen();
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
@@ -182,8 +182,10 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	/**
-	 * Wenn ein angeklicktes ResFeld verschoben wird, müssen alle zugehörigen ResFelder mit dem gleichen
-	 * Teilpaket und Rahmen um das X-Offset mitverschoben werden
+	 * Wenn ein angeklicktes ResFeld verschoben wird, müssen alle zugehörigen
+	 * ResFelder mit dem gleichen Teilpaket und Rahmen um das X-Offset mitverschoben
+	 * werden
+	 *
 	 * @param vorzeichen
 	 */
 	private void bewegeX(int vorzeichen) {
@@ -198,7 +200,11 @@ public class ControllerCanvasUebungsmodus {
 						diagramm.getResFeldArray()[y][x] = null;
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
-						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateX(newTranslateX);
+						teilpaketRahmenZuordnung.get(teilpaketClicked)
+								.setX(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite);
 					}
 				}
 			}
@@ -224,7 +230,11 @@ public class ControllerCanvasUebungsmodus {
 						diagramm.getResFeldArray()[y][x] = null;
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
-						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateY(newTranslateY);
+						teilpaketRahmenZuordnung.get(teilpaketClicked)
+								.setY(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge);
 					}
 				}
 			}
@@ -329,10 +339,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -341,7 +351,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 
 		}
 	}
@@ -445,12 +455,13 @@ public class ControllerCanvasUebungsmodus {
 		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
 	}
 
-
 	private Pane legende = new Pane();
 	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
 	/**
-	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden Farben
+	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden
+	 * Farben
+	 *
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
@@ -480,7 +491,6 @@ public class ControllerCanvasUebungsmodus {
 			legende.getChildren().addAll(circle, label);
 		}
 	}
-
 
 	private TableView<Pair<String, Object>> table = new TableView<>();
 	private ObservableList<Pair<String, Object>> data;
@@ -543,7 +553,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
@@ -551,7 +561,7 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
@@ -587,8 +597,8 @@ public class ControllerCanvasUebungsmodus {
 	}
 
 	/**
-	 * Beim Klick auf den Farbbutton in der Informationstabelle wechselt das Arbeitspaket
-	 * seine Farbe
+	 * Beim Klick auf den Farbbutton in der Informationstabelle wechselt das
+	 * Arbeitspaket seine Farbe
 	 */
 	private void wechsleFarbe() {
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
@@ -608,7 +618,6 @@ public class ControllerCanvasUebungsmodus {
 			}
 		});
 	}
-
 
 	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
 	private ObservableList<Arbeitspaket> dataPakete;
@@ -669,6 +678,7 @@ public class ControllerCanvasUebungsmodus {
 
 	/**
 	 * Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	 *
 	 * @param ap
 	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
@@ -693,7 +703,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -812,10 +822,10 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-
 	/**
-	 * Erzeugung aller Rahmen für jedes Teilpaket
-	 * Der Rahmen hat die Position des linken oberen ResEinheit im Teilpaket
+	 * Erzeugung aller Rahmen für jedes Teilpaket Der Rahmen hat die Position des
+	 * linken oberen ResEinheit im Teilpaket
+	 *
 	 * @return rahmenListe
 	 */
 	public ArrayList<Rectangle> erstelleRahmen() {
@@ -834,10 +844,9 @@ public class ControllerCanvasUebungsmodus {
 				rectangle.setStrokeWidth(1);
 				rectangle.setMouseTransparent(true);
 
-
 				rahmenListe.add(rectangle);
 
-				if(teilpaketRahmenZuordnung.containsKey(tp)) {
+				if (teilpaketRahmenZuordnung.containsKey(tp)) {
 					teilpaketRahmenZuordnung.replace(tp, rectangle);
 
 				} else {
