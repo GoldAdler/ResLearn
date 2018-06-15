@@ -37,9 +37,9 @@ import javafx.stage.Stage;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.ImportExport.CsvWriter;
 import reslearn.gui.rescanvas.DisplayCanvas;
-import reslearn.gui.tableedit.ArbeitspaketTableData;
-import reslearn.gui.tableedit.EditCell;
-import reslearn.gui.tableedit.MyIntegerStringConverter;
+import reslearn.gui.tableUtils.ArbeitspaketTableData;
+import reslearn.gui.tableUtils.EditCell;
+import reslearn.gui.tableUtils.MyIntegerStringConverter;
 import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerAufgabeErstellen extends Controller {
@@ -226,7 +226,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 		for (int i = 0; i < paketList.size(); i++) {
 			String idExtern = paketList.get(i).getIdExtern();
-			int vorgangsdauer = paketList.get(i).getSez() - paketList.get(i).getFez() + 1;
+			int vorgangsdauer = paketList.get(i).getFez() - paketList.get(i).getFaz() + 1;
 
 			pakete[i] = new Arbeitspaket(paketList.get(i).getIdIntern(), paketList.get(i).getFaz(),
 					paketList.get(i).getFez(), paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
@@ -597,7 +597,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			}
 
 			for (Arbeitspaket ap : arbeitspakete) {
-				int vorgangsdauer = ap.getSez() - ap.getFez() + 1;
+				int vorgangsdauer = ap.getFez() - ap.getFaz() + 1;
 				csvOutput.write(ap.getIdIntern().toString());
 				csvOutput.write(String.valueOf(ap.getFaz()));
 				csvOutput.write(String.valueOf(ap.getFez()));
