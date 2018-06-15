@@ -1,4 +1,4 @@
-package reslearn.gui.tableedit;
+package reslearn.gui.tableUtils;
 
 import javafx.util.converter.IntegerStringConverter;
 
