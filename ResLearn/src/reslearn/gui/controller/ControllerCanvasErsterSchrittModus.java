@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -36,7 +34,8 @@ import javafx.util.Pair;
 import reslearn.gui.rescanvas.Diagramm;
 import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
-import reslearn.gui.view.ViewErsterSchrittModus;
+import reslearn.gui.tableUtils.PairKeyFactory;
+import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -223,8 +222,7 @@ public class ControllerCanvasErsterSchrittModus {
 	 */
 	public void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
-		korrekturvorschlaege.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
 		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
@@ -238,12 +236,9 @@ public class ControllerCanvasErsterSchrittModus {
 	 */
 	public void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
-		validierenButton.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
-				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
+		validierenButton.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandX - DisplayCanvas.spaltX);
 		validierenButton.setOnAction(ValidierenAction);
-		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(validierenButton);
 	}
 
 	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
@@ -253,26 +248,17 @@ public class ControllerCanvasErsterSchrittModus {
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
 
-			ViewErsterSchrittModus.getInstance().getPane().getChildren().remove(fehlerMeldung);
 			vali.AlgoErsterSchritt();
 			for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 				ausgabe += vali.getFeedbackListe().get(i).toString();
 			}
-			fehlerMeldung = new TextArea(ausgabe);
-			fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-			fehlerMeldung.setEditable(false);
+			fehlerMeldung.setText(ausgabe);
+
 			if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
 				fehlerMeldung.setStyle("-fx-text-fill: green;");
 			} else {
 				fehlerMeldung.setStyle("-fx-text-fill: red;");
 			}
-			fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-			fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-					+ korrekturvorschlaege.getPrefHeight());
-			fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-			fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-			fehlerMeldung.setWrapText(true);
-			ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
 		}
 	};
 
@@ -283,12 +269,10 @@ public class ControllerCanvasErsterSchrittModus {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-				+ korrekturvorschlaege.getPrefHeight());
+		fehlerMeldung.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
 	}
 
 
@@ -311,12 +295,10 @@ public class ControllerCanvasErsterSchrittModus {
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
 			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
+				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
 			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
+				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
 			}
 			label = new Label(entry.getKey().getIdExtern());
@@ -386,24 +368,6 @@ public class ControllerCanvasErsterSchrittModus {
 
 	private Pair<String, Object> pair(String name, Object value) {
 		return new Pair<>(name, value);
-	}
-
-	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		@Override
-		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		}
-	}
-
-	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-			Object value = data.getValue().getValue();
-			return (value instanceof ObservableValue) ? (ObservableValue) value : new ReadOnlyObjectWrapper<>(value);
-		}
 	}
 
 	class PairValueCell extends TableCell<Pair<String, Object>, Object> {
@@ -613,5 +577,9 @@ public class ControllerCanvasErsterSchrittModus {
 
 	public Label getKorrekturvorschlaege() {
 		return korrekturvorschlaege;
+	}
+
+	public TextArea getFehlermeldung() {
+		return fehlerMeldung;
 	}
 }

@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -40,6 +38,8 @@ import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.rescanvas.Diagramm;
 import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.tableUtils.PairKeyFactory;
+import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
@@ -326,8 +326,7 @@ public class ControllerCanvasUebungsmodus {
 
 		if (kapazitaetstreuModus.isSelected()) {
 			for (int i = 0; i < 26; i++) {
-				alleLinien[i] = new Line(
-						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
+				alleLinien[i] = new Line(DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
 						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
@@ -342,7 +341,6 @@ public class ControllerCanvasUebungsmodus {
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
 			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
-
 		}
 	}
 
@@ -351,13 +349,10 @@ public class ControllerCanvasUebungsmodus {
 	 */
 	public void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
-		validierenButton.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
-				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
+		validierenButton.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandX - DisplayCanvas.spaltX);
 		validierenButton.setOnAction(ValidierenAction);
-		validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		ViewUebungsmodus.getInstance().getPane().getChildren().add(validierenButton);
+		//validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 	}
 
 	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
@@ -366,50 +361,37 @@ public class ControllerCanvasUebungsmodus {
 		public void handle(ActionEvent event) {
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
-			if (termintreuModus.isSelected()) {
-				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-				vali.AlgoTermintreu();
-				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-					ausgabe += vali.getFeedbackListe().get(i).toString();
-				}
-				fehlerMeldung = new TextArea(ausgabe);
-				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				fehlerMeldung.setEditable(false);
-				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
-					fehlerMeldung.setStyle("-fx-text-fill: green;");
-				} else {
-					fehlerMeldung.setStyle("-fx-text-fill: red;");
-				}
-				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-						+ korrekturvorschlaege.getPrefHeight());
-				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-				fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-				fehlerMeldung.setWrapText(true);
-				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
-			} else {
-				ViewUebungsmodus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
-				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-					ausgabe += vali.getFeedbackListe().get(i).toString();
-				}
-				fehlerMeldung = new TextArea(ausgabe);
-				fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-				fehlerMeldung.setEditable(false);
-				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
-					fehlerMeldung.setStyle("-fx-text-fill: green;");
-				} else {
-					fehlerMeldung.setStyle("-fx-text-fill: red;");
-				}
-				fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-				fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-						+ korrekturvorschlaege.getPrefHeight());
-				fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-				fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-				fehlerMeldung.setWrapText(true);
-				ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
-			}
 
+			if (termintreuModus.isSelected()) {
+
+				vali.AlgoTermintreu();
+
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung.setText(ausgabe);
+
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+
+			} else {
+
+				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
+
+				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+					ausgabe += vali.getFeedbackListe().get(i).toString();
+				}
+				fehlerMeldung.setText(ausgabe);
+
+				if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+					fehlerMeldung.setStyle("-fx-text-fill: green;");
+				} else {
+					fehlerMeldung.setStyle("-fx-text-fill: red;");
+				}
+			}
 		}
 	};
 
@@ -420,14 +402,11 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-				+ korrekturvorschlaege.getPrefHeight());
+		fehlerMeldung.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
-
 		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-		ViewUebungsmodus.getInstance().getPane().getChildren().add(fehlerMeldung);
 	}
 
 	/**
@@ -435,8 +414,7 @@ public class ControllerCanvasUebungsmodus {
 	 */
 	public void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
-		korrekturvorschlaege.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
 		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
@@ -465,12 +443,10 @@ public class ControllerCanvasUebungsmodus {
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
 			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
+				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
 			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
+				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand, DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
 			}
 			label = new Label(entry.getKey().getIdExtern());
@@ -542,24 +518,6 @@ public class ControllerCanvasUebungsmodus {
 		return new Pair<>(name, value);
 	}
 
-	class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		@Override
-		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		}
-	}
-
-	class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-			Object value = data.getValue().getValue();
-			return (value instanceof ObservableValue) ? (ObservableValue) value : new ReadOnlyObjectWrapper<>(value);
-		}
-	}
-
 	class PairValueCell extends TableCell<Pair<String, Object>, Object> {
 		@Override
 		protected void updateItem(Object item, boolean empty) {
@@ -597,8 +555,7 @@ public class ControllerCanvasUebungsmodus {
 				for (ResFeld[] resAr : diagramm.getResFeldArray()) {
 					for (ResFeld teilpaket : resAr) {
 						if (teilpaket != null) {
-							if (teilpaketClicked.getArbeitspaket() == teilpaket.getResEinheit().getTeilpaket()
-									.getArbeitspaket()) {
+							if (teilpaketClicked.getArbeitspaket() == teilpaket.getResEinheit().getTeilpaket().getArbeitspaket()) {
 								teilpaket.setFill(colorPicker.getValue());
 								colorObservableMap.replace(teilpaketClicked.getArbeitspaket(), colorPicker.getValue());
 							}
@@ -692,8 +649,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
-		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));

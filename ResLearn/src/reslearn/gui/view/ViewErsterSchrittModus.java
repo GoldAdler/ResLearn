@@ -50,7 +50,7 @@ public class ViewErsterSchrittModus extends Application {
 	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
 
 		stage = new Stage();
-		// Lade FXML
+
 		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
 		Scene hauptszene = new Scene(root);
 
@@ -67,21 +67,17 @@ public class ViewErsterSchrittModus extends Application {
 
 		Group group = new Group();
 
-		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
-		// der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
-				.getKoordinatenSystem();
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpaketeOben(koordinatenSystem, resCanvas);
-		controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas,
-				diagramm);
+		controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas, diagramm);
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 
@@ -123,9 +119,9 @@ public class ViewErsterSchrittModus extends Application {
 
 		rahmenErstellen();
 
-		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
-				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
-				controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege());
+		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),controllerCanvas.getTabelleArbeitspakete(),
+				controllerCanvas.getLegende(), controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege(),
+				controllerCanvas.getFehlermeldung());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
