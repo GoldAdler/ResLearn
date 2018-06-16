@@ -99,9 +99,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		Collections.sort(resCanvas.getArbeitspaketListe(), new ComperatorArbeitspaketLR());
 		ausgeben(resCanvas.getKoordinatenSystem());
 
-		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
-
-		zeitValidierung(resCanvas, moeglicheLoesungenResCanvas);
+		zeitOptimierung(resCanvas);
 
 	}
 
@@ -115,11 +113,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 * Endergebnis verwendet.
 	 *
 	 * @param resCanvas
-	 * @param moeglicheLoesungenResCanvas
 	 */
-	private void zeitValidierung(ResCanvas resCanvas, ArrayList<ResCanvas> moeglicheLoesungenResCanvas) {
+	private void zeitOptimierung(ResCanvas resCanvas) {
 
-		// System.out.println("Simulation start");
+//		System.out.println("Simulation start");
+
+		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
 		simulationDurchfuehren(resCanvas, moeglicheLoesungenResCanvas, null);
 
@@ -339,13 +338,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ResCanvas bevorSimulationStartResCanvs = resCanvas.copyResCanvas();
 
-		// hier für z simulation aufrufen : man bekommt fünf ergebnisse / extra Liste
-		// ErgebnissevonZListe
-		// diese fünf ergebnisse den meoglichenLoesungen hinzufügen
-
-		// ErgebnissevonZListe: entnehmen lösungen und simuliere für jede davon
-		// simulationDurchfuehren foreach
-
 		ArrayList<ResCanvas> simLoesungenResCanvas = new ArrayList<ResCanvas>();
 
 		String apID = null;
@@ -355,9 +347,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		Collections.sort(arbeitspaketListe, new ComperatorArbeitspaketLR());
 
 		int startAP = 0;
-		if (!(nichtMehrAnschauenApID == null)) {
+		if (nichtMehrAnschauenApID != null) {
 			for (Arbeitspaket simAp : arbeitspaketListe) {
-				if (simAp.getId() == nichtMehrAnschauenApID) {
+				if (simAp.getIdIntern() == nichtMehrAnschauenApID) {
 					startAP++;
 					break;
 				}
@@ -374,7 +366,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			Teilpaket letztesTeilpaket = tpListe.get(tpListe.size() - 1);
 			VerschiebeRichtung verschieben = letztesTeilpaket.ueberpruefeZeitenEnum();
 			if (verschieben != VerschiebeRichtung.FAZ) {
-				apID = arbeitspaketListe.get(i).getId();
+				apID = arbeitspaketListe.get(i).getIdIntern();
 				// System.out.println("simZaehler = " + ++simZaehler);
 				// if (simZaehler == 3) {
 				// System.out.println("Stopp!");
@@ -450,7 +442,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		vorbereitungSimulation = resCanvas.copyResCanvas();
 
 		for (Arbeitspaket simAp : vorbereitungSimulation.getArbeitspaketListe()) {
-			if (simAp.getId() == ap.getId()) {
+			if (simAp.getIdIntern() == ap.getIdIntern()) {
 				zuVerschiebenAp = simAp;
 				break;
 			}
@@ -564,7 +556,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					simLoesungenResCanvas);
 
 		} else if (verschieben == VerschiebeRichtung.LINKS) {
-			// Paket ist zu spät | SEZ verletzt
+			// Paket ist zu spät | FEZ verletzt
 
 			/*
 			 * Erklärung des folgenden Algorithmus
@@ -628,7 +620,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 			simulation = vorbereitungSimulation.copyResCanvas(zuVerschiebenAp);
 
-			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getId());
+			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getIdIntern());
 
 			int xStart = copyZuVerschiebenAP.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
 					.getxKoordinate();

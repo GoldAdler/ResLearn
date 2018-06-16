@@ -1,4 +1,4 @@
-package reslearn.gui.fxml;
+package reslearn.gui.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,15 +8,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import reslearn.gui.controller.VideoPlayer;
+import reslearn.gui.utils.VideoPlayer;
 
-public class TutorialVideo extends Application {
+public class ViewTutorialVideo extends Application {
 
-	private static TutorialVideo view;
+	private static ViewTutorialVideo view;
 
-	public static TutorialVideo getInstance() {
+	public static ViewTutorialVideo getInstance() {
 		if (view == null) {
-			view = new TutorialVideo();
+			view = new ViewTutorialVideo();
 		}
 		return view;
 	}
@@ -24,7 +24,7 @@ public class TutorialVideo extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		// Lade FXML-Dokument
-		Parent root = FXMLLoader.load(getClass().getResource("Tutorial.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Tutorial.fxml"));
 
 		Pane pane = new Pane();
 		pane.setPrefHeight(500);
@@ -48,7 +48,6 @@ public class TutorialVideo extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
-
 	}
 
 	public static void main(String[] args) {

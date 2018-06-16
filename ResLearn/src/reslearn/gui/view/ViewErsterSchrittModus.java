@@ -1,6 +1,7 @@
-package reslearn.gui;
+package reslearn.gui.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -16,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import reslearn.gui.controller.ControllerCanvasErsterSchrittModus;
+import reslearn.gui.rescanvas.Diagramm;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
 import reslearn.gui.utils.StandardColors;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
@@ -28,8 +32,8 @@ public class ViewErsterSchrittModus extends Application {
 	private ContextMenu menu;
 	private MenuItem ap;
 	private MenuItem reset;
-
 	private Pane pane;
+	private ControllerCanvasErsterSchrittModus controllerCanvas;
 
 	public static ViewErsterSchrittModus getInstance() {
 		if (view == null) {
@@ -46,14 +50,14 @@ public class ViewErsterSchrittModus extends Application {
 	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
 
 		stage = new Stage();
-		// Lade FXML
+
 		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
 		Scene hauptszene = new Scene(root);
 
 		ResCanvas resCanvas = new ResCanvas();
 
 		for (Arbeitspaket arbeitspaket : arbeitspakete) {
-			System.out.println("Arbeitspaket-ID:" + arbeitspaket.getId());
+			System.out.println("Arbeitspaket-ID:" + arbeitspaket.getIdIntern());
 			resCanvas.hinzufuegen(arbeitspaket);
 		}
 
@@ -63,21 +67,17 @@ public class ViewErsterSchrittModus extends Application {
 
 		Group group = new Group();
 
-		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
-		// der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
-				.getKoordinatenSystem();
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpaketeOben(koordinatenSystem, resCanvas);
-		ControllerCanvasErsterSchrittModus controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas,
-				diagramm);
+		controllerCanvas = new ControllerCanvasErsterSchrittModus(resCanvas, diagramm);
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
 
@@ -117,9 +117,11 @@ public class ViewErsterSchrittModus extends Application {
 			}
 		}
 
-		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
-				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
-				controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege());
+		rahmenErstellen();
+
+		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),controllerCanvas.getTabelleArbeitspakete(),
+				controllerCanvas.getLegende(), controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege(),
+				controllerCanvas.getFehlermeldung());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
@@ -128,6 +130,26 @@ public class ViewErsterSchrittModus extends Application {
 		stage.setScene(hauptszene);
 		stage.setTitle("ResLearn");
 		stage.show();
+	}
+
+	/**
+	 * Fügt dem Koordinatensystem alle Rahmen hinzu, die vorher im ControllerCanvas
+	 * erstellt wurden
+	 */
+	public void rahmenErstellen() {
+		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+			pane.getChildren().add(rahmen);
+		}
+	}
+
+	/**
+	 * Entfernt alle Rahmen im Koordinatensystem, die vorher dem Koordinatensystem
+	 * hinzugefügt wurden
+	 */
+	public void rahmenLoeschen(ArrayList<Rectangle> rahmenListe) {
+		for(Rectangle rahmen : rahmenListe) {
+			pane.getChildren().remove(rahmen);
+		}
 	}
 
 	public static void main(String[] args) {

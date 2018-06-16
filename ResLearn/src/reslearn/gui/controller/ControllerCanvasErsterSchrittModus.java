@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -29,14 +27,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
-import reslearn.gui.Diagramm;
-import reslearn.gui.DisplayCanvas;
-import reslearn.gui.ResFeld;
-import reslearn.gui.ViewErsterSchrittModus;
+import reslearn.gui.rescanvas.Diagramm;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.tableUtils.PairKeyFactory;
+import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.model.paket.Arbeitspaket;
+import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.Vektor2i;
@@ -52,11 +53,12 @@ public class ControllerCanvasErsterSchrittModus {
 	private Teilpaket teilpaketClicked;
 	private ResFeld rect;
 	private ColorPicker colorPicker;
-	Arbeitspaket[] arbeitspakete;
-	int maxGrenze = 5;
 	private Label korrekturvorschlaege;
 	private TextArea fehlerMeldung;
 	private Button validierenButton;
+	private Rectangle rectangle;
+	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
+	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
 
 	public ControllerCanvasErsterSchrittModus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -64,9 +66,10 @@ public class ControllerCanvasErsterSchrittModus {
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
-		erstelleButtons();
 		erstelleKorrekturvorschlaege();
 		leereFehlermeldungErstellen();
+		erstelleButtons();
+
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -74,7 +77,6 @@ public class ControllerCanvasErsterSchrittModus {
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 	}
 
-	// Event Handler Maus klicken
 	private EventHandler<MouseEvent> OnMousePressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
@@ -94,29 +96,20 @@ public class ControllerCanvasErsterSchrittModus {
 		}
 	};
 
-	// Event Handler Maus ziehen
 	private EventHandler<MouseEvent> OnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
 
 			// 1. nur ein ResFeld (A) verschieben
-			// 2. die anderen ResFelder müssen sich an dem ersten Resfeld orientieren
+			// 2. die anderen ResFelder müssen sich an dem geklickten Resfeld orientieren
 			// 3. offset von a auf andere übetragen
 			// 4. Offset muss gemerkt werden ( falls etwas rückgängig gemacht werden muss)
-
-			// Überprüfung ( logische verschieben abgschlossen, aber noch nicht in der Gui
-			// dargestellt)
 
 			double neuePositionZeigerX = e.getSceneX();
 			double neuePositionZeigerY = e.getSceneY();
 
-			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / DisplayCanvas.resFeldBreite); // neue Position
-			// Mauszeiger - alte
-			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / DisplayCanvas.resFeldLaenge); // Position
-			// Mauszeiger
-
-			// Verschiebung auf der X-Achse bewirkt logisches Verschieben im
-			// Koordinatensystem
+			int differenzX = (int) ((neuePositionZeigerX - zeigerX) / DisplayCanvas.resFeldBreite);
+			int differenzY = (int) ((neuePositionZeigerY - zeigerY) / DisplayCanvas.resFeldLaenge);
 
 			while (differenzX != 0 || differenzY != 0) {
 
@@ -132,9 +125,6 @@ public class ControllerCanvasErsterSchrittModus {
 					verschiebbar = rect.getResEinheit().getTeilpaket().bewegeX(resCanvas, -1);
 					verschiebenX(verschiebbar, -1);
 				}
-
-				// Verschiebung auf der Y-Achse bewirkt logisches Verschieben im
-				// Koordinatensystem
 
 				verschiebbar = false;
 
@@ -171,6 +161,13 @@ public class ControllerCanvasErsterSchrittModus {
 		}
 	}
 
+	/**
+	 * Wenn ein angeklicktes ResFeld verschoben wird, müssen alle zugehörigen
+	 * ResFelder mit dem gleichen Teilpaket und Rahmen um das X-Offset mitverschoben
+	 * werden
+	 *
+	 * @param vorzeichen
+	 */
 	private void bewegeX(int vorzeichen) {
 		HashMap<ResFeld, Vektor2i> resFeldMapTmp = new HashMap<ResFeld, Vektor2i>();
 		for (int y = 0; y < diagramm.getResFeldArray().length; y++) {
@@ -181,6 +178,9 @@ public class ControllerCanvasErsterSchrittModus {
 						resFeld.setTranslateX(newTranslateX);
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
+					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateX(newTranslateX);
 					}
 				}
 			}
@@ -205,6 +205,9 @@ public class ControllerCanvasErsterSchrittModus {
 						resFeldMapTmp.put(resFeld, new Vektor2i(y, x));
 						diagramm.getResFeldArray()[y][x] = null;
 					}
+					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
+						teilpaketRahmenZuordnung.get(teilpaketClicked).setTranslateY(newTranslateY);
+					}
 				}
 			}
 		}
@@ -216,61 +219,9 @@ public class ControllerCanvasErsterSchrittModus {
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////
-	// Erstellung des Valiedieren Button //
-	///////////////////////////////////////////////////////////////////////
-	public void erstelleValidierenButton() {
-		validierenButton = new Button("Validieren");
-		validierenButton.setLayoutX(
-				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
-		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
-				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
-		validierenButton.setOnAction(ValidierenAction);
-		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(validierenButton);
-	}
-
-	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
-
-		@Override
-		public void handle(ActionEvent event) {
-			Validierung vali = new Validierung(diagramm.getResFeldArray());
-			String ausgabe = "";
-
-			ViewErsterSchrittModus.getInstance().getPane().getChildren().remove(fehlerMeldung);
-			vali.AlgoErsterSchritt();
-			for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
-				ausgabe += vali.getFeedbackListe().get(i).toString();
-			}
-			fehlerMeldung = new TextArea(ausgabe);
-			fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-			fehlerMeldung.setEditable(false);
-			if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
-				fehlerMeldung.setStyle("-fx-text-fill: green;");
-			} else {
-				fehlerMeldung.setStyle("-fx-text-fill: red;");
-			}
-			fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-			fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-					+ korrekturvorschlaege.getPrefHeight());
-			fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-			fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-			fehlerMeldung.setWrapText(true);
-			ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
-		}
-	};
-
-	public void leereFehlermeldungErstellen() {
-		fehlerMeldung = new TextArea("");
-		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasBreite);
-		fehlerMeldung.setLayoutY(0 - DisplayCanvas.abstandY - DisplayCanvas.tabelleArbeitspaketLaenge
-				+ korrekturvorschlaege.getPrefHeight());
-		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
-		ViewErsterSchrittModus.getInstance().getPane().getChildren().add(fehlerMeldung);
-	}
-
+	/**
+	 * Erzeugung der Korrekturvorschläge in der Fehlermeldung
+	 */
 	public void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
 		korrekturvorschlaege.setLayoutX(
@@ -283,61 +234,112 @@ public class ControllerCanvasErsterSchrittModus {
 		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
 	}
 
-	/////////////////////////////////////////////////////////////////////////
-	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
-	///////////////////////////////////////////////////////////////////////
+	/**
+	 * Erstellung des Validieren-Buttons
+	 */
+	public void erstelleValidierenButton() {
+		validierenButton = new Button("Validieren");
+		validierenButton.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
+				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
+		validierenButton.setOnAction(ValidierenAction);
+	}
+
+	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			Validierung vali = new Validierung(diagramm.getResFeldArray());
+			String ausgabe = "";
+
+			vali.AlgoErsterSchritt();
+			for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
+				ausgabe += vali.getFeedbackListe().get(i).toString();
+			}
+			fehlerMeldung.setText(ausgabe);
+
+			if (vali.getFeedbackListe().get(0).toString() == "Alles in Ordnung!") {
+				fehlerMeldung.setStyle("-fx-text-fill: green;");
+			} else {
+				fehlerMeldung.setStyle("-fx-text-fill: red;");
+			}
+		}
+	};
+
+	/**
+	 * Erzeugung der linken Fehlermeldung
+	 */
+	public void leereFehlermeldungErstellen() {
+		fehlerMeldung = new TextArea("");
+		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		fehlerMeldung.setEditable(false);
+		fehlerMeldung.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
+		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		fehlerMeldung.setPrefHeight(DisplayCanvas.hoeheFehlermeldung);
+	}
+
 	private Pane legende = new Pane();
 	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
-	// ResEinheiten -> ObservableMap ResEinheit, Vektor2i
-	// ArrayList<blabala> = asfasf;
-	// arrayList.get(0)[i][j] == arrayList.get(1)[i][j]
-	// arrayList.get(1)[i][j] -> ResEinheit
-	// ResEinheit -> update Observableblababla
+	/**
+	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden
+	 * Farben
+	 *
+	 * @param arbeitspaketeMitFarbe
+	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
-		legende.setPrefWidth(DisplayCanvas.canvasBreite);
-		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
+
+		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY);
+		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		Label label = null;
 		Circle circle = null;
+		int xCounter = 0;
+		int yCounter = 1;
+
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
-			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
-			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
-			}
 
-			label = new Label(entry.getKey().getId());
+			circle = new Circle(
+					DisplayCanvas.breiteFehlermeldung / 7 + (DisplayCanvas.breiteFehlermeldung / 3) * xCounter,
+					DisplayCanvas.legendeHoehe / 4 + (DisplayCanvas.legendeHoehe / 2) * yCounter,
+					DisplayCanvas.legendeKreisRadius);
+			circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+
+			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
+			label.setLayoutY(circle.getCenterY() - DisplayCanvas.legendeKreisRadius / 2);
+
 			legende.getChildren().addAll(circle, label);
 
+			if (xCounter == 2) {
+				xCounter = 0;
+				yCounter += 2.7;
+			} else {
+				xCounter++;
+			}
 		}
+		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.3) + (yCounter * 12));
 	}
-
-	/////////////////////////////////////////////////////////////////////////
-	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
-	///////////////////////////////////////////////////////////////////////
 
 	private TableView<Pair<String, Object>> table = new TableView<>();
 	private ObservableList<Pair<String, Object>> data;
 
+	/**
+	 * Befüllen der Informationstabelle bei Klick auf ein Arbeitspaket mit den
+	 * entsprechenden Werten
+	 */
 	@SuppressWarnings("unchecked")
 	private void befuelleTabelle() {
-		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("Farbe", rect.getFill()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
@@ -350,6 +352,9 @@ public class ControllerCanvasErsterSchrittModus {
 		table.setItems(data);
 	}
 
+	/**
+	 * Erzeugung der Informationstabelle auf der linken Seite
+	 */
 	@SuppressWarnings("unchecked")
 	private void erstelleTabelle() {
 
@@ -384,24 +389,6 @@ public class ControllerCanvasErsterSchrittModus {
 		return new Pair<>(name, value);
 	}
 
-	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		@Override
-		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		}
-	}
-
-	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-			Object value = data.getValue().getValue();
-			return (value instanceof ObservableValue) ? (ObservableValue) value : new ReadOnlyObjectWrapper<>(value);
-		}
-	}
-
 	class PairValueCell extends TableCell<Pair<String, Object>, Object> {
 		@Override
 		protected void updateItem(Object item, boolean empty) {
@@ -428,6 +415,10 @@ public class ControllerCanvasErsterSchrittModus {
 		}
 	}
 
+	/**
+	 * Beim Klick auf den Farbbutton in der Informationstabelle wechselt das
+	 * Arbeitspaket seine Farbe
+	 */
 	private void wechsleFarbe() {
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -447,13 +438,12 @@ public class ControllerCanvasErsterSchrittModus {
 		});
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// Erstellung der Tabelle zur Anzeige der Arbeitspakete //
-	//////////////////////////////////////////////////////////////////////////////////
-
 	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
 	private ObservableList<Arbeitspaket> dataPakete;
 
+	/**
+	 * Erzeugung der Übersichtstabelle aller Arbeitspakete
+	 */
 	@SuppressWarnings("unchecked")
 	private void erstelleTabelleArbeitspakete() {
 		dataPakete = FXCollections.observableArrayList();
@@ -467,7 +457,7 @@ public class ControllerCanvasErsterSchrittModus {
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
 		apId.setMinWidth(breite / 7);
-		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("idExtern"));
 		apId.setSortType(TableColumn.SortType.ASCENDING);
 
 		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
@@ -505,7 +495,11 @@ public class ControllerCanvasErsterSchrittModus {
 		tabelleArbeitspakete.getSortOrder().add(apId);
 	}
 
-	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	/**
+	 * Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	 *
+	 * @param ap
+	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
 		tabelleArbeitspakete.getSelectionModel().select(ap);
 		tabelleArbeitspakete.scrollTo(ap);
@@ -515,6 +509,9 @@ public class ControllerCanvasErsterSchrittModus {
 	private RadioButton kapazitaetstreuModus = new RadioButton();
 	private final ToggleGroup modusToggleGroup = new ToggleGroup();
 
+	/**
+	 * Erzeugung der RadioButtons Kapazitätstreu und Termintreu
+	 */
 	private void erstelleButtons() {
 		termintreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
 		termintreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
@@ -532,6 +529,41 @@ public class ControllerCanvasErsterSchrittModus {
 		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
 		kapazitaetstreuModus.setSelected(true);
 
+	}
+
+	/**
+	 * Erzeugung aller Rahmen für jedes Teilpaket Der Rahmen hat die Position des
+	 * linken oberen ResEinheit im Teilpaket
+	 *
+	 * @return rahmenListe
+	 */
+	public ArrayList<Rectangle> erstelleRahmen() {
+		rahmenListe.clear();
+
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
+				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
+						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
+						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStroke(Color.BLACK);
+				rectangle.setStrokeWidth(1);
+				rectangle.setMouseTransparent(true);
+
+				rahmenListe.add(rectangle);
+
+				if (teilpaketRahmenZuordnung.containsKey(tp)) {
+					teilpaketRahmenZuordnung.replace(tp, rectangle);
+
+				} else {
+					teilpaketRahmenZuordnung.put(tp, rectangle);
+				}
+			}
+		}
+		return rahmenListe;
 	}
 
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
@@ -564,5 +596,9 @@ public class ControllerCanvasErsterSchrittModus {
 
 	public Label getKorrekturvorschlaege() {
 		return korrekturvorschlaege;
+	}
+
+	public TextArea getFehlermeldung() {
+		return fehlerMeldung;
 	}
 }

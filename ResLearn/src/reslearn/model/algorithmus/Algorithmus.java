@@ -7,7 +7,7 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public abstract class Algorithmus {
 
-	static final boolean testModus = false;
+	static final boolean testModus = true;
 	static final boolean trotzdem = false;
 	static final boolean historie = false;
 	static final boolean test = false;
@@ -25,7 +25,7 @@ public abstract class Algorithmus {
 					if (b == null) {
 						System.out.print(".");
 					} else {
-						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+						System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 					}
 				}
 				System.out.println();
@@ -44,7 +44,7 @@ public abstract class Algorithmus {
 					if (b == null) {
 						System.out.print(".");
 					} else {
-						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+						System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 					}
 				}
 				System.out.println();
@@ -72,7 +72,7 @@ public abstract class Algorithmus {
 					if (b == null) {
 						System.out.print(".");
 					} else {
-						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+						System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 					}
 				}
 				System.out.println();
@@ -95,7 +95,7 @@ public abstract class Algorithmus {
 					if (b == null) {
 						System.out.print(".");
 					} else {
-						System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+						System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 					}
 				}
 				System.out.println();

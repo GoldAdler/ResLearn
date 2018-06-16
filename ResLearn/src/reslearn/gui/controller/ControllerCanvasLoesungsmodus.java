@@ -28,13 +28,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
-import reslearn.gui.DisplayCanvas;
-import reslearn.gui.ResFeld;
-import reslearn.gui.ViewLoesungsmodus;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.view.ViewLoesungsmodus;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
@@ -86,6 +87,9 @@ public class ControllerCanvasLoesungsmodus {
 	 * INITIALEN Referenzen eingefügt.
 	 */
 	private ObservableMap<ResEinheit, Double> positionYObservableMap = FXCollections.observableHashMap();
+	private Rectangle rectangle;
+	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
+	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
 
 	// Legende unten
 	private Pane legende = new Pane();
@@ -186,6 +190,8 @@ public class ControllerCanvasLoesungsmodus {
 				schrittZurueck.setDisable(true);
 			}
 			extrahiereArbeitspakete(historieNummer);
+			ViewLoesungsmodus.getInstance().rahmenLoeschen();
+			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
 	};
 
@@ -198,6 +204,8 @@ public class ControllerCanvasLoesungsmodus {
 				schrittVor.setDisable(true);
 			}
 			extrahiereArbeitspakete(historieNummer);
+			ViewLoesungsmodus.getInstance().rahmenLoeschen();
+			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
 	};
 
@@ -336,7 +344,7 @@ public class ControllerCanvasLoesungsmodus {
 					Arbeitspaket arbeitspaketAktuell = koordinatenSystemNeu[y][x].getTeilpaket().getArbeitspaket();
 					if (!arbeitspaketeAbgearbeitet.contains(arbeitspaketAktuell)) {
 						arbeitspaketeAbgearbeitet.add(arbeitspaketAktuell);
-						String arbeitspaketId = arbeitspaketAktuell.getId();
+						String arbeitspaketId = arbeitspaketAktuell.getIdIntern();
 
 						ArrayList<ResEinheit> abzuarbeitendeResEinheiten = new ArrayList<ResEinheit>();
 						arbeitspaketAktuell.getTeilpaketListe().forEach(teilpaket -> teilpaket.getResEinheitListe()
@@ -360,7 +368,7 @@ public class ControllerCanvasLoesungsmodus {
 		for (ResEinheit[] zeile : koordinatenSystemUrspruenglich) {
 			for (ResEinheit resEinheit : zeile) {
 				if (resEinheit != null) {
-					if (resEinheit.getTeilpaket().getArbeitspaket().getId() == arbeitspaketId) {
+					if (resEinheit.getTeilpaket().getArbeitspaket().getIdIntern() == arbeitspaketId) {
 						if (index == abzuarbeitendeResEinheiten.size()) {
 							return;
 						}
@@ -383,32 +391,41 @@ public class ControllerCanvasLoesungsmodus {
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
-		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
-		legende.setPrefWidth(DisplayCanvas.canvasBreite);
-		legende.setPrefHeight(DisplayCanvas.legendeHoehe);
-		legende.setStyle("-fx-background-radius: 30;");
-		legende.setStyle("-fx-background-color: #c0c0c0;");
 		Label label = null;
 		Circle circle = null;
+		int xCounter = 0;
+		int yCounter = 1;
+
+		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 4 * DisplayCanvas.resFeldLaenge);
+		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
+		legende.setStyle("-fx-background-radius: 30;");
+		legende.setStyle("-fx-background-color: #c0c0c0;");
+
 		for (Map.Entry<Arbeitspaket, Color> entry : arbeitspaketeMitFarbe.entrySet()) {
 			colorObservableMap.put(entry.getKey(), entry.getValue());
-			if (label == null) {
-				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
-						DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			} else {
-				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
-						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
-				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-			}
 
-			label = new Label(entry.getKey().getId());
+			circle = new Circle(
+					DisplayCanvas.breiteFehlermeldung / 7 + (DisplayCanvas.breiteFehlermeldung / 3) * xCounter,
+					DisplayCanvas.legendeHoehe / 4 + (DisplayCanvas.legendeHoehe / 2) * yCounter,
+					DisplayCanvas.legendeKreisRadius);
+			circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
+
+			label = new Label(entry.getKey().getIdExtern());
 			label.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
-			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
+			label.setLayoutY(circle.getCenterY() - DisplayCanvas.legendeKreisRadius / 2);
+
 			legende.getChildren().addAll(circle, label);
+
+			if (xCounter == 2) {
+				xCounter = 0;
+				yCounter += 2.7;
+			} else {
+				xCounter++;
+			}
 		}
+		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.3) + (yCounter * 12));
 	}
 
 	/**
@@ -418,7 +435,7 @@ public class ControllerCanvasLoesungsmodus {
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
-				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getId()),
+				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
 				pair("FEZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFez()),
 				pair("SAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getSaz()),
@@ -616,7 +633,7 @@ public class ControllerCanvasLoesungsmodus {
 
 		TableColumn<Arbeitspaket, String> apId = new TableColumn<>("Arbeitspaket-ID");
 		apId.setMinWidth(breite / 7);
-		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("id"));
+		apId.setCellValueFactory(new PropertyValueFactory<Arbeitspaket, String>("idExtern"));
 		apId.setSortType(TableColumn.SortType.ASCENDING);
 
 		TableColumn<Arbeitspaket, Integer> apFaz = new TableColumn<>("FAZ");
@@ -660,8 +677,55 @@ public class ControllerCanvasLoesungsmodus {
 	 * @param ap
 	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
-		tabelleArbeitspakete.getSelectionModel().select(ap);
-		tabelleArbeitspakete.scrollTo(ap);
+		System.out.println("Arbeitspaket angeklickt: " + ap.getIdIntern());
+
+		// Da hier mit Kopien von Arbeitspaketen gearbeitet wird, muss das ausgewählte
+		// Arbeitspaket durch die ID herausgefunden werden
+		// Die ID des ausgewählten AP wird herausgelesen
+		String id = ap.getIdIntern();
+		Arbeitspaket apAusgewaehlt = null;
+
+		// Die in der Tabelle befindlichen APs werden überprüft, ob sie die gleiche ID
+		// haben
+		for (int i = 0; i < tabelleArbeitspakete.getItems().size(); i++) {
+			if (tabelleArbeitspakete.getItems().get(i).getIdIntern().equals(id)) {
+				apAusgewaehlt = tabelleArbeitspakete.getItems().get(i);
+				break;
+			}
+		}
+
+		// das Paket mit der gleichen ID wird in der Tabelle markiert
+		tabelleArbeitspakete.getSelectionModel().select(apAusgewaehlt);
+		tabelleArbeitspakete.scrollTo(apAusgewaehlt);
+	}
+
+	public ArrayList<Rectangle> erstelleRahmen() {
+		rahmenListe.clear();
+
+		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
+				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
+						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
+						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,
+						reseinheit.getTeilpaket().getMitarbeiteranzahl() * DisplayCanvas.resFeldLaenge);
+				rectangle.setFill(Color.TRANSPARENT);
+				rectangle.setStroke(Color.BLACK);
+				rectangle.setStrokeWidth(1);
+				rectangle.setMouseTransparent(true);
+
+				rahmenListe.add(rectangle);
+
+				if (teilpaketRahmenZuordnung.containsKey(tp)) {
+					teilpaketRahmenZuordnung.replace(tp, rectangle);
+
+				} else {
+					teilpaketRahmenZuordnung.put(tp, rectangle);
+				}
+			}
+		}
+		return rahmenListe;
 	}
 
 	public TableView<Arbeitspaket> getTabelleArbeitspakete() {
@@ -710,5 +774,9 @@ public class ControllerCanvasLoesungsmodus {
 
 	public Label getMaxPersonen() {
 		return maxPersonen;
+	}
+
+	public ArrayList<Rectangle> getRahmenListe() {
+		return rahmenListe;
 	}
 }

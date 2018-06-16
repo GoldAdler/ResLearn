@@ -1,4 +1,4 @@
-package reslearn.gui;
+package reslearn.gui.rescanvas;
 
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -85,5 +85,6 @@ public final class DisplayCanvas {
 			- abstandX * 2);
 	public static final int hoeheFehlermeldung = (int) (canvasLaenge + tabelleArbeitspaketLaenge - resFeldBreite * 1.5
 			- DisplayCanvas.abstandX - DisplayCanvas.spaltX * 2);
+	public static final int StartpunktPaneUebungAuswaehlen = resFeldBreite * 3;
 
 }

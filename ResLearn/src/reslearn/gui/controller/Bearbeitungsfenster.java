@@ -1,7 +1,6 @@
 package reslearn.gui.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,15 +17,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import reslearn.gui.DisplayCanvas;
-import reslearn.gui.ResFeld;
-import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.rescanvas.DisplayCanvas;
+import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.paket.ResEinheit;
 
 public class Bearbeitungsfenster extends Pane {
 	private Stage bearbeitungsmodus;
 	private Scene scene;
-	private LinkedList<ResFeld> resFeldListe;
+	private ArrayList<ResFeld> resFeldListe;
 	private boolean vertikal;
 
 	private Label arbeitspaket;
@@ -39,14 +38,14 @@ public class Bearbeitungsfenster extends Pane {
 	public Bearbeitungsfenster(ResFeld rect) {
 
 		arbeitspaket = new Label(
-				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getId());
+				"Teile Arbeitspaket: " + rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
 		arbeitspaket.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		hilfetext = new Label("Wählen Sie die Pakete, die sie abtrennen möchten.");
 		hilfetext.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 
 		teilen = new Button("Teile Arbeitspaket");
 		teilen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		resFeldListe = new LinkedList<ResFeld>();
+		resFeldListe = new ArrayList<ResFeld>();
 
 		sliderX = new Slider();
 		sliderX.setStyle("-fx-font-size: " + DisplayCanvas.schriftGroesse);
@@ -243,6 +242,8 @@ public class Bearbeitungsfenster extends Pane {
 						rect.getResEinheit().getTeilpaket().trenneTeilpaketHorizontal(neueResEinheitListe);
 					}
 				}
+				ViewUebungsmodus.getInstance().rahmenLoeschen();
+				ViewUebungsmodus.getInstance().rahmenErstellen();
 				bearbeitungsmodus.close();
 
 			}

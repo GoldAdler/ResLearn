@@ -1,4 +1,4 @@
-package reslearn.gui;
+package reslearn.gui.rescanvas;
 
 import javafx.scene.shape.Rectangle;
 import reslearn.model.paket.ResEinheit;

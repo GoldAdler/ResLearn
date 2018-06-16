@@ -29,10 +29,9 @@ public class ControllerAufgabeLaden extends Controller {
 	@FXML
 	private Button dateiauswaehlen;
 
-	public Arbeitspaket[] paketeArray;
+	private Arbeitspaket[] paketeArray;
 	private String name;
-	private String dateipfad = ".." + File.separator + "ResLearn" + File.separator + "bin" + File.separator + "reslearn"
-			+ File.separator + "gui" + File.separator + "eigeneAufgaben" + File.separator;
+	private String dateipfad = "./eigeneAufgaben/";
 
 	/**
 	 * Diese Methode oeffnet einen FileChooser, mit dem eine selbsterstellte Aufgabe

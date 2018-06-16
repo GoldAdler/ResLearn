@@ -59,7 +59,7 @@ public class Feedback {
 	}
 
 	private String errorToString() {
-		String overview = "Fehler bei Arbeitspaket " + resEinheit.getTeilpaket().getArbeitspaket().getId() + "!";
+		String overview = "Fehler bei Arbeitspaket " + resEinheit.getTeilpaket().getArbeitspaket().getIdIntern() + "!";
 		String msg = overview + "\n" + message + "\n" + "\n";
 		return msg;
 	}

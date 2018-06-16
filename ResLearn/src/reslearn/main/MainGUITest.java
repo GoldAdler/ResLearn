@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.gui.ViewUebungsmodus;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.algorithmus.AlgoErsteSchritt;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -68,7 +68,7 @@ public class MainGUITest {
 				if (b == null) {
 					System.out.print(".");
 				} else {
-					System.out.print(b.getTeilpaket().getArbeitspaket().getId());
+					System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
 				}
 			}
 			System.out.println();

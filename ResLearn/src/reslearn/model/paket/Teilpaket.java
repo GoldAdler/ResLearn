@@ -313,13 +313,14 @@ public class Teilpaket extends Paket {
 	 * @return
 	 */
 	public VerschiebeRichtung ueberpruefeZeitenEnum() {
+
 		VerschiebeRichtung verschieben = null;
 
 		int xPos = resEinheitListe.get(0).getPosition().getxKoordinate();
 
-		if (this.arbeitspaket.getFaz() - 1 > xPos) {
+		if (this.arbeitspaket.getFez() - 1 > xPos) {
 			verschieben = VerschiebeRichtung.RECHTS;
-		} else if (this.arbeitspaket.getFaz() - 1 == xPos) {
+		} else if (this.arbeitspaket.getFez() - 1 == xPos) {
 			verschieben = VerschiebeRichtung.FAZ;
 		} else {
 			verschieben = VerschiebeRichtung.LINKS;

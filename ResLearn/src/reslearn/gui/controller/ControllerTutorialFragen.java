@@ -17,9 +17,10 @@ import javafx.stage.Stage;
 
 public class ControllerTutorialFragen extends Controller {
 
-	int counter = 0;
-	int counterFrageAntwort = 1;
-	int counterRichtigeAntworten = 0;
+	private int counter = 0;
+	private int counterFrageAntwort = 1;
+	private int counterRichtigeAntworten = 0;
+	private final int counterAlleFragen = 4;
 
 	@FXML
 	private Button zurueck;
@@ -84,7 +85,7 @@ public class ControllerTutorialFragen extends Controller {
 
 	@FXML
 	public void weiter(ActionEvent event) {
-		if (counter < 4) {
+		if (counter < counterAlleFragen) {
 			if (counter == 0) {
 				antwort(counter);
 				counter += 1;
@@ -98,7 +99,7 @@ public class ControllerTutorialFragen extends Controller {
 					counter++;
 				}
 			}
-		} else if (counter == 4) {
+		} else if (counter == counterAlleFragen) {
 			counter++;
 			if (counterRichtigeAntworten > 2) {
 				labelErgebnis.setText(
@@ -108,7 +109,7 @@ public class ControllerTutorialFragen extends Controller {
 						"Es wurden " + counterRichtigeAntworten + " von 4 Fragen richtig beantwortet.\nSchäm dich!!");
 			}
 			labelErgebnis.setVisible(true);
-		} else if (counter == 5) {
+		} else if (counter == counterAlleFragen + 1) {
 			Scene newScene;
 			Parent root;
 			alleFenster.add("/reslearn/gui/fxml/TutorialFragen.fxml");
@@ -131,7 +132,7 @@ public class ControllerTutorialFragen extends Controller {
 		switch (counter) {
 		case 0:
 			if (rb1.isSelected()) {
-				label.setText("Antwort " + rb1.getText() + " ist richtig");
+				label.setText("Antwort: " + rb1.getText() + " ist richtig");
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -142,11 +143,11 @@ public class ControllerTutorialFragen extends Controller {
 				counterRichtigeAntworten++;
 			} else {
 				if (rb2.isSelected()) {
-					label.setText("Antwort " + rb2.getText() + " war falsch");
+					label.setText("Antwort: " + rb2.getText() + " war falsch");
 				} else if (rb3.isSelected()) {
-					label.setText("Antwort " + rb3.getText() + " war falsch");
+					label.setText("Antwort: " + rb3.getText() + " war falsch");
 				} else if (rb4.isSelected()) {
-					label.setText("Antwort " + rb4.getText() + " war falsch");
+					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
 					label.setText("Keine Antwort ist falsch, netter Versuch");
 				}
@@ -160,29 +161,29 @@ public class ControllerTutorialFragen extends Controller {
 			}
 			break;
 		case 1:
-			if (rb1.isSelected()) {
-				label.setText("Antwort " + rb1.getText() + " ist richtig");
-				rb1.setTextFill(Color.GREEN);
-				rb2.setDisable(true);
-				rb2.setTextFill(Color.RED);
+			if (rb2.isSelected()) {
+				label.setText("Antwort: " + rb2.getText() + " ist richtig");
+				rb2.setTextFill(Color.GREEN);
+				rb1.setDisable(true);
+				rb1.setTextFill(Color.RED);
 				rb3.setDisable(true);
 				rb3.setTextFill(Color.RED);
 				rb4.setDisable(true);
 				rb4.setTextFill(Color.RED);
 				counterRichtigeAntworten++;
 			} else {
-				if (rb2.isSelected()) {
-					label.setText("Antwort " + rb2.getText() + " war falsch");
+				if (rb1.isSelected()) {
+					label.setText("Antwort: " + rb1.getText() + " war falsch");
 				} else if (rb3.isSelected()) {
-					label.setText("Antwort " + rb3.getText() + " war falsch");
+					label.setText("Antwort: " + rb3.getText() + " war falsch");
 				} else if (rb4.isSelected()) {
-					label.setText("Antwort " + rb4.getText() + " war falsch");
+					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
 					label.setText("Keine Antwort ist falsch, netter Versuch");
 				}
-				rb1.setTextFill(Color.GREEN);
-				rb2.setDisable(true);
-				rb2.setTextFill(Color.RED);
+				rb2.setTextFill(Color.GREEN);
+				rb1.setDisable(true);
+				rb1.setTextFill(Color.RED);
 				rb3.setDisable(true);
 				rb3.setTextFill(Color.RED);
 				rb4.setDisable(true);
@@ -191,7 +192,7 @@ public class ControllerTutorialFragen extends Controller {
 			break;
 		case 2:
 			if (rb1.isSelected()) {
-				label.setText("Antwort " + rb1.getText() + " ist richtig");
+				label.setText("Antwort: " + rb1.getText() + " ist richtig");
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -202,11 +203,11 @@ public class ControllerTutorialFragen extends Controller {
 				counterRichtigeAntworten++;
 			} else {
 				if (rb2.isSelected()) {
-					label.setText("Antwort " + rb2.getText() + " war falsch");
+					label.setText("Antwort: " + rb2.getText() + " war falsch");
 				} else if (rb3.isSelected()) {
-					label.setText("Antwort " + rb3.getText() + " war falsch");
+					label.setText("Antwort: " + rb3.getText() + " war falsch");
 				} else if (rb4.isSelected()) {
-					label.setText("Antwort " + rb4.getText() + " war falsch");
+					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
 					label.setText("Keine Antwort ist falsch, netter Versuch");
 				}
@@ -221,7 +222,7 @@ public class ControllerTutorialFragen extends Controller {
 			break;
 		case 3:
 			if (rb1.isSelected()) {
-				label.setText("Antwort " + rb1.getText() + " ist richtig");
+				label.setText("Antwort: " + rb1.getText() + " ist richtig");
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -232,11 +233,11 @@ public class ControllerTutorialFragen extends Controller {
 				counterRichtigeAntworten++;
 			} else {
 				if (rb2.isSelected()) {
-					label.setText("Antwort " + rb2.getText() + " war falsch");
+					label.setText("Antwort: " + rb2.getText() + " war falsch");
 				} else if (rb3.isSelected()) {
-					label.setText("Antwort " + rb3.getText() + " war falsch");
+					label.setText("Antwort: " + rb3.getText() + " war falsch");
 				} else if (rb4.isSelected()) {
-					label.setText("Antwort " + rb4.getText() + " war falsch");
+					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
 					label.setText("Keine Antwort ist falsch, netter Versuch");
 				}
@@ -256,88 +257,88 @@ public class ControllerTutorialFragen extends Controller {
 		switch (counter) {
 		case 0:
 			selektieren();
-			label.setText("Frage 0");
+			label.setText("Welche Bedarfsoptimierungsverfahren gibt es?");
 			tg = new ToggleGroup();
 
-			rb1.setText("Antwort 01");
+			rb1.setText("Termin- und kapazitätstreue Bedarfsoptimierung");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
-			rb2.setText("Antwort 02");
+			rb2.setText("Termin- und planungstreue Bedarfsoptimierung");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Antwort 03");
+			rb3.setText("Planungs- und kapazitätstreue Bedarfsoptimierung");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Antwort 04");
+			rb4.setText("Termin-, planungs- und kapazitätstreue Bedarfsoptimierung");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
 
 		case 1:
 			selektieren();
-			label.setText("Frage 1");
+			label.setText("Wobei handelt es sich NICHT um eine Vorraussetzung der Terminplanung der Ressourcen?");
 			tg = new ToggleGroup();
 
-			rb1.setText("Antwort 1");
+			rb1.setText("Projektstrukturplan wurde erstellt");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
-			rb2.setText("Antwort 2");
+			rb2.setText("Terminbeschleunigung/Crashing wurde durchgeführt");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Antwort 3");
+			rb3.setText("Arbeitspakete wurden mit dazugehöriger Aufwandsschätzung und Dauer erstellt");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Antwort 4");
+			rb4.setText("Netzplan wurde erstellt");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
 
 		case 2:
 			selektieren();
-			label.setText("Frage 2");
+			label.setText("Wie wird die kapazitätstreue Bedarfsoptimierung noch genannt?");
 			tg = new ToggleGroup();
 
-			rb1.setText("Antwort 11");
+			rb1.setText("harter Abgleich");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
-			rb2.setText("Antwort 22");
+			rb2.setText("weicher Abgleich");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Antwort 33");
+			rb3.setText("schwerer Abgleich");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Antwort 44");
+			rb4.setText("stabiler Abgleich");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
 
 		case 3:
 			selektieren();
-			label.setText("Frage 3");
+			label.setText("Welchen Vorteil bietet die termintreue Bedarfsoptimierung?");
 			tg = new ToggleGroup();
 
-			rb1.setText("Antwort 111");
+			rb1.setText("Der Anfangs-und Endezeitpunkt des Projektes wird eingehalten");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
-			rb2.setText("Antwort 222");
+			rb2.setText("Die Anzahl der maximal parallel arbeitenden Mitarbeiter wird eingehalten");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Antwort 333");
+			rb3.setText("Hier könnte Ihre Werbung stehen");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Antwort 444");
+			rb4.setText("Das Projekt ist immer zum frühesten Endzeitpunkt fertiggestellt ");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
@@ -347,12 +348,16 @@ public class ControllerTutorialFragen extends Controller {
 
 	public void selektieren() {
 		rb1.setDisable(false);
+		rb1.setSelected(false);
 		rb1.setTextFill(Color.BLACK);
 		rb2.setDisable(false);
+		rb2.setSelected(false);
 		rb2.setTextFill(Color.BLACK);
 		rb3.setDisable(false);
+		rb3.setSelected(false);
 		rb3.setTextFill(Color.BLACK);
 		rb4.setDisable(false);
+		rb4.setSelected(false);
 		rb4.setTextFill(Color.BLACK);
 	}
 

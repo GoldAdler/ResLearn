@@ -533,7 +533,7 @@ public class ResCanvas {
 
 		for (Arbeitspaket apHistorie : historienArbeitspaketListe) {
 
-			Arbeitspaket apAktuell = this.findeAPnachID(apHistorie.getId());
+			Arbeitspaket apAktuell = this.findeAPnachID(apHistorie.getIdIntern());
 
 			ArrayList<Teilpaket> tpListeHistorie = apHistorie.getTeilpaketListe();
 			ArrayList<Teilpaket> tpListeAktuell = apAktuell.getTeilpaketListe();
@@ -670,7 +670,7 @@ public class ResCanvas {
 		Arbeitspaket nichtKopierenKopie = null;
 
 		for (Arbeitspaket ap : kopieResCanvas.getArbeitspaketListe()) {
-			if (ap.getId() == nichtKopierenOrginal.getId()) {
+			if (ap.getIdIntern() == nichtKopierenOrginal.getIdIntern()) {
 				nichtKopierenKopie = ap;
 				break;
 			}
@@ -717,7 +717,7 @@ public class ResCanvas {
 	public Arbeitspaket findeAPnachID(String zuFindenID) {
 		Arbeitspaket result = null;
 		for (Arbeitspaket ap : getArbeitspaketListe()) {
-			if (ap.getId() == zuFindenID) {
+			if (ap.getIdIntern() == zuFindenID) {
 				result = ap;
 				break;
 			}
@@ -805,7 +805,7 @@ public class ResCanvas {
 		ArrayList<Arbeitspaket> ausgangApListe = this.arbeitspaketListe;
 
 		for (Arbeitspaket apAusgang : ausgangApListe) {
-			Arbeitspaket apAktuell = zuUeberpruefen.findeAPnachID(apAusgang.getId());
+			Arbeitspaket apAktuell = zuUeberpruefen.findeAPnachID(apAusgang.getIdIntern());
 
 			ArrayList<Teilpaket> tpListeAusgang = apAusgang.getTeilpaketListe();
 			ArrayList<Teilpaket> tpListePruefen = apAktuell.getTeilpaketListe();

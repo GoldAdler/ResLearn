@@ -12,14 +12,16 @@ import reslearn.model.utils.Vektor2i;
 public class Arbeitspaket extends Paket {
 
 	/**
-	 * Benennung des Arbeitspakets (externn, vom User)
-	 */
-	private String id;
-
-	/**
-	 * Bennenung des Arbeitspaktes (für interne Berechnungen durchlaufend von A bis Z)
+	 * Bennenung des Arbeitspaktes (für interne Berechnungen durchlaufend von A bis
+	 * Z)
 	 */
 	private String idIntern;
+
+	/**
+	 * Benennung des Arbeitspakets (externn, vom User), wird auch in der Legende
+	 * angezeigt
+	 */
+	private String idExtern;
 
 	/**
 	 * Fruehester Anfangszeitpunkt
@@ -47,7 +49,8 @@ public class Arbeitspaket extends Paket {
 	public Arbeitspaket(String id, int faz, int fez, int saz, int sez, int vorgangsdauer, int mitarbeiteranzahl,
 			int aufwand) {
 		super(vorgangsdauer, mitarbeiteranzahl, aufwand);
-		this.id = id;
+		this.idIntern = id;
+		this.idExtern = id;
 		this.faz = faz;
 		this.saz = saz;
 		this.fez = fez;
@@ -324,7 +327,7 @@ public class Arbeitspaket extends Paket {
 	 */
 	public Arbeitspaket copy() {
 
-		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.id, this.faz, this.fez, this.saz, this.sez,
+		Arbeitspaket copyArbeitsPaket = new Arbeitspaket(this.idIntern, this.faz, this.fez, this.saz, this.sez,
 				this.vorgangsdauer, this.mitarbeiteranzahl, this.aufwand);
 
 		ArrayList<Teilpaket> neueTeilpaketListe = new ArrayList<Teilpaket>();
@@ -379,20 +382,44 @@ public class Arbeitspaket extends Paket {
 		this.teilpaketListe = teilpaketListe;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getArbeitspaketName() {
+	/**
+	 * Die interne Bezeichung eines Arbeitspaktes. Wichtig für Debuggen und
+	 * Konsolenausgaben. Wird vom User nicht gesehen.
+	 *
+	 * @return
+	 */
+	public String getIdIntern() {
 		return idIntern;
 	}
 
-	public void setArbeitspaketName(String idIntern) {
-		this.idIntern = idIntern;
+	/**
+	 * Die interne Bezeichung eines Arbeitspaktes. Wichtig für Debuggen und
+	 * Konsolenausgaben. Wird vom User nicht gesehen.
+	 *
+	 * @return
+	 */
+	public void setIdIntern(String id) {
+		this.idIntern = id;
+	}
+
+	/**
+	 * Name, der vom User eingesehen werden kann. Wird angezeigt in Tabellen und
+	 * Legende.
+	 *
+	 * @return
+	 */
+	public String getIdExtern() {
+		return idExtern;
+	}
+
+	/**
+	 * Name, der vom User eingesehen werden kann. Wird angezeigt in Tabellen und
+	 * Legende.
+	 *
+	 * @return
+	 */
+	public void setIdExtern(String idExtern) {
+		this.idExtern = idExtern;
 	}
 
 }
