@@ -316,7 +316,10 @@ public class Teilpaket extends Paket {
 
 		VerschiebeRichtung verschieben = null;
 
-		int xPos = resEinheitListe.get(0).getPosition().getxKoordinate();
+		// int xPos = resEinheitListe.get(0).getPosition().getxKoordinate();
+
+		ArrayList<ResEinheit> resEinheiten = this.getResEinheitListe();
+		int xPos = resEinheitListe.get(resEinheiten.size() - 1).getPosition().getxKoordinate();
 
 		if (this.arbeitspaket.getFez() - 1 > xPos) {
 			verschieben = VerschiebeRichtung.RECHTS;

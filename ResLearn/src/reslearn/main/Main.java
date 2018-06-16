@@ -21,7 +21,9 @@ public class Main {
 		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		erstelleTestDaten2_5(resCanvas);
+		// erstelleTestDoc3(resCanvas);
+		erstelleTestDaten2_57(resCanvas);
+		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_54(resCanvas);
 		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
@@ -80,6 +82,26 @@ public class Main {
 		resCanvas.hinzufuegen(apC);
 		resCanvas.hinzufuegen(apA);
 		resCanvas.hinzufuegen(apD);
+
+	}
+
+	private static void erstelleTestDoc3(ResCanvas resCanvas) {
+		/*
+		 * Aufgabe aus der Kinderuni-Vorlesung
+		 */
+		Arbeitspaket apA = new Arbeitspaket("A", 1, 6, 3, 8, 6, 4, 24);
+		Arbeitspaket apB = new Arbeitspaket("B", 7, 13, 10, 16, 7, 3, 21);
+		Arbeitspaket apC = new Arbeitspaket("C", 9, 16, 16, 23, 8, 2, 16);
+		Arbeitspaket apD = new Arbeitspaket("D", 14, 18, 17, 21, 5, 3, 15);
+		Arbeitspaket apE = new Arbeitspaket("E", 17, 22, 21, 26, 6, 3, 18);
+		Arbeitspaket apF = new Arbeitspaket("F", 10, 12, 10, 12, 3, 2, 6);
+
+		resCanvas.hinzufuegen(apB);
+		resCanvas.hinzufuegen(apC);
+		resCanvas.hinzufuegen(apA);
+		resCanvas.hinzufuegen(apD);
+		resCanvas.hinzufuegen(apE);
+		resCanvas.hinzufuegen(apF);
 	}
 
 	private static void erstelleTestDaten1(ResCanvas resCanvas) {
