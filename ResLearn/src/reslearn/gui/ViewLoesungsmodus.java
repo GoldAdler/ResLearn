@@ -86,7 +86,7 @@ public class ViewLoesungsmodus extends Application {
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ControllerCanvasLoesungsmodus controllerCanvas = new ControllerCanvasLoesungsmodus(arbeitspakete, historieListe,
-				resCanvas, diagramm);
+				resCanvas);
 		ResFeld[][] teilpakete = controllerCanvas.initializePositionObservableMap();
 
 		HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe = new HashMap<Arbeitspaket, Color>();
@@ -130,7 +130,13 @@ public class ViewLoesungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
-				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus());
+				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus(),
+				controllerCanvas.getButtonMaxPersonenPlus(), controllerCanvas.getButtonMaxPersonenMinus(),
+				controllerCanvas.getTextFieldMaxPersonen(), controllerCanvas.getMaxPersonen());
+
+		for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
+			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
+		}
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());

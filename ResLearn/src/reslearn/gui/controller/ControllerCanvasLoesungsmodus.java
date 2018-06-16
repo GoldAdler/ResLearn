@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -19,18 +20,20 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
-import reslearn.gui.Diagramm;
 import reslearn.gui.DisplayCanvas;
 import reslearn.gui.ResFeld;
+import reslearn.gui.ViewLoesungsmodus;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.AlgoTermintreu;
@@ -40,29 +43,83 @@ import reslearn.model.paket.Teilpaket;
 import reslearn.model.resCanvas.ResCanvas;
 
 public class ControllerCanvasLoesungsmodus {
-
-	private Diagramm diagramm;
+	// TODO: Vorgangsdauer veränderbar Checkbox nur bei Kapazitätstreu (Setter im
+	// Algorithmus)
 	private ResCanvas resCanvas;
 	private Teilpaket teilpaketClicked;
-	private ResFeld rect;
 	private ColorPicker colorPicker;
-	Arbeitspaket[] arbeitspakete;
+	private Arbeitspaket[] arbeitspakete;
+	private ArrayList<Arbeitspaket> arbeitspaketeArrayList;
+	private Line[] kapazitaetsgrenzeLinien = new Line[DisplayCanvas.resFeldZeile];
+
+	/**
+	 * Das aktuell ausgewählte ResFeld.
+	 */
+	private ResFeld rect;
+
+	/**
+	 * Liste der einzelnen Schritte. Wegen den Positions-Bindings muss das erste
+	 * Element der historieListe IMMER die originalen Referenzen enthalten (wichtig
+	 * zum ersetzen der Positionen!)
+	 */
 	private ArrayList<ResEinheit[][]> historieListe;
+
+	/**
+	 * Merkt sich die aktuelle Position in der historieListe.
+	 */
 	private int historieNummer = 0;
+
+	/**
+	 * Das ursprüngliche KoordinatenSystem, mit dem verglichen wird. Enthält die
+	 * ursprünglichen Referenzen.
+	 */
 	private ResEinheit[][] koordinatenSystemUrspruenglich;
+
+	/**
+	 * Wichtig für die X-Positions-Bindings der ResEinheiten. Hier werden die
+	 * INITIALEN Referenzen eingefügt.
+	 */
 	private ObservableMap<ResEinheit, Double> positionXObservableMap = FXCollections.observableHashMap();
+
+	/**
+	 * Wichtig für die Y-Positions-Bindings der ResEinheiten. Hier werden die
+	 * INITIALEN Referenzen eingefügt.
+	 */
 	private ObservableMap<ResEinheit, Double> positionYObservableMap = FXCollections.observableHashMap();
 
+	// Legende unten
+	private Pane legende = new Pane();
+	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
+
+	// Tabelle links
+	private TableView<Pair<String, Object>> table = new TableView<>();
+	private ObservableList<Pair<String, Object>> data;
+
+	private Button schrittZurueck = new Button();
+	private Button schrittVor = new Button();
+	private RadioButton termintreuModus = new RadioButton();
+	private RadioButton kapazitaetstreuModus = new RadioButton();
+	private final ToggleGroup modusToggleGroup = new ToggleGroup();
+
+	private Button buttonMaxPersonenMinus;
+	private Button buttonMaxPersonenPlus;
+	private TextField textFieldMaxPersonen;
+	private Label maxPersonen;
+
+	// Tabelle oben
+	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
+	private ObservableList<Arbeitspaket> dataPakete;
+
 	public ControllerCanvasLoesungsmodus(Arbeitspaket[] arbeitspakete, ArrayList<ResEinheit[][]> historieListe,
-			ResCanvas resCanvas, Diagramm diagramm) {
+			ResCanvas resCanvas) {
 		this.arbeitspakete = arbeitspakete;
 		this.historieListe = historieListe;
 		this.koordinatenSystemUrspruenglich = historieListe.get(0);
 		this.resCanvas = resCanvas;
-		this.diagramm = diagramm;
 		erstelleTabelleLinks();
 		erstelleTabelleArbeitspakete();
 		erstelleButtons();
+		erstelleGrenzLinie();
 	}
 
 	/**
@@ -70,7 +127,7 @@ public class ControllerCanvasLoesungsmodus {
 	 * Positionen der ResFelder in den ObservableMaps gespeichert und an die
 	 * ResFelder gebunden.
 	 *
-	 * @return
+	 * @return resFeldArray
 	 */
 	public ResFeld[][] initializePositionObservableMap() {
 		ResFeld[][] resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
@@ -147,69 +204,118 @@ public class ControllerCanvasLoesungsmodus {
 	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
-			System.out.println("BLUBB");
-			schrittZurueck.setDisable(true);
-			schrittVor.setDisable(false);
-			historieNummer = 0;
-
-			ResCanvas resCanvasNeu = new ResCanvas();
-
-			ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
-
-			for (Arbeitspaket arbeitspaket : arbeitspakete) {
-				copyArbeitspaket.add(arbeitspaket.copy());
-			}
-
-			copyArbeitspaket.forEach(ap -> resCanvasNeu.hinzufuegen(ap));
-
-			resCanvas = resCanvasNeu;
-			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
-			// "alten" Referenzen benötigt
-			historieListe.clear();
-			historieListe.add(koordinatenSystemUrspruenglich);
-
-			ArrayList<ResEinheit[][]> historieListeNeu = AlgoKapazitaetstreu
-					.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvas)
-					.getHistorieKoordinatenSystem();
-			for (int i = 1; i < historieListeNeu.size(); i++) {
-				historieListe.add(historieListeNeu.get(i));
-			}
-			koordinatenSystemUrspruenglich = historieListe.get(0);
-			extrahiereArbeitspakete(0);
+			kapazitaetstreuReset();
 		}
 	};
+
+	/**
+	 * Hier werden die Klötzchen der kapazitätstreuen Optimierung auf den
+	 * Anfangszustand zurückgesetzt. Diese Methode kann nicht innerhalb des
+	 * Eventhandlers stehen, da sie auch beim Drücken der Buttons zum Ändern der
+	 * Kapazitätsgrenze aufgerufen werden muss.
+	 */
+	private void kapazitaetstreuReset() {
+		schrittZurueck.setDisable(true);
+		schrittVor.setDisable(false);
+
+		// Kapazitätsgrenze-Buttons + Linie aktivieren
+		buttonMaxPersonenMinus.setDisable(false);
+		buttonMaxPersonenPlus.setDisable(false);
+		kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(100);
+
+		// Wieder von vorne anfangen
+		historieNummer = 0;
+
+		resCanvas = new ResCanvas();
+
+		ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
+		for (Arbeitspaket arbeitspaket : arbeitspakete) {
+			copyArbeitspaket.add(arbeitspaket.copy());
+		}
+
+		copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
+		System.out.println("Maxparallel: " + AufgabeLadenImport.maxPersonenParallel);
+		historieListe = AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
+				.algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
+		extrahiereArbeitspakete(historieNummer);
+	}
 
 	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
 			schrittZurueck.setDisable(true);
 			schrittVor.setDisable(false);
+
+			// Kapazitätsgrenze-Buttons + Linie deaktivieren
+			buttonMaxPersonenMinus.setDisable(true);
+			buttonMaxPersonenPlus.setDisable(true);
+			kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(0);
+
+			// Wieder von vorne anfangen
 			historieNummer = 0;
 
-			ResCanvas resCanvasNeu = new ResCanvas();
+			resCanvas = new ResCanvas();
 
 			ArrayList<Arbeitspaket> copyArbeitspaket = new ArrayList<>();
-
 			for (Arbeitspaket arbeitspaket : arbeitspakete) {
 				copyArbeitspaket.add(arbeitspaket.copy());
 			}
 
-			copyArbeitspaket.forEach(ap -> resCanvasNeu.hinzufuegen(ap));
+			copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
 
-			resCanvas = resCanvasNeu;
-			// koordinatenSystemUrspruenglich = historieListe.get(0); //Hier werden noch die
-			// "alten" Referenzen benötigt
-			historieListe.clear();
-			historieListe.add(koordinatenSystemUrspruenglich);
+			historieListe = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
+			extrahiereArbeitspakete(historieNummer);
+		}
+	};
 
-			ArrayList<ResEinheit[][]> historieListeNeu = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
-					.getHistorieKoordinatenSystem();
-			for (int i = 1; i < historieListeNeu.size(); i++) {
-				historieListe.add(historieListeNeu.get(i));
+	private EventHandler<ActionEvent> handleButtonMaxPersonenMinusAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			arbeitspaketeArrayList = resCanvas.getArbeitspaketListe();
+			int maxMitarbeiterAnzahl = 0;
+			buttonMaxPersonenPlus.setDisable(false);
+			for (int i = 0; i < arbeitspaketeArrayList.size(); i++) {
+				if (arbeitspaketeArrayList.get(i).getMitarbeiteranzahl() > maxMitarbeiterAnzahl) {
+					maxMitarbeiterAnzahl = arbeitspaketeArrayList.get(i).getMitarbeiteranzahl();
+				}
 			}
-			koordinatenSystemUrspruenglich = historieListe.get(0);
-			extrahiereArbeitspakete(0);
+			if (AufgabeLadenImport.maxPersonenParallel > maxMitarbeiterAnzahl) {
+				AufgabeLadenImport.maxPersonenParallel--;
+				textFieldMaxPersonen.setText(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
+			} else {
+				buttonMaxPersonenMinus.setDisable(true);
+			}
+			for (int i = 0; i < kapazitaetsgrenzeLinien.length; i++) {
+				if (i == AufgabeLadenImport.maxPersonenParallel) {
+					kapazitaetsgrenzeLinien[i].setOpacity(100);
+				} else {
+					kapazitaetsgrenzeLinien[i].setOpacity(0);
+				}
+			}
+			kapazitaetstreuReset();
+		}
+	};
 
+	private EventHandler<ActionEvent> handleButtonMaxPersonenPlusAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			buttonMaxPersonenMinus.setDisable(false);
+			if (AufgabeLadenImport.maxPersonenParallel < 25) {
+				AufgabeLadenImport.maxPersonenParallel++;
+				textFieldMaxPersonen.setText(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
+			} else {
+				buttonMaxPersonenPlus.setDisable(true);
+			}
+			for (int i = 0; i < kapazitaetsgrenzeLinien.length; i++) {
+				if (i == AufgabeLadenImport.maxPersonenParallel) {
+					kapazitaetsgrenzeLinien[i].setOpacity(100);
+				} else {
+					kapazitaetsgrenzeLinien[i].setOpacity(0);
+				}
+			}
+			kapazitaetstreuReset();
 		}
 	};
 
@@ -271,17 +377,11 @@ public class ControllerCanvasLoesungsmodus {
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////
-	// Erstellung der Legende für die einzelnen Farben der Arbeitspakete //
-	///////////////////////////////////////////////////////////////////////
-	private Pane legende = new Pane();
-	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
-
-	// ResEinheiten -> ObservableMap ResEinheit, Vektor2i
-	// ArrayList<blabala> = asfasf;
-	// arrayList.get(0)[i][j] == arrayList.get(1)[i][j]
-	// arrayList.get(1)[i][j] -> ResEinheit
-	// ResEinheit -> update Observableblababla
+	/**
+	 * Erstellt die Legende mit den einzelnen Farben der Arbeitspakete
+	 * 
+	 * @param arbeitspaketeMitFarbe
+	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
 		legende.setLayoutX(DisplayCanvas.canvasStartpunktX);
 		legende.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge + DisplayCanvas.gesamtAbstandX);
@@ -297,12 +397,10 @@ public class ControllerCanvasLoesungsmodus {
 				circle = new Circle(DisplayCanvas.abstandX, DisplayCanvas.legendeKreisStartpunktY,
 						DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
 			} else {
 				circle = new Circle(label.getLayoutX() + DisplayCanvas.legendeAbstand,
 						DisplayCanvas.legendeKreisStartpunktY, DisplayCanvas.legendeKreisRadius);
 				circle.fillProperty().bind(Bindings.valueAt(colorObservableMap, entry.getKey()));
-				// circle.setFill(entry.getValue());
 			}
 
 			label = new Label(entry.getKey().getId());
@@ -310,17 +408,12 @@ public class ControllerCanvasLoesungsmodus {
 			label.setLayoutX(circle.getCenterX() + DisplayCanvas.abstandX);
 			label.layoutYProperty().bind(legende.heightProperty().subtract(label.heightProperty()).divide(2));
 			legende.getChildren().addAll(circle, label);
-
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////
-	// Erstellung der unterschiedlichen Datentypen für die Tabelle links //
-	///////////////////////////////////////////////////////////////////////
-
-	private TableView<Pair<String, Object>> table = new TableView<>();
-	private ObservableList<Pair<String, Object>> data;
-
+	/**
+	 * Befüllt die TabelleLinks mit den Werten der angeklickten ResEinheit (rect).
+	 */
 	@SuppressWarnings("unchecked")
 	private void befuelleTabelle() {
 		// Erstellen der Informationsleiste links
@@ -337,6 +430,9 @@ public class ControllerCanvasLoesungsmodus {
 		table.setItems(data);
 	}
 
+	/**
+	 * Erstellt die Grundstruktur der TabelleLinks.
+	 */
 	@SuppressWarnings("unchecked")
 	private void erstelleTabelleLinks() {
 
@@ -406,7 +502,6 @@ public class ControllerCanvasLoesungsmodus {
 					colorPicker.setStyle("-fx-color-label-visible: false;");
 					colorPicker.setValue((Color) rect.getFill());
 					setGraphic(colorPicker);
-					wechsleFarbe();
 				}
 			} else {
 				setText(null);
@@ -414,12 +509,6 @@ public class ControllerCanvasLoesungsmodus {
 			}
 		}
 	}
-
-	private Button schrittZurueck = new Button();
-	private Button schrittVor = new Button();
-	private RadioButton termintreuModus = new RadioButton();
-	private RadioButton kapazitaetstreuModus = new RadioButton();
-	private final ToggleGroup modusToggleGroup = new ToggleGroup();
 
 	private void erstelleButtons() {
 		schrittZurueck.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
@@ -456,34 +545,64 @@ public class ControllerCanvasLoesungsmodus {
 		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
 		kapazitaetstreuModus.setSelected(true);
 
+		maxPersonen = new Label("Kapazitätsgrenze:");
+		maxPersonen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		maxPersonen.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
+		maxPersonen.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
+		maxPersonen.setPrefWidth(DisplayCanvas.resFeldBreite * 5);
+
+		buttonMaxPersonenMinus = new Button("-");
+		buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
+		buttonMaxPersonenMinus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
+		buttonMaxPersonenMinus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
+		buttonMaxPersonenMinus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		buttonMaxPersonenMinus.setOnAction(handleButtonMaxPersonenMinusAction);
+
+		textFieldMaxPersonen = new TextField(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
+		textFieldMaxPersonen.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+		textFieldMaxPersonen.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
+		textFieldMaxPersonen.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
+		textFieldMaxPersonen.setAlignment(Pos.CENTER);
+		textFieldMaxPersonen.setEditable(false);
+		textFieldMaxPersonen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+
+		buttonMaxPersonenPlus = new Button("+");
+		buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
+		buttonMaxPersonenPlus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
+		buttonMaxPersonenPlus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		buttonMaxPersonenPlus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
+		buttonMaxPersonenPlus.setOnAction(handleButtonMaxPersonenPlusAction);
 	}
 
-	private void wechsleFarbe() {
-		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				for (ResFeld[] resAr : diagramm.getResFeldArray()) {
-					for (ResFeld teilpaket : resAr) {
-						if (teilpaket != null) {
-							if (teilpaketClicked.getArbeitspaket() == teilpaket.getResEinheit().getTeilpaket()
-									.getArbeitspaket()) {
-								teilpaket.setFill(colorPicker.getValue());
-								colorObservableMap.replace(teilpaketClicked.getArbeitspaket(), colorPicker.getValue());
-							}
-						}
-					}
+	/**
+	 * Erstellt alle Grenzlinien.
+	 */
+	private void erstelleGrenzLinie() {
+
+		if (kapazitaetstreuModus.isSelected()) {
+			for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
+				kapazitaetsgrenzeLinien[i] = new Line(
+						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
+						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
+						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+
+				kapazitaetsgrenzeLinien[i].setStroke(Color.RED);
+
+				if (i != AufgabeLadenImport.maxPersonenParallel) {
+					kapazitaetsgrenzeLinien[i].setOpacity(0);
 				}
 			}
-		});
+			ViewLoesungsmodus.getInstance().getPane().getChildren()
+					.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
+		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// Erstellung der Tabelle zur Anzeige der Arbeitspakete //
-	//////////////////////////////////////////////////////////////////////////////////
-
-	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
-	private ObservableList<Arbeitspaket> dataPakete;
-
+	/**
+	 * Erstellung der Tabelle zur Anzeige der Arbeitspakete.
+	 */
 	@SuppressWarnings("unchecked")
 	private void erstelleTabelleArbeitspakete() {
 		dataPakete = FXCollections.observableArrayList();
@@ -535,9 +654,12 @@ public class ControllerCanvasLoesungsmodus {
 		tabelleArbeitspakete.getSortOrder().add(apId);
 	}
 
-	// Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	/**
+	 * Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
+	 * 
+	 * @param ap
+	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
-		System.out.println("Arbeitspaket angeklickt: " + ap.getId());
 		tabelleArbeitspakete.getSelectionModel().select(ap);
 		tabelleArbeitspakete.scrollTo(ap);
 	}
@@ -568,5 +690,25 @@ public class ControllerCanvasLoesungsmodus {
 
 	public RadioButton getButtonKapazitaetstreuModus() {
 		return kapazitaetstreuModus;
+	}
+
+	public Line getKapaGrenze(int i) {
+		return kapazitaetsgrenzeLinien[i];
+	}
+
+	public Button getButtonMaxPersonenMinus() {
+		return buttonMaxPersonenMinus;
+	}
+
+	public Button getButtonMaxPersonenPlus() {
+		return buttonMaxPersonenPlus;
+	}
+
+	public TextField getTextFieldMaxPersonen() {
+		return textFieldMaxPersonen;
+	}
+
+	public Label getMaxPersonen() {
+		return maxPersonen;
 	}
 }
