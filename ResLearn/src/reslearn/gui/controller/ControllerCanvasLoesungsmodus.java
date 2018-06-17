@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -35,6 +33,8 @@ import javafx.util.Pair;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
+import reslearn.gui.tableUtils.PairKeyFactory;
+import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.gui.view.ViewLoesungsmodus;
 import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.AlgoTermintreu;
@@ -123,7 +123,6 @@ public class ControllerCanvasLoesungsmodus {
 		erstelleTabelleLinks();
 		erstelleTabelleArbeitspakete();
 		erstelleButtons();
-		erstelleGrenzLinie();
 	}
 
 	/**
@@ -155,9 +154,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -374,10 +373,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-										* DisplayCanvas.resFeldBreite);
+								* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-										* DisplayCanvas.resFeldLaenge);
+								* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -387,7 +386,7 @@ public class ControllerCanvasLoesungsmodus {
 
 	/**
 	 * Erstellt die Legende mit den einzelnen Farben der Arbeitspakete
-	 * 
+	 *
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
@@ -433,7 +432,6 @@ public class ControllerCanvasLoesungsmodus {
 	 */
 	@SuppressWarnings("unchecked")
 	private void befuelleTabelle() {
-		// Erstellen der Informationsleiste links
 		data = FXCollections.observableArrayList(
 				pair("Arbeitspaket", rect.getResEinheit().getTeilpaket().getArbeitspaket().getIdExtern()),
 				pair("FAZ", rect.getResEinheit().getTeilpaket().getArbeitspaket().getFaz()),
@@ -482,24 +480,6 @@ public class ControllerCanvasLoesungsmodus {
 
 	private Pair<String, Object> pair(String name, Object value) {
 		return new Pair<>(name, value);
-	}
-
-	class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		@Override
-		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-			return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		}
-	}
-
-	class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-			Object value = data.getValue().getValue();
-			return (value instanceof ObservableValue) ? (ObservableValue) value : new ReadOnlyObjectWrapper<>(value);
-		}
 	}
 
 	class PairValueCell extends TableCell<Pair<String, Object>, Object> {
@@ -553,7 +533,7 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -589,32 +569,6 @@ public class ControllerCanvasLoesungsmodus {
 		buttonMaxPersonenPlus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		buttonMaxPersonenPlus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
 		buttonMaxPersonenPlus.setOnAction(handleButtonMaxPersonenPlusAction);
-	}
-
-	/**
-	 * Erstellt alle Grenzlinien.
-	 */
-	private void erstelleGrenzLinie() {
-
-		if (kapazitaetstreuModus.isSelected()) {
-			for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
-				kapazitaetsgrenzeLinien[i] = new Line(
-						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
-						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
-						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
-						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
-
-				kapazitaetsgrenzeLinien[i].setStroke(Color.RED);
-
-				if (i != AufgabeLadenImport.maxPersonenParallel) {
-					kapazitaetsgrenzeLinien[i].setOpacity(0);
-				}
-			}
-			ViewLoesungsmodus.getInstance().getPane().getChildren()
-					.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
-		}
 	}
 
 	/**
@@ -673,7 +627,7 @@ public class ControllerCanvasLoesungsmodus {
 
 	/**
 	 * Markieren des gewählten Arbeitspakets in der Anzeige-Tabelle
-	 * 
+	 *
 	 * @param ap
 	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {

@@ -51,7 +51,7 @@ public class ViewLoesungsmodus extends Application {
 	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
 
 		stage = new Stage();
-		// Lade FXML
+
 		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
 		Scene hauptszene = new Scene(root);
 
@@ -71,8 +71,6 @@ public class ViewLoesungsmodus extends Application {
 
 		Group group = new Group();
 
-		// Erstelle neue Zeichenfläche für Klötzchen und füge Canvas & Pane
-		// der Unterszene hinzu
 		pane = new Pane();
 		pane.setPrefWidth(DisplayCanvas.paneBreite);
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
@@ -83,9 +81,6 @@ public class ViewLoesungsmodus extends Application {
 				.algoDurchfuehren(resCanvas);
 
 		ArrayList<ResEinheit[][]> historieListe = cvNeu.getHistorieKoordinatenSystem();
-		// ArrayList<ResEinheit[][]> historieListe =
-		// AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas)
-		// .getHistorieKoordinatenSystem();
 
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
@@ -113,7 +108,6 @@ public class ViewLoesungsmodus extends Application {
 		ap = new MenuItem("Teile Arbeitspaket");
 		reset = new MenuItem("Zurücksetzen");
 		menu.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
-
 		menu.getItems().addAll(ap, reset);
 
 		for (Rectangle[] rectangleZeile : weisseFelder) {
