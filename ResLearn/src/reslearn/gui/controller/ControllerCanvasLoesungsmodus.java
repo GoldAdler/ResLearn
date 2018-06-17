@@ -123,6 +123,7 @@ public class ControllerCanvasLoesungsmodus {
 		erstelleTabelleLinks();
 		erstelleTabelleArbeitspakete();
 		erstelleButtons();
+		erstelleGrenzLinie();
 	}
 
 	/**
@@ -154,9 +155,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -239,6 +240,10 @@ public class ControllerCanvasLoesungsmodus {
 		for (Arbeitspaket arbeitspaket : arbeitspakete) {
 			copyArbeitspaket.add(arbeitspaket.copy());
 		}
+
+		buttonMaxPersonenMinus.setDisable(false);
+		buttonMaxPersonenPlus.setDisable(false);
+		kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(100);
 
 		copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
 		System.out.println("Maxparallel: " + AufgabeLadenImport.maxPersonenParallel);
@@ -373,10 +378,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-								* DisplayCanvas.resFeldBreite);
+										* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-								* DisplayCanvas.resFeldLaenge);
+										* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -396,7 +401,7 @@ public class ControllerCanvasLoesungsmodus {
 		int yCounter = 1;
 
 		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
-		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 4 * DisplayCanvas.resFeldLaenge);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 6 * DisplayCanvas.resFeldLaenge);
 		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
@@ -533,7 +538,7 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -569,6 +574,33 @@ public class ControllerCanvasLoesungsmodus {
 		buttonMaxPersonenPlus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		buttonMaxPersonenPlus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
 		buttonMaxPersonenPlus.setOnAction(handleButtonMaxPersonenPlusAction);
+	}
+
+	/**
+	 * Erstellt alle Grenzlinien.
+	 */
+	private void erstelleGrenzLinie() {
+
+		if (kapazitaetstreuModus.isSelected()) {
+			for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
+				kapazitaetsgrenzeLinien[i] = new Line(
+						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
+						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
+						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+
+				kapazitaetsgrenzeLinien[i].setStroke(Color.RED);
+
+				if (i != AufgabeLadenImport.maxPersonenParallel) {
+					kapazitaetsgrenzeLinien[i].setOpacity(0);
+				}
+			}
+			ViewLoesungsmodus.getInstance().getPane().getChildren()
+					.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
+		}
+
 	}
 
 	/**

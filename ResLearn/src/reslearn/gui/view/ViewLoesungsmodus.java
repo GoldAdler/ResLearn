@@ -129,7 +129,13 @@ public class ViewLoesungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
-				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus());
+				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus(),
+				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getButtonMaxPersonenPlus(),
+				controllerCanvas.getMaxPersonen(), controllerCanvas.getTextFieldMaxPersonen());
+
+		for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
+			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
+		}
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
