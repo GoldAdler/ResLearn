@@ -94,7 +94,8 @@ public class AlgoTermintreu extends Algorithmus {
 
 		resCanvas.sortiereAP();
 
-		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1).getIdIntern();
+		String letzteApID = resCanvas.getArbeitspaketListe().get(resCanvas.getArbeitspaketListe().size() - 1)
+				.getIdIntern();
 		return letzteApID;
 	}
 

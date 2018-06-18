@@ -5,10 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import reslearn.gui.ImportExport.AufgabeLadenImport;
+import reslearn.gui.controller.ControllerUebungsmodus;
 import reslearn.gui.rescanvas.ResFeld;
+import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
+import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.validierung.Feedback.MsgType;
 
 public class Validierung {
@@ -77,16 +82,46 @@ public class Validierung {
 	 * @return ArrayList<Feedback> - Liste, in der alle gesammelten Infos bzw.
 	 *         Fehler stehen.
 	 */
-	public ArrayList<Feedback> AlgoKapazitaetstreu(int grenzeMitarbeiterParallel) {
-		for (ResFeld[] zeile : koordinatenSystem) {
+	public ArrayList<Feedback> AlgoKapazitaetstreu(int grenzeMitarbeiterParallel, ResCanvas resCanvas) {
+		ArrayList<String> verwendeteApFAZ = new ArrayList<String>();
+		ArrayList<String> verwendeteApVorgangsdauer = new ArrayList<String>();
+		ArrayList<String> verwendeteApKapaGrenzeUeberschritten = new ArrayList<String>();
 
+		for (ResFeld[] zeile : koordinatenSystem) {
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
 
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
-					pruefeFAZ(resFeld.getResEinheit());
-					pruefeGrenzeKapazitaetUeberschritten(resFeld.getResEinheit(), grenzeMitarbeiterParallel);
-					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					if (pruefeFAZ(resFeld.getResEinheit())) {
+						if (!verwendeteApFAZ
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApFAZ.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "FAZ verletzt.\nDas Paket muss nach rechts verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
+					if (pruefeGrenzeKapazitaetUeberschritten(resFeld.getResEinheit(), grenzeMitarbeiterParallel)) {
+						if (!verwendeteApKapaGrenzeUeberschritten
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApKapaGrenzeUeberschritten
+									.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "Kapazitaetsgrenze überschritten!\n"
+									+ "Das Paket muss nach unten verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
+					if (pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit())) {
+						if (!verwendeteApVorgangsdauer
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApVorgangsdauer
+									.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "Die Vorgangsdauer des Pakets muss verkürzt werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
 					pruefeVorgangsunterbrechungTeil1(resFeld.getResEinheit());
 				}
 			}
@@ -107,6 +142,10 @@ public class Validierung {
 				}
 			}
 		}
+
+		if (feedbackListe.isEmpty()) {
+			pruefeOptimaleLoesungKapa(resCanvas);
+		}
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
@@ -122,7 +161,10 @@ public class Validierung {
 	 * @return ArrayList<Feedback> - Liste, in der alle gesammelten Infos bzw.
 	 *         Fehler stehen.
 	 */
-	public ArrayList<Feedback> AlgoTermintreu() {
+	public ArrayList<Feedback> AlgoTermintreu(ResCanvas resCanvas) {
+		ArrayList<String> verwendeteApFAZ = new ArrayList<String>();
+		ArrayList<String> verwendeteApSEZ = new ArrayList<String>();
+		ArrayList<String> verwendeteApVorgangsdauer = new ArrayList<String>();
 		for (ResFeld[] zeile : koordinatenSystem) {
 			// arbeitspaketAktuelleVorgangsdauer und arbeitspaketListeVorgangsunterbrechung
 			// und der Iterator müssen nach jeder Zeile neu initialisiert werden,
@@ -131,18 +173,131 @@ public class Validierung {
 
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
-					pruefeFAZ(resFeld.getResEinheit());
-					pruefeSEZ(resFeld.getResEinheit());
-					pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit());
+					if (pruefeFAZ(resFeld.getResEinheit())) {
+						if (!verwendeteApFAZ
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApFAZ.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "FAZ verletzt.\nDas Paket muss nach rechts verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
+					if (pruefeSEZ(resFeld.getResEinheit())) {
+						if (!verwendeteApSEZ
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApSEZ.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "SEZ verletzt.\nDas Paket muss nach links verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
+					if (pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit())) {
+						if (!verwendeteApVorgangsdauer
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApVorgangsdauer
+									.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "Die Vorgangsdauer des Pakets muss verkürzt werden.";
+
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+
 					pruefeVorgangsunterbrechungTeil1(resFeld.getResEinheit());
 				}
+
 			}
 		}
+
 		pruefeVorgangsunterbrechungTeil2();
+
+		if (feedbackListe.isEmpty()) {
+			pruefeOptimaleLoesungTermin(resCanvas);
+		}
+
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
 		return feedbackListe;
+	}
+
+	private void pruefeOptimaleLoesungTermin(ResCanvas resCanvas) {
+
+		ResCanvas resCanvasRichtigeLoesung = new ResCanvas();
+
+		for (Arbeitspaket arbeitspaket : ControllerUebungsmodus.letztesArbeitspaket) {
+			resCanvasRichtigeLoesung.hinzufuegen(arbeitspaket);
+		}
+
+		ResEinheit[][] aktuellesKoordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		ResEinheit[][] koordinatenSystemRichtigeLoesung = AlgoTermintreu.getInstance()
+				.algoDurchfuehren(resCanvasRichtigeLoesung).getKoordinatenSystem();
+
+		String bereitsVerwendetAP = null;
+		for (int i = 0; i < aktuellesKoordinatenSystem.length; i++) {
+			for (int j = 0; j < aktuellesKoordinatenSystem[i].length; j++) {
+				ResEinheit resi = aktuellesKoordinatenSystem[i][j];
+				ResEinheit resiLoesung = koordinatenSystemRichtigeLoesung[i][j];
+				if (resi == null && resiLoesung == null) {
+				} else if ((resi != null && resiLoesung != null) && (aktuellesKoordinatenSystem[i][j].getTeilpaket()
+						.getArbeitspaket().getIdIntern().equals(koordinatenSystemRichtigeLoesung[i][j].getTeilpaket()
+								.getArbeitspaket().getIdIntern()))) {
+				} else {
+					if (resi != null) {
+						if (!resi.getTeilpaket().getArbeitspaket().getIdIntern().equals(bereitsVerwendetAP)) {
+							bereitsVerwendetAP = resi.getTeilpaket().getArbeitspaket().getIdIntern();
+							String message = "Die Lösung ist zwar möglich, aber noch nicht die optimale Lösung\n"
+									+ "Arbeitspaket "
+									+ aktuellesKoordinatenSystem[i][j].getTeilpaket().getArbeitspaket().getIdIntern()
+									+ " kann weiter optimiert werden";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resi));
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	private void pruefeOptimaleLoesungKapa(ResCanvas resCanvas) {
+
+		ResCanvas resCanvasRichtigeLoesung = new ResCanvas();
+
+		for (Arbeitspaket arbeitspaket : ControllerUebungsmodus.letztesArbeitspaket) {
+			resCanvasRichtigeLoesung.hinzufuegen(arbeitspaket);
+		}
+
+		ResEinheit[][] aktuellesKoordinatenSystem = resCanvas.getKoordinatenSystem();
+
+		ResEinheit[][] koordinatenSystemRichtigeLoesung = AlgoKapazitaetstreu
+				.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvasRichtigeLoesung)
+				.getKoordinatenSystem();
+
+		String bereitsVerwendetAP = null;
+		for (int i = 0; i < aktuellesKoordinatenSystem.length; i++) {
+			for (int j = 0; j < aktuellesKoordinatenSystem[i].length; j++) {
+				ResEinheit resi = aktuellesKoordinatenSystem[i][j];
+				ResEinheit resiLoesung = koordinatenSystemRichtigeLoesung[i][j];
+				if (resi == null && resiLoesung == null) {
+				} else if ((resi != null && resiLoesung != null) && (aktuellesKoordinatenSystem[i][j].getTeilpaket()
+						.getArbeitspaket().getIdIntern().equals(koordinatenSystemRichtigeLoesung[i][j].getTeilpaket()
+								.getArbeitspaket().getIdIntern()))) {
+				} else {
+					if (resi != null) {
+						if (!resi.getTeilpaket().getArbeitspaket().getIdIntern().equals(bereitsVerwendetAP)) {
+							bereitsVerwendetAP = resi.getTeilpaket().getArbeitspaket().getIdIntern();
+							String message = "Die Lösung ist zwar möglich, aber noch nicht die optimale Lösung\n"
+									+ "Arbeitspaket "
+									+ aktuellesKoordinatenSystem[i][j].getTeilpaket().getArbeitspaket().getIdIntern()
+									+ " kann weiter optimiert werden";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resi));
+						}
+
+					}
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -153,15 +308,13 @@ public class Validierung {
 	 *
 	 * @param resEinheit
 	 */
-	private void pruefeFAZ(ResEinheit resEinheit) {
+	private boolean pruefeFAZ(ResEinheit resEinheit) {
 		int faz = resEinheit.getTeilpaket().getArbeitspaket().getFaz();
 		int xPos = resEinheit.getPosition().getxKoordinate();
-		int yPos = resEinheit.getPosition().getyKoordinate();
 		if (xPos + 1 < faz) {
-			String message = "FAZ am Punkt (" + xPos + ", " + (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
-					+ "Das Paket muss nach rechts verschoben werden.";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -191,15 +344,13 @@ public class Validierung {
 	 *
 	 * @param resEinheit
 	 */
-	private void pruefeSEZ(ResEinheit resEinheit) {
+	private boolean pruefeSEZ(ResEinheit resEinheit) {
 		int sez = resEinheit.getTeilpaket().getArbeitspaket().getSez();
 		int xPos = resEinheit.getPosition().getxKoordinate();
-		int yPos = resEinheit.getPosition().getyKoordinate();
 		if (xPos + 1 > sez) {
-			String message = "SEZ am Punkt (" + xPos + ", " + (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
-					+ "Das Paket muss nach links verschoben werden.";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -211,15 +362,14 @@ public class Validierung {
 	 * @param resEinheit
 	 * @param grenzeMitarbeiterParallel
 	 */
-	private void pruefeGrenzeKapazitaetUeberschritten(ResEinheit resEinheit, int grenzeMitarbeiterParallel) {
+	private boolean pruefeGrenzeKapazitaetUeberschritten(ResEinheit resEinheit, int grenzeMitarbeiterParallel) {
 		int xPos = resEinheit.getPosition().getxKoordinate();
 		int yPos = resEinheit.getPosition().getyKoordinate();
 		int yPosReal = koordinatenSystem.length - 1 - yPos;
 		if (yPosReal + 1 > grenzeMitarbeiterParallel) {
-			String message = "Kapazitaetsgrenze am Punkt (" + xPos + ", " + yPosReal + ") verletzt!\n"
-					+ "Das Paket muss nach unten verschoben werden.";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -230,7 +380,7 @@ public class Validierung {
 	 *
 	 * @param resEinheit
 	 */
-	private void pruefeVorgangsdauerUeberschritten(ResEinheit resEinheit) {
+	private boolean pruefeVorgangsdauerUeberschritten(ResEinheit resEinheit) {
 		Arbeitspaket arbeitspaket = resEinheit.getTeilpaket().getArbeitspaket();
 		int xPos = resEinheit.getPosition().getxKoordinate();
 		int yPos = resEinheit.getPosition().getyKoordinate();
@@ -241,10 +391,9 @@ public class Validierung {
 		arbeitspaketAktuelleVorgangsdauer.put(arbeitspaket, ++value);
 
 		if (arbeitspaketAktuelleVorgangsdauer.get(arbeitspaket) > arbeitspaket.getVorgangsdauer()) {
-			String message = "Vorgangsdauer am Punkt (" + xPos + ", " + (koordinatenSystem.length - 1 - yPos)
-					+ ") überschritten!\n" + "Die Vorgangsdauer des Pakets muss verkürzt werden.";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			return true;
 		}
+		return false;
 	}
 
 	/**

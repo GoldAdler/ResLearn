@@ -66,7 +66,7 @@ public class ControllerCanvasUebungsmodus {
 	private TextField textFieldMaxPersonen;
 	private Label maxPersonen;
 	private ArrayList<Arbeitspaket> arbeitspaketeArrayList;
-	private Line[] alleLinien = new Line[26];
+	private Line[] alleLinien = new Line[DisplayCanvas.resFeldSpalte + 1];
 	private Label korrekturvorschlaege;
 	private Rectangle rectangle;
 	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
@@ -377,7 +377,7 @@ public class ControllerCanvasUebungsmodus {
 
 			if (termintreuModus.isSelected()) {
 
-				vali.AlgoTermintreu();
+				vali.AlgoTermintreu(resCanvas);
 
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
@@ -392,7 +392,7 @@ public class ControllerCanvasUebungsmodus {
 
 			} else {
 
-				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel);
+				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel, resCanvas);
 
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
@@ -694,6 +694,8 @@ public class ControllerCanvasUebungsmodus {
 	private EventHandler<MouseEvent> OnButtonKapazitaetstreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
+			buttonMaxPersonenMinus.setDisable(false);
+			buttonMaxPersonenPlus.setDisable(false);
 			for (int i = 0; i < alleLinien.length; i++) {
 				if (i == AufgabeLadenImport.maxPersonenParallel) {
 					alleLinien[i].setOpacity(100);
@@ -708,6 +710,8 @@ public class ControllerCanvasUebungsmodus {
 	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent e) {
+			buttonMaxPersonenMinus.setDisable(true);
+			buttonMaxPersonenPlus.setDisable(true);
 			for (int i = 0; i < alleLinien.length; i++) {
 				alleLinien[i].setOpacity(0);
 			}
