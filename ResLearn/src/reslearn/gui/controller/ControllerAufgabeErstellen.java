@@ -24,7 +24,6 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -32,7 +31,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.ImportExport.CsvWriter;
@@ -44,82 +42,146 @@ import reslearn.model.paket.Arbeitspaket;
 
 public class ControllerAufgabeErstellen extends Controller {
 
-	private static int anzPakete, anzMaxPersonen;
+	/**
+	 * Die Anzahl an Paketen, die die Aufgabe enthalten soll
+	 */
+	private static int anzPakete;
+	
+	/**
+	 * Die Kapazitätsgrenze, die beim kapazitätstreuen nicht überschritten werden darf (im Übungsmodus änderbar)
+	 */
+	private static int anzMaxPersonen;
+	
 	final ToggleGroup rbGruppe = new ToggleGroup();
+	
+	/**
+	 * Dieser String wird beim Validieren auf die entsprechende Fehlermeldung gesetzt
+	 */
 	private String ergebnisValidierung = "";
+	
+	/**
+	 * In dieser ObservableList werden die Inhalte der Tabelle gespeichert
+	 */
 	private ObservableList<ArbeitspaketTableData> data = FXCollections.observableArrayList();
 
+	/**
+	 * Button, der ins vorherige Fenster zurückführt
+	 */
 	@FXML
 	private Button zurueck;
+	
+	/**
+	 * Button, der zum Hauptmenü zurückführt
+	 */
 	@FXML
 	private Button home;
+	
 
 	// Anzahl Pakete
+	
+	/**
+	 * Button mit einem "-", der die Anzahl der Pakete um 1 senkt
+	 */
 	@FXML
 	Button buttonAnzPaketeMinus = new Button();
+	
+	/**
+	 * Button mit einem "+", der die Anzahl der Pakete um 1 erhöht
+	 */
 	@FXML
 	Button buttonAnzPaketePlus = new Button();
+	
+	/**
+	 * Textfeld, das die aktuell angegebene Anzahl an Paketen anzeigt (nur durch Buttons änderbar)
+	 */
 	@FXML
 	TextField textFieldAnzPakete = new TextField();
+	
 
 	// Tabelle
+	/**
+	 * Tabelle, die aus den Spalten und dem Inhalt besteht
+	 */
 	@FXML
 	TableView<ArbeitspaketTableData> tabelle;
+	
+	/**
+	 * Spalte zur Repräsentation der (externen) ID
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, String> spalteID;
+	
+	/**
+	 * Spalte zur Repräsentation des frühesten Anfangszeitpunktes (FAZ) eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteFaz;
+	
+	/**
+	 * Spalte zur Repräsentation des spätesten Anfangszeitpunktes (SAZ) eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteSaz;
+	
+	/**
+	 * Spalte zur Repräsentation des frühesten Endzeitpunktes (FEZ) eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteFez;
+	
+	/**
+	 * Spalte zur Repräsentation des spätesten Endzeitpunkt (SEZ) eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteSez;
+	
+	/**
+	 * Spalte zur Repräsentation der Anzahl der maximalen Anzahl an Mitarbeiter eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteAnzMitarbeiter;
+	
+	/**
+	 * Spalte zur Repräsentation des Aufwand in Personen-Tage (PT) eines Paketes
+	 */
 	@FXML
 	TableColumn<ArbeitspaketTableData, Integer> spalteAufwand;
 
-	// Auswahl Optimierungsverfahren (Radiobuttons)
-	@FXML
-	RadioButton radioButtonKapazitaet = new RadioButton();
-	@FXML
-	RadioButton radioButtonTermin = new RadioButton();
-	@FXML
-	Pane panePersonen = new Pane();
-
-	// maximale Personen Parallel (kapazitätstreu)
-	@FXML
-	Button buttonMaxPersonenMinus = new Button();
-	@FXML
-	Button buttonMaxPersonenPlus = new Button();
-	@FXML
-	TextField textFieldMaxPersonen = new TextField();
 
 	// Button zur Validierung
+	/**
+	 * Button zur Validierung
+	 */
 	@FXML
 	Button buttonValidieren;
 
+	/**
+	 * Name der Datei, unter der die Aufgabe gespeichert werden soll
+	 */
 	TextField dateiname;
-	// Pfad, unter dem die angelegte Aufgabe gespeichert wird
+	
+	/**
+	 *  Pfad, unter dem die angelegte Aufgabe gespeichert wird
+	 */
 	String dateipfad = "./eigeneAufgaben/";
 
+	/**
+	 * Array aus Arbeitspaketen, in dem die erstellten Arbeitspakete nach erfolgreicher Validierung liegen
+	 */
 	public Arbeitspaket[] pakete;
 
 	public void initialize() {
+		// liest aus dem Textfeld die voreingestellte Zahl aus
 		anzPakete = Integer.parseInt(textFieldAnzPakete.getText());
-		// anzMaxPersonen = Integer.parseInt(textFieldMaxPersonen.getText());
 
-		setupLayout();
+		// Tabelle erzeugen
 		setupTabelle();
-
-		radioButtonKapazitaet.setToggleGroup(rbGruppe);
-		radioButtonKapazitaet.setSelected(true);
-		radioButtonTermin.setToggleGroup(rbGruppe);
 	}
 
 	/**
-	 * Ueberprueft die Eingaben des Useres, ob diese korrekt sind.
+	 * Ueberprueft beim Klick auf den Validieren-Button, ob die eingegebnen Arbeitspakete des Useres korrekt sind.
+	 * Sind sie korrekt, öffnet sich ein Pop-Up-Fenster zum Speichern der Aufgabe.
+	 * Sind sie fehlerhaft, öffnet sich ein Pop-Up-Fenster mit entsprechender Fehlermeldung und der fehlerhafte Wert wird in der Tabelle markiert
 	 *
 	 * @param event
 	 */
@@ -133,6 +195,11 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Der Aufruf dieser Methode fuehrt zurueck zum Hauptmenue
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void home(ActionEvent event) throws Exception {
 		Scene newScene;
@@ -151,6 +218,11 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Der Aufruf dieser Methode fuehrt zurueck zum vorherigen Fenster
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void zurueck(ActionEvent event) throws Exception {
 		Scene newScene;
@@ -169,6 +241,9 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Nach erfolgreicher Validierung öffnet sich beim Klick auf Weiter das Fenster zur Auswahl des Modus, welchen man mit der erstellen Aufgabe durchführen möchte
+	 */
 	@FXML
 	public void weiter(ActionEvent event) {
 		Scene newScene;
@@ -192,6 +267,9 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Drückt man bei der Anzahl der Pakete auf den Minus-Button, wird diese Anzahl um 1 gesenkt und die letzte Zeile in der Tabelle entfernt
+	 */
 	@FXML
 	private void handleButtonAnzPaketeMinusAction(ActionEvent event) {
 		// Anzahl der Pakete soll nicht unter 2 sein
@@ -204,8 +282,13 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Drückt man bei der Anzahl der Pakete auf den Plus-Button, wird diese Anzahl um 1 erhöht und eine neue Zeile hinzugefügt
+	 * @param event
+	 */
 	@FXML
 	private void handleButtonAnzPaketePlusAction(ActionEvent event) {
+		//Anzahl der Pakete soll nicht über 26 sein
 		if (anzPakete < 26) {
 			anzPakete++;
 			textFieldAnzPakete.setText(Integer.toString(anzPakete));
@@ -215,49 +298,73 @@ public class ControllerAufgabeErstellen extends Controller {
 		}
 	}
 
+	/**
+	 * Die ID soll alphabetisch fortlaufend sein. Die interne ID behält diesen Buchstaben, die angezeigte externe ID kann hingegen durch den User geändert werden
+	 * @param i
+	 * @return
+	 */
 	private String setIdBuchstabe(int i) {
 		String buchstaben[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
 				"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 		return buchstaben[i - 1];
 	}
 
+	/**
+	 * Diese Methode liest aus der Tabelle die Werte und legt diese in ein Array aus Arbeitspakten an
+	 * @param paketList
+	 */
 	private void getArbeitspaketArray(ObservableList<ArbeitspaketTableData> paketList) {
+		// Initialisieren des Arrays
 		pakete = new Arbeitspaket[paketList.size()];
 
 		for (int i = 0; i < paketList.size(); i++) {
+			// herauslesen der externen ID, damit diese nicht verloren geht (Konstruktor nimmt nur einen Parameter für die ID entgegen und setzt die interne und externe ID auf diesen Wert)
 			String idExtern = paketList.get(i).getIdExtern();
+			
+			// automatisches Setzen der Vorgangsdauer, da diese in der Tabelle nicht angegeben wird
 			int vorgangsdauer = paketList.get(i).getFez() - paketList.get(i).getFaz() + 1;
 
+			// setzen der einzelnen Werte der Arbeitspakte
 			pakete[i] = new Arbeitspaket(paketList.get(i).getIdIntern(), paketList.get(i).getFaz(),
 					paketList.get(i).getFez(), paketList.get(i).getSaz(), paketList.get(i).getSez(), vorgangsdauer,
 					paketList.get(i).getMitarbeiteranzahl(), paketList.get(i).getAufwand());
+			
+			// Da die externe ID auf die interne ID gesetzt wurde, wird diese nun wieder auf die vorher herausgelesene externe ID gesetzt
 			pakete[i].setIdExtern(idExtern);
 		}
 	}
 
-	// Tabelle mit Default-Werten befüllen
+	/**
+	 * Diese Methode legt die Default-Werte der Tabelle fest
+	 * @return
+	 */
 	private List<Arbeitspaket> retrieveData() {
-
-		// return Arrays.asList(new Arbeitspaket("A", 1, 2, 1, 2, 2, 1, 2), new
-		// Arbeitspaket("B", 3, 3, 3, 3, 1, 3, 3),
-		// new Arbeitspaket("C", 4, 5, 4, 5, 2, 2, 4), new Arbeitspaket("D", 4, 4, 4, 4,
-		// 1, 2, 2));
-
-		return Arrays.asList(new Arbeitspaket("A", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("B", 0, 0, 0, 0, 0, 0, 0),
-				new Arbeitspaket("C", 0, 0, 0, 0, 0, 0, 0), new Arbeitspaket("D", 0, 0, 0, 0, 0, 0, 0));
+		return Arrays.asList(
+				new Arbeitspaket("A", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("B", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("C", 0, 0, 0, 0, 0, 0, 0),
+				new Arbeitspaket("D", 0, 0, 0, 0, 0, 0, 0));
 	}
 
+	/**
+	 * Diese Methode befüllt die Tabelle mit der im Parameter übergebenen Arbeitspaket-Liste
+	 * @param pakete
+	 */
 	private void populate(final List<Arbeitspaket> pakete) {
 		pakete.forEach(p -> data.add(new ArbeitspaketTableData(p)));
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte ID fest
+	 */
 	private void setupSpalteID() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteID.setCellValueFactory(new PropertyValueFactory<>("idExtern"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+		
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteID.setCellFactory(EditCell.<ArbeitspaketTableData>forTableColumn());
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+		
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteID.setOnEditCommit(event -> {
 			final String value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setIdExtern(value);
@@ -265,14 +372,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte FAZ fest
+	 */
 	private void setupSpalteFaz() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteFaz.setCellValueFactory(new PropertyValueFactory<>("faz"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+		
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteFaz.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteFaz.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setFaz(value);
@@ -280,14 +391,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte SAZ fest
+	 */
 	private void setupSpalteSaz() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteSaz.setCellValueFactory(new PropertyValueFactory<>("saz"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteSaz.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteSaz.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setSaz(value);
@@ -295,14 +410,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte FEZ fest
+	 */
 	private void setupSpalteFez() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteFez.setCellValueFactory(new PropertyValueFactory<>("fez"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteFez.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteFez.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setFez(value);
@@ -310,14 +429,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte SEZ fest
+	 */
 	private void setupSpalteSez() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteSez.setCellValueFactory(new PropertyValueFactory<>("sez"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteSez.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteSez.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setSez(value);
@@ -325,14 +448,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte Mitarbeiteranzahl fest
+	 */
 	private void setupSpalteAnzMitarbeiter() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteAnzMitarbeiter.setCellValueFactory(new PropertyValueFactory<>("mitarbeiteranzahl"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteAnzMitarbeiter.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteAnzMitarbeiter.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setMitarbeiteranzahl(value);
@@ -340,14 +467,18 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Diese Methode legt die Einstellungen der Spalte Aufwand fest
+	 */
 	private void setupSpalteAufwand() {
+		// legt fest, welches Attribut von Arbeitspaket in dieser Spalte angezeigt wird
 		spalteAufwand.setCellValueFactory(new PropertyValueFactory<>("aufwand"));
-		// sets the cell factory to use EditCell which will handle key presses
-		// and firing commit events
+
+		// lässt die Zelle mit Hilfe der Klasse EditCell bei Tastatureingabe bearbeitbar machen
 		spalteAufwand.setCellFactory(
 				EditCell.<ArbeitspaketTableData, Integer>forTableColumn(new MyIntegerStringConverter()));
-		// updates the salary field on the PersonTableData object to the
-		// committed value
+
+		// überschreibt den alten Attributwert mit der User-Eingabe
 		spalteAufwand.setOnEditCommit(event -> {
 			final Integer value = event.getNewValue() != null ? event.getNewValue() : event.getOldValue();
 			event.getTableView().getItems().get(event.getTablePosition().getRow()).setAufwand(value);
@@ -355,11 +486,17 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Erlaubt es einzelne Zell-Inhalte der Tabelle zu ändern
+	 */
 	private void setTableEditable() {
+		// Tabelle bearbeitbar machen
 		tabelle.setEditable(true);
-		// allows the individual cells to be selected
+		
+		// erlaubt es einzelne Zellen auszuwählen
 		tabelle.getSelectionModel().cellSelectionEnabledProperty().set(true);
-		// when character or numbers pressed it will start edit in editable fields
+		
+		// bei Tastatur-Eingabe wird erlaubt, in die Zelle zu schreiben
 		tabelle.setOnKeyPressed(event -> {
 			if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
 				editFocusedCell();
@@ -367,6 +504,9 @@ public class ControllerAufgabeErstellen extends Controller {
 		});
 	}
 
+	/**
+	 * Erlaubt dem User, Werte in eine Zelle zu schreiben
+	 */
 	@SuppressWarnings("unchecked")
 	private void editFocusedCell() {
 		final TablePosition<ArbeitspaketTableData, ?> focusedCell = tabelle.focusModelProperty().get()
@@ -374,17 +514,25 @@ public class ControllerAufgabeErstellen extends Controller {
 		tabelle.edit(focusedCell.getRow(), focusedCell.getTableColumn());
 	}
 
-	public static Arbeitspaket[] getArbeitspaketArray(List<Arbeitspaket> pakete) {
-		Arbeitspaket[] arbeitspakete = new Arbeitspaket[anzPakete];
-		for (int i = 0; i < anzPakete; i++) {
-			arbeitspakete[i] = pakete.get(i);
-		}
-		return arbeitspakete;
-	}
+//	public static Arbeitspaket[] getArbeitspaketArray(List<Arbeitspaket> pakete) {
+//		Arbeitspaket[] arbeitspakete = new Arbeitspaket[anzPakete];
+//		for (int i = 0; i < anzPakete; i++) {
+//			arbeitspakete[i] = pakete.get(i);
+//		}
+//		return arbeitspakete;
+//	}
 
+	/**
+	 * Setzt die Breite, Position, Schriftgröße und Spaltenbreiten der Tabelle
+	 */
 	private void setupLayout() {
+		// Herauslesen der Fensterbreite
 		double fensterBreite = DisplayCanvas.faktor * 1920;
+		
+		// berechnet die Breite der Tabelle auf die halbe Fensterbreite
 		double tabelleBreite = fensterBreite / 2;
+		
+		// berechnet die Position der Tabelle so, dass sie zentriert dargestellt wird
 		double layoutX = (fensterBreite - tabelleBreite) / 2;
 
 		// Breite der Tabelle setzen
@@ -392,8 +540,17 @@ public class ControllerAufgabeErstellen extends Controller {
 
 		// Position der Tabelle setzen (Tabelle -> BorderPane -> StackPane)
 		tabelle.parentProperty().get().parentProperty().get().setLayoutX(layoutX);
+		
+		// Schriftgröße
+		tabelle.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
+
+		// Spalten-Breite automatisch anpassen
+		tabelle.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
+	/**
+	 * Führt alle Methoden aus, die benötigt werden, um die fertige Tabelle zu erzeugen
+	 */
 	private void setupTabelle() {
 		// den Spalten die richtigen Attribute zuteilen und bearbeitbar machen
 		setupSpalteID();
@@ -408,47 +565,29 @@ public class ControllerAufgabeErstellen extends Controller {
 		// Tabelle mit Default-Daten füllen
 		tabelle.setItems(data);
 		populate(retrieveData());
-
-		// Schriftgröße
-		tabelle.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
-
-		// Spalten-Breite automatisch anpassen
-		tabelle.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
+		// Layout der Tabelle festlegen
+		setupLayout();		
 	}
 
-	@FXML
-	private void handleButtonMaxPersonenMinusAction(ActionEvent event) {
-		if (anzMaxPersonen > 1) {
-			anzMaxPersonen--;
-			textFieldMaxPersonen.setText(Integer.toString(anzMaxPersonen));
-		}
-	}
 
-	@FXML
-	private void handleButtonMaxPersonenPlusAction(ActionEvent event) {
-		anzMaxPersonen++;
-		textFieldMaxPersonen.setText(Integer.toString(anzMaxPersonen));
-	}
-
-	// max. Personen bei termintreuer Opt. ausblenden
-	@FXML
-	private void handleRadioButtonKapazitaetAction(ActionEvent event) {
-		panePersonen.setVisible(true);
-	}
-
-	@FXML
-	private void handleRadioButtonTerminAction(ActionEvent event) {
-		panePersonen.setVisible(false);
-	}
-
+	/**
+	 * Algorithmus, der überprüft, ob die angegebenen Werte korrekt sind
+	 * @param arbeitspaket
+	 * @return
+	 */
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
+		// temporäre Hilfsvariablen
 		int faz, saz, fez, sez, ma, groessteMA;
-		groessteMA = 0;
-		// String[] id = new String[arbeitspaket.length];
 		String id;
+		
+		// in dieser Variable wird die größe Anzahl an Mitarbeiter eines Arbeitspakets gespeichert, um einen Fehler beim kapazitätstreuen Algorithmus zu verhindern
+		groessteMA = 0;
 
+		// Es wird jedes einzelen Arbeitspaket geprüft, ob die Werte korrekt sind
 		for (int i = 0; i < arbeitspaket.length; i++) {
-			// id[i] = arbeitspaket[i].getId();
+			
+			// Überschreiben der temporären Variablen auf das aktuelle Arbeitspaket
 			id = arbeitspaket[i].getIdExtern();
 			faz = arbeitspaket[i].getFaz();
 			saz = arbeitspaket[i].getSaz();
@@ -456,89 +595,111 @@ public class ControllerAufgabeErstellen extends Controller {
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
 
-			// ID nicht größer als 3 Zeichen
+			// Externe ID darf aus Visualisierungsgründen nicht länger als 3 Zeichen
 			if (id.length() > 3) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Die ID des Arbeitspakets " + arbeitspaket[i].getIdExtern()
 						+ " darf nicht mehr als 3 Zeichen enthalten.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+				
 				return false;
 			}
 
-			// ID darf nur einmal vorkommen
-			// for (int j = i; j > 0; j--) {
-			// if (id[i].equals(id[j - 1])) {
-			// ergebnisValidierung = "Die ID " + arbeitspaket[i].getId()
-			// + " darf nur einmal vergeben werden.";
-			// tabelle.getSelectionModel().clearAndSelect(i, spalteID);
-			// return false;
-			// }
-			// }
+			// Externe ID darf nur einmal vorkommen. Verlgeich der ID des aktuellen Arbeitspakets mit allen vorherigen Paketen
 			for (int j = i; j > 0; j--) {
 				if (id.equals(arbeitspaket[j - 1].getIdExtern())) {
+					
+					// Fehlermeldung setzen
 					ergebnisValidierung = "Die ID " + arbeitspaket[i].getIdExtern()
 							+ " darf nur einmal vergeben werden.";
+					
+					// Fehlerhafte Zelle markieren
 					tabelle.getSelectionModel().clearAndSelect(i, spalteID);
+					
 					return false;
 				}
 			}
 
-			// FAZ prüfen
+			// FAZ prüfen. Darf nicht unter 1 liegen
 			if (faz < 1) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Der Wert FAZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens 1 sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFaz);
+				
 				return false;
 			}
 
-			// SAZ prüfen
+			// SAZ prüfen. Darf nicht kleiner als FAZ sein
 			if (saz < faz) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Der Wert SAZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSaz);
+				
 				return false;
 			}
 
-			// FEZ prüfen
+			// FEZ prüfen. Darf nicht kleiner als FAZ sein
 			if (fez < faz) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Der Wert FEZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FAZ sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteFez);
+				
 				return false;
 			}
 
-			// SEZ prüfen
+			// SEZ prüfen. Darf nicht kleiner als FEZ sein
 			if (sez < fez) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Der Wert SEZ für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss mindestens gleich groß wie der Wert FEZ sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
+				
 				return false;
 			}
 
-			// Differenz zwischen FEZ-FAZ und SEZ-SAZ gleich groß?
+			// Die Differenz zwischen FEZ-FAZ und SEZ-SAZ muss gleich groß sein
 			if ((fez - faz) != (sez - saz)) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Die Differenzen zwischen FEZ und FAZ sowie zwichen SEZ und SAZ für das Arbeitspaket "
 						+ arbeitspaket[i].getIdExtern() + " müssen gleich groß sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteSez);
+				
 				return false;
 			}
 
-			// Mitarbeiterzahl prüfen
+			// Mitarbeiterzahl prüfen. Darf nicht kleiner als 1 sein
 			if (ma < 1) {
+				
+				// Fehlermeldung setzen
 				ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " + arbeitspaket[i].getIdExtern()
 						+ " muss größer 0 sein.";
+				
+				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+				
 				return false;
 			}
-
-			// // Bei kapazitätstreuer Optimierung darf die Anzahl an Mitarbeiter des
-			// Arbeitspakets nicht größer als die Obergrenze sein
-			// if (radioButtonKapazitaet.isSelected() && (ma > anzMaxPersonen)) {
-			// ergebnisValidierung = "Der Wert Mitarbeiteranzahl für das Arbeitspaket " +
-			// arbeitspaket[i].getId()
-			// + " darf nicht größer als die angegebene Kapazitätsgrenze sein.";
-			// tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
-			// return false;
-			// }
 
 			// Größte Anzahl an Mitarbieter ermitteln
 			if (ma > groessteMA) {
@@ -546,11 +707,18 @@ public class ControllerAufgabeErstellen extends Controller {
 			}
 
 		}
+		
+		// Default-Kapazitätsgrenze auf die größte Mitarbeieranzahl + 2 setzen. Kann beim Ausführen der Übung geändert werden
 		anzMaxPersonen = groessteMA + 2;
+		
+		
 		ergebnisValidierung = "Validierung erfolgreich!";
 		return true;
 	}
 
+	/**
+	 * Schlägt die Validierung der Arbeitspakete fehl, so wird in einem Pop-Up-Fenster der entsprechende Fehler angezeigt
+	 */
 	private void validierungFehlgeschlagen() {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Ergebnis der Validierung");
@@ -560,6 +728,11 @@ public class ControllerAufgabeErstellen extends Controller {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Möcht man die angelegten Arbeitspakte als Aufgabe speichern, wird eine CSV-Datei erstellt und unter einem festgelegten Pfad gespeichert, um diese im Menüpunkt "Aufgabe laden" aufrufen zu können
+	 * @param arbeitspakete
+	 * @param event
+	 */
 	public void export(Arbeitspaket[] arbeitspakete, ActionEvent event) {
 		String outputFile = dateipfad + dateiname.getText() + ".csv";
 		boolean alreadyExists = new File(outputFile).exists();
