@@ -19,7 +19,6 @@ import reslearn.model.validierung.Feedback.MsgType;
 public class Validierung {
 	private ResFeld[][] koordinatenSystem;
 	private ArrayList<Feedback> feedbackListe;
-	private ArrayList<Arbeitspaket> arbeitspaketeGeprueft;
 	private Map<Arbeitspaket, Integer> arbeitspaketAktuelleVorgangsdauer;
 	ArrayList<Arbeitspaket> alleArbeitspakete = new ArrayList<Arbeitspaket>();
 
@@ -44,28 +43,31 @@ public class Validierung {
 	 *         Fehler stehen.
 	 */
 	public ArrayList<Feedback> AlgoErsterSchritt() {
+		ArrayList<String> verwendeteApFAZ = new ArrayList<String>();
+		ArrayList<String> verwendeteApFEZ = new ArrayList<String>();
 		for (ResFeld[] zeile : koordinatenSystem) {
 			for (ResFeld resFeld : zeile) {
 				if (resFeld != null) {
-					pruefeFAZ(resFeld.getResEinheit());
-					pruefeFEZ(resFeld.getResEinheit());
-				}
-			}
-		}
-		for (int x = 0; x < koordinatenSystem[0].length; x++) {
-			// arbeitspaketeGeprueft muss nach jeder Spalte neu initialisiert
-			// werden damit naechste Spalte richtig ueberprueft werden kann
-			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
-
-			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
-				if (koordinatenSystem[y][x] != null) {
-					if (!arbeitspaketeGeprueft
-							.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
-						pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+					if (pruefeFAZ(resFeld.getResEinheit())) {
+						if (!verwendeteApFAZ
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApFAZ.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "FAZ verletzt.\nDas Paket muss nach rechts verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
+					}
+					if (pruefeFEZ(resFeld.getResEinheit())) {
+						if (!verwendeteApFEZ
+								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApFEZ.add(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern());
+							String message = "FEZ verletzt.\nDas Paket muss nach links verschoben werden.";
+							feedbackListe.add(new Feedback(message, MsgType.ERROR, resFeld.getResEinheit()));
+						}
 					}
 				}
 			}
 		}
+
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
 		}
@@ -86,6 +88,7 @@ public class Validierung {
 		ArrayList<String> verwendeteApFAZ = new ArrayList<String>();
 		ArrayList<String> verwendeteApVorgangsdauer = new ArrayList<String>();
 		ArrayList<String> verwendeteApKapaGrenzeUeberschritten = new ArrayList<String>();
+		ArrayList<String> verwendeteApMitarbeiterParalllel = new ArrayList<String>();
 
 		for (ResFeld[] zeile : koordinatenSystem) {
 			arbeitspaketAktuelleVorgangsdauer = new HashMap<Arbeitspaket, Integer>();
@@ -131,13 +134,24 @@ public class Validierung {
 		for (int x = 0; x < koordinatenSystem[0].length; x++) {
 			// arbeitspaketeGeprueft muss nach jeder Spalte neu initialisiert werden,
 			// damit naechste Spalte richtig ueberprueft werden kann
-			arbeitspaketeGeprueft = new ArrayList<Arbeitspaket>();
 
 			for (int y = koordinatenSystem.length - 1; y >= 0; y--) {
 				if (koordinatenSystem[y][x] != null) {
-					if (!arbeitspaketeGeprueft
-							.contains(koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket())) {
-						pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit());
+					if (pruefeMitarbeiterParallelArbeitspaket(koordinatenSystem[y][x].getResEinheit())) {
+						if (!verwendeteApMitarbeiterParalllel.contains(koordinatenSystem[y][x].getResEinheit()
+								.getTeilpaket().getArbeitspaket().getIdIntern())) {
+							verwendeteApMitarbeiterParalllel.add(koordinatenSystem[y][x].getResEinheit().getTeilpaket()
+									.getArbeitspaket().getIdIntern());
+							String message = "Zahl der maximal parallel arbeitenden Mitarbeiter bei Arbeitspaket "
+									+ koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket()
+											.getIdIntern()
+									+ " verletzt!\n" + "Die maximal erlaubte Mitarbeiterzahl beträgt "
+									+ koordinatenSystem[y][x].getResEinheit().getTeilpaket().getArbeitspaket()
+											.getMitarbeiteranzahl()
+									+ ".";
+							feedbackListe
+									.add(new Feedback(message, MsgType.ERROR, koordinatenSystem[y][x].getResEinheit()));
+						}
 					}
 				}
 			}
@@ -233,7 +247,7 @@ public class Validierung {
 		ResEinheit[][] koordinatenSystemRichtigeLoesung = AlgoTermintreu.getInstance()
 				.algoDurchfuehren(resCanvasRichtigeLoesung).getKoordinatenSystem();
 
-		String bereitsVerwendetAP = null;
+		ArrayList<String> bereitsVerwendetAP = new ArrayList<String>();
 		for (int i = 0; i < aktuellesKoordinatenSystem.length; i++) {
 			for (int j = 0; j < aktuellesKoordinatenSystem[i].length; j++) {
 				ResEinheit resi = aktuellesKoordinatenSystem[i][j];
@@ -244,8 +258,8 @@ public class Validierung {
 								.getArbeitspaket().getIdIntern()))) {
 				} else {
 					if (resi != null) {
-						if (!resi.getTeilpaket().getArbeitspaket().getIdIntern().equals(bereitsVerwendetAP)) {
-							bereitsVerwendetAP = resi.getTeilpaket().getArbeitspaket().getIdIntern();
+						if (!bereitsVerwendetAP.contains(resi.getTeilpaket().getArbeitspaket().getIdIntern())) {
+							bereitsVerwendetAP.add(resi.getTeilpaket().getArbeitspaket().getIdIntern());
 							String message = "Die Lösung ist zwar möglich, aber noch nicht die optimale Lösung\n"
 									+ "Arbeitspaket "
 									+ aktuellesKoordinatenSystem[i][j].getTeilpaket().getArbeitspaket().getIdIntern()
@@ -273,7 +287,7 @@ public class Validierung {
 				.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvasRichtigeLoesung)
 				.getKoordinatenSystem();
 
-		String bereitsVerwendetAP = null;
+		ArrayList<String> bereitsVerwendetAP = new ArrayList<String>();
 		for (int i = 0; i < aktuellesKoordinatenSystem.length; i++) {
 			for (int j = 0; j < aktuellesKoordinatenSystem[i].length; j++) {
 				ResEinheit resi = aktuellesKoordinatenSystem[i][j];
@@ -284,8 +298,8 @@ public class Validierung {
 								.getArbeitspaket().getIdIntern()))) {
 				} else {
 					if (resi != null) {
-						if (!resi.getTeilpaket().getArbeitspaket().getIdIntern().equals(bereitsVerwendetAP)) {
-							bereitsVerwendetAP = resi.getTeilpaket().getArbeitspaket().getIdIntern();
+						if (!bereitsVerwendetAP.contains(resi.getTeilpaket().getArbeitspaket().getIdIntern())) {
+							bereitsVerwendetAP.add(resi.getTeilpaket().getArbeitspaket().getIdIntern());
 							String message = "Die Lösung ist zwar möglich, aber noch nicht die optimale Lösung\n"
 									+ "Arbeitspaket "
 									+ aktuellesKoordinatenSystem[i][j].getTeilpaket().getArbeitspaket().getIdIntern()
@@ -325,15 +339,13 @@ public class Validierung {
 	 *
 	 * @param resEinheit
 	 */
-	private void pruefeFEZ(ResEinheit resEinheit) {
+	private boolean pruefeFEZ(ResEinheit resEinheit) {
 		int fez = resEinheit.getTeilpaket().getArbeitspaket().getFez();
 		int xPos = resEinheit.getPosition().getxKoordinate();
-		int yPos = resEinheit.getPosition().getyKoordinate();
 		if (xPos + 1 > fez) {
-			String message = "FEZ am Punkt (" + xPos + ", " + (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
-					+ "Das Paket muss nach links verschoben werden.";
-			feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -363,7 +375,6 @@ public class Validierung {
 	 * @param grenzeMitarbeiterParallel
 	 */
 	private boolean pruefeGrenzeKapazitaetUeberschritten(ResEinheit resEinheit, int grenzeMitarbeiterParallel) {
-		int xPos = resEinheit.getPosition().getxKoordinate();
 		int yPos = resEinheit.getPosition().getyKoordinate();
 		int yPosReal = koordinatenSystem.length - 1 - yPos;
 		if (yPosReal + 1 > grenzeMitarbeiterParallel) {
@@ -382,8 +393,6 @@ public class Validierung {
 	 */
 	private boolean pruefeVorgangsdauerUeberschritten(ResEinheit resEinheit) {
 		Arbeitspaket arbeitspaket = resEinheit.getTeilpaket().getArbeitspaket();
-		int xPos = resEinheit.getPosition().getxKoordinate();
-		int yPos = resEinheit.getPosition().getyKoordinate();
 		if (!arbeitspaketAktuelleVorgangsdauer.containsKey(arbeitspaket)) {
 			arbeitspaketAktuelleVorgangsdauer.put(arbeitspaket, 0);
 		}
@@ -447,7 +456,7 @@ public class Validierung {
 			for (int counter = 0; counter <= alleXKoordinatenOhneDuplikate.size() - 1; counter++) {
 				if (k != alleXKoordinatenOhneDuplikate.get(counter)) {
 					String message = "Vorgang ab der Spalte " + alleXKoordinatenOhneDuplikate.get(counter)
-							+ " unterbrochen.\n";
+							+ " unterbrochen.";
 					feedbackListe.add(new Feedback(message, MsgType.ERROR, alleResEinheiten.get(0)));
 					break;
 				}
@@ -471,7 +480,7 @@ public class Validierung {
 	 *
 	 * @param resEinheit
 	 */
-	private void pruefeMitarbeiterParallelArbeitspaket(ResEinheit resEinheit) {
+	private boolean pruefeMitarbeiterParallelArbeitspaket(ResEinheit resEinheit) {
 		Arbeitspaket arbeitspaket = resEinheit.getTeilpaket().getArbeitspaket();
 		int xPos = resEinheit.getPosition().getxKoordinate();
 		int yPos = resEinheit.getPosition().getyKoordinate();
@@ -492,11 +501,9 @@ public class Validierung {
 			}
 
 			if (mitarbeiterParallelCount > mitarbeiterParallelArbeitspaket) {
-				String message = "Zahl der maximal parallel arbeitenden Mitarbeiter am Punkt (" + xPos + ", "
-						+ (koordinatenSystem.length - 1 - yPos) + ") verletzt!\n"
-						+ "Die maximal erlaubte Mitarbeiterzahl beträgt " + mitarbeiterParallelArbeitspaket + ".";
-				feedbackListe.add(new Feedback(message, MsgType.ERROR, resEinheit));
+				return true;
 			}
 		}
+		return false;
 	}
 }
