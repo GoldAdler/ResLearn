@@ -122,9 +122,7 @@ public class ViewUebungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
-				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getButtonMaxPersonenPlus(),
-				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getTextFieldMaxPersonen(),
-				controllerCanvas.getMaxPersonen(), controllerCanvas.getKorrekturvorschlaege(),
+				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getKonfigModus(), controllerCanvas.getKorrekturvorschlaege(),
 				controllerCanvas.getFehlermeldung());
 
 		for (int i = 0; i < 26; i++) {
