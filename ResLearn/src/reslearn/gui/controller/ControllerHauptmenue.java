@@ -53,14 +53,17 @@ public class ControllerHauptmenue extends Controller {
 			ViewTutorialVideo.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == quiz) {
-			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Quiz.fxml"));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+			ControllerTutorialFragen.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
+			// Parent root =
+			// FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Quiz.fxml"));
+			// newScene = new Scene(root);
+			// Stage stage = new Stage();
+			// stage.setTitle("ResLearn");
+			// stage.setMaximized(true);
+			// stage.setScene(newScene);
+			// stage.show();
+			// ((Node) (event.getSource())).getScene().getWindow().hide();
 		} else {
 			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Hauptmenue.fxml"));
 			newScene = new Scene(root);
