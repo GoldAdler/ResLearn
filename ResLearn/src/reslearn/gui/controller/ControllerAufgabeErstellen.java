@@ -773,7 +773,8 @@ public class ControllerAufgabeErstellen extends Controller {
 	 */
 	public void export(Arbeitspaket[] arbeitspakete, ActionEvent event) {
 		String outputFile = dateipfad + dateiname.getText() + ".csv";
-		boolean alreadyExists = new File(outputFile).exists();
+		File file = new File(outputFile);
+		boolean alreadyExists = file.exists();
 		String spalten[] = new String[9];
 
 		spalten[0] = "Id";
@@ -793,35 +794,29 @@ public class ControllerAufgabeErstellen extends Controller {
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists) {
 				csvOutput.writeRecord(spalten);
+				for (Arbeitspaket ap : arbeitspakete) {
+					int vorgangsdauer = ap.getFez() - ap.getFaz() + 1;
+					csvOutput.write(ap.getIdIntern().toString());
+					csvOutput.write(String.valueOf(ap.getFaz()));
+					csvOutput.write(String.valueOf(ap.getFez()));
+					csvOutput.write(String.valueOf(ap.getSaz()));
+					csvOutput.write(String.valueOf(ap.getSez()));
+					csvOutput.write(String.valueOf(vorgangsdauer));
+					csvOutput.write(String.valueOf(ap.getMitarbeiteranzahl()));
+					csvOutput.write(String.valueOf(ap.getAufwand()));
+					csvOutput.write(String.valueOf(anzMaxPersonen));
+					csvOutput.endRecord();
+				}
+				csvOutput.close();
 				weiter(event);
 			} else {
-				Alert alert = new Alert(AlertType.CONFIRMATION);
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Warnung");
 				alert.setHeaderText("Warnung");
-				alert.setContentText("Der Dateiname existiert bereits. Datei überschreiben");
-				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK) {
-					weiter(event);
-				} else {
-					alert.close();
-					return;
-				}
+				alert.setContentText("Der Dateiname existiert bereits. Bitte anderen Namen eingeben.");
+				alert.showAndWait();
 			}
 
-			for (Arbeitspaket ap : arbeitspakete) {
-				int vorgangsdauer = ap.getFez() - ap.getFaz() + 1;
-				csvOutput.write(ap.getIdIntern().toString());
-				csvOutput.write(String.valueOf(ap.getFaz()));
-				csvOutput.write(String.valueOf(ap.getFez()));
-				csvOutput.write(String.valueOf(ap.getSaz()));
-				csvOutput.write(String.valueOf(ap.getSez()));
-				csvOutput.write(String.valueOf(vorgangsdauer));
-				csvOutput.write(String.valueOf(ap.getMitarbeiteranzahl()));
-				csvOutput.write(String.valueOf(ap.getAufwand()));
-				csvOutput.write(String.valueOf(anzMaxPersonen));
-				csvOutput.endRecord();
-			}
-
-			csvOutput.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
