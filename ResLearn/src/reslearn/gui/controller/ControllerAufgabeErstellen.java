@@ -203,7 +203,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	/**
 	 * Der Aufruf dieser Methode fuehrt zurueck zum Hauptmenue
-	 * 
+	 *
 	 * @param event
 	 * @throws Exception
 	 */
@@ -227,7 +227,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	/**
 	 * Der Aufruf dieser Methode fuehrt zurueck zum vorherigen Fenster
-	 * 
+	 *
 	 * @param event
 	 * @throws Exception
 	 */
@@ -297,7 +297,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	/**
 	 * Drückt man bei der Anzahl der Pakete auf den Plus-Button, wird diese Anzahl
 	 * um 1 erhöht und eine neue Zeile hinzugefügt
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -316,7 +316,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	 * Die ID soll alphabetisch fortlaufend sein. Die interne ID behält diesen
 	 * Buchstaben, die angezeigte externe ID kann hingegen durch den User geändert
 	 * werden
-	 * 
+	 *
 	 * @param i
 	 * @return
 	 */
@@ -329,7 +329,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	/**
 	 * Diese Methode liest aus der Tabelle die Werte und legt diese in ein Array aus
 	 * Arbeitspakten an
-	 * 
+	 *
 	 * @param paketList
 	 */
 	private void getArbeitspaketArray(ObservableList<ArbeitspaketTableData> paketList) {
@@ -359,7 +359,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	/**
 	 * Diese Methode legt die Default-Werte der Tabelle fest
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Arbeitspaket> retrieveData() {
@@ -370,7 +370,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	/**
 	 * Diese Methode befüllt die Tabelle mit der im Parameter übergebenen
 	 * Arbeitspaket-Liste
-	 * 
+	 *
 	 * @param pakete
 	 */
 	private void populate(final List<Arbeitspaket> pakete) {
@@ -604,7 +604,7 @@ public class ControllerAufgabeErstellen extends Controller {
 
 	/**
 	 * Algorithmus, der überprüft, ob die angegebenen Werte korrekt sind
-	 * 
+	 *
 	 * @param arbeitspaket
 	 * @return
 	 */
@@ -767,7 +767,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	 * Möcht man die angelegten Arbeitspakte als Aufgabe speichern, wird eine
 	 * CSV-Datei erstellt und unter einem festgelegten Pfad gespeichert, um diese im
 	 * Menüpunkt "Aufgabe laden" aufrufen zu können
-	 * 
+	 *
 	 * @param arbeitspakete
 	 * @param event
 	 */
@@ -834,8 +834,7 @@ public class ControllerAufgabeErstellen extends Controller {
 		dialog.setHeaderText("Wollen Sie die Aufgabe speichern?");
 
 		ButtonType speichernButton = new ButtonType("Speichern", ButtonData.OK_DONE);
-		ButtonType weiterButton = new ButtonType("Weiter", ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(speichernButton, weiterButton);
+		dialog.getDialogPane().getButtonTypes().add(speichernButton);
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -866,8 +865,6 @@ public class ControllerAufgabeErstellen extends Controller {
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get() == speichernButton) {
 			export(arbeitspakete, event);
-		} else if (result.get() == weiterButton) {
-			weiter(event);
 		} else {
 			dialog.close();
 		}
