@@ -341,12 +341,16 @@ public class ControllerCanvasLoesungsmodus {
 			kapazitaetstreuReset();
 		}
 	};
-	
+
 	private EventHandler<ActionEvent> handleCheckBoxDauerAction = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
 			// TODO: Richtigen Algorithmus auswählen
+			boolean vorgangsdauerVeraenderbar = dauerCheckBox.isSelected() ? true : false;
+			AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
+					.setVorgangsdauerVeraenderbar(vorgangsdauerVeraenderbar);
+			kapazitaetstreuReset();
 		}
 	};
 
@@ -747,23 +751,24 @@ public class ControllerCanvasLoesungsmodus {
 	 * Konfigurationsmöglichkeiten angezeigt werden
 	 */
 	private void modusKonfiguration() {
-		
+
 		// Pane beim ersten Aufruf befüllen
 		if (konfigModus.getChildren().size() == 0) {
 			konfigModus.getChildren().addAll(maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
 					buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
-			
+
 			// Kapazitätsgrenzen-Konfig Positionen festlegen
 			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
-			textFieldMaxPersonen.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+			textFieldMaxPersonen
+					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
 			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
-			
+
 			// Dauer veränderbar-Konfig Position festlegen
 			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 2);
 			dauerCheckBox.setLayoutX(dauerLabel.getLayoutX() + dauerLabel.getPrefWidth());
 			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 2);
 		}
-		
+
 		if (kapazitaetstreuModus.isSelected()) {
 			buttonMaxPersonenMinus.setDisable(false);
 			buttonMaxPersonenPlus.setDisable(false);
