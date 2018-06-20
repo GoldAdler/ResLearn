@@ -722,6 +722,7 @@ public class ControllerCanvasUebungsmodus {
 		dauerLabel.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite + DisplayCanvas.resFeldBreite);
 
 		dauerCheckBox.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
+		dauerCheckBox.setOnAction(handleCheckBoxDauerAction);
 
 		konfigModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
 		konfigModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
@@ -811,6 +812,14 @@ public class ControllerCanvasUebungsmodus {
 
 		}
 	};
+	
+	private EventHandler<ActionEvent> handleCheckBoxDauerAction = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			// TODO: Richtigen Algorithmus auswählen
+		}
+	};
 
 	/**
 	 * Je nach dem, welcher Modus ausgewählt ist, sollen die jeweiligen
@@ -836,9 +845,19 @@ public class ControllerCanvasUebungsmodus {
 		}
 
 		if (kapazitaetstreuModus.isSelected()) {
-			konfigModus.setVisible(true);
+			buttonMaxPersonenMinus.setDisable(false);
+			buttonMaxPersonenPlus.setDisable(false);
+			dauerCheckBox.setDisable(false);
+			maxPersonen.textFillProperty().set(Color.BLACK);
+			dauerLabel.textFillProperty().set(Color.BLACK);
+			textFieldMaxPersonen.setStyle("-fx-text-fill: black;");
 		} else if (termintreuModus.isSelected()) {
-			konfigModus.setVisible(false);
+			buttonMaxPersonenMinus.setDisable(true);
+			buttonMaxPersonenPlus.setDisable(true);
+			dauerCheckBox.setDisable(true);
+			maxPersonen.textFillProperty().set(Color.GREY);
+			dauerLabel.textFillProperty().set(Color.GREY);
+			textFieldMaxPersonen.setStyle("-fx-text-fill: grey;");
 		}
 	}
 
