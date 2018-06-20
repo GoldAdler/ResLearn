@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import reslearn.gui.view.ViewAufgabeLaden;
 import reslearn.gui.view.ViewTutorialVideo;
 import reslearn.gui.view.ViewUebungAuswaehlen;
 
@@ -41,13 +42,7 @@ public class ControllerHauptmenue extends Controller {
 			stage.show();
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == aufgabeLaden) {
-			Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/AufgabeLaden.fxml"));
-			newScene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setTitle("ResLearn");
-			stage.setMaximized(true);
-			stage.setScene(newScene);
-			stage.show();
+			ViewAufgabeLaden.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else if (event.getSource() == tutorial) {
 			ViewTutorialVideo.getInstance().start(new Stage());
