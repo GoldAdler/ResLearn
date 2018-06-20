@@ -412,7 +412,7 @@ public class ControllerCanvasLoesungsmodus {
 		int yCounter = 1;
 
 		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
-		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 6 * DisplayCanvas.resFeldLaenge);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 8 * DisplayCanvas.resFeldLaenge);
 		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
@@ -587,7 +587,7 @@ public class ControllerCanvasLoesungsmodus {
 		konfigModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
 		konfigModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
 		konfigModus.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-		konfigModus.setPrefHeight(DisplayCanvas.resFeldLaenge * 2);
+		konfigModus.setPrefHeight(DisplayCanvas.resFeldLaenge * 4);
 
 		modusKonfiguration();
 	}
@@ -738,32 +738,27 @@ public class ControllerCanvasLoesungsmodus {
 	 * Konfigurationsmöglichkeiten angezeigt werden
 	 */
 	private void modusKonfiguration() {
-		if (kapazitaetstreuModus.isSelected()) {
-
-			// Konfigurations-Pane leeren
-			konfigModus.getChildren().removeAll(dauerLabel, dauerCheckBox);
-
-			// Konfigurations-Pane befüllen
+		
+		// Pane beim ersten Aufruf befüllen
+		if (konfigModus.getChildren().size() == 0) {
 			konfigModus.getChildren().addAll(maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
-					buttonMaxPersonenPlus);
-
-			// Positionen festlegen
+					buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
+			
+			// Kapazitätsgrenzen-Konfig Positionen festlegen
 			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
-			textFieldMaxPersonen
-					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+			textFieldMaxPersonen.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
 			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
-
-		} else if (termintreuModus.isSelected()) {
-
-			// Konfigurations-Pane leeren
-			konfigModus.getChildren().removeAll(maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
-					buttonMaxPersonenPlus);
-
-			// Konfigurations-Pane befüllen
-			konfigModus.getChildren().addAll(dauerLabel, dauerCheckBox);
-
-			// Position festlegen
+			
+			// Dauer veränderbar-Konfig Position festlegen
+			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 2);
 			dauerCheckBox.setLayoutX(dauerLabel.getLayoutX() + dauerLabel.getPrefWidth());
+			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 2);
+		}
+		
+		if (kapazitaetstreuModus.isSelected()) {
+			konfigModus.setVisible(true);
+		} else if (termintreuModus.isSelected()) {
+			konfigModus.setVisible(false);			
 		}
 	}
 
