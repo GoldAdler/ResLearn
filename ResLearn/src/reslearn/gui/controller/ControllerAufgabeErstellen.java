@@ -610,7 +610,7 @@ public class ControllerAufgabeErstellen extends Controller {
 	 */
 	private boolean paketeValidieren(Arbeitspaket[] arbeitspaket) {
 		// temporäre Hilfsvariablen
-		int faz, saz, fez, sez, ma, groessteMA;
+		int faz, saz, fez, sez, ma, aufwand, groessteMA;
 		String id;
 
 		// in dieser Variable wird die größe Anzahl an Mitarbeiter eines Arbeitspakets
@@ -627,6 +627,7 @@ public class ControllerAufgabeErstellen extends Controller {
 			fez = arbeitspaket[i].getFez();
 			sez = arbeitspaket[i].getSez();
 			ma = arbeitspaket[i].getMitarbeiteranzahl();
+			aufwand = arbeitspaket[i].getAufwand();
 
 			// Externe ID darf aus Visualisierungsgründen nicht länger als 3 Zeichen
 			if (id.length() > 3) {
@@ -731,6 +732,18 @@ public class ControllerAufgabeErstellen extends Controller {
 
 				// Fehlerhafte Zelle markieren
 				tabelle.getSelectionModel().clearAndSelect(i, spalteAnzMitarbeiter);
+
+				return false;
+			}
+			
+			// Aufwand prüfen. Aufwand muss das Produkt aus Vorgangsdauer und Mitarbeiteranzahl sein
+			if ((sez - saz + 1) * ma != aufwand) {
+				// Fehlermeldung setzen
+				ergebnisValidierung = "Der Aufwand des Arbeitspakets " + arbeitspaket[i].getIdExtern()
+						+ " muss das Produkt aus Vorgangsdauer und Mitarbeiteranzahl sein.";
+
+				// Fehlerhafte Zelle markieren
+				tabelle.getSelectionModel().clearAndSelect(i, spalteAufwand);
 
 				return false;
 			}
