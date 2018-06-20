@@ -47,7 +47,7 @@
                         <Image url="@../images/Baby2.PNG" />
                      </image>
                   </ImageView>
-                  <Label contentDisplay="CENTER" layoutY="243.0" prefHeight="52.0" prefWidth="269.0" styleClass="labelTitle" stylesheets="@Stylesheet.css" text="ErsterSchritt Modus">
+                  <Label contentDisplay="CENTER" layoutY="243.0" prefHeight="52.0" prefWidth="269.0" styleClass="labelTitle" stylesheets="@Stylesheet.css" text="Erster-Schritt-Modus">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -55,7 +55,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label layoutY="287.0" prefHeight="105.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. " wrapText="true">
+                  <Label layoutY="287.0" prefHeight="105.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Sie können im Erster-Schritt-Modus das Einstellen der Ausgangssituation üben, indem Sie die erstellten Pakete in Gleichverteilung und frühester Lage ohne Vorgangsunterbrechung anordnen." wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -84,7 +84,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label layoutY="293.0" prefHeight="98.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. " wrapText="true">
+                  <Label layoutY="287.0" prefHeight="105.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Im Übungsmodus können Sie Aufgaben kapazitätstreu oder termintreu optimieren. Sie können zwischen den verschiedenen Modi wechseln und die maximale Mitarbeiterkapazität anpassen." wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -113,7 +113,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label layoutY="285.0" prefHeight="105.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. " wrapText="true">
+                  <Label layoutY="287.0" prefHeight="105.0" prefWidth="269.0" styleClass="labelText" stylesheets="@Stylesheet.css" text="Im Lösungsmodus können Sie unserem Lösungsalgorithmus beim Arbeiten zusehen. Sie können zwischen den verschiedenen Modi wechseln und die maximale Mitarbeiterkapazität anpassen." wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
