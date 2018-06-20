@@ -22,11 +22,9 @@ public class ControllerAufgabeLaden extends Controller {
 	private Button zurueck;
 	@FXML
 	private Button home;
-	@FXML
+
 	private Label labellDateiname;
-	@FXML
 	private Button laden;
-	@FXML
 	private Button dateiauswaehlen;
 
 	private Arbeitspaket[] paketeArray;
