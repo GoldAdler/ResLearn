@@ -42,12 +42,12 @@ public class ControllerTutorialFragen extends Controller {
 	@FXML
 	private Button home;
 
-	private Label labelErgebnis = new Label();
+	private Label labelErgebnis;
 
-	private GridPane gridpane = new GridPane();
+	private GridPane gridpane;
 
 	private ToggleGroup tg;
-	private Label label = new Label();
+	private Label label;
 	private RadioButton rb1 = new RadioButton();
 	private RadioButton rb2 = new RadioButton();
 	private RadioButton rb3 = new RadioButton();
@@ -55,6 +55,7 @@ public class ControllerTutorialFragen extends Controller {
 	private Button weiter = new Button("Weiter");;
 
 	public void start(Stage stage) throws Exception {
+		selektieren();
 		counter = 0;
 		counterFrageAntwort = 1;
 		counterRichtigeAntworten = 0;
@@ -77,6 +78,9 @@ public class ControllerTutorialFragen extends Controller {
 		rb4.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 
 		tg = new ToggleGroup();
+		gridpane = new GridPane();
+		label = new Label();
+		labelErgebnis = new Label();
 
 		rb1.setText("Termin- und kapazitätstreue Bedarfsoptimierung");
 		rb1.setUserData(rb1.getText());
@@ -234,6 +238,7 @@ public class ControllerTutorialFragen extends Controller {
 		case 0:
 			if (rb1.isSelected()) {
 				label.setText("Antwort: " + rb1.getText() + " ist richtig");
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -250,8 +255,9 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort ist falsch, netter Versuch");
+					label.setText("Keine Antwort auszuwählen ist die falsche Lösung");
 				}
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -264,6 +270,7 @@ public class ControllerTutorialFragen extends Controller {
 		case 1:
 			if (rb2.isSelected()) {
 				label.setText("Antwort: " + rb2.getText() + " ist richtig");
+				rb2.setDisable(true);
 				rb2.setTextFill(Color.GREEN);
 				rb1.setDisable(true);
 				rb1.setTextFill(Color.RED);
@@ -280,8 +287,9 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort ist falsch, netter Versuch");
+					label.setText("Keine Antwort auszuwählen ist die falsche Lösung");
 				}
+				rb2.setDisable(true);
 				rb2.setTextFill(Color.GREEN);
 				rb1.setDisable(true);
 				rb1.setTextFill(Color.RED);
@@ -294,6 +302,7 @@ public class ControllerTutorialFragen extends Controller {
 		case 2:
 			if (rb1.isSelected()) {
 				label.setText("Antwort: " + rb1.getText() + " ist richtig");
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -310,8 +319,9 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort ist falsch, netter Versuch");
+					label.setText("Keine Antwort auszuwählen ist die falsche Lösung");
 				}
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -324,6 +334,7 @@ public class ControllerTutorialFragen extends Controller {
 		case 3:
 			if (rb1.isSelected()) {
 				label.setText("Antwort: " + rb1.getText() + " ist richtig");
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
@@ -340,8 +351,9 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort ist falsch, netter Versuch");
+					label.setText("Keine Antwort auszuwählen ist die falsche Lösung");
 				}
+				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.RED);
