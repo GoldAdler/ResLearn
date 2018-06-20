@@ -131,7 +131,6 @@ public class ControllerCanvasLoesungsmodus {
 		erstelleTabelleArbeitspakete();
 		erstelleButtons();
 		erstelleGrenzLinie();
-
 	}
 
 	/**
@@ -221,7 +220,7 @@ public class ControllerCanvasLoesungsmodus {
 		@Override
 		public void handle(MouseEvent e) {
 			kapazitaetstreuReset();
-			modusKonfiguration();
+
 		}
 	};
 
@@ -235,13 +234,10 @@ public class ControllerCanvasLoesungsmodus {
 		schrittZurueck.setDisable(true);
 		schrittVor.setDisable(false);
 
-		// Kapazitätsgrenze-Buttons + Linie aktivieren
-		buttonMaxPersonenMinus.setDisable(false);
-		buttonMaxPersonenPlus.setDisable(false);
-		kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(100);
-
 		// Wieder von vorne anfangen
 		historieNummer = 0;
+
+		kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(100);
 
 		resCanvas = new ResCanvas();
 
@@ -250,15 +246,13 @@ public class ControllerCanvasLoesungsmodus {
 			copyArbeitspaket.add(arbeitspaket.copy());
 		}
 
-		buttonMaxPersonenMinus.setDisable(false);
-		buttonMaxPersonenPlus.setDisable(false);
-		kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(100);
-
 		copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
 		System.out.println("Maxparallel: " + AufgabeLadenImport.maxPersonenParallel);
 		historieListe = AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
 				.algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
 		extrahiereArbeitspakete(historieNummer);
+
+		modusKonfiguration();
 	}
 
 	private EventHandler<MouseEvent> OnButtonTermintreuPressedEventHandler = new EventHandler<MouseEvent>() {
@@ -267,13 +261,10 @@ public class ControllerCanvasLoesungsmodus {
 			schrittZurueck.setDisable(true);
 			schrittVor.setDisable(false);
 
-			// Kapazitätsgrenze-Buttons + Linie deaktivieren
-			buttonMaxPersonenMinus.setDisable(true);
-			buttonMaxPersonenPlus.setDisable(true);
-			kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(0);
-
 			// Wieder von vorne anfangen
 			historieNummer = 0;
+
+			kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel].setOpacity(0);
 
 			resCanvas = new ResCanvas();
 
@@ -767,6 +758,12 @@ public class ControllerCanvasLoesungsmodus {
 			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 2);
 			dauerCheckBox.setLayoutX(dauerLabel.getLayoutX() + dauerLabel.getPrefWidth());
 			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 2);
+		}
+
+		// Bei nur einem Element in der Historienliste ist nichts zum weiter
+		// auswählen vorhanden
+		if (historieListe.size() == 1) {
+			schrittVor.setDisable(true);
 		}
 
 		if (kapazitaetstreuModus.isSelected()) {
