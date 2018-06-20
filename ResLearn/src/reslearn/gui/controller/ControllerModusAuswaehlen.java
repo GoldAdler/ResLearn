@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import reslearn.gui.view.ViewAufgabeLaden;
 import reslearn.gui.view.ViewErsterSchrittModus;
 import reslearn.gui.view.ViewLoesungsmodus;
 import reslearn.gui.view.ViewUebungAuswaehlen;
@@ -76,6 +77,10 @@ public class ControllerModusAuswaehlen extends Controller {
 		if (alleFenster.get(alleFenster.size() - 1) == "/reslearn/gui/fxml/UebungAuswaehlen.fxml") {
 			vorherigesFenster(alleFenster);
 			ViewUebungAuswaehlen.getInstance().start(new Stage());
+			((Node) (event.getSource())).getScene().getWindow().hide();
+		} else if (alleFenster.get(alleFenster.size() - 1) == "/reslearn/gui/fxml/AufgabeLaden.fxml") {
+			vorherigesFenster(alleFenster);
+			ViewAufgabeLaden.getInstance().start(new Stage());
 			((Node) (event.getSource())).getScene().getWindow().hide();
 		} else {
 			try {
