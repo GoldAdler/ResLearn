@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="reslearn.gui.controller.ControllerUebungsmodus">
+   <children>
+      <Label alignment="CENTER" layoutX="450.0" layoutY="14.0" styleClass="titleResLearn" stylesheets="@Stylesheet.css" text="Erste-Schritte-Modus" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="7.0">
+         <image>
+            <Image url="@../images/pfeil.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="50.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/home.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="zurueck" layoutX="7.0" layoutY="7.0" mnemonicParsing="false" onAction="#zurueck" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
+      <Button fx:id="home" layoutX="50.0" layoutY="7.0" mnemonicParsing="false" onAction="#home" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

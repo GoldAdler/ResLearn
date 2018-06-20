@@ -51,7 +51,7 @@ public class ViewErsterSchrittModus extends Application {
 
 		stage = new Stage();
 
-		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/ErsteSchritteModus.fxml"));
 		Scene hauptszene = new Scene(root);
 
 		ResCanvas resCanvas = new ResCanvas();
