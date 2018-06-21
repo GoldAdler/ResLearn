@@ -212,7 +212,7 @@ public class AlgoTermintreu extends Algorithmus {
 			simulation = resCanvas.copyResCanvas(zuVerschiebenAp);
 
 			copyZuVerschiebenAP = simulation.findeAPnachID(zuVerschiebenAp.getIdIntern());
-			copyZuVerschiebenAP.neuSetzenTermin(x, simulation);
+			copyZuVerschiebenAP.neuSetzenStartpunkt(x, simulation);
 			simLoesungenResCanvas.add(simulation);
 		}
 

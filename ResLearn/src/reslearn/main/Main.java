@@ -21,8 +21,8 @@ public class Main {
 		// erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
-		// erstelleTestDoc3(resCanvas);
-		erstelleTestDaten2_57(resCanvas);
+		erstelleTestDoc3(resCanvas);
+		// erstelleTestDaten2_57(resCanvas);
 		// erstelleTestDaten2_5(resCanvas);
 		// erstelleTestDaten2_54(resCanvas);
 		// erstelleTestDaten2_55(resCanvas);
@@ -50,7 +50,8 @@ public class Main {
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus
-		algorithmus = AlgoKapazitaetstreu.getInstance(5);
+		algorithmus = AlgoKapazitaetstreu.getInstance(4);
+		((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(false);
 		// algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);

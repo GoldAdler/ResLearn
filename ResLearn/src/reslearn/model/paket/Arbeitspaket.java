@@ -113,7 +113,7 @@ public class Arbeitspaket extends Paket {
 
 				}
 
-				tp.getArbeitspaket().neuSetzenKapa(abstand, resCanvas);
+				tp.getArbeitspaket().neuSetzenAbstand(abstand, resCanvas);
 				break;
 			}
 			xEnde = xStart + tp.getVorgangsdauer() - 1;
@@ -161,7 +161,7 @@ public class Arbeitspaket extends Paket {
 	 * @param abstand
 	 * @param resCanvas
 	 */
-	public void neuSetzenKapa(int abstand, ResCanvas resCanvas) {
+	public void neuSetzenAbstand(int abstand, ResCanvas resCanvas) {
 		Teilpaket ersteTP = teilpaketListe.get(0);
 		ResEinheit erstesRes = ersteTP.getResEinheitListe().get(0);
 
@@ -204,7 +204,7 @@ public class Arbeitspaket extends Paket {
 	 * @param start
 	 * @param resCanvas
 	 */
-	public void neuSetzenTermin(int start, ResCanvas resCanvas) {
+	public void neuSetzenStartpunkt(int start, ResCanvas resCanvas) {
 
 		ArrayList<ResEinheit> resEinheitenListe = this.getTeilpaketListe().get(0).getResEinheitListe();
 		Iterator<ResEinheit> it = resEinheitenListe.iterator();
@@ -299,16 +299,24 @@ public class Arbeitspaket extends Paket {
 
 	@Override
 	public boolean bewegeX(ResCanvas resCanvas, int xMove) {
+		boolean verschoben;
 		for (Teilpaket teilpaket : teilpaketListe) {
-			teilpaket.bewegeX(resCanvas, xMove);
+			verschoben = teilpaket.bewegeX(resCanvas, xMove);
+			if (verschoben == false) {
+				return false;
+			}
 		}
 		return true;
 	}
 
 	@Override
 	public boolean bewegeY(ResCanvas resCanvas, int yMove) {
+		boolean verschoben;
 		for (Teilpaket teilpaket : teilpaketListe) {
-			teilpaket.bewegeY(resCanvas, yMove);
+			verschoben = teilpaket.bewegeY(resCanvas, yMove);
+			if (verschoben == false) {
+				return false;
+			}
 		}
 		return true;
 	}

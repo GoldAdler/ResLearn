@@ -12,6 +12,7 @@ import reslearn.model.paket.Teilpaket.VerschiebeRichtung;
 import reslearn.model.resCanvas.ResCanvas;
 import reslearn.model.utils.ComperatorArbeitspaketLR;
 import reslearn.model.utils.ComperatorArbeitspaketRL;
+import reslearn.model.utils.ComperatorFaz;
 import reslearn.model.utils.ComperatorTeilpaket;
 import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
@@ -116,7 +117,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void zeitOptimierung(ResCanvas resCanvas) {
 
-//		System.out.println("Simulation start");
+		// System.out.println("Simulation start");
 
 		ArrayList<ResCanvas> moeglicheLoesungenResCanvas = new ArrayList<ResCanvas>();
 
@@ -124,6 +125,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		for (ResCanvas rC : moeglicheLoesungenResCanvas) {
 			Algorithmus.ausgeben(rC.getKoordinatenSystem());
+			Algorithmus.ausgebenKurzerTest(rC.getKoordinatenSystem());
 		}
 
 		ResCanvas ergebnis = bewerteLoesungen(moeglicheLoesungenResCanvas);
@@ -459,6 +461,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					unterhalbStack, zuVerschiebenAp.getTeilpaketListe().get(0));
 			ArrayList<Arbeitspaket> rechtsListe = new ArrayList<Arbeitspaket>();
 
+			ArrayList<Arbeitspaket> arbeitspaketListe = vorbereitungSimulation.getArbeitspaketListe();
+
 			if (unterhalbStack.isEmpty()) {
 				// 1. Szenario: nichts liegt unter Z
 
@@ -490,7 +494,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				Arbeitspaket rechtsAp = vorbereitungSimulation.getKoordinatenSystem()[position
 						.getyKoordinate()][position.getxKoordinate() + 1].getTeilpaket().getArbeitspaket();
 
-				for (Arbeitspaket arbP : vorbereitungSimulation.getArbeitspaketListe()) {
+				for (Arbeitspaket arbP : arbeitspaketListe) {
 					if (arbP != rechtsAp) {
 						int ersteXpos = arbP.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
 								.getxKoordinate();
@@ -499,8 +503,52 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						}
 					}
 				}
-				rechtsAp.bewegeX(vorbereitungSimulation,
+				boolean verschoben = rechtsAp.bewegeX(vorbereitungSimulation,
 						-zuVerschiebenAp.getTeilpaketListe().get(0).getVorgangsdauer());
+
+				if (verschoben == false) {
+					/*
+					 * Beispie:
+					 *
+					 * Bei Mitarbeitergrenze 4
+					 *
+					 * ...........................................
+					 * AAAAAA...FFF...............................
+					 * AAAAAA...FFF..BBBBBBBDDDDDEEEEEE...........
+					 * AAAAAACCCCCCCCBBBBBBBDDDDDEEEEEE...........
+					 * AAAAAACCCCCCCCBBBBBBBDDDDDEEEEEE...........
+					 *
+					 * ...........................................
+					 * AAAAAA...FFF...............................
+					 * AAAAAA...FFF..BBBBBBBDDDDDEEEEEE...........
+					 * AAAAAA........BBBBBBBDDDDDEEEEEE...........
+					 * AAAAAA........BBBBBBBDDDDDEEEEEE...........
+					 *
+					 * B kann nicht nach links verschoben werden, da F dort liegt. F liegt bereits
+					 * auf FAZ, kann also nicht nach links. Folglich kann nichts verschoben werden
+					 * und C nicht neu eingefügt werden.
+					 *
+					 * Deswegen müssen nun alle Arbeitspakete nach FAZ soriert werden. Danach werden
+					 * alle Pakete aus dem Koordinatensystem gelöscht um anschließend die Pakete in
+					 * der neuen Reihenfolge einzufügen.
+					 *
+					 */
+
+					Collections.sort(arbeitspaketListe, new ComperatorFaz());
+
+					for (Arbeitspaket loeschenAp : arbeitspaketListe) {
+						vorbereitungSimulation.entferneArbeitspaket(loeschenAp);
+					}
+
+					int start = 0;
+					for (Arbeitspaket zuSetzten : arbeitspaketListe) {
+						zuSetzten.neuSetzenStartpunkt(start, vorbereitungSimulation);
+						start += zuSetzten.getVorgangsdauer();
+					}
+
+				}
+
+				Algorithmus.ausgebenKurzerTest(vorbereitungSimulation.getKoordinatenSystem());
 
 			} else {
 
@@ -533,7 +581,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				 *
 				 */
 
-				for (Arbeitspaket arbP : vorbereitungSimulation.getArbeitspaketListe()) {
+				for (Arbeitspaket arbP : arbeitspaketListe) {
 
 					int ersteXpos = arbP.getTeilpaketListe().get(0).getResEinheitListe().get(0).getPosition()
 							.getxKoordinate();
@@ -630,7 +678,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			simulation.herunterfallenAlleTeilpakete();
 
 			int abstand = x - xStart;
-			copyZuVerschiebenAP.neuSetzenKapa(abstand, simulation);
+			copyZuVerschiebenAP.neuSetzenAbstand(abstand, simulation);
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 
