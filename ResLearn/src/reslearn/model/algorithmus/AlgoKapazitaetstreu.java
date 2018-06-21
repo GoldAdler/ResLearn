@@ -270,8 +270,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	/**
 	 * Bewertet die übergebenen ResCanvases.
 	 *
-	 * Je weniger Zeitverstöße desto besser wird das ResCanvas bewertet. Die
-	 * bestbewertesten ResCanvas werden zurückgegeben.
+	 * Je weniger Zeitverstöße desto besser wird das ResCanvas bewertet. Bei gleich
+	 * vielen Verstößen werden die Pakete, welche die kürzeste Gesamtprojektzeit
+	 * haben gewählt. Die bestbewertesten ResCanvas werden zurückgegeben.
 	 *
 	 * @param Zeitueberschreitung
 	 * @return
@@ -279,13 +280,16 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	public ArrayList<ResCanvas> geringsteVerstoesse(ArrayList<ResCanvas> Zeitueberschreitung) {
 		int min = Integer.MAX_VALUE;
 
+		int maxRechts = 0;
 		ArrayList<ResCanvas> durchlaufenListe = Zeitueberschreitung;
 		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
-		ResEinheit[][] koordinatenSystem = null;
 		for (int y = (ResCanvas.koorHoehe - maxBegrenzung); y < ResCanvas.koorHoehe; y++) {
 
 			for (ResCanvas canvas : durchlaufenListe) {
-				koordinatenSystem = canvas.getKoordinatenSystem();
+				Arbeitspaket letztesAp = canvas.getArbeitspaketListe().get(canvas.getArbeitspaketListe().size() - 1);
+				Teilpaket letztesTp = letztesAp.getTeilpaketListe().get(letztesAp.getTeilpaketListe().size() - 1);
+				ResEinheit letzteRes = letztesTp.getResEinheitListe().get(letztesTp.getResEinheitListe().size() - 1);
+
 				int counter = 0;
 				for (Arbeitspaket arbeitspaket : canvas.getArbeitspaketListe()) {
 					for (Teilpaket teilpaket : arbeitspaket.getTeilpaketListe()) {
@@ -302,8 +306,17 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 					optimalListe.clear();
 					optimalListe.add(canvas);
 					min = counter;
+					maxRechts = letzteRes.getPosition().getxKoordinate();
 				} else if (counter == min) {
-					optimalListe.add(canvas);
+
+					if (maxRechts > letzteRes.getPosition().getxKoordinate()) {
+						optimalListe.clear();
+						optimalListe.add(canvas);
+						maxRechts = letzteRes.getPosition().getxKoordinate();
+					} else if (maxRechts == letzteRes.getPosition().getxKoordinate()) {
+						optimalListe.add(canvas);
+					}
+
 				}
 			}
 			durchlaufenListe.clear();
@@ -452,6 +465,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		vorbereitungSimulation.entferneArbeitspaket(zuVerschiebenAp);
 
+		ArrayList<Arbeitspaket> arbeitspaketListe = vorbereitungSimulation.getArbeitspaketListe();
+
 		if (verschieben == VerschiebeRichtung.RECHTS) {
 			// Paket ist zu früh | FAZ verletzt
 
@@ -460,8 +475,6 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			Vektor2i position = this.sucheDarunterLiegendePakete(vorbereitungSimulation.getKoordinatenSystem(),
 					unterhalbStack, zuVerschiebenAp.getTeilpaketListe().get(0));
 			ArrayList<Arbeitspaket> rechtsListe = new ArrayList<Arbeitspaket>();
-
-			ArrayList<Arbeitspaket> arbeitspaketListe = vorbereitungSimulation.getArbeitspaketListe();
 
 			if (unterhalbStack.isEmpty()) {
 				// 1. Szenario: nichts liegt unter Z
@@ -600,71 +613,47 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			}
 
 			vorbereitungSimulation.herunterfallenAlleArbeitspaketeAußerEines(zuVerschiebenAp);
-			simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp,
-					simLoesungenResCanvas);
-
-		} else if (verschieben == VerschiebeRichtung.LINKS) {
-			// Paket ist zu spät | FEZ verletzt
-
-			/*
-			 * Erklärung des folgenden Algorithmus
-			 *
-			 * D ist zu spät. Das heißt D muss nach Möglichkeit nach links verschoben
-			 * werden. Ist dies nicht möglich. Belasse D wo es ist.
-			 *
-			 * ...........................................
-			 * .........ZZZ.........DDDDD.................
-			 * AAAAAA...ZZZ.........DDDDD.................
-			 * AAAAAABBBBBBB........DDDDDEEEEEE...........
-			 * AAAAAABBBBBBBCCCCCCCCDDDDDEEEEEE...........
-			 * AAAAAABBBBBBBCCCCCCCCDDDDDEEEEEE...........
-			 *
-			 * 1. Kopie des ResCanvas anlegen (Ausgangssituation)
-			 *
-			 * 2. Simulation starten: D rauslöschen
-			 *
-			 * In eigenen Kopien wird versucht
-			 *
-			 * D von FAZ bis SEZ versuchen einzufügen und obergrenze prüfen. Wenn obergrenze
-			 * inordnung wird eine Kopie der Simulation einer Liste hinzugefügt. Ist die
-			 * Simulation beendet, müssen diese Kopien danach überprüft werden, ob die
-			 * Position eine möglichst gerine Anzahl an parallen Arbeiten Mitarbeitern
-			 * gewährleistet.
-			 *
-			 * Wird keine Möglichkeit gefunden, D einzufügen, wird mit der Kopie der
-			 * Ausgangssituation weitergearbeitet. Mit anderen Worten D wird dort belassen,
-			 * wo es ursprünglich lag.
-			 *
-			 */
-
-			simuliere(resCanvas, ausgangssituationResCanvs, vorbereitungSimulation, zuVerschiebenAp,
-					simLoesungenResCanvas);
 
 		}
+
+		boolean loesungGefunden = simuliere(resCanvas, vorbereitungSimulation, zuVerschiebenAp, simLoesungenResCanvas,
+				zuVerschiebenAp.getFaz(), zuVerschiebenAp.getSez());
+
+		if (!loesungGefunden) {
+
+			int grenzeRechts = arbeitspaketListe.get(arbeitspaketListe.size() - 1).getSez();
+			simuliere(resCanvas, vorbereitungSimulation, zuVerschiebenAp, simLoesungenResCanvas,
+					zuVerschiebenAp.getSez(), grenzeRechts);
+
+			simLoesungenResCanvas.add(ausgangssituationResCanvs);
+		}
+
 	}
 
 	/**
 	 * Simuliert für das übergebene Arbeitspaket zuVerschiebenPaket mehre Szenarien
-	 * in dem es Versucht das Paket zwischen FAZ und SEZ einzusetzen. Für jedes
+	 * in dem es Versucht das Paket zwischen start und ende einzusetzen. Für jedes
 	 * Szenario wird eine Kopie des ResCanvas angelegt. Diese Kopien werden bewertet
 	 * und das optimalste Ergebnis wird als unser aktuelles ResCanvas gesetzt. Das
 	 * optimale Ergebnis ist das KoordinatenSystem mit der geringsten Anzahl an
 	 * parallel arbeitenden Mitarbeitern.
 	 *
-	 *
 	 * @param resCanvas
-	 * @param ausgangssituationResCanvs
 	 * @param vorbereitungSimulation
 	 * @param zuVerschiebenAp
+	 * @param simLoesungenResCanvas
+	 * @param start
+	 * @param ende
+	 * @return
 	 */
-	private void simuliere(ResCanvas resCanvas, ResCanvas ausgangssituationResCanvs, ResCanvas vorbereitungSimulation,
-			Arbeitspaket zuVerschiebenAp, ArrayList<ResCanvas> simLoesungenResCanvas) {
+	private boolean simuliere(ResCanvas resCanvas, ResCanvas vorbereitungSimulation, Arbeitspaket zuVerschiebenAp,
+			ArrayList<ResCanvas> simLoesungenResCanvas, int start, int ende) {
 
 		ResCanvas simulation = null;
 		Arbeitspaket copyZuVerschiebenAP = null;
 		boolean loesungGefunden = false;
 
-		for (int x = zuVerschiebenAp.getFaz() - 1; x < zuVerschiebenAp.getSaz(); x++) {
+		for (int x = start - 1; x < ende; x++) {
 
 			simulation = vorbereitungSimulation.copyResCanvas(zuVerschiebenAp);
 
@@ -699,9 +688,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		}
 
-		if (!loesungGefunden) {
-			simLoesungenResCanvas.add(ausgangssituationResCanvs);
-		}
+		return loesungGefunden;
 
 	}
 
