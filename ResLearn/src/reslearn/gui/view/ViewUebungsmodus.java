@@ -29,7 +29,7 @@ public class ViewUebungsmodus extends Application {
 	private static ViewUebungsmodus view;
 	private Stage stage;
 	private ContextMenu menu;
-	private MenuItem ap;
+	private MenuItem apTeilen;
 	private MenuItem reset;
 	private Pane pane;
 	private ControllerCanvasUebungsmodus controllerCanvas;
@@ -96,11 +96,11 @@ public class ViewUebungsmodus extends Application {
 		controllerCanvas.erstelleLegende(arbeitspaketeMitFarbe);
 
 		menu = new ContextMenu();
-		ap = new MenuItem("Teile Arbeitspaket");
+		apTeilen = new MenuItem("Teile Arbeitspaket");
 		reset = new MenuItem("Zurücksetzen");
 		menu.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 
-		menu.getItems().addAll(ap, reset);
+		menu.getItems().addAll(apTeilen, reset);
 
 		for (Rectangle[] rectangleZeile : weisseFelder) {
 			for (Rectangle rectangle : rectangleZeile) {
@@ -123,7 +123,7 @@ public class ViewUebungsmodus extends Application {
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getValidierenButton(), controllerCanvas.getButtonKapazitaetstreuModus(),
 				controllerCanvas.getButtonTermintreuModus(), controllerCanvas.getKonfigModus(), controllerCanvas.getKorrekturvorschlaege(),
-				controllerCanvas.getFehlermeldung());
+				controllerCanvas.getFehlermeldung(), controllerCanvas.getLoesungsButton());
 
 		for (int i = 0; i < 26; i++) {
 			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
@@ -170,8 +170,8 @@ public class ViewUebungsmodus extends Application {
 		return menu;
 	}
 
-	public MenuItem getAp() {
-		return ap;
+	public MenuItem getApTeilen() {
+		return apTeilen;
 	}
 
 	public MenuItem getReset() {
