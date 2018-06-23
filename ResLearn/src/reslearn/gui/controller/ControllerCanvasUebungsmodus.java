@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -224,10 +226,10 @@ public class ControllerCanvasUebungsmodus {
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
 						teilpaketRahmenZuordnung.get(teilpaketClicked)
-						.setX(teilpaketClicked.getResEinheitListe()
-								.get(teilpaketClicked.getVorgangsdauer()
-										* (teilpaketClicked.getMitarbeiteranzahl() - 1))
-								.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite);
+								.setX(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite);
 					}
 				}
 			}
@@ -254,10 +256,10 @@ public class ControllerCanvasUebungsmodus {
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
 						teilpaketRahmenZuordnung.get(teilpaketClicked)
-						.setY(teilpaketClicked.getResEinheitListe()
-								.get(teilpaketClicked.getVorgangsdauer()
-										* (teilpaketClicked.getMitarbeiteranzahl() - 1))
-								.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge);
+								.setY(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge);
 					}
 				}
 			}
@@ -362,10 +364,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -374,7 +376,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 		}
 	}
 
@@ -395,6 +397,7 @@ public class ControllerCanvasUebungsmodus {
 
 		@Override
 		public void handle(ActionEvent event) {
+			validierenButton.setDisable(true);
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
 
@@ -428,9 +431,17 @@ public class ControllerCanvasUebungsmodus {
 					fehlerMeldung.setStyle("-fx-text-fill: red;");
 				}
 			}
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					validierenButton.setDisable(false);
+
+				}
+			}, 2000);
 		}
 	};
-
 
 	private void erstelleLoesungsButton() {
 		loesungsButton = new Button("Lösung anzeigen");
@@ -448,7 +459,6 @@ public class ControllerCanvasUebungsmodus {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 
 		}
 	};
@@ -715,7 +725,7 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
 		kapazitaetstreuModus
-		.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -862,7 +872,7 @@ public class ControllerCanvasUebungsmodus {
 			// Kapazitätsgrenzen-Konfig Positionen festlegen
 			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
 			textFieldMaxPersonen
-			.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
 			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
 
 			// Dauer veränderbar-Konfig Position festlegen

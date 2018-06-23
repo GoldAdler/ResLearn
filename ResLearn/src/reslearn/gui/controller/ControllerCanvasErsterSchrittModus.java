@@ -1,10 +1,13 @@
 package reslearn.gui.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -13,6 +16,7 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -36,6 +40,7 @@ import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
 import reslearn.gui.tableUtils.PairKeyFactory;
 import reslearn.gui.tableUtils.PairValueFactory;
+import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -56,6 +61,7 @@ public class ControllerCanvasErsterSchrittModus {
 	private Label korrekturvorschlaege;
 	private TextArea fehlerMeldung;
 	private Button validierenButton;
+	private Button uebungsmodusButton;
 	private Rectangle rectangle;
 	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
 	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
@@ -66,6 +72,7 @@ public class ControllerCanvasErsterSchrittModus {
 		erstelleTabelle();
 		erstelleTabelleArbeitspakete();
 		erstelleValidierenButton();
+		erstelleUebungsmodusButton();
 		erstelleKorrekturvorschlaege();
 		leereFehlermeldungErstellen();
 		erstelleButtons();
@@ -250,6 +257,7 @@ public class ControllerCanvasErsterSchrittModus {
 
 		@Override
 		public void handle(ActionEvent event) {
+			validierenButton.setDisable(true);
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
 
@@ -264,6 +272,38 @@ public class ControllerCanvasErsterSchrittModus {
 			} else {
 				fehlerMeldung.setStyle("-fx-text-fill: red;");
 			}
+
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					validierenButton.setDisable(false);
+
+				}
+			}, 2000);
+
+		}
+	};
+
+	public void erstelleUebungsmodusButton() {
+		uebungsmodusButton = new Button("Weiter zum Übungsmodus");
+		uebungsmodusButton.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		uebungsmodusButton.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 7 * DisplayCanvas.resFeldLaenge);
+		uebungsmodusButton.setOnAction(OnButtonUebungAnzeigenEventHandler);
+	}
+
+	private EventHandler<ActionEvent> OnButtonUebungAnzeigenEventHandler = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			try {
+				ViewUebungsmodus.getInstance().initializeCanvasView(ControllerUebungsmodus.letztesArbeitspaket);
+				((Node) (event.getSource())).getScene().getWindow().hide();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 	};
 
@@ -580,6 +620,10 @@ public class ControllerCanvasErsterSchrittModus {
 
 	public Button getValidierenButton() {
 		return validierenButton;
+	}
+
+	public Button getUebungsmodusButton() {
+		return uebungsmodusButton;
 	}
 
 	public ToggleGroup getModusToggleGroup() {

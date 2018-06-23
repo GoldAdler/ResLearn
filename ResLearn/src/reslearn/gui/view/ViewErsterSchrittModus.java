@@ -73,7 +73,8 @@ public class ViewErsterSchrittModus extends Application {
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
 
-		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas).getKoordinatenSystem();
+		ResEinheit[][] koordinatenSystem = AlgoErsteSchritt.getInstance().algoDurchfuehren(resCanvas)
+				.getKoordinatenSystem();
 		Diagramm diagramm = new Diagramm();
 		Rectangle[][] weisseFelder = diagramm.zeichneCanvas(canvas);
 		ResFeld[][] teilpakete = diagramm.zeichneTeilpaketeOben(koordinatenSystem, resCanvas);
@@ -119,9 +120,10 @@ public class ViewErsterSchrittModus extends Application {
 
 		rahmenErstellen();
 
-		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),controllerCanvas.getTabelleArbeitspakete(),
-				controllerCanvas.getLegende(), controllerCanvas.getValidierenButton(), controllerCanvas.getKorrekturvorschlaege(),
-				controllerCanvas.getFehlermeldung());
+		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
+				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
+				controllerCanvas.getValidierenButton(), controllerCanvas.getUebungsmodusButton(),
+				controllerCanvas.getKorrekturvorschlaege(), controllerCanvas.getFehlermeldung());
 
 		Scene unterszene = new Scene(group);
 		((Pane) hauptszene.getRoot()).getChildren().add(unterszene.getRoot());
@@ -137,7 +139,7 @@ public class ViewErsterSchrittModus extends Application {
 	 * erstellt wurden
 	 */
 	public void rahmenErstellen() {
-		for(Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
+		for (Rectangle rahmen : controllerCanvas.erstelleRahmen()) {
 			pane.getChildren().add(rahmen);
 		}
 	}
@@ -147,7 +149,7 @@ public class ViewErsterSchrittModus extends Application {
 	 * hinzugefügt wurden
 	 */
 	public void rahmenLoeschen(ArrayList<Rectangle> rahmenListe) {
-		for(Rectangle rahmen : rahmenListe) {
+		for (Rectangle rahmen : rahmenListe) {
 			pane.getChildren().remove(rahmen);
 		}
 	}
