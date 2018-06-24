@@ -196,7 +196,8 @@ public class ControllerCanvasLoesungsmodus {
 			if (historieNummer == 0) {
 				schrittZurueck.setDisable(true);
 			}
-			extrahiereArbeitspakete(historieNummer);
+			// extrahiereArbeitspakete(historieNummer); wird bei der Rahmenerstellung
+			// durchgeführt
 			ViewLoesungsmodus.getInstance().rahmenLoeschen();
 			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
@@ -210,7 +211,8 @@ public class ControllerCanvasLoesungsmodus {
 			if (historieNummer + 1 == historieListe.size()) {
 				schrittVor.setDisable(true);
 			}
-			extrahiereArbeitspakete(historieNummer);
+			// extrahiereArbeitspakete(historieNummer); wird bei der Rahmenerstellung
+			// durchgeführt
 			ViewLoesungsmodus.getInstance().rahmenLoeschen();
 			ViewLoesungsmodus.getInstance().rahmenErstellen();
 		}
@@ -250,7 +252,10 @@ public class ControllerCanvasLoesungsmodus {
 		System.out.println("Maxparallel: " + AufgabeLadenImport.maxPersonenParallel);
 		historieListe = AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
 				.algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
-		extrahiereArbeitspakete(historieNummer);
+		// extrahiereArbeitspakete(historieNummer); wird bei der Rahmenerstellung
+		// durchgeführt
+		ViewLoesungsmodus.getInstance().rahmenLoeschen();
+		ViewLoesungsmodus.getInstance().rahmenErstellen();
 
 		modusKonfiguration();
 	}
@@ -276,7 +281,10 @@ public class ControllerCanvasLoesungsmodus {
 			copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
 
 			historieListe = AlgoTermintreu.getInstance().algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
-			extrahiereArbeitspakete(historieNummer);
+			// extrahiereArbeitspakete(historieNummer); wird bei der Rahmenerstellung
+			// durchgeführt
+			ViewLoesungsmodus.getInstance().rahmenLoeschen();
+			ViewLoesungsmodus.getInstance().rahmenErstellen();
 
 			modusKonfiguration();
 		}
@@ -352,7 +360,7 @@ public class ControllerCanvasLoesungsmodus {
 	 *
 	 * @param historieNummer
 	 */
-	private void extrahiereArbeitspakete(int historieNummer) {
+	private ArrayList<Arbeitspaket> extrahiereArbeitspakete(int historieNummer) {
 		ResEinheit[][] koordinatenSystemNeu = historieListe.get(historieNummer);
 		ArrayList<Arbeitspaket> arbeitspaketeAbgearbeitet = new ArrayList<Arbeitspaket>();
 
@@ -373,6 +381,7 @@ public class ControllerCanvasLoesungsmodus {
 				}
 			}
 		}
+		return arbeitspaketeAbgearbeitet;
 	}
 
 	/**
@@ -711,7 +720,7 @@ public class ControllerCanvasLoesungsmodus {
 	public ArrayList<Rectangle> erstelleRahmen() {
 		rahmenListe.clear();
 
-		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
+		for (Arbeitspaket ap : extrahiereArbeitspakete(historieNummer)) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
 				ResEinheit reseinheit = tp.getResEinheitListe()
 						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));

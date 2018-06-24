@@ -1,10 +1,13 @@
 package reslearn.gui.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -41,6 +44,7 @@ import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
 import reslearn.gui.tableUtils.PairKeyFactory;
 import reslearn.gui.tableUtils.PairValueFactory;
+import reslearn.gui.view.ViewLoesungsmodus;
 import reslearn.gui.view.ViewUebungsmodus;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
@@ -61,6 +65,7 @@ public class ControllerCanvasUebungsmodus {
 	private ResFeld rect;
 	private ColorPicker colorPicker;
 	private Button validierenButton;
+	private Button loesungsButton;
 	private TextArea fehlerMeldung;
 	private Button buttonMaxPersonenMinus;
 	private Button buttonMaxPersonenPlus;
@@ -70,8 +75,27 @@ public class ControllerCanvasUebungsmodus {
 	private Line[] alleLinien = new Line[DisplayCanvas.resFeldSpalte + 1];
 	private Label korrekturvorschlaege;
 	private Rectangle rectangle;
+
 	private ArrayList<Rectangle> rahmenListe = new ArrayList<>();
 	private HashMap<Teilpaket, Rectangle> teilpaketRahmenZuordnung = new HashMap<Teilpaket, Rectangle>();
+
+	private Pane legende = new Pane();
+	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
+
+	private TableView<Pair<String, Object>> table = new TableView<>();
+	private ObservableList<Pair<String, Object>> data;
+
+	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
+	private ObservableList<Arbeitspaket> dataPakete;
+
+	private Pane konfigModus = new Pane();
+	private RadioButton termintreuModus = new RadioButton();
+	private RadioButton kapazitaetstreuModus = new RadioButton();
+	private final ToggleGroup modusToggleGroup = new ToggleGroup();
+
+	// Konfigurationsmöglichkeiten im termintreuen Verfahren
+	private Label dauerLabel = new Label();
+	private CheckBox dauerCheckBox = new CheckBox();
 
 	public ControllerCanvasUebungsmodus(ResCanvas resCanvas, Diagramm diagramm) {
 		this.resCanvas = resCanvas;
@@ -83,14 +107,15 @@ public class ControllerCanvasUebungsmodus {
 		erstelleButtons();
 		erstelleGrenzLinie();
 		erstelleKorrekturvorschlaege();
-		leereFehlermeldungErstellen();
+		erstelleLeereFehlermeldung();
+		erstelleLoesungsButton();
 	}
 
 	public void makeDraggable(ResFeld feld) {
 		feld.setOnMousePressed(OnMousePressedEventHandler);
 		feld.setOnMouseDragged(OnMouseDraggedEventHandler);
 		feld.setOnContextMenuRequested(OnMouseSecondaryEventHandler);
-		ViewUebungsmodus.getInstance().getAp().setOnAction(OnMenuItemApEventHandler);
+		ViewUebungsmodus.getInstance().getApTeilen().setOnAction(OnMenuItemApTeilenEventHandler);
 		ViewUebungsmodus.getInstance().getReset().setOnAction(OnMenuItemResetEventHandler);
 	}
 
@@ -265,10 +290,10 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> OnMenuItemApEventHandler = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnMenuItemApTeilenEventHandler = new EventHandler<ActionEvent>() {
+
 		@Override
 		public void handle(ActionEvent e) {
-
 			@SuppressWarnings("unused")
 			Bearbeitungsfenster bearbeitungsFenster = new Bearbeitungsfenster(rect);
 		}
@@ -332,7 +357,7 @@ public class ControllerCanvasUebungsmodus {
 	/**
 	 * Erstellung der Grenzlinie für Anzahl Mitarbeiter parallel
 	 */
-	public void erstelleGrenzLinie() {
+	private void erstelleGrenzLinie() {
 
 		if (kapazitaetstreuModus.isSelected()) {
 			for (int i = 0; i < 26; i++) {
@@ -358,20 +383,21 @@ public class ControllerCanvasUebungsmodus {
 	/**
 	 * Erstellung des Validieren-Buttons
 	 */
-	public void erstelleValidierenButton() {
+	private void erstelleValidierenButton() {
 		validierenButton = new Button("Validieren");
 		validierenButton.setLayoutX(
 				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		validierenButton.setLayoutY(DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge
 				- DisplayCanvas.abstandX - DisplayCanvas.spaltX);
-		validierenButton.setOnAction(ValidierenAction);
+		validierenButton.setOnAction(OnButtonValidierenEventHandler);
 		// validierenButton.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 	}
 
-	private EventHandler<ActionEvent> ValidierenAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnButtonValidierenEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
+			validierenButton.setDisable(true);
 			Validierung vali = new Validierung(diagramm.getResFeldArray());
 			String ausgabe = "";
 
@@ -405,13 +431,42 @@ public class ControllerCanvasUebungsmodus {
 					fehlerMeldung.setStyle("-fx-text-fill: red;");
 				}
 			}
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					validierenButton.setDisable(false);
+
+				}
+			}, 2000);
+		}
+	};
+
+	private void erstelleLoesungsButton() {
+		loesungsButton = new Button("Lösung anzeigen");
+		loesungsButton.setLayoutX(DisplayCanvas.tabelleLayoutX);
+		loesungsButton.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 14 * DisplayCanvas.resFeldLaenge);
+		loesungsButton.setOnAction(OnButtonLoesungAnzeigenEventHandler);
+	}
+
+	private EventHandler<ActionEvent> OnButtonLoesungAnzeigenEventHandler = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			try {
+				ViewLoesungsmodus.getInstance().initializeCanvasView(ControllerUebungsmodus.letztesArbeitspaket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 	};
 
 	/**
 	 * Erzeugung der linken Fehlermeldung
 	 */
-	public void leereFehlermeldungErstellen() {
+	private void erstelleLeereFehlermeldung() {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
@@ -426,7 +481,7 @@ public class ControllerCanvasUebungsmodus {
 	/**
 	 * Erzeugung der Korrekturvorschläge in der Fehlermeldung
 	 */
-	public void erstelleKorrekturvorschlaege() {
+	private void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
 		korrekturvorschlaege.setLayoutX(
 				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
@@ -437,9 +492,6 @@ public class ControllerCanvasUebungsmodus {
 		korrekturvorschlaege.setFont(new Font("Arial", DisplayCanvas.schriftGroesse * 1.5));
 		korrekturvorschlaege.setStyle("-fx-font-weight: bold");
 	}
-
-	private Pane legende = new Pane();
-	private ObservableMap<Arbeitspaket, Color> colorObservableMap = FXCollections.observableHashMap();
 
 	/**
 	 * Erstellung der Legende für die einzelnen Arbeitspakete mit den entsprechenden
@@ -486,9 +538,6 @@ public class ControllerCanvasUebungsmodus {
 
 		legende.setPrefHeight((DisplayCanvas.legendeHoehe * 1.3) + (yCounter * 12));
 	}
-
-	private TableView<Pair<String, Object>> table = new TableView<>();
-	private ObservableList<Pair<String, Object>> data;
 
 	/**
 	 * Befüllen der Informationstabelle bei Klick auf ein Arbeitspaket mit den
@@ -596,9 +645,6 @@ public class ControllerCanvasUebungsmodus {
 		});
 	}
 
-	private TableView<Arbeitspaket> tabelleArbeitspakete = new TableView<>();
-	private ObservableList<Arbeitspaket> dataPakete;
-
 	/**
 	 * Erzeugung der Übersichtstabelle aller Arbeitspakete
 	 */
@@ -666,15 +712,6 @@ public class ControllerCanvasUebungsmodus {
 		tabelleArbeitspakete.scrollTo(ap);
 	}
 
-	private Pane konfigModus = new Pane();
-	private RadioButton termintreuModus = new RadioButton();
-	private RadioButton kapazitaetstreuModus = new RadioButton();
-	private final ToggleGroup modusToggleGroup = new ToggleGroup();
-
-	// Konfigurationsmöglichkeiten im termintreuen Verfahren
-	private Label dauerLabel = new Label();
-	private CheckBox dauerCheckBox = new CheckBox();
-
 	/**
 	 * Erzeugung der RadioButtons Kapazitätstreu und Termintreu
 	 */
@@ -704,7 +741,7 @@ public class ControllerCanvasUebungsmodus {
 		buttonMaxPersonenMinus = new Button("-");
 		buttonMaxPersonenMinus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
 		buttonMaxPersonenMinus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		buttonMaxPersonenMinus.setOnAction(handleButtonMaxPersonenMinusAction);
+		buttonMaxPersonenMinus.setOnAction(OnButtonMaxPersonenMinusEventHandler);
 
 		textFieldMaxPersonen = new TextField(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
 		textFieldMaxPersonen.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
@@ -715,14 +752,14 @@ public class ControllerCanvasUebungsmodus {
 		buttonMaxPersonenPlus = new Button("+");
 		buttonMaxPersonenPlus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		buttonMaxPersonenPlus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
-		buttonMaxPersonenPlus.setOnAction(handleButtonMaxPersonenPlusAction);
+		buttonMaxPersonenPlus.setOnAction(OnButtonMaxPersonenPlusEventHandler);
 
 		dauerLabel.setText("Vorgangsdauer änderbar?");
 		dauerLabel.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		dauerLabel.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite + DisplayCanvas.resFeldBreite);
 
 		dauerCheckBox.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		dauerCheckBox.setOnAction(handleCheckBoxDauerAction);
+		dauerCheckBox.setOnAction(OnCheckBoxDauerEventHandler);
 
 		konfigModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
 		konfigModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
@@ -762,7 +799,7 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> handleButtonMaxPersonenMinusAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnButtonMaxPersonenMinusEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -791,7 +828,7 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> handleButtonMaxPersonenPlusAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnButtonMaxPersonenPlusEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -812,8 +849,8 @@ public class ControllerCanvasUebungsmodus {
 
 		}
 	};
-	
-	private EventHandler<ActionEvent> handleCheckBoxDauerAction = new EventHandler<ActionEvent>() {
+
+	private EventHandler<ActionEvent> OnCheckBoxDauerEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -958,5 +995,9 @@ public class ControllerCanvasUebungsmodus {
 
 	public Pane getKonfigModus() {
 		return konfigModus;
+	}
+
+	public Button getLoesungsButton() {
+		return loesungsButton;
 	}
 }
