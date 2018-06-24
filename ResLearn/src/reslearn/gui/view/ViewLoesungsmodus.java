@@ -129,7 +129,6 @@ public class ViewLoesungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
-				controllerCanvas.getButtonKapazitaetstreuModus(), controllerCanvas.getButtonTermintreuModus(),
 				//				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getButtonMaxPersonenPlus(),
 				//				controllerCanvas.getMaxPersonen(), controllerCanvas.getTextFieldMaxPersonen(),
 				controllerCanvas.getKonfigModus());

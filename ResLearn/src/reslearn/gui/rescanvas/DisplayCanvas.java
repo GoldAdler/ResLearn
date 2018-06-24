@@ -45,7 +45,7 @@ public final class DisplayCanvas {
 	public static final int tabelleLayoutY = 4 * resFeldBreite;
 
 	public static final int buttonLoesungsmodusLayoutX = resFeldBreite;
-	public static final int buttonLoesungsmodusLayoutY = tabelleLayoutY + tabelleLaenge + resFeldBreite;
+	public static final int buttonLoesungsmodusLayoutY = tabelleLayoutY + tabelleLaenge + 2 * resFeldBreite;
 	public static final int buttonLoesungsmodusBreite = (tabelleBreite - resFeldBreite) / 2;
 
 	public static final int tabelleArbeitspaketBreite = canvasBreite + spaltX;
@@ -74,17 +74,24 @@ public final class DisplayCanvas {
 	public static final int buttonXStart = abstandButtonX;
 	public static final int buttonYStart = hoeheUeberschrift * 2;
 
+	public static final int breiteFehlermeldung = (int) (bounds.getWidth() - canvasBreite - canvasStartpunktX- abstandX * 2);
+	public static final int hoeheFehlermeldung = (int) (canvasLaenge + tabelleArbeitspaketLaenge - resFeldBreite * 1.5 - DisplayCanvas.abstandX - DisplayCanvas.spaltX * 2);
+	public static final int StartpunktPaneUebungAuswaehlen = resFeldBreite * 3;
+
 	public static final int legendeHoehe = (int) (faktor * 43);
+	public static final int legendeBreite = breiteFehlermeldung;
 	public static final int legendeKreisRadius = (int) (faktor * 15);
 	public static final int legendeKreisStartpunktX = (int) (faktor * 20);
 	public static final int legendeKreisStartpunktY = (int) (faktor * 22);
-
+	public static final int legendeStartpunktX = resFeldBreite;
+	public static final int legendeStartpunktY = buttonLoesungsmodusLayoutY + 8 * resFeldLaenge;
 	public static final int legendeAbstand = (int) (faktor * 85);
+	public static final int legendeKreisX = legendeBreite / 7 + (legendeBreite / 3) ;
+	public static final int legendeKreisY = legendeHoehe / 4 + (legendeHoehe / 2);
 
-	public static final int breiteFehlermeldung = (int) (bounds.getWidth() - canvasBreite - canvasStartpunktX
-			- abstandX * 2);
-	public static final int hoeheFehlermeldung = (int) (canvasLaenge + tabelleArbeitspaketLaenge - resFeldBreite * 1.5
-			- DisplayCanvas.abstandX - DisplayCanvas.spaltX * 2);
-	public static final int StartpunktPaneUebungAuswaehlen = resFeldBreite * 3;
+	public static final int konfigModusStartpunktX = buttonLoesungsmodusLayoutX;
+	public static final int konfigModusStartpunktY = tabelleLayoutY + tabelleLaenge + resFeldLaenge;
+	public static final int konfigModusBreite = breiteFehlermeldung;
+	public static final int konfigModusHoehe = resFeldLaenge * 7;
 
 }

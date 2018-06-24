@@ -162,9 +162,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -290,7 +290,7 @@ public class ControllerCanvasLoesungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> handleButtonMaxPersonenMinusAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnButtonMaxPersonenMinusEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -319,7 +319,7 @@ public class ControllerCanvasLoesungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> handleButtonMaxPersonenPlusAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnButtonMaxPersonenPlusEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -341,14 +341,14 @@ public class ControllerCanvasLoesungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> handleCheckBoxDauerAction = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> OnCheckBoxDauerEventHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
 			// TODO: Richtigen Algorithmus auswählen
 			boolean vorgangsdauerVeraenderbar = dauerCheckBox.isSelected() ? true : false;
 			AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
-					.setVorgangsdauerVeraenderbar(vorgangsdauerVeraenderbar);
+			.setVorgangsdauerVeraenderbar(vorgangsdauerVeraenderbar);
 			kapazitaetstreuReset();
 		}
 	};
@@ -401,10 +401,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-										* DisplayCanvas.resFeldBreite);
+								* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-										* DisplayCanvas.resFeldLaenge);
+								* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -424,7 +424,7 @@ public class ControllerCanvasLoesungsmodus {
 		int yCounter = 1;
 
 		legende.setLayoutX(DisplayCanvas.tabelleLayoutX);
-		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 8 * DisplayCanvas.resFeldLaenge);
+		legende.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + 10 * DisplayCanvas.resFeldLaenge);
 		legende.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		legende.setStyle("-fx-background-radius: 30;");
 		legende.setStyle("-fx-background-color: #c0c0c0;");
@@ -553,34 +553,39 @@ public class ControllerCanvasLoesungsmodus {
 		schrittVor.setOnMouseClicked(OnButtonVorPressedEventHandler);
 
 		termintreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
-		termintreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		termintreuModus.setLayoutY(DisplayCanvas.resFeldBreite);
 		termintreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		termintreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		termintreuModus.setText("Termintreu");
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
-		kapazitaetstreuModus
-				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
-		kapazitaetstreuModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 2);
+		kapazitaetstreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus.setLayoutY(DisplayCanvas.resFeldBreite);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		kapazitaetstreuModus.setText("Kapazitätstreu");
-		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
 		kapazitaetstreuModus.setToggleGroup(modusToggleGroup);
+		kapazitaetstreuModus.setOnMouseClicked(OnButtonKapazitaetstreuPressedEventHandler);
 		kapazitaetstreuModus.setSelected(true);
 
 		maxPersonen = new Label("Kapazitätsgrenze:");
 		maxPersonen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		maxPersonen.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite + DisplayCanvas.resFeldBreite);
+		maxPersonen.setLayoutX(DisplayCanvas.resFeldBreite);
+		maxPersonen.setLayoutY(DisplayCanvas.resFeldLaenge * 3);
 
 		buttonMaxPersonenMinus = new Button("-");
 		buttonMaxPersonenMinus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
 		buttonMaxPersonenMinus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		buttonMaxPersonenMinus.setOnAction(handleButtonMaxPersonenMinusAction);
+		buttonMaxPersonenMinus.setLayoutX(DisplayCanvas.resFeldBreite);
+		buttonMaxPersonenMinus.setLayoutY(DisplayCanvas.resFeldLaenge * 3);
+		buttonMaxPersonenMinus.setOnAction(OnButtonMaxPersonenMinusEventHandler);
 
 		textFieldMaxPersonen = new TextField(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
 		textFieldMaxPersonen.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
+		textFieldMaxPersonen.setLayoutX(DisplayCanvas.resFeldBreite);
+		textFieldMaxPersonen.setLayoutY(DisplayCanvas.resFeldLaenge * 3);
 		textFieldMaxPersonen.setAlignment(Pos.CENTER);
 		textFieldMaxPersonen.setEditable(false);
 		textFieldMaxPersonen.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -588,19 +593,24 @@ public class ControllerCanvasLoesungsmodus {
 		buttonMaxPersonenPlus = new Button("+");
 		buttonMaxPersonenPlus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		buttonMaxPersonenPlus.setPrefWidth(DisplayCanvas.resFeldBreite * 1.5);
-		buttonMaxPersonenPlus.setOnAction(handleButtonMaxPersonenPlusAction);
+		buttonMaxPersonenPlus.setLayoutX(DisplayCanvas.resFeldBreite);
+		buttonMaxPersonenPlus.setLayoutY(DisplayCanvas.resFeldLaenge * 3);
+		buttonMaxPersonenPlus.setOnAction(OnButtonMaxPersonenPlusEventHandler);
 
 		dauerLabel.setText("Vorgangsdauer änderbar?");
 		dauerLabel.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		dauerLabel.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite + DisplayCanvas.resFeldBreite);
+		dauerLabel.setLayoutX(DisplayCanvas.resFeldBreite);
 
 		dauerCheckBox.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
-		dauerCheckBox.setOnAction(handleCheckBoxDauerAction);
+		dauerCheckBox.setLayoutX(DisplayCanvas.resFeldBreite);
+		dauerCheckBox.setOnAction(OnCheckBoxDauerEventHandler);
 
-		konfigModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX);
-		konfigModus.setLayoutY(DisplayCanvas.buttonLoesungsmodusLayoutY + DisplayCanvas.resFeldBreite * 4);
-		konfigModus.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
-		konfigModus.setPrefHeight(DisplayCanvas.resFeldLaenge * 4);
+		konfigModus.setLayoutX(DisplayCanvas.konfigModusStartpunktX);
+		konfigModus.setLayoutY(DisplayCanvas.konfigModusStartpunktY + 3 * DisplayCanvas.resFeldBreite);
+		konfigModus.setPrefWidth(DisplayCanvas.konfigModusBreite);
+		konfigModus.setPrefHeight(DisplayCanvas.konfigModusHoehe);
+		konfigModus.setStyle("-fx-border-color: black");
 
 		modusKonfiguration();
 	}
@@ -615,10 +625,10 @@ public class ControllerCanvasLoesungsmodus {
 				kapazitaetsgrenzeLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				kapazitaetsgrenzeLinien[i].setStroke(Color.RED);
 
@@ -627,7 +637,7 @@ public class ControllerCanvasLoesungsmodus {
 				}
 			}
 			ViewLoesungsmodus.getInstance().getPane().getChildren()
-					.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
+			.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
 		}
 
 	}
@@ -754,19 +764,19 @@ public class ControllerCanvasLoesungsmodus {
 
 		// Pane beim ersten Aufruf befüllen
 		if (konfigModus.getChildren().size() == 0) {
-			konfigModus.getChildren().addAll(maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
+			konfigModus.getChildren().addAll(kapazitaetstreuModus, termintreuModus, maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
 					buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
 
 			// Kapazitätsgrenzen-Konfig Positionen festlegen
 			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
 			textFieldMaxPersonen
-					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+			.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
 			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
 
 			// Dauer veränderbar-Konfig Position festlegen
-			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 2);
+			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 5);
 			dauerCheckBox.setLayoutX(dauerLabel.getLayoutX() + dauerLabel.getPrefWidth());
-			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 2);
+			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 25);
 		}
 
 		// Bei nur einem Element in der Historienliste ist nichts zum weiter
