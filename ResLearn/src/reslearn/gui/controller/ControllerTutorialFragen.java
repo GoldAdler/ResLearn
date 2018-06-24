@@ -82,7 +82,7 @@ public class ControllerTutorialFragen extends Controller {
 		label = new Label();
 		labelErgebnis = new Label();
 
-		rb1.setText("Termin- und kapazit√§tstreue Bedarfsoptimierung");
+		rb1.setText("Termin- und kapazit‰tstreue Bedarfsoptimierung");
 		rb1.setUserData(rb1.getText());
 		rb1.setToggleGroup(tg);
 
@@ -90,11 +90,11 @@ public class ControllerTutorialFragen extends Controller {
 		rb2.setUserData(rb2.getText());
 		rb2.setToggleGroup(tg);
 
-		rb3.setText("Planungs- und kapazit√§tstreue Bedarfsoptimierung");
+		rb3.setText("Planungs- und kapazit‰tstreue Bedarfsoptimierung");
 		rb3.setUserData(rb3.getText());
 		rb3.setToggleGroup(tg);
 
-		rb4.setText("Termin-, planungs- und kapazit√§tstreue Bedarfsoptimierung");
+		rb4.setText("Termin-, planungs- und kapazit‰tstreue Bedarfsoptimierung");
 		rb4.setUserData(rb4.getText());
 		rb4.setToggleGroup(tg);
 
@@ -211,7 +211,7 @@ public class ControllerTutorialFragen extends Controller {
 						"Es wurden " + counterRichtigeAntworten + " von 4 Fragen richtig beantwortet.\nKlasse!!");
 			} else {
 				labelErgebnis.setText(
-						"Es wurden " + counterRichtigeAntworten + " von 4 Fragen richtig beantwortet.\nSch√§m dich!!");
+						"Es wurden " + counterRichtigeAntworten + " von 4 Fragen richtig beantwortet.\nSch‰m dich!!");
 			}
 			labelErgebnis.setVisible(true);
 		} else if (counter == counterAlleFragen + 1) {
@@ -255,7 +255,7 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort auszuw√§hlen ist die falsche L√∂sung");
+					label.setText("Keine Antwort auszuw‰hlen ist die falsche Lˆsung");
 				}
 				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
@@ -287,7 +287,7 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort auszuw√§hlen ist die falsche L√∂sung");
+					label.setText("Keine Antwort auszuw‰hlen ist die falsche Lˆsung");
 				}
 				rb2.setDisable(true);
 				rb2.setTextFill(Color.GREEN);
@@ -319,7 +319,7 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort auszuw√§hlen ist die falsche L√∂sung");
+					label.setText("Keine Antwort auszuw‰hlen ist die falsche Lˆsung");
 				}
 				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
@@ -351,7 +351,7 @@ public class ControllerTutorialFragen extends Controller {
 				} else if (rb4.isSelected()) {
 					label.setText("Antwort: " + rb4.getText() + " war falsch");
 				} else {
-					label.setText("Keine Antwort auszuw√§hlen ist die falsche L√∂sung");
+					label.setText("Keine Antwort auszuw‰hlen ist die falsche Lˆsung");
 				}
 				rb1.setDisable(true);
 				rb1.setTextFill(Color.GREEN);
@@ -373,7 +373,7 @@ public class ControllerTutorialFragen extends Controller {
 			label.setText("Welche Bedarfsoptimierungsverfahren gibt es?");
 			tg = new ToggleGroup();
 
-			rb1.setText("Termin- und kapazit√§tstreue Bedarfsoptimierung");
+			rb1.setText("Termin- und kapazit‰tstreue Bedarfsoptimierung");
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
@@ -381,11 +381,11 @@ public class ControllerTutorialFragen extends Controller {
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Planungs- und kapazit√§tstreue Bedarfsoptimierung");
+			rb3.setText("Planungs- und kapazit‰tstreue Bedarfsoptimierung");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Termin-, planungs- und kapazit√§tstreue Bedarfsoptimierung");
+			rb4.setText("Termin-, planungs- und kapazit‰tstreue Bedarfsoptimierung");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
@@ -399,11 +399,11 @@ public class ControllerTutorialFragen extends Controller {
 			rb1.setUserData(rb1.getText());
 			rb1.setToggleGroup(tg);
 
-			rb2.setText("Terminbeschleunigung/Crashing wurde durchgef√ºhrt");
+			rb2.setText("Terminbeschleunigung/Crashing wurde durchgef¸hrt");
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Arbeitspakete wurden mit dazugeh√∂riger Aufwandssch√§tzung und Dauer erstellt");
+			rb3.setText("Arbeitspakete wurden mit dazugehˆriger Aufwandssch‰tzung und Dauer erstellt");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
@@ -414,7 +414,7 @@ public class ControllerTutorialFragen extends Controller {
 
 		case 2:
 			selektieren();
-			label.setText("Wie wird die kapazit√§tstreue Bedarfsoptimierung noch genannt?");
+			label.setText("Wie wird die kapazit‰tstreue Bedarfsoptimierung noch genannt?");
 			tg = new ToggleGroup();
 
 			rb1.setText("harter Abgleich");
@@ -447,11 +447,11 @@ public class ControllerTutorialFragen extends Controller {
 			rb2.setUserData(rb2.getText());
 			rb2.setToggleGroup(tg);
 
-			rb3.setText("Lieferengp√§sse k√∂nnen besser eingeplant werden");
+			rb3.setText("Lieferengp‰sse kˆnnen besser eingeplant werden");
 			rb3.setUserData(rb3.getText());
 			rb3.setToggleGroup(tg);
 
-			rb4.setText("Das Projekt ist immer zum fr√ºhesten Endzeitpunkt fertiggestellt ");
+			rb4.setText("Das Projekt ist immer zum fr¸hesten Endzeitpunkt fertiggestellt ");
 			rb4.setUserData(rb4.getText());
 			rb4.setToggleGroup(tg);
 			break;
