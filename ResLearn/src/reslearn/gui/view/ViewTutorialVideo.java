@@ -49,9 +49,4 @@ public class ViewTutorialVideo extends Application {
 		stage.setTitle("ResLearn");
 		stage.show();
 	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
-
 }

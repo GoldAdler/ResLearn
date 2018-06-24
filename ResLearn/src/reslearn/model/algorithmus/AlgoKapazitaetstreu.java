@@ -34,8 +34,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	public static AlgoKapazitaetstreu getInstance(int grenze) {
 		if (algoKapazitaetstreu == null) {
 			algoKapazitaetstreu = new AlgoKapazitaetstreu();
-			algoKapazitaetstreu.setMaxBegrenzung(grenze);
 		}
+		algoKapazitaetstreu.setMaxBegrenzung(grenze);
 		return algoKapazitaetstreu;
 	}
 

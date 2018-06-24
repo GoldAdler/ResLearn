@@ -131,6 +131,8 @@ public class ControllerCanvasLoesungsmodus {
 		erstelleTabelleArbeitspakete();
 		erstelleButtons();
 		erstelleGrenzLinie();
+
+		AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel).setVorgangsdauerVeraenderbar(false);
 	}
 
 	/**
@@ -162,9 +164,9 @@ public class ControllerCanvasLoesungsmodus {
 					resFeldArray[i][j] = new ResFeld(j * DisplayCanvas.resFeldBreite, i * DisplayCanvas.resFeldLaenge,
 							koordinatenSystemUrspruenglich[i][j]);
 					resFeldArray[i][j].xProperty()
-					.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionXObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].yProperty()
-					.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
+							.bind(Bindings.valueAt(positionYObservableMap, resFeldArray[i][j].getResEinheit()));
 					resFeldArray[i][j].setOnMousePressed(OnMousePressedEventHandler);
 				}
 			}
@@ -249,7 +251,6 @@ public class ControllerCanvasLoesungsmodus {
 		}
 
 		copyArbeitspaket.forEach(arbeitspaket -> resCanvas.hinzufuegen(arbeitspaket));
-		System.out.println("Maxparallel: " + AufgabeLadenImport.maxPersonenParallel);
 		historieListe = AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
 				.algoDurchfuehren(resCanvas).getHistorieKoordinatenSystem();
 		// extrahiereArbeitspakete(historieNummer); wird bei der Rahmenerstellung
@@ -345,10 +346,8 @@ public class ControllerCanvasLoesungsmodus {
 
 		@Override
 		public void handle(ActionEvent event) {
-			// TODO: Richtigen Algorithmus auswählen
-			boolean vorgangsdauerVeraenderbar = dauerCheckBox.isSelected() ? true : false;
 			AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
-			.setVorgangsdauerVeraenderbar(vorgangsdauerVeraenderbar);
+					.setVorgangsdauerVeraenderbar(dauerCheckBox.isSelected());
 			kapazitaetstreuReset();
 		}
 	};
@@ -401,10 +400,10 @@ public class ControllerCanvasLoesungsmodus {
 						}
 						positionXObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getxKoordinate()
-								* DisplayCanvas.resFeldBreite);
+										* DisplayCanvas.resFeldBreite);
 						positionYObservableMap.replace(resEinheit,
 								(double) abzuarbeitendeResEinheiten.get(index).getPosition().getyKoordinate()
-								* DisplayCanvas.resFeldLaenge);
+										* DisplayCanvas.resFeldLaenge);
 						index++;
 					}
 				}
@@ -560,7 +559,8 @@ public class ControllerCanvasLoesungsmodus {
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
-		kapazitaetstreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.resFeldBreite);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -625,10 +625,10 @@ public class ControllerCanvasLoesungsmodus {
 				kapazitaetsgrenzeLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				kapazitaetsgrenzeLinien[i].setStroke(Color.RED);
 
@@ -637,7 +637,7 @@ public class ControllerCanvasLoesungsmodus {
 				}
 			}
 			ViewLoesungsmodus.getInstance().getPane().getChildren()
-			.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
+					.add(kapazitaetsgrenzeLinien[AufgabeLadenImport.maxPersonenParallel]);
 		}
 
 	}
@@ -705,7 +705,6 @@ public class ControllerCanvasLoesungsmodus {
 	 * @param ap
 	 */
 	private void markiereArbeitspaketInTabelle(Arbeitspaket ap) {
-		System.out.println("Arbeitspaket angeklickt: " + ap.getIdIntern());
 
 		// Da hier mit Kopien von Arbeitspaketen gearbeitet wird, muss das ausgewählte
 		// Arbeitspaket durch die ID herausgefunden werden
@@ -764,19 +763,20 @@ public class ControllerCanvasLoesungsmodus {
 
 		// Pane beim ersten Aufruf befüllen
 		if (konfigModus.getChildren().size() == 0) {
-			konfigModus.getChildren().addAll(kapazitaetstreuModus, termintreuModus, maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
-					buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
-
-			// Kapazitätsgrenzen-Konfig Positionen festlegen
-			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
-			textFieldMaxPersonen
-			.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
-			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
 
 			// Dauer veränderbar-Konfig Position festlegen
 			dauerLabel.setLayoutY(DisplayCanvas.resFeldBreite * 5);
 			dauerCheckBox.setLayoutX(dauerLabel.getLayoutX() + dauerLabel.getPrefWidth());
-			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 25);
+			dauerCheckBox.setLayoutY(DisplayCanvas.resFeldBreite * 5);
+			konfigModus.getChildren().addAll(kapazitaetstreuModus, termintreuModus, maxPersonen, buttonMaxPersonenMinus,
+					textFieldMaxPersonen, buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
+
+			// Kapazitätsgrenzen-Konfig Positionen festlegen
+			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
+			textFieldMaxPersonen
+					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
+
 		}
 
 		// Bei nur einem Element in der Historienliste ist nichts zum weiter

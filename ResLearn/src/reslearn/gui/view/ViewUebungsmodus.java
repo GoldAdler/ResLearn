@@ -121,8 +121,9 @@ public class ViewUebungsmodus extends Application {
 
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
-				controllerCanvas.getValidierenButton(), controllerCanvas.getKonfigModus(), controllerCanvas.getKorrekturvorschlaege(),
-				controllerCanvas.getFehlermeldung(), controllerCanvas.getLoesungsButton());
+				controllerCanvas.getValidierenButton(), controllerCanvas.getKonfigModus(),
+				controllerCanvas.getKorrekturvorschlaege(), controllerCanvas.getFehlermeldung(),
+				controllerCanvas.getLoesungsButton());
 
 		for (int i = 0; i < 26; i++) {
 			group.getChildren().add(controllerCanvas.getKapaGrenze(i));
@@ -155,10 +156,6 @@ public class ViewUebungsmodus extends Application {
 		for (Rectangle rahmen : controllerCanvas.getRahmenListe()) {
 			pane.getChildren().remove(rahmen);
 		}
-	}
-
-	public static void main(String[] args) {
-		launch(args);
 	}
 
 	public Stage getStage() {

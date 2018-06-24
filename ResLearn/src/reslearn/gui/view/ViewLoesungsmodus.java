@@ -76,7 +76,6 @@ public class ViewLoesungsmodus extends Application {
 		pane.setPrefHeight(DisplayCanvas.paneLaenge);
 		pane.setLayoutX(DisplayCanvas.paneLayoutX);
 		pane.setLayoutY(DisplayCanvas.paneLayoutY);
-		System.out.println(AufgabeLadenImport.maxPersonenParallel);
 		ResCanvas cvNeu = AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
 				.algoDurchfuehren(resCanvas);
 
@@ -129,8 +128,10 @@ public class ViewLoesungsmodus extends Application {
 		group.getChildren().addAll(canvas, pane, controllerCanvas.getTable(),
 				controllerCanvas.getTabelleArbeitspakete(), controllerCanvas.getLegende(),
 				controllerCanvas.getButtonSchrittZurueck(), controllerCanvas.getButtonSchrittVor(),
-				//				controllerCanvas.getButtonMaxPersonenMinus(), controllerCanvas.getButtonMaxPersonenPlus(),
-				//				controllerCanvas.getMaxPersonen(), controllerCanvas.getTextFieldMaxPersonen(),
+				// controllerCanvas.getButtonMaxPersonenMinus(),
+				// controllerCanvas.getButtonMaxPersonenPlus(),
+				// controllerCanvas.getMaxPersonen(),
+				// controllerCanvas.getTextFieldMaxPersonen(),
 				controllerCanvas.getKonfigModus());
 
 		for (int i = 0; i < DisplayCanvas.resFeldZeile; i++) {
@@ -164,10 +165,6 @@ public class ViewLoesungsmodus extends Application {
 		for (Rectangle rahmen : controllerCanvas.getRahmenListe()) {
 			pane.getChildren().remove(rahmen);
 		}
-	}
-
-	public static void main(String[] args) {
-		launch(args);
 	}
 
 	public Stage getStage() {

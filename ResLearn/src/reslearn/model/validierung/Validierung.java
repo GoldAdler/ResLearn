@@ -81,10 +81,13 @@ public class Validierung {
 	 * überprüft, ob eine Vorgangsunterbrechung vorliegt.
 	 *
 	 * @param grenzeMitarbeiterParallel
+	 * @param resCanvas
+	 * @param vorgangsdauerVeraenderbar
 	 * @return ArrayList<Feedback> - Liste, in der alle gesammelten Infos bzw.
 	 *         Fehler stehen.
 	 */
-	public ArrayList<Feedback> AlgoKapazitaetstreu(int grenzeMitarbeiterParallel, ResCanvas resCanvas) {
+	public ArrayList<Feedback> AlgoKapazitaetstreu(int grenzeMitarbeiterParallel, ResCanvas resCanvas,
+			boolean vorgangsdauerVeraenderbar) {
 		ArrayList<String> verwendeteApFAZ = new ArrayList<String>();
 		ArrayList<String> verwendeteApVorgangsdauer = new ArrayList<String>();
 		ArrayList<String> verwendeteApKapaGrenzeUeberschritten = new ArrayList<String>();
@@ -115,7 +118,7 @@ public class Validierung {
 						}
 					}
 
-					if (pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit())) {
+					if (pruefeVorgangsdauerUeberschritten(resFeld.getResEinheit()) && !vorgangsdauerVeraenderbar) {
 						if (!verwendeteApVorgangsdauer
 								.contains(resFeld.getResEinheit().getTeilpaket().getArbeitspaket().getIdIntern())) {
 							verwendeteApVorgangsdauer
@@ -158,7 +161,7 @@ public class Validierung {
 		}
 
 		if (feedbackListe.isEmpty()) {
-			pruefeOptimaleLoesungKapa(resCanvas);
+			pruefeOptimaleLoesungKapa(resCanvas, vorgangsdauerVeraenderbar);
 		}
 		if (feedbackListe.isEmpty()) {
 			feedbackListe.add(new Feedback("Alles in Ordnung!", MsgType.INFO));
@@ -273,7 +276,7 @@ public class Validierung {
 		}
 	}
 
-	private void pruefeOptimaleLoesungKapa(ResCanvas resCanvas) {
+	private void pruefeOptimaleLoesungKapa(ResCanvas resCanvas, boolean vorgangsdauerVeraenderbar) {
 
 		ResCanvas resCanvasRichtigeLoesung = new ResCanvas();
 
@@ -282,7 +285,8 @@ public class Validierung {
 		}
 
 		ResEinheit[][] aktuellesKoordinatenSystem = resCanvas.getKoordinatenSystem();
-
+		AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel)
+				.setVorgangsdauerVeraenderbar(vorgangsdauerVeraenderbar);
 		ResEinheit[][] koordinatenSystemRichtigeLoesung = AlgoKapazitaetstreu
 				.getInstance(AufgabeLadenImport.maxPersonenParallel).algoDurchfuehren(resCanvasRichtigeLoesung)
 				.getKoordinatenSystem();

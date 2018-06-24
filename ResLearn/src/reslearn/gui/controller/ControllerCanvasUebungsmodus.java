@@ -46,6 +46,7 @@ import reslearn.gui.tableUtils.PairKeyFactory;
 import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.gui.view.ViewLoesungsmodus;
 import reslearn.gui.view.ViewUebungsmodus;
+import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -109,6 +110,8 @@ public class ControllerCanvasUebungsmodus {
 		erstelleKorrekturvorschlaege();
 		erstelleLeereFehlermeldung();
 		erstelleLoesungsButton();
+
+		AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel).setVorgangsdauerVeraenderbar(false);
 	}
 
 	public void makeDraggable(ResFeld feld) {
@@ -226,10 +229,10 @@ public class ControllerCanvasUebungsmodus {
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
 						teilpaketRahmenZuordnung.get(teilpaketClicked)
-						.setX(teilpaketClicked.getResEinheitListe()
-								.get(teilpaketClicked.getVorgangsdauer()
-										* (teilpaketClicked.getMitarbeiteranzahl() - 1))
-								.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite);
+								.setX(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite);
 					}
 				}
 			}
@@ -256,10 +259,10 @@ public class ControllerCanvasUebungsmodus {
 					}
 					if (teilpaketRahmenZuordnung.containsKey(teilpaketClicked)) {
 						teilpaketRahmenZuordnung.get(teilpaketClicked)
-						.setY(teilpaketClicked.getResEinheitListe()
-								.get(teilpaketClicked.getVorgangsdauer()
-										* (teilpaketClicked.getMitarbeiteranzahl() - 1))
-								.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge);
+								.setY(teilpaketClicked.getResEinheitListe()
+										.get(teilpaketClicked.getVorgangsdauer()
+												* (teilpaketClicked.getMitarbeiteranzahl() - 1))
+										.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge);
 					}
 				}
 			}
@@ -364,10 +367,10 @@ public class ControllerCanvasUebungsmodus {
 				alleLinien[i] = new Line(
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.abstandX + DisplayCanvas.spaltX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite,
 						DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite - DisplayCanvas.abstandX,
 						DisplayCanvas.canvasStartpunktY + DisplayCanvas.canvasLaenge - DisplayCanvas.abstandY
-						- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
+								- DisplayCanvas.spaltY - i * DisplayCanvas.resFeldBreite);
 
 				alleLinien[i].setStroke(Color.RED);
 
@@ -376,7 +379,7 @@ public class ControllerCanvasUebungsmodus {
 				}
 			}
 			ViewUebungsmodus.getInstance().getPane().getChildren()
-			.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
+					.add(alleLinien[AufgabeLadenImport.maxPersonenParallel]);
 		}
 	}
 
@@ -418,7 +421,7 @@ public class ControllerCanvasUebungsmodus {
 
 			} else {
 
-				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel, resCanvas);
+				vali.AlgoKapazitaetstreu(AufgabeLadenImport.maxPersonenParallel, resCanvas, dauerCheckBox.isSelected());
 
 				for (int i = 0; i < vali.getFeedbackListe().size(); i++) {
 					ausgabe += vali.getFeedbackListe().get(i).toString();
@@ -446,7 +449,7 @@ public class ControllerCanvasUebungsmodus {
 	private void erstelleLoesungsButton() {
 		loesungsButton = new Button("Lösung anzeigen");
 		loesungsButton.setLayoutX(DisplayCanvas.tabelleLayoutX);
-		loesungsButton.setLayoutY(DisplayCanvas.legendeStartpunktY  + 7 * DisplayCanvas.resFeldLaenge);
+		loesungsButton.setLayoutY(DisplayCanvas.legendeStartpunktY + 7 * DisplayCanvas.resFeldLaenge);
 		loesungsButton.setOnAction(OnButtonLoesungAnzeigenEventHandler);
 	}
 
@@ -470,7 +473,8 @@ public class ControllerCanvasUebungsmodus {
 		fehlerMeldung = new TextArea("");
 		fehlerMeldung.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		fehlerMeldung.setEditable(false);
-		fehlerMeldung.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		fehlerMeldung.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		fehlerMeldung.setLayoutY(DisplayCanvas.tabelleLayoutY + 2 * DisplayCanvas.resFeldLaenge);
 		fehlerMeldung.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		fehlerMeldung.setPrefHeight(DisplayCanvas.canvasLaenge);
@@ -482,7 +486,8 @@ public class ControllerCanvasUebungsmodus {
 	 */
 	private void erstelleKorrekturvorschlaege() {
 		korrekturvorschlaege = new Label("Korrekturvorschläge");
-		korrekturvorschlaege.setLayoutX(DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
+		korrekturvorschlaege.setLayoutX(
+				DisplayCanvas.canvasStartpunktX + DisplayCanvas.canvasBreite + DisplayCanvas.gesamtAbstandX);
 		korrekturvorschlaege.setLayoutY(DisplayCanvas.tabelleLayoutY);
 		korrekturvorschlaege.setPrefWidth(DisplayCanvas.breiteFehlermeldung);
 		korrekturvorschlaege.setPrefHeight(DisplayCanvas.resFeldBreite * 1.5);
@@ -498,7 +503,6 @@ public class ControllerCanvasUebungsmodus {
 	 * @param arbeitspaketeMitFarbe
 	 */
 	public void erstelleLegende(HashMap<Arbeitspaket, Color> arbeitspaketeMitFarbe) {
-
 
 		Label label = null;
 		Circle circle = null;
@@ -690,7 +694,8 @@ public class ControllerCanvasUebungsmodus {
 		tabelleArbeitspakete.setEditable(true);
 		tabelleArbeitspakete.setLayoutX(DisplayCanvas.tabelleArbeitspaketLayoutX);
 		tabelleArbeitspakete.setLayoutY(DisplayCanvas.tabelleArbeitspaketLayoutY);
-		tabelleArbeitspakete.setPrefSize(DisplayCanvas.tabelleArbeitspaketBreite, DisplayCanvas.tabelleArbeitspaketLaenge);
+		tabelleArbeitspakete.setPrefSize(DisplayCanvas.tabelleArbeitspaketBreite,
+				DisplayCanvas.tabelleArbeitspaketLaenge);
 		tabelleArbeitspakete.setStyle("-fx-font:" + DisplayCanvas.schriftGroesse + " Arial;");
 		tabelleArbeitspakete.getColumns().addAll(apId, apFaz, apSaz, apFez, apSez, apAnzMitarbeiter, apAufwand);
 		tabelleArbeitspakete.getSortOrder().add(apId);
@@ -721,7 +726,8 @@ public class ControllerCanvasUebungsmodus {
 		termintreuModus.setOnMouseClicked(OnButtonTermintreuPressedEventHandler);
 		termintreuModus.setToggleGroup(modusToggleGroup);
 
-		kapazitaetstreuModus.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
+		kapazitaetstreuModus
+				.setLayoutX(DisplayCanvas.buttonLoesungsmodusLayoutX * 2 + DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setLayoutY(DisplayCanvas.resFeldBreite);
 		kapazitaetstreuModus.setPrefWidth(DisplayCanvas.buttonLoesungsmodusBreite);
 		kapazitaetstreuModus.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
@@ -765,7 +771,6 @@ public class ControllerCanvasUebungsmodus {
 
 		dauerCheckBox.setFont(new Font("Arial", DisplayCanvas.schriftGroesse));
 		dauerCheckBox.setLayoutX(DisplayCanvas.resFeldBreite);
-		dauerCheckBox.setOnAction(OnCheckBoxDauerEventHandler);
 
 		konfigModus.setLayoutX(DisplayCanvas.konfigModusStartpunktX);
 		konfigModus.setLayoutY(DisplayCanvas.konfigModusStartpunktY);
@@ -850,14 +855,6 @@ public class ControllerCanvasUebungsmodus {
 		}
 	};
 
-	private EventHandler<ActionEvent> OnCheckBoxDauerEventHandler = new EventHandler<ActionEvent>() {
-
-		@Override
-		public void handle(ActionEvent event) {
-			// TODO: Richtigen Algorithmus auswählen
-		}
-	};
-
 	/**
 	 * Je nach dem, welcher Modus ausgewählt ist, sollen die jeweiligen
 	 * Konfigurationsmöglichkeiten angezeigt werden
@@ -866,13 +863,13 @@ public class ControllerCanvasUebungsmodus {
 
 		// Pane beim ersten Aufruf befüllen
 		if (konfigModus.getChildren().size() == 0) {
-			konfigModus.getChildren().addAll(kapazitaetstreuModus, termintreuModus, maxPersonen, buttonMaxPersonenMinus, textFieldMaxPersonen,
-					buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
+			konfigModus.getChildren().addAll(kapazitaetstreuModus, termintreuModus, maxPersonen, buttonMaxPersonenMinus,
+					textFieldMaxPersonen, buttonMaxPersonenPlus, dauerLabel, dauerCheckBox);
 
 			// Kapazitätsgrenzen-Konfig Positionen festlegen
 			buttonMaxPersonenMinus.setLayoutX(maxPersonen.getLayoutX() + maxPersonen.getPrefWidth());
 			textFieldMaxPersonen
-			.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
+					.setLayoutX(buttonMaxPersonenMinus.getLayoutX() + buttonMaxPersonenMinus.getPrefWidth());
 			buttonMaxPersonenPlus.setLayoutX(textFieldMaxPersonen.getLayoutX() + textFieldMaxPersonen.getPrefWidth());
 
 			// Dauer veränderbar-Konfig Position festlegen
@@ -909,7 +906,8 @@ public class ControllerCanvasUebungsmodus {
 
 		for (Arbeitspaket ap : resCanvas.getArbeitspaketListe()) {
 			for (Teilpaket tp : ap.getTeilpaketListe()) {
-				ResEinheit reseinheit = tp.getResEinheitListe().get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
+				ResEinheit reseinheit = tp.getResEinheitListe()
+						.get(tp.getVorgangsdauer() * (tp.getMitarbeiteranzahl() - 1));
 				rectangle = new Rectangle(reseinheit.getPosition().getxKoordinate() * DisplayCanvas.resFeldBreite,
 						reseinheit.getPosition().getyKoordinate() * DisplayCanvas.resFeldLaenge,
 						reseinheit.getTeilpaket().getVorgangsdauer() * DisplayCanvas.resFeldBreite,

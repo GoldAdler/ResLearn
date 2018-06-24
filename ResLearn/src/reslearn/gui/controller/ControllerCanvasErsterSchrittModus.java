@@ -35,12 +35,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import reslearn.gui.ImportExport.AufgabeLadenImport;
 import reslearn.gui.rescanvas.Diagramm;
 import reslearn.gui.rescanvas.DisplayCanvas;
 import reslearn.gui.rescanvas.ResFeld;
 import reslearn.gui.tableUtils.PairKeyFactory;
 import reslearn.gui.tableUtils.PairValueFactory;
 import reslearn.gui.view.ViewUebungsmodus;
+import reslearn.model.algorithmus.AlgoKapazitaetstreu;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
 import reslearn.model.paket.Teilpaket;
@@ -77,6 +79,7 @@ public class ControllerCanvasErsterSchrittModus {
 		leereFehlermeldungErstellen();
 		erstelleButtons();
 
+		AlgoKapazitaetstreu.getInstance(AufgabeLadenImport.maxPersonenParallel).setVorgangsdauerVeraenderbar(false);
 	}
 
 	public void makeDraggable(ResFeld feld) {
