@@ -66,9 +66,11 @@ public class Teilpaket extends Paket {
 	 * @param neueResEinheitListe
 	 */
 	private Teilpaket(Teilpaket teilpaket, ArrayList<ResEinheit> neueResEinheitListe) {
+
 		for (ResEinheit zuEntfernen : neueResEinheitListe) {
 			teilpaket.resEinheitListe.remove(zuEntfernen);
 		}
+
 		this.arbeitspaket = teilpaket.getArbeitspaket();
 		this.resEinheitListe = neueResEinheitListe;
 		for (ResEinheit resEinheit : resEinheitListe) {
@@ -85,6 +87,9 @@ public class Teilpaket extends Paket {
 		Collections.sort(teilpaket.getResEinheitListe(), new ComperatorVektor2iY());
 	}
 
+	private Teilpaket() {
+	}
+
 	/**
 	 * Damit diese Methode funktionieren kann, wird die zu übergebende ArrayList
 	 * nach der Sortierungsmethode des ComperatorVektor2iY sortiert.
@@ -98,18 +103,145 @@ public class Teilpaket extends Paket {
 
 		if (!neueResEinheitListe.isEmpty()) {
 
-			neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
+			/*
+			 * ...........................................
+			 * .............DDD...........................
+			 * .............DDD...........................
+			 * .............DDDDD.........................
+			 * AAAAAA...CCCCFFFDD.........................
+			 * AAAAAABBBBBBBFFFDD......EEEEEE.............
+			 * AAAAAABBBBBBBCCCCCC.....EEEEEE.............
+			 * AAAAAABBBBBBBCCCCCC.....EEEEEE.............
+			 *
+			 * Problem: Diese D's ------------------------
+			 * .............DDD...........................
+			 * .............DDD...........................
+			 * .............DDDDD.........................
+			 *
+			 * überschreiten die Grenze. Allerdings gehören die D's zu zwei verschieden
+			 * Teilpaketen. Dem Teilpaket aus 9 ResEinheiten und das andere aus dem
+			 * Teilpaket mit 6 ResEinheiten.
+			 *
+			 * Für diesen speziellen Speziallfall unter den Speizallfällen müssen die
+			 * überschrittenen ResEinheiten aus meheren Teilpaketen entefernt werden. Diese
+			 * Teilpakete müssen natürlich auch wieder über ihre Veränderung informiert
+			 * werden.
+			 *
+			 */
 
-			neuesTeilpaket.setVorgangsdauer(this.getVorgangsdauer());
-			neuesTeilpaket.setMitarbeiteranzahl(neuesTeilpaket.getAufwand() / neuesTeilpaket.getVorgangsdauer());
+			ArrayList<ArrayList<ResEinheit>> resEinheitsListe = new ArrayList<>();
 
-			this.setMitarbeiteranzahl(this.getMitarbeiteranzahl() - neuesTeilpaket.getMitarbeiteranzahl());
+			Teilpaket tmpTeilpaket = null;
+			Teilpaket testTeilpaket = null;
+			ArrayList<ResEinheit> tmpResEinheitsListe = new ArrayList<>();
 
-			if (this.resEinheitListe.isEmpty()) {
-				this.arbeitspaket.entferneTeilpaket(this);
+			// Wir spalten die neueResEinheitListe in mehere Listen auf. Die Anzahl dieser
+			// neuen Listen ist dabei identisch mit der Anzahl der unterschiedlichen
+			// Teilpaketen, aus dennen die ResEinheiten für die neueResEinehitListe stammen.
+			// Dies ist notwendig, da diese neuen temporeren Listen dazu dienen werden, die
+			// Teilpakete übere ihre Veränderungen zu informieren.
+
+			for (ResEinheit res : neueResEinheitListe) {
+
+				if (tmpResEinheitsListe.isEmpty()) {
+					resEinheitsListe.add(tmpResEinheitsListe);
+					tmpResEinheitsListe.add(res);
+					tmpTeilpaket = res.getTeilpaket();
+				} else {
+					testTeilpaket = res.getTeilpaket();
+					if (testTeilpaket == tmpTeilpaket) {
+						tmpResEinheitsListe.add(res);
+					} else {
+						tmpTeilpaket = testTeilpaket;
+						tmpResEinheitsListe = new ArrayList<>();
+						resEinheitsListe.add(tmpResEinheitsListe);
+						tmpResEinheitsListe.add(res);
+
+					}
+				}
+			}
+
+			// for (Teilpaket tp : teilpaketListe) {
+			// for (ResEinheit zuEntfernen : neueResEinheitListe) {
+			// tp.resEinheitListe.remove(zuEntfernen);
+			// }
+			// }
+
+			// die ResEinheitsListe besteht nur aus einer Liste. Das bedeutet, dass nur ein
+			// einziges Teilpaket, also das aktuelle, von den Änderungen betroffen sind. Der
+			// einfache Fall
+			if (resEinheitsListe.size() == 1) {
+				neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
+
+				neuesTeilpaket.setVorgangsdauer(this.getVorgangsdauer());
+				neuesTeilpaket.setMitarbeiteranzahl(neuesTeilpaket.getAufwand() / neuesTeilpaket.getVorgangsdauer());
+
+				this.setMitarbeiteranzahl(this.getMitarbeiteranzahl() - neuesTeilpaket.getMitarbeiteranzahl());
+
+				if (this.resEinheitListe.isEmpty()) {
+					this.arbeitspaket.entferneTeilpaket(this);
+				}
+			} else {
+				// In resEinheitsListe sind mehere Listen. Der schwere Fall. Mehrere Teilpakete
+				// müssen über ihre Änderung informiert werden. Da mehrere TEilpakete die
+				// ResEinheiten stellen.
+
+				// update der sich zu verändernden Teilpakete
+
+				Teilpaket tmp = null;
+				for (ArrayList<ResEinheit> resList : resEinheitsListe) {
+					tmp = resList.get(0).getTeilpaket();
+					for (ResEinheit zuEntfernenRE : resList) {
+						tmp.getResEinheitListe().remove(zuEntfernenRE);
+					}
+					if (tmp.getResEinheitListe().isEmpty()) {
+						tmp.getArbeitspaket().entferneTeilpaket(tmp);
+					} else {
+						tmp.setAufwand(tmp.getResEinheitListe().size());
+
+						int minY = Integer.MAX_VALUE;
+						int maxY = 0;
+						for (ResEinheit res : tmp.getResEinheitListe()) {
+							if (res.getPosition().getyKoordinate() < minY) {
+								minY = res.getPosition().getyKoordinate();
+							}
+							if (res.getPosition().getyKoordinate() > maxY) {
+								maxY = res.getPosition().getyKoordinate();
+							}
+						}
+
+						int mitarbeiteranzahl = maxY - minY;
+						tmp.setMitarbeiteranzahl(mitarbeiteranzahl);
+
+						tmp.setVorgangsdauer((int) Math.ceil(((double) tmp.aufwand / (double) tmp.mitarbeiteranzahl)));
+					}
+				}
+
+				neuesTeilpaket = new Teilpaket();
+				neuesTeilpaket.setArbeitspaket(this.getArbeitspaket());
+				neuesTeilpaket.getArbeitspaket().teilpaketHinzufuegen(neuesTeilpaket);
+				neuesTeilpaket.setResEinheitListe(neueResEinheitListe);
+				for (ResEinheit re : neueResEinheitListe) {
+					re.setTeilpaket(neuesTeilpaket);
+				}
+				// Diese Werte werden nur benötigt, damit später keine Nullpointer geworfen
+				// wird.
+				// Allerdings spielen diese Werte neben diesem Grund keine Rolle, da es sich
+				// hierbei um ein Teilpaket, dass die ResEinheiten zusammenasst, die über der
+				// Grenze liegen. Also wird dieses Teilpaket eh wieder gelöschst
+				// -----------------------------------------
+				neuesTeilpaket.setMitarbeiteranzahl(this.getArbeitspaket().getMitarbeiteranzahl());
+				neuesTeilpaket.setAufwand(neueResEinheitListe.size());
+				neuesTeilpaket.setVorgangsdauer(
+						neueResEinheitListe.get(neueResEinheitListe.size() - 1).getPosition().getxKoordinate()
+								- neueResEinheitListe.get(0).getPosition().getxKoordinate());
+				// -----------------------------------------
+
 			}
 
 		}
+
+		Collections.sort(neuesTeilpaket.getArbeitspaket().getTeilpaketListe(), new ComperatorTeilpaket());
 
 		return neuesTeilpaket;
 
@@ -130,9 +262,25 @@ public class Teilpaket extends Paket {
 
 			neuesTeilpaket = new Teilpaket(this, neueResEinheitListe);
 
-			neuesTeilpaket.setMitarbeiteranzahl(this.getMitarbeiteranzahl());
-			neuesTeilpaket.setVorgangsdauer(neuesTeilpaket.getAufwand() / neuesTeilpaket.getMitarbeiteranzahl());
+			int minY = Integer.MAX_VALUE;
+			int maxY = 0;
+			for (ResEinheit res : neuesTeilpaket.getResEinheitListe()) {
+				if (res.getPosition().getyKoordinate() < minY) {
+					minY = res.getPosition().getyKoordinate();
+				}
+				if (res.getPosition().getyKoordinate() > maxY) {
+					maxY = res.getPosition().getyKoordinate();
+				}
+			}
 
+			int mitarbeiteranzahl = maxY - minY;
+
+			neuesTeilpaket.setMitarbeiteranzahl(mitarbeiteranzahl);
+			if (mitarbeiteranzahl != 0) {
+				neuesTeilpaket.setVorgangsdauer(neuesTeilpaket.getAufwand() / neuesTeilpaket.getMitarbeiteranzahl());
+			} else {
+				neuesTeilpaket.setVorgangsdauer(1);
+			}
 			this.setVorgangsdauer(this.getVorgangsdauer() - neuesTeilpaket.getVorgangsdauer());
 
 			if (this.resEinheitListe.isEmpty()) {
@@ -157,6 +305,7 @@ public class Teilpaket extends Paket {
 	 * @param gesezteResEinheiten
 	 */
 	public void trenneVariabel(ArrayList<ResEinheit> gesezteResEinheiten) {
+
 		if (!gesezteResEinheiten.isEmpty()) {
 			Teilpaket neuesTeilpaket = new Teilpaket(this.arbeitspaket, gesezteResEinheiten);
 			neuesTeilpaket.getArbeitspaket().teilpaketHinzufuegen(neuesTeilpaket);

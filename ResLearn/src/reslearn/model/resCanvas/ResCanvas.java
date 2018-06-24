@@ -234,18 +234,20 @@ public class ResCanvas {
 			zuFallendeTeilpakete.add(teilpaket);
 		}
 
-		for (Teilpaket lasseFallen : zuFallendeTeilpakete) {
+		if (!zuFallendeTeilpakete.isEmpty()) {
+			for (Teilpaket lasseFallen : zuFallendeTeilpakete) {
 
-			// if (!tmp.getResEinheitListe().isEmpty()) {
-			ResEinheit ausgangspunkt = lasseFallen.getResEinheitListe().get(0);
+				// if (!tmp.getResEinheitListe().isEmpty()) {
+				ResEinheit ausgangspunkt = lasseFallen.getResEinheitListe().get(0);
 
-			boolean kollision = falle(lasseFallen, ausgangspunkt, zuVerschiebenListe);
+				boolean kollision = falle(lasseFallen, ausgangspunkt, zuVerschiebenListe);
 
-			if (kollision) {
+				if (kollision) {
 
-				Algorithmus.ausgeben(koordinatenSystem);
+					Algorithmus.ausgeben(koordinatenSystem);
 
-				this.herunterfallen(lasseFallen);
+					this.herunterfallen(lasseFallen);
+				}
 			}
 		}
 	}
@@ -317,7 +319,30 @@ public class ResCanvas {
 		int aktuellerAbstand;
 		boolean kollision = false;
 
-		for (int xPos = x; xPos <= x + tmp.getVorgangsdauer() - 1; xPos++) {
+		int dauer = tmp.getResEinheitListe().get(tmp.getResEinheitListe().size() - 1).getPosition().getxKoordinate();
+
+		for (int xPos = x; xPos <= dauer; xPos++) {
+
+			/*
+			 * ...........................................
+			 * AAAAAA...CCCCFFFEEE..DDDDD--...............
+			 * AAAAAABBBBBBBFFFEEE..DDDDE.................
+			 * AAAAAABBBBBBBCCCCCCEEEDDDED................
+			 * AAAAAABBBBBBBCCCCCCEEEEEEEDD...............
+			 *
+			 * Beispiel: Es können Fälle auftretten, bei dennen Position -- keine D, bzw
+			 * ResEinheiten, mehr liegen. Allerdings würde diese Methode für diese Stellen
+			 * den Abstand für das Herunterfallen berechnen. Dies wird mit diesem Teil des
+			 * Codes unterbunden.
+			 */
+
+			if (koordinatenSystem[y][xPos] == null) {
+				Algorithmus.ausgeben(koordinatenSystem);
+				return false;
+			}
+		}
+
+		for (int xPos = x; xPos <= dauer; xPos++) {
 			aktuellerAbstand = 0;
 			for (int yPos = y + 1; yPos < ResCanvas.koorHoehe; yPos++) {
 
@@ -420,15 +445,21 @@ public class ResCanvas {
 			if (untersteReiheLeer && untersteReihe != null) {
 
 				Teilpaket verschiebe = untersteReihe.getTeilpaket();
-				verschiebe.bewegeX(this, -laengeLuecke);
+				boolean verschoben = verschiebe.bewegeX(this, -laengeLuecke);
+				if (!verschoben) {
+					return;
+				}
 				this.herunterfallenAlleTeilpakete();
 
 				Algorithmus.ausgeben(koordinatenSystem);
 
 				untersteReiheLeer = false;
 				laengeLuecke = 0;
-				x = untersteReihe.getTeilpaket().getResEinheitListe().get(0).getPosition().getxKoordinate()
-						+ untersteReihe.getVorgangsdauer();
+
+				// x =
+				// untersteReihe.getTeilpaket().getResEinheitListe().get(0).getPosition().getxKoordinate()
+				// + untersteReihe.getVorgangsdauer();
+				x = 0;
 			}
 
 		}
@@ -467,6 +498,9 @@ public class ResCanvas {
 		}
 
 		this.herunterfallenAlleTeilpakete();
+
+		Algorithmus.ausgeben(koordinatenSystem);
+
 	}
 
 	/**
@@ -592,7 +626,7 @@ public class ResCanvas {
 				for (ResEinheit re : tp.getResEinheitListe()) {
 					if (re.getPosition() != null) {
 						neuesKoordinatenSystem[re.getPosition().getyKoordinate()][re.getPosition()
-						                                                          .getxKoordinate()] = re;
+								.getxKoordinate()] = re;
 					}
 				}
 			}
@@ -810,10 +844,22 @@ public class ResCanvas {
 			ArrayList<Teilpaket> tpListeAusgang = apAusgang.getTeilpaketListe();
 			ArrayList<Teilpaket> tpListePruefen = apAktuell.getTeilpaketListe();
 
+			if (tpListeAusgang.size() != tpListePruefen.size()) {
+				return false;
+			}
+
+			for (Arbeitspaket ap : zuUeberpruefen.getArbeitspaketListe()) {
+				ap.zusammenfuegen();
+			}
+
 			for (int a = 0; a < tpListeAusgang.size(); a++) {
 
 				ArrayList<ResEinheit> resListeAusgang = tpListeAusgang.get(a).getResEinheitListe();
 				ArrayList<ResEinheit> resListePruefen = tpListePruefen.get(a).getResEinheitListe();
+
+				if (resListeAusgang.size() != resListePruefen.size()) {
+					return false;
+				}
 
 				for (int b = 0; b < resListeAusgang.size(); b++) {
 					int xAusgang = resListeAusgang.get(b).getPosition().getxKoordinate();

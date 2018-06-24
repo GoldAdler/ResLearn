@@ -11,6 +11,7 @@ public abstract class Algorithmus {
 	static final boolean trotzdem = false;
 	static final boolean historie = false;
 	static final boolean test = false;
+	static final boolean lul = false;
 	public static int zaehlerTest = 0;
 	public static int zaehlerTrotzdem = 0;
 
@@ -38,7 +39,7 @@ public abstract class Algorithmus {
 	public static void ausgebenHistorie(ResEinheit[][] koordinatenSystem) {
 
 		if (historie) {
-			System.out.println("zaehlerTest: " + ++zaehlerTest);
+			// System.out.println("zaehlerTest: " + ++zaehlerTest);
 			for (ResEinheit[] a : koordinatenSystem) {
 				for (ResEinheit b : a) {
 					if (b == null) {
@@ -66,7 +67,9 @@ public abstract class Algorithmus {
 	public static void ausgeben(ResEinheit[][] koordinatenSystem) {
 
 		if (testModus) {
+
 			System.out.println("zaehlerTest: " + ++zaehlerTest);
+
 			for (ResEinheit[] a : koordinatenSystem) {
 				for (ResEinheit b : a) {
 					if (b == null) {
@@ -89,6 +92,24 @@ public abstract class Algorithmus {
 	public static void ausgebenTrotzdem(ResEinheit[][] koordinatenSystem) {
 
 		if (trotzdem) {
+			System.out.println("zaehlerTest: " + ++zaehlerTrotzdem);
+			for (ResEinheit[] a : koordinatenSystem) {
+				for (ResEinheit b : a) {
+					if (b == null) {
+						System.out.print(".");
+					} else {
+						System.out.print(b.getTeilpaket().getArbeitspaket().getIdIntern());
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+	}
+
+	public static void ausgebenLul(ResEinheit[][] koordinatenSystem) {
+
+		if (lul) {
 			System.out.println("zaehlerTest: " + ++zaehlerTrotzdem);
 			for (ResEinheit[] a : koordinatenSystem) {
 				for (ResEinheit b : a) {
