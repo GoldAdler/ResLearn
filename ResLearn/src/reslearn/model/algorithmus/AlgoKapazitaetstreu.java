@@ -18,30 +18,12 @@ import reslearn.model.utils.ComperatorVektor2iX;
 import reslearn.model.utils.ComperatorVektor2iY;
 import reslearn.model.utils.Vektor2i;
 
-// TODO 1 KLUTKE ERZÄHLEN
-// Siehe Kinder UNI maxBegrenzung 2
-// ist nicht lösbar, da kompllet neuer Algo nötig währe
-// siehe unten
-
-// TODO Fange Fehler ab, wenn ein AP größer ist als maxBegrenzung!!!
-/*
- * bzw. löse diesen Fall, falls noch Zeit ist. Wenn vorgangsdauerVeraenderbar
- * möglich ist eine Lösung erstellbar. Dazu muss aber ein neuer Algo erstellt werden,
- * der hier verwendet hier. Viele Methoden sollten, aber recyclbar sein.
- */
-
 public class AlgoKapazitaetstreu extends Algorithmus {
 
 	private static AlgoKapazitaetstreu algoKapazitaetstreu;
 	private boolean vorgangsdauerVeraenderbar = false;
 
-	// TODO: Vorläufige Integer. Wieder löschen!!!!
 	private int maxBegrenzung;
-	// TODO maxBegrenzung ist zu hoch fall
-	// z.B maxBegrenzung = 10;
-	// warum werden die Pakete angefasst, obwohl sie in FAZ liegen? Verändert dürfte
-	// sich nicht, da wenn maxBegrenzung zu hoch ist, passiert in
-	// #kapazitaetsOptimierung eigentlich nichts
 
 	// Zum Testen benutzen
 	// private static int simZaehler = 0;
@@ -504,8 +486,8 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				 * dem optimalsten Ergebnis wird anschließend weitergearbeitet.
 				 */
 
-				Arbeitspaket rechtsAp = vorbereitungSimulation.getKoordinatenSystem()[position
-						.getyKoordinate()][position.getxKoordinate() + 1].getTeilpaket().getArbeitspaket();
+				Arbeitspaket rechtsAp = vorbereitungSimulation.getKoordinatenSystem()[ResCanvas.koorHoehe - 1][position
+						.getxKoordinate() + 1].getTeilpaket().getArbeitspaket();
 
 				for (Arbeitspaket arbP : arbeitspaketListe) {
 					if (arbP != rechtsAp) {
@@ -684,6 +666,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			} else if (ueberpruefeObergrenzeUeberschritten(simulation) && vorgangsdauerVeraenderbar) {
 
 				simuliereVorgangsdauerAnpassen(simLoesungenResCanvas, simulation);
+
 			}
 
 		}
@@ -702,36 +685,64 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 	 */
 	private void simuliereVorgangsdauerAnpassen(ArrayList<ResCanvas> simLoesungenResCanvas, ResCanvas simulation) {
 
-		ResCanvas copySimulation = simulation.copyResCanvas();
+		/*
+		 * Alles bezüglich copySimulation wurde auskommentiert. Dieser Schritt ist zwar
+		 * notwendig, aber in dieser Form nicht umsetztbar. Dies liegt daran, da zuviele
+		 * Lösungen erstellt werden. Dadurch wird der Algo nie mit den der Berechnung
+		 * fertig. Möglich Lösung für das Problem währe die Operationen bezüglich
+		 * SimulationCopy in einem gesonderten Thread abzuarbeiten. Von sowas haben wir
+		 * aber keine Ahung XD
+		 */
+
+		// ResCanvas copySimulation = simulation.copyResCanvas();
 		Teilpaket neuesTeilpaket = ueberpruefeObergrenzeResEinheit(simulation, simulation.getKoordinatenSystem());
-		Teilpaket copyNeuesTeilpaket = ueberpruefeObergrenzeResEinheit(copySimulation,
-				copySimulation.getKoordinatenSystem());
+		// Teilpaket copyNeuesTeilpaket =
+		// ueberpruefeObergrenzeResEinheit(copySimulation,
+		// copySimulation.getKoordinatenSystem());
+
 		if (neuesTeilpaket != null) {
 
 			int grenze = ResCanvas.koorHoehe - maxBegrenzung - 1;
 
-			verschiebeLinks(copySimulation, copyNeuesTeilpaket, grenze);
+			// verschiebeLinks(copySimulation, copyNeuesTeilpaket, grenze);
 			verschiebeLinks(simulation, neuesTeilpaket, grenze);
 
-			copySimulation.aufschliessenArbeitspaket();
+			// copySimulation.aufschliessenArbeitspaket();
 
 			boolean hinzufuegen = false;
 
 			// verschiebe für copysimulation
-			hinzufuegen = verschiebeRechts(copySimulation, copyNeuesTeilpaket, grenze);
-			Algorithmus.ausgeben(copySimulation.getKoordinatenSystem());
-			if (!copyNeuesTeilpaket.getArbeitspaket().ueberpruefeVorgangsunterbrechungSimulation() && hinzufuegen) {
-				simLoesungenResCanvas.add(copySimulation);
-			}
+			// hinzufuegen = verschiebeRechts(copySimulation, copyNeuesTeilpaket, grenze);
+			// Algorithmus.ausgeben(copySimulation.getKoordinatenSystem());
+			//
+			// for (Arbeitspaket ap : copySimulation.getArbeitspaketListe()) {
+			// ap.zusammenfuegen();
+			// }
+
+			// if
+			// (!copyNeuesTeilpaket.getArbeitspaket().ueberpruefeVorgangsunterbrechungSimulation()
+			// && hinzufuegen) {
+			// simLoesungenResCanvas.add(copySimulation);
+			// }
 
 			// verschiebe für orginal simulation
 
 			hinzufuegen = verschiebeRechts(simulation, neuesTeilpaket, grenze);
 
 			simulation.aufschliessenArbeitspaket();
+
+			// for (Arbeitspaket ap : copySimulation.getArbeitspaketListe()) {
+			// ap.zusammenfuegen();
+			// }
+
+			for (Arbeitspaket ap : simulation.getArbeitspaketListe()) {
+				ap.zusammenfuegen();
+			}
 			if (!neuesTeilpaket.getArbeitspaket().ueberpruefeVorgangsunterbrechungSimulation() && hinzufuegen) {
 				simLoesungenResCanvas.add(simulation);
 			}
+
+			// Algorithmus.ausgebenLul(simulation.getKoordinatenSystem());
 
 			Algorithmus.ausgeben(simulation.getKoordinatenSystem());
 			// System.out.println("Lösung gefunden variable Vorgangsdauer");
@@ -775,6 +786,9 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				}
 			}
 		}
+
+		Algorithmus.ausgeben(koordinatenSystem);
+
 	}
 
 	/**
@@ -793,10 +807,15 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 		if (!zuSetzendeResEinheiten.isEmpty()) {
 
 			Collections.sort(ap.getTeilpaketListe(), new ComperatorTeilpaket());
-			Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
 
-			Teilpaket tp = ap.getTeilpaketListe().get(ap.getTeilpaketListe().size() - 1);
-			int xPosRechts = tp.getResEinheitListe().get(tp.getVorgangsdauer() - 1).getPosition().getxKoordinate();
+			int xPosRechts = 0;
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				int tmp = tp.getResEinheitListe().get(tp.getResEinheitListe().size() - 1).getPosition()
+						.getxKoordinate();
+				xPosRechts = Math.max(tmp, xPosRechts);
+			}
+
+			Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
 
 			for (int x = xPosRechts + 1; x <= ResCanvas.koorBreite; x++) {
 
@@ -912,6 +931,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 				for (int i = y; i > grenze; i--) {
 					if (gesezteResEinheiten.size() < zuSetzendeResEinheiten.size()
 							&& gleicheResEinheiten < ap.getMitarbeiteranzahl()) {
+
 						ResEinheit zuSetzen = zuSetzendeResEinheiten.get(gesezteResEinheiten.size());
 						koordinatenSystem[zuSetzen.getPosition().getyKoordinate()][zuSetzen.getPosition()
 								.getxKoordinate()] = null;
@@ -919,6 +939,12 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 						zuSetzen.setPosition(new Vektor2i(i, x));
 						gesezteResEinheiten.add(zuSetzen);
 						gleicheResEinheiten++;
+
+					} else if (gleicheResEinheiten == ap.getMitarbeiteranzahl()) {
+						Collections.sort(zuSetzendeResEinheiten, new ComperatorVektor2iY());
+
+						neuesTeilpaket.trenneVariabel(gesezteResEinheiten);
+						return true;
 					} else {
 						return false;
 					}
@@ -1246,6 +1272,7 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 			}
 		}
 		if (!grenzeUeberschrittenListe.isEmpty()) {
+
 			neuesTeilpaket = grenzeUeberschrittenListe.get(0).getTeilpaket()
 					.trenneTeilpaketHorizontal(grenzeUeberschrittenListe);
 

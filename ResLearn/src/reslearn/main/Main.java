@@ -51,7 +51,7 @@ public class Main {
 
 		// durchführen des Algorithmus
 		algorithmus = AlgoKapazitaetstreu.getInstance(4);
-		((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(false);
+		((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(true);
 		// algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);
