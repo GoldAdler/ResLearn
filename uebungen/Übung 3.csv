@@ -1,0 +1,4 @@
+Id;FAZ;FEZ;SAZ;SEZ;Vorgangsdauer;Mitarbeiteranzahl;Aufwand;MaxPersonenParallel
+A;1;2;3;4;2;3;6;4
+B;1;2;4;5;2;4;8;4
+C;3;5;5;7;3;2;6;4
