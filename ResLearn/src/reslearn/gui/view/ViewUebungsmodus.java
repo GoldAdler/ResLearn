@@ -27,6 +27,7 @@ import reslearn.model.resCanvas.ResCanvas;
 
 public class ViewUebungsmodus extends Application {
 	private static ViewUebungsmodus view;
+	public static int maxMitarbeiter;
 	private Stage stage;
 	private ContextMenu menu;
 	private MenuItem apTeilen;
@@ -47,7 +48,7 @@ public class ViewUebungsmodus extends Application {
 	}
 
 	public void initializeCanvasView(Arbeitspaket[] arbeitspakete) throws IOException {
-
+		boolean gefunden = false;
 		stage = new Stage();
 
 		Parent root = FXMLLoader.load(getClass().getResource("/reslearn/gui/fxml/Uebungsmodus.fxml"));
@@ -93,6 +94,19 @@ public class ViewUebungsmodus extends Application {
 				}
 			}
 		}
+
+		for (int i = 0; i < koordinatenSystem.length; i++) {
+			if (gefunden == false) {
+				for (int j = 0; j < koordinatenSystem[i].length; j++) {
+					if (koordinatenSystem[i][j] != null) {
+						maxMitarbeiter = koordinatenSystem.length - i;
+						gefunden = true;
+						break;
+					}
+				}
+			}
+		}
+
 		controllerCanvas.erstelleLegende(arbeitspaketeMitFarbe);
 
 		menu = new ContextMenu();
