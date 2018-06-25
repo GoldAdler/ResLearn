@@ -47,6 +47,7 @@ import reslearn.model.resCanvas.ResCanvas;
 public class ControllerCanvasLoesungsmodus {
 	// TODO: Vorgangsdauer veränderbar Checkbox nur bei Kapazitätstreu (Setter im
 	// Algorithmus)
+	private int maxMitarbeiter;
 	private ResCanvas resCanvas;
 	private Teilpaket teilpaketClicked;
 	private ColorPicker colorPicker;
@@ -143,6 +144,7 @@ public class ControllerCanvasLoesungsmodus {
 	 * @return resFeldArray
 	 */
 	public ResFeld[][] initializePositionObservableMap() {
+		boolean gefunden = false;
 		ResFeld[][] resFeldArray = new ResFeld[DisplayCanvas.resFeldSpalte][DisplayCanvas.resFeldZeile];
 
 		// Befüllen der ObservableMaps
@@ -171,6 +173,19 @@ public class ControllerCanvasLoesungsmodus {
 				}
 			}
 		}
+
+		for (int i = 0; i < koordinatenSystemUrspruenglich.length; i++) {
+			if (gefunden == false) {
+				for (int j = 0; j < koordinatenSystemUrspruenglich[i].length; j++) {
+					if (koordinatenSystemUrspruenglich[i][j] != null) {
+						maxMitarbeiter = koordinatenSystemUrspruenglich.length - i;
+						gefunden = true;
+						break;
+					}
+				}
+			}
+		}
+
 		return resFeldArray;
 	}
 
@@ -325,7 +340,7 @@ public class ControllerCanvasLoesungsmodus {
 		@Override
 		public void handle(ActionEvent event) {
 			buttonMaxPersonenMinus.setDisable(false);
-			if (AufgabeLadenImport.maxPersonenParallel < 25) {
+			if (AufgabeLadenImport.maxPersonenParallel < maxMitarbeiter) {
 				AufgabeLadenImport.maxPersonenParallel++;
 				textFieldMaxPersonen.setText(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
 			} else {
