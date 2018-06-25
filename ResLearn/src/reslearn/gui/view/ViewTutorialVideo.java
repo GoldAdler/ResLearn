@@ -33,7 +33,7 @@ public class ViewTutorialVideo extends Application {
 		pane.setLayoutY(85);
 
 		MediaPlayer player = new MediaPlayer(
-				new Media(getClass().getResource("/reslearn/gui/images/test.mp4").toExternalForm()));
+				new Media(getClass().getResource("/reslearn/gui/images/TutorialNeu.mp4").toExternalForm()));
 		VideoPlayer video = new VideoPlayer(player);
 
 		pane.getChildren().add(video);
