@@ -21,6 +21,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import reslearn.gui.rescanvas.DisplayCanvas;
 
 public class VideoPlayer extends BorderPane {
 
@@ -36,15 +37,20 @@ public class VideoPlayer extends BorderPane {
 	private HBox mediaBar;
 
 	/**
-	 * VideoPlayer von Oracle  mit kleinen Veränderungen, wie z.B.
-	 * Buttons als Bilder anstatt Strings
+	 * VideoPlayer von Oracle mit kleinen Veränderungen, wie z.B. Buttons als Bilder
+	 * anstatt Strings
+	 *
 	 * @param mp
 	 */
-	public VideoPlayer(final MediaPlayer mp) {
+	public VideoPlayer(final MediaPlayer mp, Pane pane) {
 		// Video Player von Oracle,
 		this.mp = mp;
 		setStyle("-fx-background-color: #bfc2c7;");
 		mediaView = new MediaView(mp);
+		// mediaView.maxWidth(800);
+		// mediaView.maxHeight(500);
+		mediaView.setFitWidth(DisplayCanvas.displayBreite * 0.8);
+		mediaView.setFitHeight(DisplayCanvas.displayHoehe * 0.8);
 		Pane mvPane = new Pane();
 		mvPane.getChildren().add(mediaView);
 		mvPane.setStyle("-fx-background-color: black;");
