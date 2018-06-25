@@ -37,18 +37,16 @@ public class VideoPlayer extends BorderPane {
 	private HBox mediaBar;
 
 	/**
-	 * VideoPlayer von Oracle mit kleinen Ver‰nderungen, wie z.B. Buttons als Bilder
+	 * VideoPlayer von Oracle mit kleinen Ver√§nderungen, wie z.B. Buttons als Bilder
 	 * anstatt Strings
 	 *
 	 * @param mp
 	 */
-	public VideoPlayer(final MediaPlayer mp, Pane pane) {
+	public VideoPlayer(final MediaPlayer mp) {
 		// Video Player von Oracle,
 		this.mp = mp;
 		setStyle("-fx-background-color: #bfc2c7;");
 		mediaView = new MediaView(mp);
-		// mediaView.maxWidth(800);
-		// mediaView.maxHeight(500);
 		mediaView.setFitWidth(DisplayCanvas.displayBreite * 0.8);
 		mediaView.setFitHeight(DisplayCanvas.displayHoehe * 0.8);
 		Pane mvPane = new Pane();
