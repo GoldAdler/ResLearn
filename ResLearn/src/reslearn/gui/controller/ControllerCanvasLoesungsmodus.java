@@ -340,7 +340,7 @@ public class ControllerCanvasLoesungsmodus {
 		@Override
 		public void handle(ActionEvent event) {
 			buttonMaxPersonenMinus.setDisable(false);
-			if (AufgabeLadenImport.maxPersonenParallel < maxMitarbeiter) {
+			if (AufgabeLadenImport.maxPersonenParallel < maxMitarbeiter - 1) {
 				AufgabeLadenImport.maxPersonenParallel++;
 				textFieldMaxPersonen.setText(Integer.toString(AufgabeLadenImport.maxPersonenParallel));
 			} else {

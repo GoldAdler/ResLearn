@@ -210,7 +210,7 @@ public class Teilpaket extends Paket {
 							}
 						}
 
-						int mitarbeiteranzahl = maxY - minY;
+						int mitarbeiteranzahl = maxY - minY + 1;
 						tmp.setMitarbeiteranzahl(mitarbeiteranzahl);
 
 						tmp.setVorgangsdauer((int) Math.ceil(((double) tmp.aufwand / (double) tmp.mitarbeiteranzahl)));
@@ -273,7 +273,7 @@ public class Teilpaket extends Paket {
 				}
 			}
 
-			int mitarbeiteranzahl = maxY - minY;
+			int mitarbeiteranzahl = maxY - minY + 1;
 
 			neuesTeilpaket.setMitarbeiteranzahl(mitarbeiteranzahl);
 			if (mitarbeiteranzahl != 0) {

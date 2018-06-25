@@ -28,8 +28,8 @@ public class TestLogikMain {
 		// erstelleTestDaten2_55(resCanvas);
 		// erstelleTestDaten2_56(resCanvas);
 		// erstelleTestDaten2_57(resCanvas);
-		erstelleTestDaten2_6(resCanvas);
-		// erstelleTestDaten2_7(resCanvas);
+		// erstelleTestDaten2_6(resCanvas);
+		erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
 		// erstelleTestDaten2F(resCanvas);
 
@@ -50,7 +50,7 @@ public class TestLogikMain {
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus
-		algorithmus = AlgoKapazitaetstreu.getInstance(5);
+		algorithmus = AlgoKapazitaetstreu.getInstance(4);
 		((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(true);
 		// algorithmus = AlgoTermintreu.getInstance();
 
