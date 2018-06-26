@@ -1,6 +1,6 @@
 package reslearn.main;
 
-import reslearn.model.algorithmus.AlgoKapazitaetstreu;
+import reslearn.model.algorithmus.AlgoTermintreu;
 import reslearn.model.algorithmus.Algorithmus;
 import reslearn.model.paket.Arbeitspaket;
 import reslearn.model.paket.ResEinheit;
@@ -18,7 +18,7 @@ public class TestLogikMain {
 		// erstelleTestDaten1(resCanvas);
 
 		// PTMA_U09
-		// erstelleTestDaten2(resCanvas);
+		erstelleTestDaten2(resCanvas);
 
 		// Random Datensätze
 		// erstelleTestDoc3(resCanvas);
@@ -29,7 +29,7 @@ public class TestLogikMain {
 		// erstelleTestDaten2_56(resCanvas);
 		// erstelleTestDaten2_57(resCanvas);
 		// erstelleTestDaten2_6(resCanvas);
-		erstelleTestDaten2_7(resCanvas);
+		// erstelleTestDaten2_7(resCanvas);
 		// erstelleTestDaten2_8(resCanvas);
 		// erstelleTestDaten2F(resCanvas);
 
@@ -50,8 +50,8 @@ public class TestLogikMain {
 		// algorithmus = AlgoErsteSchritt.getInstance();
 
 		// durchführen des Algorithmus
-		algorithmus = AlgoKapazitaetstreu.getInstance(4);
-		((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(true);
+		algorithmus = AlgoTermintreu.getInstance();
+		// ((AlgoKapazitaetstreu) algorithmus).setVorgangsdauerVeraenderbar(true);
 		// algorithmus = AlgoTermintreu.getInstance();
 
 		resCanvas = algorithmus.algoDurchfuehren(resCanvas);

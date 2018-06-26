@@ -9,7 +9,7 @@ public abstract class Algorithmus {
 
 	static final boolean testModus = false;
 	static final boolean trotzdem = false;
-	static final boolean historie = false;
+	static final boolean historie = true;
 	static final boolean test = false;
 	static final boolean lul = false;
 	public static int zaehlerTest = 0;
@@ -135,19 +135,20 @@ public abstract class Algorithmus {
 	 * @param grenze
 	 * @return
 	 */
-	protected ArrayList<ResCanvas> rankingWeicheKriterien(ArrayList<ResCanvas> keineZeitueberschreitung, int grenze) {
+	protected ArrayList<ResCanvas> rankingWeicheKriterien(ArrayList<ResCanvas> keineZeitueberschreitung, int grenzeY,
+			int grenzeX) {
 		int min = Integer.MAX_VALUE;
 
 		ArrayList<ResCanvas> durchlaufenListe = keineZeitueberschreitung;
 		ArrayList<ResCanvas> optimalListe = new ArrayList<>();
 		ResEinheit[][] koordinatenSystem = null;
-		for (int y = grenze; y < ResCanvas.koorHoehe; y++) {
+		for (int y = grenzeY; y < ResCanvas.koorHoehe; y++) {
 
 			for (ResCanvas canvas : durchlaufenListe) {
 				koordinatenSystem = canvas.getKoordinatenSystem();
 				int counter = 0;
 
-				for (int x = 0; x < ResCanvas.koorBreite; x++) {
+				for (int x = 0; x < grenzeX; x++) {
 					if (koordinatenSystem[y][x] != null) {
 						counter++;
 					}

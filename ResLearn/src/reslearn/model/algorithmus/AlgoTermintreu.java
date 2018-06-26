@@ -45,23 +45,34 @@ public class AlgoTermintreu extends Algorithmus {
 
 		loescheLoesungenMitLuecken(moeglicheLoesungenResCanvas, reduzierteMoeglicheLoesungenResCanvas);
 
-		int yMin = 0;
+		int yMin = Integer.MAX_VALUE;
+		int yMax = 0;
+
 		for (ResCanvas canvas : reduzierteMoeglicheLoesungenResCanvas) {
-			int yWert = canvas.berechneMaxY();
-			if (yWert > yMin) {
+			int yWert = canvas.berechneMinY();
+			if (yWert <= yMin) {
 				yMin = yWert;
+				// yMax = ResCanvas.koorHoehe - yMin;
 			}
 		}
-
 		ArrayList<ResCanvas> flacheLoesungen = new ArrayList<>();
+
 		for (ResCanvas canvas : reduzierteMoeglicheLoesungenResCanvas) {
-			int yWert = canvas.berechneMaxY();
-			if (yWert == yMin) {
-				flacheLoesungen.add(canvas);
+			// int yWert = ResCanvas.koorHoehe - canvas.berechneMinY();
+			if (canvas.berechneMinY() == yMin) {
+				// flacheLoesungen.add(canvas);
 			}
 		}
 
-		ArrayList<ResCanvas> optimalListe = this.rankingWeicheKriterien(flacheLoesungen, yMin);
+		int xMax = 0;
+		for (ResCanvas canvas : flacheLoesungen) {
+			if (canvas.berechneMaxX() > xMax) {
+				xMax = canvas.berechneMaxX();
+			}
+		}
+
+		ArrayList<ResCanvas> optimalListe = this.rankingWeicheKriterien(reduzierteMoeglicheLoesungenResCanvas, yMin,
+				xMax);
 
 		for (ResCanvas lul : optimalListe) {
 			Algorithmus.ausgebenKurzerTest(lul.getKoordinatenSystem());
@@ -111,7 +122,7 @@ public class AlgoTermintreu extends Algorithmus {
 	private void loescheLoesungenMitLuecken(ArrayList<ResCanvas> moeglicheLoesungenResCanvas,
 			ArrayList<ResCanvas> reduzierteMoeglicheLoesungenResCanvas) {
 		for (ResCanvas canvas : moeglicheLoesungenResCanvas) {
-
+			canvas.herunterfallenAlleTeilpakete();
 			ResEinheit[][] koordinaten = canvas.getKoordinatenSystem();
 
 			ResEinheit gefundenRE = null;

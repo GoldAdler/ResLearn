@@ -827,6 +827,22 @@ public class ResCanvas {
 		return yMax;
 	}
 
+	public int berechneMaxX() {
+		int xMax = 0;
+
+		for (Arbeitspaket ap : this.arbeitspaketListe) {
+			for (Teilpaket tp : ap.getTeilpaketListe()) {
+				for (ResEinheit res : tp.getResEinheitListe()) {
+					if (res.getPosition().getxKoordinate() > xMax) {
+						xMax = res.getPosition().getyKoordinate();
+					}
+				}
+
+			}
+		}
+		return xMax;
+	}
+
 	/**
 	 * Überprüft ob die beiden übergebenen ResCanvas identisch sind.
 	 *

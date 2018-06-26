@@ -152,13 +152,13 @@ public class AlgoKapazitaetstreu extends Algorithmus {
 
 		ArrayList<ResCanvas> optimalListe = null;
 
-		int grenze = ResCanvas.koorHoehe - maxBegrenzung;
+		int grenzeY = ResCanvas.koorHoehe - maxBegrenzung;
 
 		if (keineZeitueberschreitung.isEmpty()) {
 			moeglicheLoesungenResCanvas = geringsteVerstoesse(moeglicheLoesungenResCanvas);
-			optimalListe = rankingWeicheKriterien(moeglicheLoesungenResCanvas, grenze);
+			optimalListe = rankingWeicheKriterien(moeglicheLoesungenResCanvas, grenzeY, ResCanvas.koorBreite);
 		} else {
-			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung, grenze);
+			optimalListe = rankingWeicheKriterien(keineZeitueberschreitung, grenzeY, ResCanvas.koorHoehe);
 
 			// System.out.println("optimal");
 			for (ResCanvas op : optimalListe) {
